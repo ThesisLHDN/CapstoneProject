@@ -1,8 +1,9 @@
 import "./scrum.scss";
+import Paper from "@mui/material/Paper";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import mockData from "../../mockData";
 import { useState } from "react";
-import Card from "../card";
+import Card from "./card";
 
 const Scrum = () => {
   const [data, setData] = useState(mockData);
@@ -39,12 +40,18 @@ const Scrum = () => {
         {data.map((section) => (
           <Droppable key={section.id} droppableId={section.id}>
             {(provided) => (
-              <div
+              <Paper
                 {...provided.droppableProps}
                 className="scrum__section"
                 ref={provided.innerRef}
+                sx={{ backgroundColor: "#e8e8e8" }}
               >
-                <div className="scrum__section__title">{section.title}</div>
+                <div className="scrum__section__title">
+                  {section.title}{" "}
+                  <span className="scrum__section__title__num">
+                    {section.tasks.length} issues
+                  </span>
+                </div>
                 <div className="scrum__section__content">
                   {section.tasks.map((task, index) => (
                     <Draggable
@@ -62,14 +69,14 @@ const Scrum = () => {
                             opacity: snapshot.isDragging ? "0.5" : "1",
                           }}
                         >
-                          <Card>{task.title}</Card>
+                          <Card>{task}</Card>
                         </div>
                       )}
                     </Draggable>
                   ))}
                   {provided.placeholder}
                 </div>
-              </div>
+              </Paper>
             )}
           </Droppable>
         ))}

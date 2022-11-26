@@ -12,7 +12,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 
-const SearchBar = ({ setSearchQuery }) => (
+const SearchBar = (props) => (
   //   <form>
   //     <TextField
   //       id="search-bar"
@@ -34,7 +34,7 @@ const SearchBar = ({ setSearchQuery }) => (
   //       <SearchIcon style={{ fill: "blue" }} />
   //     </IconButton>
   //   </form>
-  <FormControl sx={{ mx: 1, width: 500 }} variant="outlined">
+  <FormControl sx={{ width: 500, ...props.sx }} variant="outlined">
     {/* <InputLabel
       htmlFor="outlined-adornment-password"
       sx={{ fontSize: 12 }}

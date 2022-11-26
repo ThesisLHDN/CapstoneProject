@@ -4,14 +4,19 @@ import Typography from "@mui/material/Typography";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
-// import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
 import { styled } from "@mui/material/styles";
 
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
+import PermIdentityRoundedIcon from "@mui/icons-material/PermIdentityRounded";
+import FilterListRoundedIcon from "@mui/icons-material/FilterListRounded";
+import FilterAltRoundedIcon from "@mui/icons-material/FilterAltRounded";
+import SortRoundedIcon from "@mui/icons-material/SortRounded";
 
 import Scrum from "src/components/scrum";
+import SearchBar from "src/components/search";
 
 function handleClick(event) {
   event.preventDefault();
@@ -84,8 +89,47 @@ function Board() {
         </Grid>
       </Grid>
       <Typography variant="h5" sx={{ color: "green", fontWeight: 700 }}>
-        Board
+        Sprint 02
       </Typography>
+      <Typography variant="caption" sx={{ color: "#555" }}>
+        Lorem Ipsum is simply dummy text of the printing and typesetting
+        industry. Lorem Ipsum has been the industry's standard dummy text ever
+        since the 1500s, when an unknown printer took a galley of type and
+        scrambled it to make a type specimen book.
+      </Typography>
+
+      <Box
+        sx={{
+          display: "flex",
+          gap: 1,
+          gridTemplateColumns: "repeat(4, 1fr)",
+          mt: 1,
+        }}
+      >
+        <SearchBar sx={{width:"250px"}}/>
+        <Button
+          variant="text"
+          startIcon={<FilterAltRoundedIcon />}
+          sx={{ color: "#181818" }}
+        >
+          Filter
+        </Button>
+        <Button
+          variant="text"
+          startIcon={<SortRoundedIcon />}
+          sx={{ color: "#181818" }}
+        >
+          Sort
+        </Button>
+        <Button
+          variant="text"
+          startIcon={<PermIdentityRoundedIcon />}
+          sx={{ color: "#181818" }}
+        >
+          Me
+        </Button>
+      </Box>
+
       <Scrum />
     </div>
   );

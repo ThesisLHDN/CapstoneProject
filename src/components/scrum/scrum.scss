@@ -1,27 +1,33 @@
 .scrum {
-    display: flex;
-    align-items: flex-start;
+  display: flex;
+  align-items: flex-start;
+  padding: 20px 0px;
 
-    &__section {
-        width: 300px;
-        background-color: #d4d4d4;
-        padding: 10px;
-        border-radius: 10px;
+  &__section {
+    width: 300px;
+    background-color: #e8e8e8;
+    padding: 10px 5px;
+    border-radius: 5px;
 
-        & ~ & {
-            margin-left: 10px;
-        }
+    & ~ & {
+      margin-left: 10px;
+    }
 
-        &__title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin: 10px 0 20px;
-        }
+    &__title {
+      font-size: 16px;
+      font-weight: 700;
+      margin: 0px 0px 10px;
 
-        &__content {
-            & > * ~ * {
-                margin-top: 10px;
-            }
-        }
-    } 
+      &__num {
+        font-size: 12px;
+        font-weight: 400;
+      }
+    }
+
+    &__content {
+      & > * ~ * {
+        margin-top: 10px;
+      }
+    }
+  }
 }

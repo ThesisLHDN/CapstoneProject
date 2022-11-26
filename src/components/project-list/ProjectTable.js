@@ -31,8 +31,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function createData(star, name, type, owner, protein) {
-  return { star, name, type, owner, protein };
+function createData(star, name, type, owner) {
+  return { star, name, type, owner };
 }
 
 const rows = [
@@ -40,22 +40,19 @@ const rows = [
     true,
     "First Scrum Project",
     "Scrum project",
-    "Nguyễn Trường Hải Đăng",
-    4.0
+    "Nguyễn Trường Hải Đăng"
   ),
   createData(
     false,
     "First Kanban Project",
     "Kanban project",
-    "Nguyễn Hoàng Lâm",
-    4.3
+    "Nguyễn Hoàng Lâm"
   ),
   createData(
     false,
     "Second Scrum Project",
     "Scrum project",
-    "Nguyễn Hoàng Lâm",
-    6.0
+    "Nguyễn Hoàng Lâm"
   ),
 ];
 

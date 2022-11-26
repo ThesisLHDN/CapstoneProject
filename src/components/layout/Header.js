@@ -11,7 +11,7 @@ import PersonAddOutlinedIcon from "@mui/icons-material/PersonAddOutlined";
 
 import Avatar from "@mui/material/Avatar";
 
-import SearchBar from "src/components/search/SearchBar";
+import SearchBar from "src/components/search";
 import { Link } from "react-router-dom";
 // import BottomNavigation from "@mui/material/BottomNavigation";
 // import BottomNavigationAction from "@mui/material/BottomNavigationAction";
