@@ -6,13 +6,15 @@ import Header from "src/components/layout/Header";
 
 import Home from "src/pages/Home";
 import WorkspaceSetting from "./pages/workspace-setting/WorkspaceSetting";
-import ProjectSetting from "./pages/ProjectSetting";
-import Dashboard from "./pages/Dashboard";
+import ProjectSetting from "./pages/project-setting/ProjectSetting";
+import Dashboard from "./pages/dashboard/Dashboard";
 import SideBar from "./components/layout/SideBar";
 import Box from "@mui/material/Box";
 // import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import Board from "./pages/board/Board";
+import Backlog from "./pages/backlog/Backlog";
+import Document from "./pages/project-document/Documents";
 
 function App() {
   return (
@@ -41,6 +43,8 @@ function App() {
                   element={<WorkspaceSetting></WorkspaceSetting>}
                 ></Route>{" "}
                 <Route path="/board" element={<Board />}></Route>
+                <Route path="/backlog" element={<Backlog />} />
+                <Route path="/document" element={<Document />} />
               </Routes>
             </Box>
           </Grid>

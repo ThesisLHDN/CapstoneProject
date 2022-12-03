@@ -20,6 +20,9 @@ module.exports = {
         "light-gray": "#F7F7F7",
         "half-transparent": "rgba(0, 0, 0, 0.5)",
         "sidebar-bg": "#98A0AF",
+        "to-do-color": '#EC6F28',
+        "in-progress-color": '#006BA7',
+        "done-color": '#009606',
       },
       borderWidth: {
         1: "1px",
@@ -41,9 +44,6 @@ module.exports = {
       },
       minHeight: {
         590: "590px",
-      },
-      backgroundImage: {
-        "hero-pattern": "url('https://i.ibb.co/MkvLDfb/Rectangle-4389.png')",
       },
     },
   },

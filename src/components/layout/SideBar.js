@@ -35,7 +35,7 @@ const links = [
   },
   {
     name: 'Project Settings',
-    link: '/project-settings',
+    link: '/project-setting',
     icon: <SettingsOutlinedIcon style={{ fontSize: "34px" }} />
   },
   
