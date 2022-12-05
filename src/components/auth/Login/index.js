@@ -32,24 +32,6 @@ import {
 const facebookProvider = new FacebookAuthProvider();
 const googleProvider = new GoogleAuthProvider();
 
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
 const theme = createTheme();
 
 export default function SignInSide() {
@@ -210,8 +192,6 @@ export default function SignInSide() {
                   <GoogleIcon style={{width: 32, height: 32}} />
                 </IconButton>
               </Box>
-
-              <Copyright sx={{mt: 5}} />
             </Box>
           </Box>
         </Grid>

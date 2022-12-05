@@ -78,11 +78,8 @@ function Board() {
             <AccessTimeRoundedIcon sx={{mr: 1}} />
             10 days remaining
           </Typography>
-          <GrayButton variant="contained">Complete sprint</GrayButton>
-          <GrayButton
-            variant="contained"
-            sx={{mx: 1, width: '32px !important', minWidth: 32}}
-          >
+          <GrayButton>Complete sprint</GrayButton>
+          <GrayButton sx={{mx: 1, width: '32px !important', minWidth: 32}}>
             <MoreHorizIcon />
           </GrayButton>
         </Grid>

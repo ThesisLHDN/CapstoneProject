@@ -11,7 +11,7 @@ function ChatRoom() {
     <Paper
       elevation={3}
       sx={{
-        width:'80vw',
+        width: '80vw',
         borderRadius: '30px',
         overflow: 'hidden',
         position: 'fixed',

@@ -80,7 +80,6 @@ function RoadMap() {
           </Typography> */}
           {/* <GrayButton variant="contained">Complete sprint</GrayButton> */}
           <GrayButton
-            variant="contained"
             sx={{mx: 1, width: '32px !important', minWidth: 32}}
           >
             <MoreHorizIcon />
