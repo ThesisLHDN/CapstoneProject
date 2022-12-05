@@ -9,14 +9,13 @@ import Box from '@mui/material/Box';
 import {styled} from '@mui/material/styles';
 
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
-import PermIdentityRoundedIcon from '@mui/icons-material/PermIdentityRounded';
+// import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
+// import PermIdentityRoundedIcon from '@mui/icons-material/PermIdentityRounded';
 // import FilterListRoundedIcon from '@mui/icons-material/FilterListRounded';
 import FilterAltRoundedIcon from '@mui/icons-material/FilterAltRounded';
-import SortRoundedIcon from '@mui/icons-material/SortRounded';
+// import SortRoundedIcon from '@mui/icons-material/SortRounded';
 
-import Scrum from 'src/components/scrum';
-import SearchBar from 'src/components/search';
+import SearchBar from 'src/components/search'
 
 function handleClick(event) {
   event.preventDefault();
@@ -31,7 +30,8 @@ const GrayButton = styled(Button)({
     backgroundColor: '#ddd',
   },
 });
-function Board() {
+
+function RoadMap() {
   return (
     // <Scrum />
     <div style={{textAlign: 'left'}}>
@@ -60,7 +60,7 @@ function Board() {
             </Link>
             ,
             <Typography key="3" color="text.primary">
-              Board
+              Roadmap
             </Typography>
             , ]
           </Breadcrumbs>
@@ -74,11 +74,11 @@ function Board() {
             alignItems: 'center',
           }}
         >
-          <Typography sx={{mx: 1, display: 'flex', justifyItems: 'center'}}>
+          {/* <Typography sx={{mx: 1, display: 'flex', justifyItems: 'center'}}>
             <AccessTimeRoundedIcon sx={{mr: 1}} />
             10 days remaining
-          </Typography>
-          <GrayButton variant="contained">Complete sprint</GrayButton>
+          </Typography> */}
+          {/* <GrayButton variant="contained">Complete sprint</GrayButton> */}
           <GrayButton
             variant="contained"
             sx={{mx: 1, width: '32px !important', minWidth: 32}}
@@ -88,7 +88,7 @@ function Board() {
         </Grid>
       </Grid>
       <Typography variant="h5" sx={{color: 'green', fontWeight: 700}}>
-        Sprint 02
+        RoadMap
       </Typography>
       <Typography variant="caption" sx={{color: '#555'}}>
         Lorem Ipsum is simply dummy text of the printing and typesetting
@@ -113,7 +113,7 @@ function Board() {
         >
           Filter
         </Button>
-        <Button
+        {/* <Button
           variant="text"
           startIcon={<SortRoundedIcon />}
           sx={{color: '#181818'}}
@@ -126,12 +126,12 @@ function Board() {
           sx={{color: '#181818'}}
         >
           Me
-        </Button>
+        </Button> */}
       </Box>
 
-      <Scrum />
+      {/* <Scrum /> */}
     </div>
   );
 }
 
-export default Board;
+export default RoadMap;

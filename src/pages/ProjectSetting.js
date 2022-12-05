@@ -1,9 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 function ProjectSetting() {
-  return (
-    <div>Project Setting</div>
-  )
+  return <div>Project Setting</div>;
 }
 
-export default ProjectSetting
+export default ProjectSetting;

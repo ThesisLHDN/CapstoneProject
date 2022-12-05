@@ -1,9 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 function ProjectItem() {
-  return (
-    <div>ProjectItem</div>
-  )
+  return <div>ProjectItem</div>;
 }
 
-export default ProjectItem
+export default ProjectItem;

@@ -1,21 +1,21 @@
-import "./scrum.scss";
-import Paper from "@mui/material/Paper";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import mockData from "../../mockData";
-import { useState } from "react";
-import Card from "./card";
+import './scrum.scss';
+import Paper from '@mui/material/Paper';
+import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
+import mockData from '../../mockData';
+import {useState} from 'react';
+import Card from './card';
 
 const Scrum = () => {
   const [data, setData] = useState(mockData);
 
   const onDragEnd = (result) => {
     if (!result.destination) return;
-    const { source, destination } = result;
+    const {source, destination} = result;
 
     if (source.droppableId !== destination.droppableId) {
       const sourceColIndex = data.findIndex((e) => e.id === source.droppableId);
       const destinationColIndex = data.findIndex(
-        (e) => e.id === destination.droppableId
+        (e) => e.id === destination.droppableId,
       );
 
       const sourceCol = data[sourceColIndex];
@@ -44,10 +44,10 @@ const Scrum = () => {
                 {...provided.droppableProps}
                 className="scrum__section"
                 ref={provided.innerRef}
-                sx={{ backgroundColor: "#e8e8e8" }}
+                sx={{backgroundColor: '#e8e8e8'}}
               >
                 <div className="scrum__section__title">
-                  {section.title}{" "}
+                  {section.title}{' '}
                   <span className="scrum__section__title__num">
                     {section.tasks.length} issues
                   </span>
@@ -66,7 +66,7 @@ const Scrum = () => {
                           {...provided.dragHandleProps}
                           style={{
                             ...provided.draggableProps.style,
-                            opacity: snapshot.isDragging ? "0.5" : "1",
+                            opacity: snapshot.isDragging ? '0.5' : '1',
                           }}
                         >
                           <Card>{task}</Card>

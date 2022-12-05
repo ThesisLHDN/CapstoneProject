@@ -1,16 +1,22 @@
-import React from "react";
+import React from 'react';
 // import { useState } from "react";
-import SearchIcon from "@mui/icons-material/Search";
+import SearchIcon from '@mui/icons-material/Search';
 // import Box from "@mui/material/Box";
-import IconButton from "@mui/material/IconButton";
+import {
+  IconButton,
+  InputAdornment,
+  TextField,
+  FormControl,
+} from '@mui/material';
 // import Input from "@mui/material/Input";
 // import FilledInput from "@mui/material/FilledInput";
 // import OutlinedInput from "@mui/material/OutlinedInput";
 // import InputLabel from "@mui/material/InputLabel";
-import InputAdornment from "@mui/material/InputAdornment";
+// import InputAdornment from '@mui/material/InputAdornment';
 // import FormHelperText from "@mui/material/FormHelperText";
-import FormControl from "@mui/material/FormControl";
-import TextField from "@mui/material/TextField";
+// import FormControl from '@mui/material/FormControl';
+// import TextField from '@mui/material/TextField';
+// import {Typography} from '@mui/material';
 
 const SearchBar = (props) => (
   //   <form>
@@ -34,7 +40,19 @@ const SearchBar = (props) => (
   //       <SearchIcon style={{ fill: "blue" }} />
   //     </IconButton>
   //   </form>
-  <FormControl sx={{ width: 500, ...props.sx }} variant="outlined">
+  <FormControl
+    sx={{
+      width: 500,
+      ...props.sx,
+      '& .MuiFormControl-root.MuiTextField-root': props.round
+        ? {borderRadius: 40}
+        : {borderRadius: 10},
+      '& input::placeholder': {
+        fontSize: 14,
+      },
+    }}
+    variant="outlined"
+  >
     {/* <InputLabel
       htmlFor="outlined-adornment-password"
       sx={{ fontSize: 12 }}
@@ -45,12 +63,12 @@ const SearchBar = (props) => (
     <TextField
       //   id="outlined-adornment-password"
       size="small"
-      placeholder="Search for issues"
+      placeholder="Search for Issues"
       sx={{
-        backgroundColor: "#EEE",
+        backgroundColor: '#EEE',
         borderRadius: 2,
-        "& .MuiOutlinedInput-notchedOutline": {
-          border: "0px",
+        '& .MuiOutlinedInput-notchedOutline': {
+          border: '0px',
           borderRadius: 2,
         },
       }}
