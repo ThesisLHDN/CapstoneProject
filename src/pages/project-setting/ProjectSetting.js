@@ -155,7 +155,7 @@ function ProjectSetting() {
       <MemberList />
 
       <Grid container>
-        <Grid item xs={2} >
+        <Grid item xs={3} >
           <Button
             variant="text"
             startIcon={<LogoutIcon sx={{ marginRight: 1, width: 24, height: 24 }} />}

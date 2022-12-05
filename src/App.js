@@ -15,6 +15,7 @@ import Grid from "@mui/material/Grid";
 import Board from "./pages/board/Board";
 import Backlog from "./pages/backlog/Backlog";
 import Document from "./pages/project-document/Documents";
+import Issue from "./pages/issue/Issue";
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
                 <Route path="/board" element={<Board />}></Route>
                 <Route path="/backlog" element={<Backlog />} />
                 <Route path="/document" element={<Document />} />
+                <Route path="/issue" element={<Issue />} />
               </Routes>
             </Box>
           </Grid>

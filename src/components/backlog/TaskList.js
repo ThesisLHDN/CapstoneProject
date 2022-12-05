@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd"
 import { styled } from "@mui/material/styles"
+import { NavLink } from "react-router-dom"
 import MuiAccordion from '@mui/material/Accordion'
 import MuiAccordionSummary from '@mui/material/AccordionSummary'
 import MuiAccordionDetails from '@mui/material/AccordionDetails'
@@ -221,7 +222,7 @@ function TaskList(props) {
                 </div>
                 
                 <AccordionDetails>
-                <div className="-mt-2">
+                <div className="-mt-2 mb-2">
                   <Droppable droppableId={columnId} key={columnId}>
                     {(provided, snapshot) => {
                       return (
@@ -238,15 +239,18 @@ function TaskList(props) {
                                       ref={provided.innerRef}
                                       {...provided.draggableProps}
                                       {...provided.dragHandleProps}
-                                      className="select-none h-8 mb-2 text-sm"
+                                      className="select-none h-10 mb-0.5 text-sm"
                                       style={{
                                         backgroundColor: snapshot.isDragging ? "#D6D6D6": "#E5E7EB",
                                         color: "black", ...provided.draggableProps.style,
-                                        paddingTop: "4px",
-                                        paddingBottom: "2px"
+                                        paddingTop: "8px",
+                                        paddingBottom: "8px",
                                       }}
+                                      onMouseOver
                                     >
-                                      <TaskCard item={item} />
+                                      <NavLink to="/issue">
+                                        <TaskCard item={item} />
+                                      </NavLink>
                                     </div>
                                   );
                                 }}

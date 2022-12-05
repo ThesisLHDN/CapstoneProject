@@ -23,6 +23,8 @@ module.exports = {
         "to-do-color": '#EC6F28',
         "in-progress-color": '#006BA7',
         "done-color": '#009606',
+        "hover-issue": '#D6D6D6',
+        "dang-color": '#ffffff',
       },
       borderWidth: {
         1: "1px",
