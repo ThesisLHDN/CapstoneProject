@@ -2,19 +2,22 @@ import './App.css';
 import {Routes, Route} from 'react-router-dom';
 import {Box, Grid} from '@mui/material';
 
-import Header from 'src/components/layout/Header';
-import Login from 'src/components/authentication/Login';
-import Signup from 'src/components/authentication/Signup';
-import ForgetPassword from 'src/components/authentication/ForgetPassword';
-import SideBar from 'src/components/layout/SideBar';
-import ChatRoom from 'src/components/ChatRoom';
+import ChatRoom from './components/ChatRoom';
+import Header from './components/layout/Header';
+import SideBar from './components/layout/SideBar';
+import Login from './components/auth/Login';
+import Signup from './components/auth/Signup';
+import ForgetPassword from './components/auth/ForgetPassword';
 
-import Home from 'src/pages/Home';
-import WorkspaceSetting from './pages/workspace-setting/WorkspaceSetting';
-import ProjectSetting from './pages/ProjectSetting';
-import Dashboard from './pages/Dashboard';
-import Board from './pages/board/Board';
+import Home from './pages/Home';
 import RoadMap from './pages/roadmap';
+import Issue from './pages/issue/Issue';
+import Board from './pages/board/Board';
+import Backlog from './pages/backlog/Backlog';
+import Dashboard from './pages/dashboard/Dashboard';
+import Document from './pages/project-document/Documents';
+import ProjectSetting from './pages/project-setting/ProjectSetting';
+import WorkspaceSetting from './pages/workspace-setting/WorkspaceSetting';
 
 import AuthProvider from 'src/Context/AuthProvider';
 
@@ -51,6 +54,9 @@ function App() {
                   <Route path="/signup" element={<Signup />}></Route>
                   <Route path="/forget" element={<ForgetPassword />}></Route>
                   <Route path="/chat" element={<ChatRoom />}></Route>
+                  <Route path="/backlog" element={<Backlog />} />
+                  <Route path="/document" element={<Document />} />
+                  <Route path="/issue" element={<Issue />} />
                 </Routes>
               </Box>
             </Grid>

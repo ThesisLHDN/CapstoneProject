@@ -1,14 +1,7 @@
 import React from 'react';
 import {format} from 'date-fns';
 
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import Link from '@mui/material/Link';
-import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
-import Box from '@mui/material/Box';
-import Avatar from '@mui/material/Avatar';
+import {Grid, Typography, IconButton, Divider, Box, Avatar} from '@mui/material';
 
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import PersonAddAltRoundedIcon from '@mui/icons-material/PersonAddAltRounded';
