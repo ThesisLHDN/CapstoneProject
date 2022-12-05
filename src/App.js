@@ -1,6 +1,7 @@
 import './App.css';
 import {Routes, Route} from 'react-router-dom';
-import {Box, Grid} from '@mui/material';
+import {Box, Grid, Badge, IconButton, Modal} from '@mui/material';
+import ChatRoundedIcon from '@mui/icons-material/ChatRounded';
 
 import ChatRoom from './components/ChatRoom';
 import Header from './components/layout/Header';
@@ -20,8 +21,11 @@ import ProjectSetting from './pages/project-setting/ProjectSetting';
 import WorkspaceSetting from './pages/workspace-setting/WorkspaceSetting';
 
 import AuthProvider from 'src/Context/AuthProvider';
+import {useState} from 'react';
 
 function App() {
+  const [openChat, setOpenChat] = useState(false);
+
   return (
     <AuthProvider>
       <div className="App">
@@ -62,6 +66,34 @@ function App() {
             </Grid>
           </Grid>
         </Box>
+        <Badge
+          badgeContent={4}
+          color="primary"
+          overlap="circular"
+          variant="dot"
+          sx={{
+            position: 'fixed',
+            bottom: 40,
+            right: 40,
+            '& .MuiBadge-badge': {
+              fontSize: 10,
+              backgroundColor: 'coral',
+              padding: '0 4px',
+            },
+          }}
+        >
+          <IconButton onClick={() => setOpenChat(true)}>
+            <ChatRoundedIcon sx={{width: 40, height: 40, color: 'green'}} />
+          </IconButton>
+          <Modal
+            open={openChat}
+            onClose={() => {
+              setOpenChat(false);
+            }}
+          >
+            <ChatRoom />
+          </Modal>
+        </Badge>
       </div>
     </AuthProvider>
   );

@@ -54,7 +54,6 @@ export default function Header() {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        // boxShadow: '2px 2px 5px rgba(0, 0, 0, 0.2)',
         padding: '0px 20px',
         borderRadius: 0,
         position: 'fixed',
@@ -80,9 +79,9 @@ export default function Header() {
         }}
       >
         {/* <Tab label="Home" to="/" component={Link} /> */}
-        <Tab label="Roadmap" to="/roadmap" component={Link} />
+        {/* <Tab label="Roadmap" to="/roadmap" component={Link} /> */}
         {/* <Tab label="Dashboard" to="/dashboard" component={Link} /> */}
-        <Tab label="Board" to="/board" component={Link} />
+        {/* <Tab label="Board" to="/board" component={Link} /> */}
         <Tab
           label="Workspace Setting"
           to="/workspace-setting"
@@ -124,7 +123,6 @@ export default function Header() {
             />
           </IconButton>
 
-          {/* <AvatarPopup sx={{position: 'absolute'}} /> */}
           <Modal open={open} onClose={handleClose}>
             <Box
               sx={{
@@ -148,49 +146,6 @@ export default function Header() {
           </Modal>
         </div>
       </Box>
-
-      {/* <img
-        src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909__340.png"
-        width="20px"
-        alt="avatar"
-      >
-        {" "}
-      </img> */}
     </Paper>
   );
 }
-
-// return (
-//   <Box
-//     sx={{
-//       backgroundColor: "white",
-//       height: 60,
-//       display: "flex",
-//       alignItems: "center",
-//       boxShadow: "2px 2px 5px rgba(0, 0, 0, 0.2)",
-//       padding: "10px",
-//     }}
-//   >
-//     <img src={logo} width="150" alt="Logo" />
-//     {/* <Box sx={{ width: 500 }}>
-//       <BottomNavigation
-//         showLabels
-//         value={value}
-//         onChange={(event, newValue) => {
-//           setValue(newValue);
-//         }}
-//       >
-//         <BottomNavigationAction label="Your works" />
-//         <BottomNavigationAction label="Projects" />
-//       </BottomNavigation>
-//     </Box>
-//     <nav>
-//       <Link to="/">Home Page</Link>
-//       <Link to="/project-setting">Project setting Page</Link>
-//       <Link to="/dashboard">Dashboard</Link>
-//     </nav> */}
-//   </Box>
-// );
-// }
-
-// export default Header;

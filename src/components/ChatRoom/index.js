@@ -8,7 +8,18 @@ import Paper from '@mui/material/Paper';
 
 function ChatRoom() {
   return (
-    <Paper elevation={3} sx={{borderRadius: '30px', overflow: 'hidden'}}>
+    <Paper
+      elevation={3}
+      sx={{
+        width:'80vw',
+        borderRadius: '30px',
+        overflow: 'hidden',
+        position: 'fixed',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+      }}
+    >
       <Grid
         container
         sx={{
@@ -18,12 +29,12 @@ function ChatRoom() {
           height: 600,
         }}
       >
-        <Grid item xs={5} sx={{height:'100%'}}>
+        <Grid item xs={4} sx={{height: '100%'}}>
           <ChatSideBar />
         </Grid>
         <Grid
           item
-          xs={7}
+          xs={8}
           // sx={{backgroundColor: 'blue'}}
           sx={{height: '100%'}}
         >
