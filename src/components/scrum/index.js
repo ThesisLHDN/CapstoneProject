@@ -1,7 +1,8 @@
 import './scrum.scss';
-import Paper from '@mui/material/Paper';
+import {Paper, Button} from '@mui/material';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
-import mockData from '../../mockData';
+import mockData from './mockData';
 import {useState} from 'react';
 import Card from './card';
 
@@ -11,6 +12,7 @@ const Scrum = () => {
   const onDragEnd = (result) => {
     if (!result.destination) return;
     const {source, destination} = result;
+    console.log(source, destination);
 
     if (source.droppableId !== destination.droppableId) {
       const sourceColIndex = data.findIndex((e) => e.id === source.droppableId);
@@ -44,7 +46,7 @@ const Scrum = () => {
                 {...provided.droppableProps}
                 className="scrum__section"
                 ref={provided.innerRef}
-                sx={{backgroundColor: '#e8e8e8'}}
+                sx={{backgroundColor: '#efefef'}}
               >
                 <div className="scrum__section__title">
                   {section.title}{' '}
@@ -80,6 +82,22 @@ const Scrum = () => {
             )}
           </Droppable>
         ))}
+        <Button
+          sx={{
+            backgroundColor: '#cdcdcd',
+            color: 'black',
+            borderRadius: '3 !important',
+            height: 40,
+            width: 40,
+            minWidth: 40,
+            '&:hover': {
+              backgroundColor: '#efefef',
+            },
+            ml: 2,
+          }}
+        >
+          <MoreHorizIcon />
+        </Button>
       </div>
     </DragDropContext>
   );
