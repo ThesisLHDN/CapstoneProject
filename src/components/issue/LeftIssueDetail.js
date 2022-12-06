@@ -6,7 +6,7 @@ import AttachFileIcon from '@mui/icons-material/AttachFile'
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd'
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 import "react-datepicker/dist/react-datepicker.css"
-import Comment from './Comment'
+import Comments from './comment/Comments'
 
 function LeftIssueDetail() {
   const [startDate, setStartDate] = useState(new Date())
@@ -124,7 +124,7 @@ function LeftIssueDetail() {
         Activity
       </Typography>
 
-      <Comment />
+      <Comments currentUserId="1" />
     </div>
   )
 }

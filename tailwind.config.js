@@ -12,6 +12,8 @@ module.exports = {
       },
       colors: {
         "green-tx": "#008000",
+        "tg-text-color": "#00980F",
+        "tg-color": '#E0FFDD',
       },
       backgroundColor: {
         "main-bg": "#FAFBFB",
@@ -24,13 +26,13 @@ module.exports = {
         "in-progress-color": '#006BA7',
         "done-color": '#009606',
         "hover-issue": '#D6D6D6',
-        "dang-color": '#ffffff',
+        "tg-color": '#E0FFDD',
       },
       borderWidth: {
         1: "1px",
       },
       borderColor: {
-        color: "rgba(0, 0, 0, 0.1)",
+        color: "#B4B4B4",
       },
       width: {
         400: "400px",
