@@ -2,13 +2,12 @@ import { useState } from "react"
 import { Button } from "@mui/material"
 import CommentForm from "./CommentForm"
 import Comment from "./Comment"
-import './index.css'
 
 const comments = [
   {
     id: "1",
     body: "First comment",
-    username: "Jack",
+    username: "Lam Nguyen",
     userId: "1",
     parentId: null,
     createdAt: "2021-08-16T23:00:33.010+02:00",
@@ -16,7 +15,7 @@ const comments = [
   {
     id: "2",
     body: "Second comment",
-    username: "John",
+    username: "Dang Nguyen",
     userId: "2",
     parentId: null,
     createdAt: "2021-08-16T23:00:33.010+02:00",
@@ -24,18 +23,18 @@ const comments = [
   {
     id: "3",
     body: "First comment first child",
-    username: "John",
-    userId: "2",
+    username: "Lam Nguyen",
+    userId: "1",
     parentId: "1",
-    createdAt: "2021-08-16T23:00:33.010+02:00",
+    createdAt: "2022-08-16T23:00:33.010+02:00",
   },
   {
     id: "4",
     body: "Second comment second child",
-    username: "John",
+    username: "Dang Nguyen",
     userId: "2",
     parentId: "2",
-    createdAt: "2021-08-16T23:00:33.010+02:00",
+    createdAt: "2022-12-11T23:00:33.010+02:00",
   },
 ];
 
@@ -86,7 +85,8 @@ const Comments = ({ currentUserId }) => {
 
   const deleteComment = (commentId) => {
     const deleteComment = async () => { return {}; };
-    if (window.confirm("Are you sure you want to remove comment?")) {
+    // if (window.confirm("Are you sure you want to remove comment?")) 
+    {
       deleteComment().then(() => {
         const updatedBackendComments = backendComments.filter(
           (backendComment) => backendComment.id !== commentId
@@ -151,7 +151,7 @@ const Comments = ({ currentUserId }) => {
       {activeCommentBtn ? 
         <div>
           <CommentForm handleSubmit={addComment}/>
-          <div className="mt-10">
+          <div className="mt-8">
             {rootComments.map((rootComment) => (
               <Comment
                 key={rootComment.id}

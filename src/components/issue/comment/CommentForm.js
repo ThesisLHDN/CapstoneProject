@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { Avatar, Button } from "@mui/material";
-import './index.css'
 
-const CommentForm = ({ initialText="", handleSubmit, handleCancel }) => {
+const CommentForm = ({ isAvatar=false, initialText="", handleSubmit, handleCancel }) => {
   const [text, setText] = useState(initialText);
   const isTextareaDisabled = text.length === 0;
 
@@ -22,11 +21,12 @@ const CommentForm = ({ initialText="", handleSubmit, handleCancel }) => {
       <div className="flex">
         <Avatar
           src="X"
-          sx={{ width: 40, height: 40, backgroundColor: "#8993A4" }}
+          sx={{ width: 40, height: 40, backgroundColor: "#8993A4",  }}
           alt="Lam Nguyen"
         />
+        
         <textarea
-          className="w-full h-10 mx-2 p-2 border-solid border-1 border-color text-sm"
+          className="w-full h-10 ml-2 p-2 border-solid border-1 border-color text-sm"
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder="Add a comment..."

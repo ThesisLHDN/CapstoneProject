@@ -1,5 +1,7 @@
 import CommentForm from "./CommentForm";
-import './index.css'
+import { Avatar } from "@mui/material";
+import moment from "moment/moment";
+
 const Comment = ({
   comment,
   replies,
@@ -18,20 +20,24 @@ const Comment = ({
   const canReply = Boolean(currentUserId);
   const replyId = parentId ? parentId : comment.id;
   const createdAt = new Date(comment.createdAt).toLocaleDateString();
+  const timepassed = moment(createdAt, "DD/MM/YYYY").fromNow();
 
   return (
-    <div key={comment.id} className="comment">
-      <div className="comment-image-container">
-        <img src="/user-icon.png" />
-      </div>
-      <div className="comment-right-part">
-        <div className="comment-content">
-          <div className="comment-author">{comment.username}</div>
-          <div>{createdAt}</div>
+    <div key={comment.id} className="flex mb-5">
+      <Avatar
+        src="X"
+        sx={{ width: 40, height: 40, backgroundColor: "#8993A4", marginRight: 1 }}
+        alt={comment.username}
+      />
+      <div className="w-full">
+        <div className="flex">
+          <div className="mr-3 text-sm font-bold">{comment.username}</div>
+          <div className="mr-3 text-sm">{timepassed}</div>
         </div>
-        {!isEditing && <div className="comment-text">{comment.body}</div>}
+        {!isEditing && <div className="text-sm mt-2">{comment.body}</div>}
         {isEditing && (
           <CommentForm
+            isAvatar={true}
             initialText={comment.body}
             handleSubmit={(text) => updateComment(text, comment.id)}
             handleCancel={() => {
@@ -39,10 +45,10 @@ const Comment = ({
             }}
           />
         )}
-        <div className="comment-actions">
+        <div className="flex text-sm cursor-pointer mt-2">
           {canReply && (
             <div
-              className="comment-action"
+              className="mr-2 hover:underline font-bold"
               onClick={() =>
                 setActiveComment({ id: comment.id, type: "replying" })
               }
@@ -52,33 +58,35 @@ const Comment = ({
           )}
           {canChange && (
             <div className="flex">
-            <div
-              className="comment-action"
-              onClick={() =>
-                setActiveComment({ id: comment.id, type: "editing" })
-              }
-            >
-              Edit
-            </div>
-            <div
-              className="comment-action"
-              onClick={() => deleteComment(comment.id)}
-            >
-              Delete
-            </div>
+              <div
+                className="mr-2 hover:underline font-bold"
+                onClick={() =>
+                  setActiveComment({ id: comment.id, type: "editing" })
+                }
+              >
+                Edit
+              </div>
+              <div
+                className="mr-2 hover:underline font-bold"
+                onClick={() => deleteComment(comment.id)}
+              >
+                Delete
+              </div>
             </div>
           )}
         </div>
         {isReplying && (
+          <div className="mt-4">
           <CommentForm
             handleSubmit={(text) => addComment(text, replyId)}
             handleCancel={() => {
               setActiveComment(null);
             }}
           />
+          </div>
         )}
         {replies.length > 0 && (
-          <div className="replies">
+          <div className="mt-5">
             {replies.map((reply) => (
               <Comment
                 comment={reply}
