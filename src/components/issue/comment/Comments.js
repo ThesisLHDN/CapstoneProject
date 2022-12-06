@@ -6,7 +6,7 @@ import Comment from "./Comment"
 const comments = [
   {
     id: "1",
-    body: "First comment",
+    body: "Ad dolore elit reprehenderit do id excepteur officia qui officia aute cillum nulla laborum ipsum. Exercitation velit elit do mollit. Velit mollit cupidatat qui aute ea laborum proident non ad sit exercitation et. Exercitation proident minim sint do excepteur. Proident ex duis elit et commodo nulla.",
     username: "Lam Nguyen",
     userId: "1",
     parentId: null,

@@ -34,24 +34,22 @@ const Comment = ({
           <div className="mr-3 text-sm font-bold">{comment.username}</div>
           <div className="mr-3 text-sm">{timepassed}</div>
         </div>
-        {!isEditing && <div className="text-sm mt-2">{comment.body}</div>}
+        {!isEditing && <div className="text-sm mt-2 text-ellipsis overflow-hidden text-justify">{comment.body}</div>}
         {isEditing && (
           <CommentForm
-            isAvatar={true}
+            isAvatar={false}
             initialText={comment.body}
             handleSubmit={(text) => updateComment(text, comment.id)}
-            handleCancel={() => {
-              setActiveComment(null);
-            }}
+            handleCancel={() => {setActiveComment(null)}}
           />
         )}
+
+        {!isEditing &&
         <div className="flex text-sm cursor-pointer mt-2">
           {canReply && (
             <div
               className="mr-2 hover:underline font-bold"
-              onClick={() =>
-                setActiveComment({ id: comment.id, type: "replying" })
-              }
+              onClick={() => setActiveComment({ id: comment.id, type: "replying" })}
             >
               Reply
             </div>
@@ -60,9 +58,7 @@ const Comment = ({
             <div className="flex">
               <div
                 className="mr-2 hover:underline font-bold"
-                onClick={() =>
-                  setActiveComment({ id: comment.id, type: "editing" })
-                }
+                onClick={() => setActiveComment({ id: comment.id, type: "editing" })}
               >
                 Edit
               </div>
@@ -74,17 +70,17 @@ const Comment = ({
               </div>
             </div>
           )}
-        </div>
+        </div>}
+
         {isReplying && (
           <div className="mt-4">
           <CommentForm
             handleSubmit={(text) => addComment(text, replyId)}
-            handleCancel={() => {
-              setActiveComment(null);
-            }}
+            handleCancel={() => {setActiveComment(null);}}
           />
           </div>
         )}
+        
         {replies.length > 0 && (
           <div className="mt-5">
             {replies.map((reply) => (

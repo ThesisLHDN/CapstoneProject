@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Avatar, Button } from "@mui/material";
 
-const CommentForm = ({ isAvatar=false, initialText="", handleSubmit, handleCancel }) => {
+const CommentForm = ({ isAvatar=true, initialText="", handleSubmit, handleCancel }) => {
   const [text, setText] = useState(initialText);
   const isTextareaDisabled = text.length === 0;
 
@@ -11,29 +11,33 @@ const CommentForm = ({ isAvatar=false, initialText="", handleSubmit, handleCance
     setText("");
   };
 
-  const onCancel = () => {
+  const onCancel = (event) => {
     setText("");
     handleCancel();
   }
 
   return (
-    <form onSubmit={onSubmit}>
+    <form >
       <div className="flex">
-        <Avatar
-          src="X"
-          sx={{ width: 40, height: 40, backgroundColor: "#8993A4",  }}
-          alt="Lam Nguyen"
-        />
+        {isAvatar ? (
+          <Avatar
+            src="X"
+            sx={{ width: 40, height: 40, backgroundColor: "#8993A4",  }}
+            alt="Lam Nguyen"
+          />
+        ) : <></>}
         
+
         <textarea
-          className="w-full h-10 ml-2 p-2 border-solid border-1 border-color text-sm"
+          className={`w-full h-10 p-2 border-solid border-1 border-color text-sm ${isAvatar ? 'ml-2' : 'mt-2'}`}
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder="Add a comment..."
+          rows={20}
         />
       </div>
       
-      <div className="ml-12 mt-2">
+      <div className={`${isAvatar ? 'ml-12' : ''} mt-2`}>
         <Button
           variant="contained"
           onClick={isTextareaDisabled ? null : onSubmit}
