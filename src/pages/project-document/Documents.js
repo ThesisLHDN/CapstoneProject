@@ -48,7 +48,7 @@ function convertDate(d) {
 }
 
 function Document() {
-  const rootDocument = folders.concat(files).filter((item) => item.parent == "")
+  const rootDocument = folders.concat(files).filter((item) => item.parent === "")
 
   return (
     <div>
