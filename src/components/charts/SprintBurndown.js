@@ -11,7 +11,7 @@ function SprintBurndown({ chartData }) {
         <SettingsOutlinedIcon sx={{ marginTop: 3 }}/>
       </div>
       <p className="text-sm italic ml-6 mt-3">Short description</p>
-      <div className="chart-container" style={{ width: "90%", height: "90%", marginLeft: "7%", marginTop: 20, marginBottom: 30}}>
+      <div className="chart-container" style={{ width: "90%", height: "90%", marginLeft: "7%", marginTop: 20, marginBottom: 40}}>
         <Line data={chartData}/>
       </div>
     </div>

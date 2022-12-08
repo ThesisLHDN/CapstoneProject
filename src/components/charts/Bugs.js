@@ -87,11 +87,11 @@ function Bugs({ chartData }) {
         </div>
       </div>
       
-      <div className="chart-container" style={{ width: "90%", height: "90%", marginLeft: "5%", marginTop: 40, marginBottom: 30}}>
+      <div className="chart-container" style={{ width: "90%", height: "90%", marginLeft: "5%", marginTop: 20, marginBottom: 20}}>
         <Bar data={chartData} />
       </div>
 
-      <div className="flex mb-8">
+      <div className="flex mb-4">
         <div className="my-10 mx-10">
           <Button 
             startIcon={activeAllCategories ? <RadioButtonCheckedIcon /> : <CircleOutlinedIcon />}

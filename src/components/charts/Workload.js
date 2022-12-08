@@ -11,7 +11,7 @@ function Workload({ chartData }) {
         <SettingsOutlinedIcon sx={{ marginTop: 3 }}/>
       </div>
       <p className="text-sm italic ml-6 mt-3">Short description</p>
-      <div className="chart-container" style={{ width: "90%", height: "90%", marginLeft: "5%", marginTop: -30, marginBottom: -30}}>
+      <div className="chart-container" style={{ width: "80%", height: "80%", marginLeft: "10%", marginTop: -40, marginBottom: -40}}>
         <Pie
           data={chartData}
           options={{

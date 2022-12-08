@@ -6,7 +6,7 @@ import EpicCompletion from 'src/components/charts/EpicCompletion';
 import DelayPrediction from 'src/components/charts/DelayPrediction';
 import Bugs from 'src/components/charts/Bugs';
 import MemberManagement from 'src/components/charts/MemberManagement';
-import { WorkloadData, CompletionData, BurndownData, BugsData } from "../../components/charts/Data";
+import { WorkloadData, CompletionData, BurndownData, BugsData, DelayData, PerformceData } from "../../components/charts/Data";
 
 function convertDate(d) {
   const date = new Date(d)
@@ -64,9 +64,20 @@ function Dashboard() {
       },
     ]
   });
-  
+
+  const [delayData, setDelayData] = useState({
+    labels: DelayData.map((data) => data.id),
+    datasets: [{
+      label: "Delay",
+      data: DelayData.map((data) => data.delay),
+      backgroundColor: ["#03AA00", "#E9B500", "#E71515", "#E87D00"],
+      borderWidth: 0,
+      borderRadius: Number.MAX_VALUE,
+    }]
+  });
 
   const [completionData, setCompletionData] = useState(CompletionData)
+  const [performanceData, setPerformanceData] = useState(PerformceData)
 
   return (
     <div>
@@ -124,8 +135,8 @@ function Dashboard() {
         
         <Grid item xs={6}>
           <Grid item sx={{paddingLeft: 1, paddingBottom: 2}}><SprintBurndown chartData={burndownData}/></Grid>
-          <Grid item sx={{paddingLeft: 1, paddingBottom: 2}}><DelayPrediction chartData={burndownData}/></Grid>
-          <Grid item sx={{paddingLeft: 1, paddingBottom: 2}}><MemberManagement /></Grid>
+          <Grid item sx={{paddingLeft: 1, paddingBottom: 2}}><DelayPrediction chartData={delayData}/></Grid>
+          <Grid item sx={{paddingLeft: 1, paddingBottom: 2}}><MemberManagement data={performanceData}/></Grid>
         </Grid> 
       </Grid>
     </div>
