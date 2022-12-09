@@ -1,0 +1,18 @@
+.tag {
+	.tag-close-icon {
+    color: #E0FFDD
+	}
+  &:hover {
+    .tag-close-icon {
+    width: 16px;
+		height: 16px;
+		line-height: 16px;
+		text-align: center;
+		font-size: 14px;
+		margin: 0 4px;
+		color: #fff;
+		border-radius: 50%;
+		background: #00980F;
+		cursor: pointer;
+    }}
+}

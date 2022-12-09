@@ -22,6 +22,7 @@ import WorkspaceSetting from './pages/workspace-setting/WorkspaceSetting';
 
 import AuthProvider from 'src/Context/AuthProvider';
 import {useState} from 'react';
+import Profile from './pages/profile/Profile';
 
 function App() {
   const [openChat, setOpenChat] = useState(false);
@@ -61,6 +62,7 @@ function App() {
                   <Route path="/backlog" element={<Backlog />} />
                   <Route path="/document" element={<Document />} />
                   <Route path="/issue" element={<Issue />} />
+                  <Route path="/profile" element={<Profile />} />
                 </Routes>
               </Box>
             </Grid>
