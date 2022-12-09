@@ -1,10 +1,9 @@
 import './card.scss';
-import Avatar from '@mui/material/Avatar';
-import Typography from '@mui/material/Typography';
 import format from 'date-fns/format';
+
+import {Avatar, Typography, Chip, Paper} from '@mui/material';
+
 import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
-import Chip from '@mui/material/Chip';
-import Paper from '@mui/material/Paper';
 import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
 import FiberManualRecordRoundedIcon from '@mui/icons-material/FiberManualRecordRounded';
 import FlagRoundedIcon from '@mui/icons-material/FlagRounded';

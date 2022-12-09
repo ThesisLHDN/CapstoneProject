@@ -1,0 +1,19 @@
+.gantt_task_progress {
+  background-color: rgb(44, 175, 44);
+}
+.gantt_task_line {
+  background-color: #89bc8c;
+}
+.gantt_grid_scale,
+.gantt_task_scale,
+.gantt_task_vscroll {
+  background-color: #eee;
+}
+.gantt_grid_scale,
+.gantt_task_scale,
+.gantt_task .gantt_task_scale .gantt_scale_cell,
+.gantt_grid_scale .gantt_grid_head_cell {
+  color: #000;
+  font-size: 14px;
+  border-bottom: 1px solid #cecece;
+}

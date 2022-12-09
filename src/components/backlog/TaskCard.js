@@ -1,11 +1,11 @@
 import React from 'react'
-import { Button } from "@mui/material"
+import { Button, Avatar } from "@mui/material"
+
 import DoneRoundedIcon from "@mui/icons-material/DoneRounded"
 import FiberManualRecordRoundedIcon from "@mui/icons-material/FiberManualRecordRounded"
 import FlagRoundedIcon from "@mui/icons-material/FlagRounded"
 import QuestionMarkRoundedIcon from "@mui/icons-material/QuestionMarkRounded"
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded"
-import Avatar from "@mui/material/Avatar"
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 const IssueIcon = (type) => {

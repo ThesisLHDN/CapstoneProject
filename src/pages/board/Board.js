@@ -1,17 +1,12 @@
 import React from 'react';
 import 'src/App.scss';
-import Typography from '@mui/material/Typography';
-import Breadcrumbs from '@mui/material/Breadcrumbs';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
+
+import {Typography, Breadcrumbs, Link, Grid, Button, Box} from '@mui/material';
 import {styled} from '@mui/material/styles';
 
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
 import PermIdentityRoundedIcon from '@mui/icons-material/PermIdentityRounded';
-// import FilterListRoundedIcon from '@mui/icons-material/FilterListRounded';
 import FilterAltRoundedIcon from '@mui/icons-material/FilterAltRounded';
 import SortRoundedIcon from '@mui/icons-material/SortRounded';
 

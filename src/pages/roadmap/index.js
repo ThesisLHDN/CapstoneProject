@@ -1,11 +1,17 @@
 import React from 'react';
 import 'src/App.scss';
-import Typography from '@mui/material/Typography';
-import Breadcrumbs from '@mui/material/Breadcrumbs';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
+import {
+  Typography,
+  Breadcrumbs,
+  Link,
+  Button,
+  Box,
+  Grid,
+  Paper,
+} from '@mui/material';
+import Gantt from './Gantt';
+import Toolbar from './toolbar';
+import MessageArea from './messageArea';
 import {styled} from '@mui/material/styles';
 
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -15,7 +21,34 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import FilterAltRoundedIcon from '@mui/icons-material/FilterAltRounded';
 // import SortRoundedIcon from '@mui/icons-material/SortRounded';
 
-import SearchBar from 'src/components/search'
+import SearchBar from 'src/components/search';
+
+const data = {
+  data: [
+    {
+      id: 1,
+      text: 'Task #1',
+      start_date: '2022-04-15',
+      duration: 3,
+      progress: 0.6,
+    },
+    {
+      id: 2,
+      text: 'Task #2',
+      start_date: '2022-04-18',
+      duration: 3,
+      progress: 0.4,
+    },
+    {
+      id:3,
+      text: 'Task #3',
+      start_date: '2022-04-18',
+      duration: 5,
+      progress: 0.5,
+    },
+  ],
+  links: [{id: 1, source: 1, target: 2, type: '0'}],
+};
 
 function handleClick(event) {
   event.preventDefault();
@@ -32,8 +65,35 @@ const GrayButton = styled(Button)({
 });
 
 function RoadMap() {
+  const [zoom, setZoom] = React.useState('Days');
+  const [messagesState, setMessagesState] = React.useState([]);
+  // d
+
+  const addMessage = (message) => {
+    const maxLogLength = 5;
+    const newMessage = {message};
+    const messages = [newMessage, ...messagesState];
+
+    if (messages.length > maxLogLength) {
+      messages.length = maxLogLength;
+    }
+    setMessagesState(messages);
+  };
+
+  const logDataUpdate = (type, action, item, id) => {
+    let text = item && item.text ? ` (${item.text})` : '';
+    let message = `${type} ${action}: ${id} ${text}`;
+    if (type === 'link' && action !== 'delete') {
+      message += ` ( source: ${item.source}, target: ${item.target} )`;
+    }
+    addMessage(message);
+  };
+
+  const handleZoomChange = (zoom) => {
+    setZoom(zoom);
+  };
+
   return (
-    // <Scrum />
     <div style={{textAlign: 'left'}}>
       <Grid container spacing={2}>
         <Grid item xs={5}>
@@ -79,9 +139,7 @@ function RoadMap() {
             10 days remaining
           </Typography> */}
           {/* <GrayButton variant="contained">Complete sprint</GrayButton> */}
-          <GrayButton
-            sx={{mx: 1, width: '32px !important', minWidth: 32}}
-          >
+          <GrayButton sx={{mx: 1, width: '32px !important', minWidth: 32}}>
             <MoreHorizIcon />
           </GrayButton>
         </Grid>
@@ -128,7 +186,18 @@ function RoadMap() {
         </Button> */}
       </Box>
 
-      {/* <Scrum /> */}
+      <Box>
+        <Box
+          className="zoom-bar"
+          sx={{display: 'flex', justifyContent: 'flex-end'}}
+        >
+          <Toolbar zoom={zoom} onZoomChange={handleZoomChange} />
+        </Box>
+        <Box className="gantt-container">
+          <Gantt tasks={data} zoom={zoom} onDataUpdated={logDataUpdate} />
+        </Box>
+        {/* <MessageArea messages={messagesState} /> */}
+      </Box>
     </div>
   );
 }

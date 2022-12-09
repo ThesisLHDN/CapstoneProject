@@ -1,10 +1,9 @@
 import React from 'react';
 
-import Grid from '@mui/material/Grid';
+import {Grid, Paper} from '@mui/material';
 
 import ChatSideBar from './ChatSideBar';
 import ChatWindow from './ChatWindow';
-import Paper from '@mui/material/Paper';
 
 function ChatRoom() {
   return (

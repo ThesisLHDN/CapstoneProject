@@ -1,17 +1,25 @@
 import React from 'react';
-import Typography from '@mui/material/Typography';
 import {styled} from '@mui/material/styles';
+
+import {
+  Typography,
+  Avatar,
+  Box,
+  TextField,
+  Button,
+  Grid,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+} from '@mui/material';
+// import MuiAccordion from '@mui/material/Accordion';
+// import MuiAccordionSummary from '@mui/material/AccordionSummary';
+// import MuiAccordionDetails from '@mui/material/AccordionDetails';
+
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
-import MuiAccordion from '@mui/material/Accordion';
-import MuiAccordionSummary from '@mui/material/AccordionSummary';
-import MuiAccordionDetails from '@mui/material/AccordionDetails';
-import TextField from '@mui/material/TextField';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import ProjectTable from 'src/components/project-list/ProjectTable';
-import Avatar from '@mui/material/Avatar';
+
 import AvatarList from './AvatarList';
 
 const StyledTypo = styled(Typography)({
@@ -30,8 +38,8 @@ const GradButton = styled(Button)({
   },
 });
 
-const Accordion = styled((props) => (
-  <MuiAccordion disableGutters elevation={0} square {...props} />
+const StyledAccordion = styled((props) => (
+  <Accordion disableGutters elevation={0} square {...props} />
 ))(({theme}) => ({
   //   border: `1px solid ${theme.palette.divider}`,
   '&:not(:last-child)': {
@@ -44,8 +52,8 @@ const Accordion = styled((props) => (
 
 // const SettingPart = styled(Typography);
 
-const AccordionSummary = styled((props) => (
-  <MuiAccordionSummary
+const StyledAccordionSummary = styled((props) => (
+  <AccordionSummary
     expandIcon={
       <ArrowForwardIosSharpIcon sx={{fontSize: '0.9rem', color: 'green'}} />
     }
@@ -65,7 +73,7 @@ const AccordionSummary = styled((props) => (
   },
 }));
 
-const AccordionDetails = styled(MuiAccordionDetails)(({theme}) => ({
+const StyledAccordionDetails = styled(AccordionDetails)(({theme}) => ({
   padding: theme.spacing(2),
   //   borderTop: "1px solid rgba(0, 0, 0, .125)",
 }));
@@ -85,14 +93,17 @@ function WorkspaceSetting() {
         Workspace Setting
       </Typography>
       <Box sx={{my: 2}}>
-        <Accordion
+        <StyledAccordion
           expanded={expanded === 'panel1'}
           onChange={handleChange('panel1')}
         >
-          <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
+          <StyledAccordionSummary
+            aria-controls="panel1d-content"
+            id="panel1d-header"
+          >
             <StyledTypo>Workspace details</StyledTypo>
-          </AccordionSummary>
-          <AccordionDetails>
+          </StyledAccordionSummary>
+          <StyledAccordionDetails>
             <Grid container spacing={2}>
               <Grid item xs={2}>
                 <Typography sx={{my: 2}}>Rename</Typography>
@@ -144,16 +155,19 @@ function WorkspaceSetting() {
               Vestibulum facilisis pharetra est,
               sit amet faucibus urna consequat id."
             ></TextField>
-          </AccordionDetails>
-        </Accordion>
-        <Accordion
+          </StyledAccordionDetails>
+        </StyledAccordion>
+        <StyledAccordion
           expanded={expanded === 'panel2'}
           onChange={handleChange('panel2')}
         >
-          <AccordionSummary aria-controls="panel2d-content" id="panel2d-header">
+          <StyledAccordionSummary
+            aria-controls="panel2d-content"
+            id="panel2d-header"
+          >
             <StyledTypo>Projects</StyledTypo>{' '}
-          </AccordionSummary>
-          <AccordionDetails sx={{position: 'relative'}}>
+          </StyledAccordionSummary>
+          <StyledAccordionDetails sx={{position: 'relative'}}>
             <GradButton
               sx={{right: '0px'}}
               variant="contained"
@@ -162,16 +176,19 @@ function WorkspaceSetting() {
               Create project
             </GradButton>
             <ProjectTable />
-          </AccordionDetails>
-        </Accordion>
-        <Accordion
+          </StyledAccordionDetails>
+        </StyledAccordion>
+        <StyledAccordion
           expanded={expanded === 'panel3'}
           onChange={handleChange('panel3')}
         >
-          <AccordionSummary aria-controls="panel3d-content" id="panel3d-header">
+          <StyledAccordionSummary
+            aria-controls="panel3d-content"
+            id="panel3d-header"
+          >
             <StyledTypo>People</StyledTypo>
-          </AccordionSummary>
-          <AccordionDetails>
+          </StyledAccordionSummary>
+          <StyledAccordionDetails>
             <Grid container spacing={2}>
               <Grid item xs={2}>
                 <Typography sx={{my: 2}}>Administrator</Typography>
@@ -185,16 +202,19 @@ function WorkspaceSetting() {
             </Grid>
             <Typography sx={{my: 2}}>Members</Typography>
             <AvatarList />
-          </AccordionDetails>
-        </Accordion>
-        <Accordion
+          </StyledAccordionDetails>
+        </StyledAccordion>
+        <StyledAccordion
           expanded={expanded === 'panel4'}
           onChange={handleChange('panel4')}
         >
-          <AccordionSummary aria-controls="panel3d-content" id="panel3d-header">
+          <StyledAccordionSummary
+            aria-controls="panel3d-content"
+            id="panel3d-header"
+          >
             <StyledTypo>Dashboard</StyledTypo>
-          </AccordionSummary>
-          <AccordionDetails>
+          </StyledAccordionSummary>
+          <StyledAccordionDetails>
             <Typography>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
               pellentesque justo quam, eget mattis nisl pellentesque sed. In
@@ -204,8 +224,8 @@ function WorkspaceSetting() {
               fermentum mattis nunc a condimentum. Suspendisse potenti. Nulla
               vitae diam nec turpis pharetra fermentum sodales interdum dui.
             </Typography>
-          </AccordionDetails>
-        </Accordion>
+          </StyledAccordionDetails>
+        </StyledAccordion>
       </Box>
     </div>
   );

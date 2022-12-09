@@ -1,35 +1,42 @@
 import * as React from 'react';
 import {styled} from '@mui/material/styles';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
+import {
+  Table,
+  TableBody,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+  TablePagination,
+} from '@mui/material';
+
+// import TableBody from '@mui/material/TableBody';
 import TableCell, {tableCellClasses} from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import IconButton from '@mui/material/IconButton';
+
 import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
 import StarRoundedIcon from '@mui/icons-material/StarRounded';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
-const StyledTableCell = styled(TableCell)(({theme}) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: 'green',
-    color: theme.palette.common.white,
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
-}));
 
-const StyledTableRow = styled(TableRow)(({theme}) => ({
-  '&:nth-of-type(odd)': {
-    backgroundColor: theme.palette.action.hover,
-  },
-  // hide last border
-  '&:last-child td, &:last-child th': {
-    border: 0,
-  },
-}));
+// const StyledTableCell = styled(TableCell)(({theme}) => ({
+//   [`&.${tableCellClasses.head}`]: {
+//     backgroundColor: 'green',
+//     color: theme.palette.common.white,
+//   },
+//   [`&.${tableCellClasses.body}`]: {
+//     fontSize: 14,
+//   },
+// }));
+
+// const StyledTableRow = styled(TableRow)(({theme}) => ({
+//   '&:nth-of-type(odd)': {
+//     backgroundColor: theme.palette.action.hover,
+//   },
+//   // hide last border
+//   '&:last-child td, &:last-child th': {
+//     border: 0,
+//   },
+// }));
 
 function createData(star, name, type, owner) {
   return {star, name, type, owner};
@@ -56,43 +63,112 @@ const rows = [
   ),
 ];
 
+const columns = [
+  {id: 'name', label: 'Name', minWidth: 170},
+  {id: 'code', label: 'ISO\u00a0Code', minWidth: 100},
+  {
+    id: 'population',
+    label: 'Population',
+    minWidth: 170,
+    align: 'right',
+    format: (value) => value.toLocaleString('en-US'),
+  },
+  {
+    id: 'size',
+    label: 'Size\u00a0(km\u00b2)',
+    minWidth: 170,
+    align: 'right',
+    format: (value) => value.toLocaleString('en-US'),
+  },
+  {
+    id: 'density',
+    label: 'Density',
+    minWidth: 170,
+    align: 'right',
+    format: (value) => value.toFixed(2),
+  },
+];
+function createPopulation(name, code, population, size) {
+  const density = population / size;
+  return {name, code, population, size, density};
+}
+
+const rowsss = [
+  createPopulation('India', 'IN', 1324171354, 3287263),
+  createPopulation('China', 'CN', 1403500365, 9596961),
+  createPopulation('Italy', 'IT', 60483973, 301340),
+  createPopulation('United States', 'US', 327167434, 9833520),
+  createPopulation('Canada', 'CA', 37602103, 9984670),
+  createPopulation('Australia', 'AU', 25475400, 7692024),
+  createPopulation('Germany', 'DE', 83019200, 357578),
+  createPopulation('Ireland', 'IE', 4857000, 70273),
+  createPopulation('Mexico', 'MX', 126577691, 1972550),
+  createPopulation('Japan', 'JP', 126317000, 377973),
+  createPopulation('France', 'FR', 67022000, 640679),
+  createPopulation('United Kingdom', 'GB', 67545757, 242495),
+  createPopulation('Russia', 'RU', 146793744, 17098246),
+  createPopulation('Nigeria', 'NG', 200962417, 923768),
+  createPopulation('Brazil', 'BR', 210147125, 8515767),
+];
+
 export default function ProjectTable() {
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
   return (
-    <TableContainer component={Paper} sx={{my: 2}}>
-      <Table sx={{minWidth: 700}} aria-label="customized table">
-        <TableHead>
-          <TableRow>
-            <StyledTableCell></StyledTableCell>
-            <StyledTableCell align="left">Name</StyledTableCell>
-            <StyledTableCell align="center">Project Type</StyledTableCell>
-            <StyledTableCell align="center">Project owner</StyledTableCell>
-            <StyledTableCell align="center"></StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <StyledTableRow key={row.name}>
-              <StyledTableCell component="th" scope="row">
-                <IconButton>
-                  {row.star ? (
-                    <StarRoundedIcon sx={{color: '#ffbf00'}} />
-                  ) : (
-                    <StarBorderRoundedIcon />
-                  )}
-                </IconButton>
-              </StyledTableCell>
-              <StyledTableCell align="left">{row.name}</StyledTableCell>
-              <StyledTableCell align="center">{row.type}</StyledTableCell>
-              <StyledTableCell align="center">{row.owner}</StyledTableCell>
-              <StyledTableCell align="center">
-                <IconButton>
-                  <EditRoundedIcon />
-                </IconButton>
-              </StyledTableCell>
-            </StyledTableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <Paper sx={{overflow: 'hidden', my: 2}}>
+      <TableContainer>
+        <Table sx={{minWidth: 700}} aria-label="customized table">
+          <TableHead
+            sx={{
+              backgroundColor: 'green',
+              '& .MuiTableCell-root.MuiTableCell-head': {
+                color: 'white',
+                fontWeight: 700,
+              },
+            }}
+          >
+            <TableRow>
+              <TableCell></TableCell>
+              <TableCell align="left">Name</TableCell>
+              <TableCell align="center">Project Type</TableCell>
+              <TableCell align="center">Project owner</TableCell>
+              <TableCell align="center"></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => (
+              <TableRow key={row.name} hover>
+                <TableCell scope="row">
+                  <IconButton>
+                    {row.star ? (
+                      <StarRoundedIcon sx={{color: '#ffbf00'}} />
+                    ) : (
+                      <StarBorderRoundedIcon />
+                    )}
+                  </IconButton>
+                </TableCell>
+                <TableCell align="left">{row.name}</TableCell>
+                <TableCell align="center">{row.type}</TableCell>
+                <TableCell align="center">{row.owner}</TableCell>
+                <TableCell align="center">
+                  <IconButton>
+                    <EditRoundedIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Paper>
   );
 }
