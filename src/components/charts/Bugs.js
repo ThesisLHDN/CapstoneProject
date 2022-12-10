@@ -110,7 +110,7 @@ function Bugs({ chartData }) {
               backgroundColor: "#EFEFEF",
             }}
             onClick={() => setActiveAllCategories(!activeAllCategories)}
-          >All Catergories</Button>
+          >All Categories</Button>
         </div>
 
         <div>

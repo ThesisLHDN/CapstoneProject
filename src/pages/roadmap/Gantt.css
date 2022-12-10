@@ -2,7 +2,7 @@
   background-color: rgb(44, 175, 44);
 }
 .gantt_task_line {
-  background-color: #89bc8c;
+  background-color: #75bc7a;
 }
 .gantt_grid_scale,
 .gantt_task_scale,
@@ -14,6 +14,6 @@
 .gantt_task .gantt_task_scale .gantt_scale_cell,
 .gantt_grid_scale .gantt_grid_head_cell {
   color: #000;
-  font-size: 14px;
+  font-size: 13px;
   border-bottom: 1px solid #cecece;
 }

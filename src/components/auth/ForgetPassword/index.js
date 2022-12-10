@@ -1,6 +1,7 @@
 import React, {useContext} from 'react';
 // import {useNavigate} from 'react-router-dom';
 // import AuthContext from 'src/Context/AuthProvider';
+import {colorHover} from 'src/style';
 
 import {
   Button,
@@ -85,7 +86,7 @@ export default function SignInSide() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Grid container component="main" sx={{height: 'auto'}}>
+      {/* <Grid container component="main" sx={{height: '100vh'}}>
         <CssBaseline />
         <Grid
           item
@@ -136,42 +137,99 @@ export default function SignInSide() {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                size="small"
               />
-              {/* <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-              /> */}
-              {/* <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              /> */}
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{mt: 3, mb: 2}}
+                sx={{mt: 3, mb: 2, ...colorHover.greenBtn}}
               >
                 Continue
               </Button>
               <Grid container>
                 <Grid item xs></Grid>
                 <Grid item>
-                  <Link href="#" variant="body2">
+                  <Link href="/login" variant="body2" sx={{color: 'green'}}>
                     {'Login'}
                   </Link>
                 </Grid>
                 <Grid item xs></Grid>
               </Grid>
-              npm
             </Box>
           </Box>
         </Grid>
+      </Grid> */}
+      <Grid
+        container
+        component="main"
+        sx={{
+          background: 'radial-gradient(farthest-corner at -100% -00%, #5DC75C, #7CC7B2, #5B69C6)',
+          height: '100vh',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Box
+          sx={{
+            my: 8,
+            mx: 4,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            backgroundColor: 'white',
+            borderRadius: 10,
+            width: '30vw',
+            px: 4,
+            py: 2,
+            justifySelf: 'center',
+            height: 'fit-content',
+          }}
+        >
+          <Typography component="h1" variant="h5">
+            Forget Password
+          </Typography>
+          <Box
+            component="form"
+            noValidate
+            onSubmit={handleSubmit}
+            sx={{
+              mt: 1,
+              '& .MuiInputLabel-root': {
+                color: 'green',
+              },
+            }}
+          >
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Enter email"
+              name="email"
+              autoComplete="email"
+              autoFocus
+              size="small"
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{mt: 3, mb: 2, ...colorHover.greenBtn}}
+            >
+              Continue
+            </Button>
+            <Grid container>
+              <Grid item xs></Grid>
+              <Grid item>
+                <Link href="/login" variant="body2" sx={{color: 'green'}}>
+                  {'Login'}
+                </Link>
+              </Grid>
+              <Grid item xs></Grid>
+            </Grid>
+          </Box>
+        </Box>
       </Grid>
     </ThemeProvider>
   );

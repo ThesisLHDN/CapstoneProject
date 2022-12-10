@@ -1,6 +1,6 @@
 import './scrum.scss';
 import {Paper, Button} from '@mui/material';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
 import mockData from './mockData';
 import {useState} from 'react';
@@ -96,7 +96,7 @@ const Scrum = () => {
             ml: 2,
           }}
         >
-          <MoreHorizIcon />
+          <AddRoundedIcon />
         </Button>
       </div>
     </DragDropContext>

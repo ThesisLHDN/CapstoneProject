@@ -11,6 +11,9 @@ import {
 import PhotoRoundedIcon from '@mui/icons-material/PhotoRounded';
 import SmartDisplayRoundedIcon from '@mui/icons-material/SmartDisplayRounded';
 import InsertDriveFileRoundedIcon from '@mui/icons-material/InsertDriveFileRounded';
+import SendRoundedIcon from '@mui/icons-material/Send';
+
+import {colorHover} from 'src/style';
 
 function TypingArea() {
   return (
@@ -27,28 +30,34 @@ function TypingArea() {
                 <>
                   <InputAdornment position="end">
                     <IconButton
+                      size="small"
                       edge="end"
-                      color="primary"
-                      sx={{wdith: 24, height: 24}}
+                      sx={{...colorHover.greenIconBtn}}
+                      component="label"
                     >
+                      <input hidden accept="*" multiple type="file" />
                       <InsertDriveFileRoundedIcon />
                     </IconButton>
                   </InputAdornment>
                   <InputAdornment position="end">
                     <IconButton
+                      size="small"
                       edge="end"
-                      color="primary"
-                      sx={{wdith: 24, height: 24}}
+                      sx={{...colorHover.greenIconBtn}}
+                      component="label"
                     >
+                      <input hidden accept="image/*" type="file" />
                       <PhotoRoundedIcon />
                     </IconButton>
                   </InputAdornment>
                   <InputAdornment position="end">
                     <IconButton
+                      size="small"
                       edge="end"
-                      color="primary"
-                      sx={{wdith: 24, height: 24}}
+                      sx={{...colorHover.greenIconBtn}}
+                      component="label"
                     >
+                      <input hidden accept="video/*" multiple type="file" />
                       <SmartDisplayRoundedIcon />
                     </IconButton>
                   </InputAdornment>
@@ -58,7 +67,11 @@ function TypingArea() {
           ></TextField>
         </Grid>{' '}
         <Grid item xs={2}>
-          <Button variant="contained" sx={{width: '100%', height: '100%'}}>
+          <Button
+            variant="contained"
+            sx={{width: '100%', height: '100%', ...colorHover.greenBtn}}
+            endIcon={<SendRoundedIcon />}
+          >
             Send
           </Button>
         </Grid>

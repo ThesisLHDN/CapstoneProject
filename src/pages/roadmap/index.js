@@ -7,11 +7,10 @@ import {
   Button,
   Box,
   Grid,
-  Paper,
 } from '@mui/material';
 import Gantt from './Gantt';
 import Toolbar from './toolbar';
-import MessageArea from './messageArea';
+// import MessageArea from './messageArea';
 import {styled} from '@mui/material/styles';
 
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -23,32 +22,7 @@ import FilterAltRoundedIcon from '@mui/icons-material/FilterAltRounded';
 
 import SearchBar from 'src/components/search';
 
-const data = {
-  data: [
-    {
-      id: 1,
-      text: 'Task #1',
-      start_date: '2022-04-15',
-      duration: 3,
-      progress: 0.6,
-    },
-    {
-      id: 2,
-      text: 'Task #2',
-      start_date: '2022-04-18',
-      duration: 3,
-      progress: 0.4,
-    },
-    {
-      id:3,
-      text: 'Task #3',
-      start_date: '2022-04-18',
-      duration: 5,
-      progress: 0.5,
-    },
-  ],
-  links: [{id: 1, source: 1, target: 2, type: '0'}],
-};
+import data from './tasks';
 
 function handleClick(event) {
   event.preventDefault();

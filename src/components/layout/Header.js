@@ -10,6 +10,7 @@ import Avatar from '@mui/material/Avatar';
 import SearchBar from 'src/components/search';
 import {Link} from 'react-router-dom';
 import {getAuth, signOut} from 'firebase/auth';
+import {colorHover} from 'src/style';
 
 // function LinkTab(props) {
 //   return (
@@ -138,8 +139,19 @@ export default function Header() {
                 position: 'absolute',
               }}
             >
-              <Button variant="contained">Profile</Button>
-              <Button variant="outlined" color="error" onClick={handleLogout}>
+              <Button
+                variant="contained"
+                sx={{...colorHover.greenBtn}}
+                href="/profile"
+              >
+                Profile
+              </Button>
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={handleLogout}
+                href="/login"
+              >
                 Logout
               </Button>
             </Box>
