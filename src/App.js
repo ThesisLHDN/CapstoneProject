@@ -1,5 +1,7 @@
 import './App.css';
+import {useState} from 'react';
 import {Routes, Route} from 'react-router-dom';
+
 import {Box, Grid, Badge, IconButton, Modal} from '@mui/material';
 import ChatRoundedIcon from '@mui/icons-material/ChatRounded';
 
@@ -15,14 +17,13 @@ import RoadMap from './pages/roadmap';
 import Issue from './pages/issue/Issue';
 import Board from './pages/board/Board';
 import Backlog from './pages/backlog/Backlog';
+import Profile from './pages/profile/Profile';
 import Dashboard from './pages/dashboard/Dashboard';
 import Document from './pages/project-document/Documents';
 import ProjectSetting from './pages/project-setting/ProjectSetting';
 import WorkspaceSetting from './pages/workspace-setting/WorkspaceSetting';
 
 import AuthProvider from 'src/Context/AuthProvider';
-import {useState} from 'react';
-import Profile from './pages/profile/Profile';
 
 function App() {
   const [openChat, setOpenChat] = useState(false);

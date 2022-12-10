@@ -50,9 +50,9 @@ function Message({mine, children}) {
         }}
       >
         <Paper
+          elevation={0}
           sx={{
             maxWidth: '75%',
-            //   display: 'flex',
             ...(mine
               ? {backgroundColor: '#04BF00', color: 'white'}
               : {backgroundColor: '#DADADA'}),
@@ -60,7 +60,6 @@ function Message({mine, children}) {
             my: 2,
             py: 1,
             px: 2,
-            //   alignItems: 'flex-end',
             right: '0px',
             '&:hover + .sendDate': {
               display: 'inline-block',

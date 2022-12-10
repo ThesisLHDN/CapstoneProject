@@ -11,6 +11,7 @@ import {
 import PhotoRoundedIcon from '@mui/icons-material/PhotoRounded';
 import SmartDisplayRoundedIcon from '@mui/icons-material/SmartDisplayRounded';
 import InsertDriveFileRoundedIcon from '@mui/icons-material/InsertDriveFileRounded';
+import {colorHover} from 'src/style';
 
 function TypingArea() {
   return (
@@ -27,27 +28,27 @@ function TypingArea() {
                 <>
                   <InputAdornment position="end">
                     <IconButton
+                      size="small"
                       edge="end"
-                      color="primary"
-                      sx={{wdith: 24, height: 24}}
+                      sx={{...colorHover.greenIconBtn}}
                     >
                       <InsertDriveFileRoundedIcon />
                     </IconButton>
                   </InputAdornment>
                   <InputAdornment position="end">
                     <IconButton
+                      size="small"
                       edge="end"
-                      color="primary"
-                      sx={{wdith: 24, height: 24}}
+                      sx={{...colorHover.greenIconBtn}}
                     >
                       <PhotoRoundedIcon />
                     </IconButton>
                   </InputAdornment>
                   <InputAdornment position="end">
                     <IconButton
+                      size="small"
                       edge="end"
-                      color="primary"
-                      sx={{wdith: 24, height: 24}}
+                      sx={{...colorHover.greenIconBtn}}
                     >
                       <SmartDisplayRoundedIcon />
                     </IconButton>
@@ -58,7 +59,10 @@ function TypingArea() {
           ></TextField>
         </Grid>{' '}
         <Grid item xs={2}>
-          <Button variant="contained" sx={{width: '100%', height: '100%'}}>
+          <Button
+            variant="contained"
+            sx={{width: '100%', height: '100%', ...colorHover.greenBtn}}
+          >
             Send
           </Button>
         </Grid>

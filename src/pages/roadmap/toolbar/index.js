@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import './Toolbar.css';
 import {Radio, RadioGroup, FormControlLabel} from '@mui/material';
 
@@ -15,6 +15,11 @@ function Toolbar(props) {
         control={<Radio />}
         label={value}
         onChange={handleZoomChange}
+        sx={{
+          '&.MuiButtonBase-root.MuiRadio-root.Mui-checked': {
+            color: 'green !important',
+          },
+        }}
       />
     );
   });
@@ -26,7 +31,12 @@ function Toolbar(props) {
         row
         aria-labelledby="demo-row-radio-buttons-group-label"
         name="row-radio-buttons-group"
-        sx={{display: 'inline-block', ml: 2}}
+        sx={{
+          display: 'inline-block',
+          ml: 2,
+          '& .MuiButtonBase-root.MuiRadio-root.Mui-checked': {color: 'green !important'},
+        }}
+        defaultValue="Days"
       >
         {zoomRadios}
       </RadioGroup>

@@ -10,6 +10,7 @@ import {
   Grid,
   Accordion,
   AccordionSummary,
+  IconButton,
   AccordionDetails,
 } from '@mui/material';
 // import MuiAccordion from '@mui/material/Accordion';
@@ -18,8 +19,9 @@ import {
 
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import ProjectTable from 'src/components/project-list/ProjectTable';
+import EditRoundedIcon from '@mui/icons-material/EditRounded';
 
+import ProjectTable from 'src/components/project-list/ProjectTable';
 import AvatarList from './AvatarList';
 
 const StyledTypo = styled(Typography)({
@@ -133,27 +135,17 @@ function WorkspaceSetting() {
 
             <Typography sx={{my: 2}}>Workspace description</Typography>
             <TextField
-              sx={{width: '100%'}}
+              sx={{
+                width: '100%',
+                scrollbarGutter: 'stable',
+                textAlign: 'justify',
+                '& textarea': {
+                  textAlign: 'justify',
+                },
+              }}
               multiline
               rows={4}
-              value="Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              In quis lacus sit amet arcu imperdiet suscipit.
-              Quisque ultrices lorem in enim ultrices hendrerit.
-              Cras accumsan, augue id rhoncus fringilla,
-              odio ipsum fringilla mauris,
-              eu molestie dolor libero sit amet odio.
-              Ut vestibulum viverra eros, quis laoreet nibh varius sed.
-              In hac habitasse platea dictumst.
-              Aliquam turpis libero, aliquam vitae ipsum a,
-              pellentesque tempus massa.
-              Suspendisse eu tellus sapien.
-              Donec egestas eu mi consectetur porta.
-              Vivamus mattis magna quis est porttitor egestas.
-              Vestibulum ante ipsum primis in faucibus orci
-              luctus et ultrices posuere cubilia curae;
-              Sed mollis aliquet urna, at finibus ante vulputate non.
-              Vestibulum facilisis pharetra est,
-              sit amet faucibus urna consequat id."
+              value="Lorem ipsum dolor sit amet, consectetio. Ut vestibulum viverra eros, quis laoreet nibh varius sed. In hac hllentesque tempus massa. Suspendisse eu tellus sapien. Donec egestas eu mi consectetur porta. Vivamus mattis magna quis est porttitor egestas. Vestibulum ante ipsum primis in faucibus orciluctus et ultrices posuere cubilia curae; Sed mollis aliquet urna, at finibus ante vulputate non. Vestibulum facilisis pharetra est, sit amet faucibus urna consequat id."
             ></TextField>
           </StyledAccordionDetails>
         </StyledAccordion>
@@ -194,10 +186,24 @@ function WorkspaceSetting() {
                 <Typography sx={{my: 2}}>Administrator</Typography>
               </Grid>
               <Grid item xs={10} sx={{display: 'flex', alignItems: 'center'}}>
-                <div style={{display: 'flex', alignItems: 'center'}}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    '&:hover button': {
+                      display: 'block',
+                    },
+                  }}
+                >
                   <Avatar alt="Remy Sharp" src="#" />
-                  <Typography sx={{mx: 2}}> Nguyễn Trường Hải Đăng</Typography>
-                </div>
+                  <Typography sx={{mx: 2}}>
+                    {' '}
+                    Nguyễn Trường Hải Đăng
+                  </Typography>{' '}
+                  <IconButton sx={{display: 'none'}}>
+                    <EditRoundedIcon />
+                  </IconButton>
+                </Box>
               </Grid>
             </Grid>
             <Typography sx={{my: 2}}>Members</Typography>

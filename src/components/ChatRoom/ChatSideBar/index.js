@@ -1,7 +1,14 @@
 import React from 'react';
 import {format} from 'date-fns';
 
-import {Grid, Typography, IconButton, Divider, Box, Avatar} from '@mui/material';
+import {
+  Grid,
+  Typography,
+  IconButton,
+  Divider,
+  Box,
+  Avatar,
+} from '@mui/material';
 
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import PersonAddAltRoundedIcon from '@mui/icons-material/PersonAddAltRounded';
@@ -121,7 +128,15 @@ function ChatSideBar() {
           }}
         >
           {dummyData.map(({name, photoURL, lastMessage, time}) => (
-            <Box sx={{textDecoration: 'none', display: 'block', width: '100%'}}>
+            <Box
+              sx={{
+                textDecoration: 'none',
+                display: 'block',
+                width: '100%',
+                '&:hover': {backgroundColor: '#efefef'},
+                borderRadius: 3,
+              }}
+            >
               <Box sx={{padding: 1}}>
                 <Grid container sx={{alignItems: 'center'}}>
                   <Grid item xs={3}>
@@ -150,7 +165,7 @@ function ChatSideBar() {
                   </Grid>
                 </Grid>
               </Box>
-              <Divider></Divider>
+              {/* <Divider></Divider> */}
             </Box>
           ))}
         </Box>

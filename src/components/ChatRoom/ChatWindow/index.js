@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {styled} from '@mui/material/styles';
 import {
   Box,
   Modal,
@@ -8,6 +9,7 @@ import {
   Divider,
   Typography,
   Avatar,
+  Switch,
 } from '@mui/material';
 
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -75,6 +77,57 @@ const dummyMessage = {
   ],
 };
 
+const IOSSwitch = styled((props) => (
+  <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
+))(({theme}) => ({
+  width: 40,
+  height: 22,
+  padding: 0,
+  '& .MuiSwitch-switchBase': {
+    padding: 0,
+    margin: 2,
+    transitionDuration: '300ms',
+    '&.Mui-checked': {
+      transform: 'translateX(18px)',
+      color: '#fff',
+      '& + .MuiSwitch-track': {
+        backgroundColor: theme.palette.mode === 'dark' ? '#2ECA45' : '#65C466',
+        opacity: 1,
+        border: 0,
+      },
+      '&.Mui-disabled + .MuiSwitch-track': {
+        opacity: 0.5,
+      },
+    },
+    '&.Mui-focusVisible .MuiSwitch-thumb': {
+      color: '#33cf4d',
+      border: '6px solid #fff',
+    },
+    '&.Mui-disabled .MuiSwitch-thumb': {
+      color:
+        theme.palette.mode === 'light'
+          ? theme.palette.grey[100]
+          : theme.palette.grey[600],
+    },
+    '&.Mui-disabled + .MuiSwitch-track': {
+      opacity: theme.palette.mode === 'light' ? 0.7 : 0.3,
+    },
+  },
+  '& .MuiSwitch-thumb': {
+    boxSizing: 'border-box',
+    width: 18,
+    height: 18,
+  },
+  '& .MuiSwitch-track': {
+    borderRadius: 24 / 2,
+    backgroundColor: theme.palette.mode === 'light' ? '#E9E9EA' : '#39393D',
+    opacity: 1,
+    transition: theme.transitions.create(['background-color'], {
+      duration: 500,
+    }),
+  },
+}));
+
 function ChatWindow() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => {
@@ -84,6 +137,8 @@ function ChatWindow() {
     setOpen(false);
   };
 
+  const [settingModal, setSettingModal] = useState(false);
+
   return (
     <Box container sx={{p: 2, height: '100%'}}>
       <Box sx={{display: 'flex', justifyContent: 'space-between', mb: 2}}>
@@ -92,13 +147,89 @@ function ChatWindow() {
           <Typography variant="h5">Kênh chat 1</Typography>
         </Box>
         <Box sx={{display: 'flex', gap: 1}}>
-          <Button variant="contained" startIcon={<PersonAddAltRoundedIcon />}>
+          {/* <Button variant="contained" startIcon={<PersonAddAltRoundedIcon />}>
             Add Member
-          </Button>
+          </Button> */}
           <Box sx={{position: 'relative'}}>
-            <IconButton sx={{color: 'green'}} onClick={handleOpen}>
+            <IconButton
+              sx={{color: 'green'}}
+              onClick={() => setSettingModal(true)}
+            >
               <MoreVertIcon />
             </IconButton>
+            {settingModal && (
+              <Box>
+                <Box
+                  sx={{
+                    width: '100vw',
+                    height: '100vh',
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    backgroundColor: '#00000020',
+                  }}
+                  onClick={() => setSettingModal(false)}
+                ></Box>{' '}
+                <Paper
+                  elevation={3}
+                  sx={{
+                    position: 'absolute',
+                    top: 0,
+                    right: 0,
+                    p: 2,
+                  }}
+                >
+                  <Typography variant="h6" sx={{color: 'green'}}>
+                    Setting
+                  </Typography>
+                  <Divider sx={{my: 1}}></Divider>
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      height: 40,
+                    }}
+                  >
+                    <Typography>Rename</Typography>
+                  </div>
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      height: 40,
+                      gap: 2,
+                    }}
+                  >
+                    <Typography>Notifications</Typography>
+                    <IOSSwitch defaultChecked />
+                  </div>
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      height: 40,
+                      gap: 2,
+                    }}
+                  >
+                    <Typography>Public</Typography>
+                    <IOSSwitch defaultChecked />
+                  </div>
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      height: 40,
+                    }}
+                  >
+                    <Typography>Members</Typography>
+                  </div>
+                </Paper>
+              </Box>
+            )}
             <Modal open={open} onClose={handleClose}>
               <Paper
                 elevation={3}

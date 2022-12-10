@@ -1,30 +1,45 @@
-import React from 'react'
-import { Typography, Grid, TextField, Button, Avatar } from '@mui/material'
-import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline'
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
-import PhoneEnabledOutlinedIcon from '@mui/icons-material/PhoneEnabledOutlined'
-import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined'
+import React from 'react';
+import {Typography, Grid, TextField, Button, Avatar} from '@mui/material';
+import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import PhoneEnabledOutlinedIcon from '@mui/icons-material/PhoneEnabledOutlined';
+import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 
 function Profile() {
+  console.log('Profile')
   return (
     <div>
-      <Typography variant="h5" sx={{ color: "green", fontWeight: 700 }}>
+      <Typography variant="h5" sx={{color: 'green', fontWeight: 700}}>
         Account Settings
       </Typography>
 
       <Grid container alignItems="center" justifyContent="center">
         <Avatar
           src="X"
-          sx={{ width: "15vw", height: "15vw", backgroundColor: "#8993A4", fontSize: 120 }}
+          sx={{
+            width: '15vw',
+            height: '15vw',
+            backgroundColor: '#8993A4',
+            fontSize: 120,
+          }}
           alt="Lam Nguyen"
         />
       </Grid>
 
-      <Grid container alignItems="center" justifyContent="center" sx={{ mt: 6 }}>
+      <Grid container alignItems="center" justifyContent="center" sx={{mt: 6}}>
         <Grid item xs={2}>
-          <Typography sx={{ display: "flex", color: "green", fontSize: 16, fontWeight: 700 }}>
-            <DriveFileRenameOutlineIcon sx={{ marginRight: 2, width: 24, height: 24 }}/>
+          <Typography
+            sx={{
+              display: 'flex',
+              color: 'green',
+              fontSize: 16,
+              fontWeight: 700,
+            }}
+          >
+            <DriveFileRenameOutlineIcon
+              sx={{marginRight: 2, width: 24, height: 24}}
+            />
             Name
           </Typography>
         </Grid>
@@ -33,15 +48,22 @@ function Profile() {
           <TextField
             value="Lam Nguyen"
             size="small"
-            sx={{ width: "100%", backgroundColor: "#ECECEC" }}
+            sx={{width: '100%', backgroundColor: '#ECECEC'}}
           ></TextField>
         </Grid>
       </Grid>
 
-      <Grid container alignItems="center" justifyContent="center" sx={{ mt: 3 }}>
+      <Grid container alignItems="center" justifyContent="center" sx={{mt: 3}}>
         <Grid item xs={2}>
-          <Typography sx={{ display: "flex", color: "green", fontSize: 16, fontWeight: 700 }}>
-            <EmailOutlinedIcon sx={{ marginRight: 2, width: 24, height: 24 }}/>
+          <Typography
+            sx={{
+              display: 'flex',
+              color: 'green',
+              fontSize: 16,
+              fontWeight: 700,
+            }}
+          >
+            <EmailOutlinedIcon sx={{marginRight: 2, width: 24, height: 24}} />
             Email
           </Typography>
         </Grid>
@@ -51,17 +73,26 @@ function Profile() {
             value="lamngngng@gmail.com"
             size="small"
             sx={{
-              width: "100%",
-              backgroundColor: "#ECECEC",
+              width: '100%',
+              backgroundColor: '#ECECEC',
             }}
           ></TextField>
         </Grid>
       </Grid>
 
-      <Grid container alignItems="center" justifyContent="center" sx={{ mt: 3 }}>
+      <Grid container alignItems="center" justifyContent="center" sx={{mt: 3}}>
         <Grid item xs={2}>
-          <Typography sx={{ display: "flex", color: "green", fontSize: 16, fontWeight: 700 }}>
-            <PhoneEnabledOutlinedIcon sx={{ marginRight: 2, width: 24, height: 24 }}/>
+          <Typography
+            sx={{
+              display: 'flex',
+              color: 'green',
+              fontSize: 16,
+              fontWeight: 700,
+            }}
+          >
+            <PhoneEnabledOutlinedIcon
+              sx={{marginRight: 2, width: 24, height: 24}}
+            />
             Phone number
           </Typography>
         </Grid>
@@ -70,17 +101,26 @@ function Profile() {
           <TextField
             value="0123456789"
             size="small"
-            sx={{ width: "100%", backgroundColor: "#ECECEC" }}
+            sx={{width: '100%', backgroundColor: '#ECECEC'}}
           ></TextField>
         </Grid>
       </Grid>
 
-      <Grid container alignItems="center" justifyContent="center" sx={{ mt: 2 }}>
+      <Grid container alignItems="center" justifyContent="center" sx={{mt: 2}}>
         <Grid item xs={3}>
           <Button
             variant="text"
-            startIcon={<LockOutlinedIcon sx={{ marginRight: 1, width: 24, height: 24 }} />}
-            sx={{ color: "green", textTransform: "none", fontSize: 16, fontWeight: 700, paddingX: 2, marginTop: 1 }}
+            startIcon={
+              <LockOutlinedIcon sx={{marginRight: 1, width: 24, height: 24}} />
+            }
+            sx={{
+              color: 'green',
+              textTransform: 'none',
+              fontSize: 16,
+              fontWeight: 700,
+              paddingX: 2,
+              marginTop: 1,
+            }}
           >
             Change password
           </Button>
@@ -88,12 +128,21 @@ function Profile() {
         <Grid item xs={2.75}></Grid>
       </Grid>
 
-      <Grid container alignItems="center" justifyContent="center" sx={{ mt: 2 }}>
+      <Grid container alignItems="center" justifyContent="center" sx={{mt: 2}}>
         <Grid item xs={3}>
           <Button
             variant="text"
-            startIcon={<DeleteOutlineIcon sx={{ marginRight: 1, width: 24, height: 24 }} />}
-            sx={{ color: "red", textTransform: "none", fontSize: 16, fontWeight: 700, paddingX: 2, marginTop: 1 }}
+            startIcon={
+              <DeleteOutlineIcon sx={{marginRight: 1, width: 24, height: 24}} />
+            }
+            sx={{
+              color: 'red',
+              textTransform: 'none',
+              fontSize: 16,
+              fontWeight: 700,
+              paddingX: 2,
+              marginTop: 1,
+            }}
           >
             Log out
           </Button>
@@ -101,7 +150,7 @@ function Profile() {
         <Grid item xs={2.75}></Grid>
       </Grid>
     </div>
-  )
+  );
 }
 
-export default Profile
+export default Profile;

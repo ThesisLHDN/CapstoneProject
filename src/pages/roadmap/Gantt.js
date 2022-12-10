@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {gantt} from 'dhtmlx-gantt';
 import 'dhtmlx-gantt/codebase/dhtmlxgantt.css';
 import './Gantt.css';
-import {Box, Paper} from '@mui/material';
+import { Paper} from '@mui/material';
 
 export default class Gantt extends Component {
   // instance of gantt.dataProcessor
