@@ -146,7 +146,12 @@ export default function Header() {
               >
                 Profile
               </Button>
-              <Button variant="outlined" color="error" onClick={handleLogout}>
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={handleLogout}
+                href="/login"
+              >
                 Logout
               </Button>
             </Box>

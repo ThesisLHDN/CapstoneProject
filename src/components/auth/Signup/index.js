@@ -1,8 +1,6 @@
 import React from 'react';
-// import {useNavigate} from 'react-router-dom';
-// import AuthContext from 'src/Context/AuthProvider';
+import {colorHover} from 'src/style';
 
-// import Avatar from '@mui/material/Avatar';
 import {
   Button,
   IconButton,
@@ -127,7 +125,7 @@ export default function SignInSide() {
   };
   return (
     <ThemeProvider theme={theme}>
-      <Grid container component="main" sx={{height: 'auto'}}>
+      {/* <Grid container component="main" sx={{height: '100vh'}}>
         <CssBaseline />
         <Grid
           item
@@ -155,9 +153,6 @@ export default function SignInSide() {
               alignItems: 'center',
             }}
           >
-            {/* <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
-              <LockOutlinedIcon />
-            </Avatar> */}
             <Typography component="h1" variant="h5">
               Sign up
             </Typography>
@@ -232,7 +227,7 @@ export default function SignInSide() {
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{mt: 3, mb: 2}}
+                sx={{mt: 3, mb: 2, ...colorHover.greenBtn}}
                 onClick={signUpHandler}
               >
                 Sign Up
@@ -240,7 +235,8 @@ export default function SignInSide() {
               <Grid container justifyContent="flex-end">
                 <Grid item>
                   <Typography variant="body2">
-                    Already have an account? <Link href="#">{'Login'}</Link>
+                    Already have an account?{' '}
+                    <Link href="/login" sx={{color:'green'}}>{'Login'}</Link>
                   </Typography>
                 </Grid>
               </Grid>
@@ -258,6 +254,130 @@ export default function SignInSide() {
             </Box>
           </Box>
         </Grid>
+      </Grid> */}
+      <Grid
+        container
+        component="main"
+        sx={{
+          background: 'radial-gradient(farthest-corner at -100% -00%, #5DC75C, #7CC7B2, #5B69C6)',
+          height: '100vh',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Box
+          sx={{
+            my: 8,
+            mx: 4,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            backgroundColor: 'white',
+            borderRadius: 10,
+            width: '30vw',
+            px: 4,
+            py: 2,
+            justifySelf: 'center',
+            height: 'fit-content',
+          }}
+        >
+          <Typography component="h1" variant="h5">
+            Sign up
+          </Typography>
+          <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 3}}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  size="small"
+                  autoComplete="given-name"
+                  name="firstName"
+                  required
+                  fullWidth
+                  id="firstName"
+                  label="First Name"
+                  autoFocus
+                  onChange={onChangeHandler}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  size="small"
+                  required
+                  fullWidth
+                  id="lastName"
+                  label="Last Name"
+                  name="lastName"
+                  autoComplete="family-name"
+                  onChange={onChangeHandler}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  size="small"
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  autoComplete="email"
+                  onChange={onChangeHandler}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  size="small"
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="new-password"
+                  onChange={onChangeHandler}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <FormControlLabel
+                  control={
+                    <Checkbox value="allowExtraEmails" color="primary" />
+                  }
+                  label="I want to receive inspiration, marketing promotions and updates via email."
+                />
+              </Grid>
+            </Grid>
+            {errorMessage && <Typography>{errorMessage}</Typography>}
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{mt: 3, mb: 2, ...colorHover.greenBtn}}
+              onClick={signUpHandler}
+            >
+              Sign Up
+            </Button>
+            <Grid container justifyContent="flex-end">
+              <Grid item>
+                <Typography variant="body2">
+                  Already have an account?{' '}
+                  <Link href="/login" sx={{color: 'green'}}>
+                    {'Login'}
+                  </Link>
+                </Typography>
+              </Grid>
+            </Grid>
+            <Divider sx={{my: 1}}>
+              <Typography variant="body2">Or continue with</Typography>{' '}
+            </Divider>
+            <Box sx={{display: 'flex', gap: 1, justifyContent: 'center'}}>
+              <IconButton variant="contained" onClick={facebookLoginHandler}>
+                <FacebookIcon style={{width: 32, height: 32}} />
+              </IconButton>
+              <IconButton variant="contained" onClick={googleLoginHandler}>
+                <GoogleIcon style={{width: 32, height: 32}} />
+              </IconButton>
+            </Box>
+          </Box>
+        </Box>
       </Grid>
     </ThemeProvider>
   );

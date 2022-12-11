@@ -106,7 +106,7 @@ function WorkspaceSetting() {
             <StyledTypo>Workspace details</StyledTypo>
           </StyledAccordionSummary>
           <StyledAccordionDetails>
-            <Grid container spacing={2}>
+          <Grid container spacing={2} sx={{alignItems: 'center'}}>
               <Grid item xs={2}>
                 <Typography sx={{my: 2}}>Rename</Typography>
               </Grid>

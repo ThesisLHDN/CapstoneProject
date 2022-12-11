@@ -11,6 +11,8 @@ import {
 import PhotoRoundedIcon from '@mui/icons-material/PhotoRounded';
 import SmartDisplayRoundedIcon from '@mui/icons-material/SmartDisplayRounded';
 import InsertDriveFileRoundedIcon from '@mui/icons-material/InsertDriveFileRounded';
+import SendRoundedIcon from '@mui/icons-material/Send';
+
 import {colorHover} from 'src/style';
 
 function TypingArea() {
@@ -31,7 +33,9 @@ function TypingArea() {
                       size="small"
                       edge="end"
                       sx={{...colorHover.greenIconBtn}}
+                      component="label"
                     >
+                      <input hidden accept="*" multiple type="file" />
                       <InsertDriveFileRoundedIcon />
                     </IconButton>
                   </InputAdornment>
@@ -40,7 +44,9 @@ function TypingArea() {
                       size="small"
                       edge="end"
                       sx={{...colorHover.greenIconBtn}}
+                      component="label"
                     >
+                      <input hidden accept="image/*" type="file" />
                       <PhotoRoundedIcon />
                     </IconButton>
                   </InputAdornment>
@@ -49,7 +55,9 @@ function TypingArea() {
                       size="small"
                       edge="end"
                       sx={{...colorHover.greenIconBtn}}
+                      component="label"
                     >
+                      <input hidden accept="video/*" multiple type="file" />
                       <SmartDisplayRoundedIcon />
                     </IconButton>
                   </InputAdornment>
@@ -62,6 +70,7 @@ function TypingArea() {
           <Button
             variant="contained"
             sx={{width: '100%', height: '100%', ...colorHover.greenBtn}}
+            endIcon={<SendRoundedIcon />}
           >
             Send
           </Button>
