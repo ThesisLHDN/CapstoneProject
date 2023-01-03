@@ -88,28 +88,6 @@ const columns = [
     format: (value) => value.toFixed(2),
   },
 ];
-function createPopulation(name, code, population, size) {
-  const density = population / size;
-  return {name, code, population, size, density};
-}
-
-const rowsss = [
-  createPopulation('India', 'IN', 1324171354, 3287263),
-  createPopulation('China', 'CN', 1403500365, 9596961),
-  createPopulation('Italy', 'IT', 60483973, 301340),
-  createPopulation('United States', 'US', 327167434, 9833520),
-  createPopulation('Canada', 'CA', 37602103, 9984670),
-  createPopulation('Australia', 'AU', 25475400, 7692024),
-  createPopulation('Germany', 'DE', 83019200, 357578),
-  createPopulation('Ireland', 'IE', 4857000, 70273),
-  createPopulation('Mexico', 'MX', 126577691, 1972550),
-  createPopulation('Japan', 'JP', 126317000, 377973),
-  createPopulation('France', 'FR', 67022000, 640679),
-  createPopulation('United Kingdom', 'GB', 67545757, 242495),
-  createPopulation('Russia', 'RU', 146793744, 17098246),
-  createPopulation('Nigeria', 'NG', 200962417, 923768),
-  createPopulation('Brazil', 'BR', 210147125, 8515767),
-];
 
 export default function ProjectTable() {
   const [page, setPage] = React.useState(0);

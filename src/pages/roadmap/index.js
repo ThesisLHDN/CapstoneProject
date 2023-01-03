@@ -1,13 +1,6 @@
 import React from 'react';
 import 'src/App.scss';
-import {
-  Typography,
-  Breadcrumbs,
-  Link,
-  Button,
-  Box,
-  Grid,
-} from '@mui/material';
+import {Typography, Breadcrumbs, Link, Button, Box, Grid} from '@mui/material';
 import Gantt from './Gantt';
 import Toolbar from './toolbar';
 // import MessageArea from './messageArea';
@@ -150,11 +143,11 @@ function RoadMap() {
           sx={{color: '#181818'}}
         >
           Sort
-        </Button>
-        <Button
+        </Button>*/}
+        {/* <Button
           variant="text"
           startIcon={<PermIdentityRoundedIcon />}
-          sx={{color: '#181818'}}
+          sx={{color: '#181818', textTransform: 'none'}}
         >
           Me
         </Button> */}

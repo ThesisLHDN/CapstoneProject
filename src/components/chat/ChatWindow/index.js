@@ -130,9 +130,7 @@ const IOSSwitch = styled((props) => (
 
 function ChatWindow() {
   const [open, setOpen] = useState(false);
-  const handleOpen = () => {
-    setOpen(true);
-  };
+
   const handleClose = () => {
     setOpen(false);
   };

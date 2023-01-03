@@ -1,5 +1,5 @@
 import './scrum.scss';
-import {Paper, Button} from '@mui/material';
+import {Button, Box} from '@mui/material';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
 import mockData from './mockData';
@@ -9,31 +9,86 @@ import Card from './card';
 const Scrum = () => {
   const [data, setData] = useState(mockData);
 
-  const onDragEnd = (result) => {
+  // const onDragEnd = (result) => {
+  //   if (!result.destination) return;
+  //   const {source, destination} = result;
+  //   console.log(source, destination);
+
+  //   if (source.droppableId !== destination.droppableId) {
+  //     const sourceColIndex = data.findIndex((e) => e.id === source.droppableId);
+  //     const destinationColIndex = data.findIndex(
+  //       (e) => e.id === destination.droppableId,
+  //     );
+
+  //     const sourceCol = data[sourceColIndex];
+  //     const destinationCol = data[destinationColIndex];
+
+  //     const sourceTask = [...sourceCol.tasks];
+  //     const destinationTask = [...destinationCol.tasks];
+
+  //     const [removed] = sourceTask.splice(source.index, 1);
+  //     destinationTask.splice(destination.index, 0, removed);
+
+  //     data[sourceColIndex].tasks = sourceTask;
+  //     data[destinationColIndex].tasks = destinationTask;
+
+  //     setData(data);
+  //   } 
+  //   else{
+
+  //   }
+    // else {
+    //   const column = columns[source.droppableId];
+    //   const copiedItems = [...column.items];
+    //   const [removed] = copiedItems.splice(source.index, 1);
+    //   copiedItems.splice(destination.index, 0, removed);
+    //   setColumns({
+    //     ...columns,
+    //     [source.droppableId]: {
+    //       ...column,
+    //       items: copiedItems,
+    //     },
+    //   });
+    // }
+  // };
+  const onDragEnd = (result, columns, setColumns) => {
     if (!result.destination) return;
+    console.log(result);
     const {source, destination} = result;
     console.log(source, destination);
 
-    if (source.droppableId !== destination.droppableId) {
-      const sourceColIndex = data.findIndex((e) => e.id === source.droppableId);
-      const destinationColIndex = data.findIndex(
-        (e) => e.id === destination.droppableId,
-      );
-
-      const sourceCol = data[sourceColIndex];
-      const destinationCol = data[destinationColIndex];
-
-      const sourceTask = [...sourceCol.tasks];
-      const destinationTask = [...destinationCol.tasks];
-
-      const [removed] = sourceTask.splice(source.index, 1);
-      destinationTask.splice(destination.index, 0, removed);
-
-      data[sourceColIndex].tasks = sourceTask;
-      data[destinationColIndex].tasks = destinationTask;
-
-      setData(data);
-    }
+    // if (source.droppableId !== destination.droppableId) {
+    //   const sourceColumn = columns[source.droppableId];
+    //   const destColumn = columns[destination.droppableId];
+    //   const sourceItems = [...sourceColumn.items];
+    //   const destItems = [...destColumn.items];
+    //   const [removed] = sourceItems.splice(source.index, 1);
+    //   destItems.splice(destination.index, 0, removed);
+    //   setColumns({
+    //     ...columns,
+    //     [source.droppableId]: {
+    //       ...sourceColumn,
+    //       items: sourceItems,
+    //     },
+    //     [destination.droppableId]: {
+    //       ...destColumn,
+    //       items: destItems,
+    //     },
+    //   });
+    // }
+    // else {
+    //   const column = columns[source.droppableId];
+    //   const copiedItems = [...column.items];
+    //   const [removed] = copiedItems.splice(source.index, 1);
+    //   copiedItems.splice(destination.index, 0, removed);
+    //   setColumns({
+    //     ...columns,
+    //     [source.droppableId]: {
+    //       ...column,
+    //       items: copiedItems,
+    //     },
+    //   });
+    // }
   };
 
   return (
@@ -42,7 +97,7 @@ const Scrum = () => {
         {data.map((section) => (
           <Droppable key={section.id} droppableId={section.id}>
             {(provided) => (
-              <Paper
+              <Box
                 {...provided.droppableProps}
                 className="scrum__section"
                 ref={provided.innerRef}
@@ -78,7 +133,7 @@ const Scrum = () => {
                   ))}
                   {provided.placeholder}
                 </div>
-              </Paper>
+              </Box>
             )}
           </Droppable>
         ))}
