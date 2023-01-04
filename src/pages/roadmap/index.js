@@ -5,6 +5,7 @@ import Gantt from './Gantt';
 import Toolbar from './toolbar';
 // import MessageArea from './messageArea';
 import {styled} from '@mui/material/styles';
+import {color} from 'src/style';
 
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 // import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
@@ -12,6 +13,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 // import FilterListRoundedIcon from '@mui/icons-material/FilterListRounded';
 import FilterAltRoundedIcon from '@mui/icons-material/FilterAltRounded';
 // import SortRoundedIcon from '@mui/icons-material/SortRounded';
+import {colorHover} from 'src/style';
 
 import SearchBar from 'src/components/search';
 
@@ -111,7 +113,7 @@ function RoadMap() {
           </GrayButton>
         </Grid>
       </Grid>
-      <Typography variant="h5" sx={{color: 'green', fontWeight: 700}}>
+      <Typography variant="h5" sx={{color: color.green03, fontWeight: 700}}>
         RoadMap
       </Typography>
       <Typography variant="caption" sx={{color: '#555'}}>
@@ -133,7 +135,7 @@ function RoadMap() {
         <Button
           variant="text"
           startIcon={<FilterAltRoundedIcon />}
-          sx={{color: '#181818'}}
+          sx={{color: '#181818', textTransform: 'none'}}
         >
           Filter
         </Button>

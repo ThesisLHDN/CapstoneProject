@@ -15,6 +15,8 @@ import SearchBar from 'src/components/search';
 import Filter from 'src/components/Filter';
 import Sort from 'src/components/Sort';
 
+import {color, colorHover} from 'src/style';
+
 function handleClick(event) {
   event.preventDefault();
   console.info('You clicked a breadcrumb.');
@@ -74,13 +76,23 @@ function Board() {
             <AccessTimeRoundedIcon sx={{mr: 1}} />
             10 days remaining
           </Typography>
-          <GrayButton>Complete sprint</GrayButton>
-          <GrayButton sx={{mx: 1, width: '32px !important', minWidth: 32}}>
+          <Button sx={{...colorHover.grayBtn, height: 32}}>
+            Complete sprint
+          </Button>
+          <Button
+            sx={{
+              mx: 1,
+              width: '32px !important',
+              minWidth: 32,
+              height: 32,
+              ...colorHover.grayBtn,
+            }}
+          >
             <MoreHorizIcon />
-          </GrayButton>
+          </Button>
         </Grid>
       </Grid>
-      <Typography variant="h5" sx={{color: 'green', fontWeight: 700}}>
+      <Typography variant="h5" sx={{color: color.green03, fontWeight: 700}}>
         Sprint 02
       </Typography>
       <Typography variant="caption" sx={{color: '#555'}}>

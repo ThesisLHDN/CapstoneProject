@@ -1,4 +1,5 @@
 import {useState} from 'react';
+import {color} from 'src/style';
 import {Badge, IconButton, Modal} from '@mui/material';
 import ChatRoundedIcon from '@mui/icons-material/ChatRounded';
 
@@ -24,7 +25,7 @@ function ChatButton() {
       }}
     >
       <IconButton onClick={() => setOpenChat(true)}>
-        <ChatRoundedIcon sx={{width: 40, height: 40, color: 'green'}} />
+        <ChatRoundedIcon sx={{width: 40, height: 40, color: color.green03}} />
       </IconButton>
       <Modal
         open={openChat}

@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 // import {useNavigate} from 'react-router-dom';
 // import AuthContext from 'src/Context/AuthProvider';
-import {colorHover} from 'src/style';
+import {color, colorHover} from 'src/style';
 
 import {
   Button,
@@ -124,7 +124,7 @@ export default function SignInSide() {
               sx={{
                 mt: 1,
                 '& .MuiInputLabel-root': {
-                  color: 'green',
+                  color: color.green03,
                 },
               }}
             >
@@ -150,7 +150,7 @@ export default function SignInSide() {
               <Grid container>
                 <Grid item xs></Grid>
                 <Grid item>
-                  <Link href="/login" variant="body2" sx={{color: 'green'}}>
+                  <Link href="/login" variant="body2" sx={{color: color.green03}}>
                     {'Login'}
                   </Link>
                 </Grid>
@@ -196,7 +196,7 @@ export default function SignInSide() {
             sx={{
               mt: 1,
               '& .MuiInputLabel-root': {
-                color: 'green',
+                color: color.green03,
               },
             }}
           >
@@ -222,7 +222,7 @@ export default function SignInSide() {
             <Grid container>
               <Grid item xs></Grid>
               <Grid item>
-                <Link href="/login" variant="body2" sx={{color: 'green'}}>
+                <Link href="/login" variant="body2" sx={{color: color.green03}}>
                   {'Login'}
                 </Link>
               </Grid>

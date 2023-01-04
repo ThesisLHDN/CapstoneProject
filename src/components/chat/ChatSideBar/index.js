@@ -1,6 +1,6 @@
 import React from 'react';
 import {format} from 'date-fns';
-
+import {color} from 'src/style'
 import {
   Grid,
   Typography,
@@ -115,7 +115,7 @@ function ChatSideBar() {
             xs={2}
             sx={{justifyContent: 'flex-end', display: 'inline-flex'}}
           >
-            <IconButton sx={{color: 'green', width: 32, height: 32}}>
+            <IconButton sx={{color: color.green03, width: 32, height: 32}}>
               <MoreVertIcon />
             </IconButton>
           </Grid>

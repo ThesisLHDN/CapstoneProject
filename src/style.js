@@ -14,6 +14,8 @@ const colorHover = {
     '&:hover': {color: '#00a922'},
   },
   greenGradBtn: {
+    color: 'white',
+    textTransform: 'none',
     backgroundImage:
       'radial-gradient(farthest-corner at -100% 200%, #ffff00, #008000)',
     transition: 'background 2s',
@@ -22,7 +24,12 @@ const colorHover = {
         'radial-gradient(farthest-corner at -100% 200%, #ffff22, #228822)',
     },
   },
-  grayBtn: {backgroundColor: '#cdcdcd', '&:hover': {backgroundColor: '#ddd'}},
+  grayBtn: {
+    backgroundColor: '#cdcdcd',
+    textTransform: 'none',
+    color: '#181818',
+    '&:hover': {backgroundColor: '#ddd'},
+  },
 };
 
 export {color, colorHover};

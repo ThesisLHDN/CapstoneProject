@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {color} from 'src/style';
 import {Typography, Box, Button, Grid, Breadcrumbs, Link} from '@mui/material';
 import SearchBar from 'src/components/search';
 import FilterAltRoundedIcon from '@mui/icons-material/FilterAltRounded';
@@ -52,7 +53,7 @@ function Backlog() {
       <Typography
         variant="h5"
         sx={{
-          color: 'green',
+          color: color.green03,
           fontWeight: 700,
           fontFamily: 'Open Sans, sans-serif',
         }}

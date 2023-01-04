@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   Paper,
-  Checkbox,
   Typography,
   Button,
   Select,
@@ -9,8 +8,6 @@ import {
   MenuItem,
   Popper,
   Grow,
-  ClickAwayListener,
-  FormHelperText,
   MenuList,
 } from '@mui/material';
 import FilterAltRoundedIcon from '@mui/icons-material/FilterAltRounded';
@@ -27,11 +24,6 @@ const data = {
 };
 
 function FilterRow({property, values}) {
-  //   const property = props.property;
-  //   const values = props.value;
-  console.log(property);
-  //   console.log(value);
-  //   console.log(props)
   return (
     <Box
       sx={{
@@ -170,72 +162,6 @@ function Filter() {
           </Grow>
         )}
       </Popper>
-      {/* <Popper
-        open={open}
-        anchorEl={anchorRef.current}
-        role={undefined}
-        placement="bottom-start"
-        transition
-        disablePortal
-      >
-        {({TransitionProps, placement}) => (
-          <Grow
-            {...TransitionProps}
-            style={{
-              transformOrigin:
-                placement === 'bottom-start' ? 'left top' : 'left bottom',
-            }}
-          >
-            <Paper>
-              <ClickAwayListener onClickAway={handleClose}>
-                <Typography sx={{fontWeight: 700, color: color.green03}}>
-                  Filter
-                </Typography>
-                <MenuList
-                  autoFocusItem={open}
-                  id="composition-menu"
-                  aria-labelledby="composition-button"
-                  onKeyDown={handleListKeyDown}
-                >
-                  {Object.entries(data).map(([key, value]) => (
-                    <FilterRow property={key} values={value} />
-                  ))}
-                </MenuList>
-
-                <Button sx={{...colorHover.greenGradBtn}} variant="contained">
-                  Confirm
-                </Button>
-                <Button variant="outlined" color="error">
-                  Clear filter
-                </Button>
-              </ClickAwayListener>
-            </Paper>
-          </Grow>
-        )}
-      </Popper> */}
-
-      {/* <Paper
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          p: 2,
-          gap: 1,
-        }}
-      >
-        <Typography sx={{fontWeight: 700, color: color.green03}}>
-          Filter
-        </Typography>
-        {Object.entries(data).map(([key, value]) => (
-          <FilterRow property={key} values={value} onClick={handleClose} />
-        ))}
-        <Button sx={{...colorHover.greenGradBtn}} variant="contained">
-          Confirm
-        </Button>
-        <Button variant="outlined" color="error">
-          Clear filter
-        </Button>
-      </Paper> */}
     </>
   );
 }

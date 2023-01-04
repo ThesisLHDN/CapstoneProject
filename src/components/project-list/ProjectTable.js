@@ -1,5 +1,6 @@
 import * as React from 'react';
-import {styled} from '@mui/material/styles';
+// import {styled} from '@mui/material/styles';
+import {color} from 'src/style'
 import {
   Table,
   TableBody,
@@ -20,7 +21,7 @@ import EditRoundedIcon from '@mui/icons-material/EditRounded';
 
 // const StyledTableCell = styled(TableCell)(({theme}) => ({
 //   [`&.${tableCellClasses.head}`]: {
-//     backgroundColor: 'green',
+//     backgroundColor: color.green03,
 //     color: theme.palette.common.white,
 //   },
 //   [`&.${tableCellClasses.body}`]: {
@@ -107,7 +108,7 @@ export default function ProjectTable() {
         <Table sx={{minWidth: 700}} aria-label="customized table">
           <TableHead
             sx={{
-              backgroundColor: 'green',
+              backgroundColor: color.green03,
               '& .MuiTableCell-root.MuiTableCell-head': {
                 color: 'white',
                 fontWeight: 700,

@@ -6,6 +6,7 @@ import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 import ViewTimelineOutlinedIcon from '@mui/icons-material/ViewTimelineOutlined';
 import ViewListOutlinedIcon from '@mui/icons-material/ViewListOutlined';
+import WPQuickSetting from '../WPQuickSetting';
 
 const links = [
   {
@@ -81,12 +82,13 @@ function SideBar() {
         ))}
       </div>
 
-      <div className="w-full absolute bottom-20">
+      <WPQuickSetting />
+      {/* <div className="w-full absolute bottom-20">
         <p className="mx-6 h-px border-0 bg-gray-400 font-extrabold shadow-2xl"></p>
         <div className="hover:text-green-tx cursor-pointer">
           <div className="mt-5 ml-6 mr-14">
             <p className="text-sm overflow-hidden truncate font-bold">
-              Dang Nguyen's Workspace aaaaaaaaaaaaaa
+              Dang Nguyen's Workspace
             </p>
           </div>
           <div className="absolute right-6 bottom-0">
@@ -95,7 +97,7 @@ function SideBar() {
             />
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

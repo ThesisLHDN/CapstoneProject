@@ -2,13 +2,14 @@ import React from 'react'
 import { Typography, Box, Button, Grid, Breadcrumbs, Link, IconButton } from '@mui/material'
 import SearchBar from 'src/components/search'
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined'
-import SortRoundedIcon from "@mui/icons-material/SortRounded"
+// import SortRoundedIcon from "@mui/icons-material/SortRounded"
 import AddIcon from '@mui/icons-material/Add'
 import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRightOutlined'
 import FolderOutlinedIcon from '@mui/icons-material/FolderOutlined'
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined'
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined'
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'
+import Sort from 'src/components/Sort'
 
 const folders = [
   {
@@ -86,13 +87,14 @@ function Document() {
 
       <Box sx={{ display: "flex", gap: 1, gridTemplateColumns: "repeat(4, 1fr)", mt: 2 }}>
         <SearchBar sx={{width:"210px"}}/>
-        <Button
+        {/* <Button
           variant="text"
           startIcon={<SortRoundedIcon />}
           sx={{ color: "#181818", textTransform: "none" }}
         >
           Sort
-        </Button>
+        </Button> */}
+        <Sort/>
         <Button
           variant="text"
           startIcon={<VisibilityOutlinedIcon />}

@@ -19,7 +19,7 @@ import Avatar from '@mui/material/Avatar';
 import SearchBar from 'src/components/search';
 import {Link} from 'react-router-dom';
 import {getAuth, signOut} from 'firebase/auth';
-import {colorHover} from 'src/style';
+import {color, colorHover} from 'src/style';
 
 // function LinkTab(props) {
 //   return (
@@ -89,9 +89,12 @@ export default function Header() {
         sx={{
           mx: 2,
           height: '100%',
-          '& .MuiTab-root.Mui-selected': {color: 'green', fontWeight: 'bold'},
+          '& .MuiTab-root.Mui-selected': {
+            color: color.green03,
+            fontWeight: 'bold',
+          },
           '& .MuiTabs-indicator': {
-            backgroundColor: 'green',
+            backgroundColor: color.green03,
             height: '3px',
           },
         }}
@@ -101,7 +104,14 @@ export default function Header() {
         {/* <Tab label="Dashboard" to="/dashboard" component={Link} /> */}
         {/* <Tab label="Board" to="/board" component={Link} /> */}
         <Tab
-          label="Workspace Setting"
+          sx={{textTransform: 'none'}}
+          label="Your Works"
+          to="/workspace-setting"
+          component={Link}
+        />
+        <Tab
+          sx={{textTransform: 'none'}}
+          label="Projects"
           to="/workspace-setting"
           component={Link}
         />
@@ -122,7 +132,7 @@ export default function Header() {
         <IconButton
           color="primary"
           aria-label="no notification"
-          sx={{color: 'green'}}
+          sx={{color: color.green03}}
         >
           <NotificationsNoneIcon />
         </IconButton>
