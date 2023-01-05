@@ -20,7 +20,7 @@ import {
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {ReactComponent as FacebookIcon} from '../logo/Facebook.svg';
 import {ReactComponent as GoogleIcon} from '../logo/Google.svg';
-import {colorHover} from 'src/style';
+import {color, colorHover} from 'src/style';
 
 // import app, {auth} from 'src/firebase/config.js';
 import {
@@ -131,7 +131,7 @@ export default function SignInSide() {
               sx={{
                 mt: 1,
                 '& .MuiInputLabel-root': {
-                  color: 'green',
+                  color: color.green03,
                 },
               }}
             >
@@ -171,14 +171,14 @@ export default function SignInSide() {
               </Button>
               <Grid container>
                 <Grid item xs>
-                  <Link href="/forget" variant="body2" sx={{color:'green'}}>
+                  <Link href="/forget" variant="body2" sx={{color:color.green03}}>
                     Forgot password?
                   </Link>
                 </Grid>
                 <Grid item>
                   <Typography variant="body2">
                     Don't have an account?{' '}
-                    <Link href="/signup" sx={{color:'green'}}>{'Sign Up'}</Link>
+                    <Link href="/signup" sx={{color:color.green03}}>{'Sign Up'}</Link>
                   </Typography>
                 </Grid>
               </Grid>
@@ -201,7 +201,8 @@ export default function SignInSide() {
         container
         component="main"
         sx={{
-          background: 'radial-gradient(farthest-corner at -100% -00%, #5DC75C, #7CC7B2, #5B69C6)',
+          background:
+            'radial-gradient(farthest-corner at -100% -00%, #5DC75C, #7CC7B2, #5B69C6)',
           height: '100vh',
           justifyContent: 'center',
           alignItems: 'center',
@@ -233,7 +234,7 @@ export default function SignInSide() {
             sx={{
               mt: 1,
               '& .MuiInputLabel-root': {
-                color: 'green',
+                color: color.green03,
               },
             }}
           >
@@ -268,20 +269,24 @@ export default function SignInSide() {
               fullWidth
               variant="contained"
               sx={{mt: 3, mb: 2, ...colorHover.greenBtn}}
-              href='/'
+              href="/"
             >
               Login
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="/forget" variant="body2" sx={{color: 'green'}}>
+                <Link
+                  href="/forget"
+                  variant="body2"
+                  sx={{color: color.green03}}
+                >
                   Forgot password?
                 </Link>
               </Grid>
               <Grid item>
                 <Typography variant="body2">
                   Don't have an account?{' '}
-                  <Link href="/signup" sx={{color: 'green'}}>
+                  <Link href="/signup" sx={{color: color.green03}}>
                     {'Sign Up'}
                   </Link>
                 </Typography>

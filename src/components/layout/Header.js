@@ -1,6 +1,15 @@
 import React from 'react';
 import logo from 'src/assets/images/logo.png';
-import {Box, Tabs, Tab, Button, IconButton, Paper, Modal} from '@mui/material';
+import {
+  Box,
+  Tabs,
+  Tab,
+  Button,
+  IconButton,
+  Paper,
+  Modal,
+  Popper,
+} from '@mui/material';
 
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
@@ -10,7 +19,7 @@ import Avatar from '@mui/material/Avatar';
 import SearchBar from 'src/components/search';
 import {Link} from 'react-router-dom';
 import {getAuth, signOut} from 'firebase/auth';
-import {colorHover} from 'src/style';
+import {color, colorHover} from 'src/style';
 
 // function LinkTab(props) {
 //   return (
@@ -25,9 +34,9 @@ import {colorHover} from 'src/style';
 // }
 
 export default function Header() {
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  // const [open, setOpen] = React.useState(false);
+  // const handleOpen = () => setOpen(true);
+  // const handleClose = () => setOpen(false);
 
   const [value, setValue] = React.useState(0);
 
@@ -44,6 +53,14 @@ export default function Header() {
         // An error happened.
       });
   };
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(anchorEl ? null : event.currentTarget);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popper' : undefined;
 
   return (
     <Paper
@@ -72,9 +89,12 @@ export default function Header() {
         sx={{
           mx: 2,
           height: '100%',
-          '& .MuiTab-root.Mui-selected': {color: 'green', fontWeight: 'bold'},
+          '& .MuiTab-root.Mui-selected': {
+            color: color.green03,
+            fontWeight: 'bold',
+          },
           '& .MuiTabs-indicator': {
-            backgroundColor: 'green',
+            backgroundColor: color.green03,
             height: '3px',
           },
         }}
@@ -84,7 +104,14 @@ export default function Header() {
         {/* <Tab label="Dashboard" to="/dashboard" component={Link} /> */}
         {/* <Tab label="Board" to="/board" component={Link} /> */}
         <Tab
-          label="Workspace Setting"
+          sx={{textTransform: 'none'}}
+          label="Your Works"
+          to="/workspace-setting"
+          component={Link}
+        />
+        <Tab
+          sx={{textTransform: 'none'}}
+          label="Projects"
           to="/workspace-setting"
           component={Link}
         />
@@ -96,13 +123,7 @@ export default function Header() {
           variant="contained"
           sx={{
             height: 36,
-            backgroundImage:
-              'radial-gradient(farthest-corner at -100% 200%, #ffff00, #008000)',
-            transition: 'background 2s',
-            '&:hover': {
-              backgroundImage:
-                'radial-gradient(farthest-corner at -100% 200%, #ffff22, #228822)',
-            },
+            ...colorHover.greenGradBtn,
           }}
           startIcon={<PersonAddOutlinedIcon />}
         >
@@ -111,12 +132,12 @@ export default function Header() {
         <IconButton
           color="primary"
           aria-label="no notification"
-          sx={{color: 'green'}}
+          sx={{color: color.green03}}
         >
           <NotificationsNoneIcon />
         </IconButton>
         <div style={{position: 'relative'}}>
-          <IconButton onClick={handleOpen}>
+          <IconButton onClick={handleClick}>
             <Avatar
               alt="Remy Sharp"
               src="/static/images/avatar/1.jpg"
@@ -124,14 +145,14 @@ export default function Header() {
             />
           </IconButton>
 
-          <Modal open={open} onClose={handleClose}>
+          <Popper id={id} open={open} anchorEl={anchorEl}>
             <Box
               sx={{
                 backgroundColor: 'white',
                 borderRadius: '10px',
                 p: 2,
-                right: '20px',
-                top: '20px',
+                right: 0,
+                top: 0,
                 boxShadow: '2px 2px 5px #00000020',
                 display: 'flex',
                 flexDirection: 'column',
@@ -155,7 +176,7 @@ export default function Header() {
                 Logout
               </Button>
             </Box>
-          </Modal>
+          </Popper>
         </div>
       </Box>
     </Paper>

@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {styled} from '@mui/material/styles';
+import {color} from 'src/style';
 import {
   Box,
   Modal,
@@ -130,9 +131,7 @@ const IOSSwitch = styled((props) => (
 
 function ChatWindow() {
   const [open, setOpen] = useState(false);
-  const handleOpen = () => {
-    setOpen(true);
-  };
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -152,7 +151,7 @@ function ChatWindow() {
           </Button> */}
           <Box sx={{position: 'relative'}}>
             <IconButton
-              sx={{color: 'green'}}
+              sx={{color: color.green03}}
               onClick={() => setSettingModal(true)}
             >
               <MoreVertIcon />
@@ -179,7 +178,7 @@ function ChatWindow() {
                     p: 2,
                   }}
                 >
-                  <Typography variant="h6" sx={{color: 'green'}}>
+                  <Typography variant="h6" sx={{color: color.green03}}>
                     Setting
                   </Typography>
                   <Divider sx={{my: 1}}></Divider>

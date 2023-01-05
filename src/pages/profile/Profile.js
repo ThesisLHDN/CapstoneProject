@@ -1,4 +1,5 @@
 import React from 'react';
+import {color} from 'src/style'
 import {Typography, Grid, TextField, Button, Avatar} from '@mui/material';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
@@ -10,7 +11,7 @@ function Profile() {
   console.log('Profile')
   return (
     <div>
-      <Typography variant="h5" sx={{color: 'green', fontWeight: 700}}>
+      <Typography variant="h5" sx={{color: color.green03, fontWeight: 700}}>
         Account Settings
       </Typography>
 
@@ -32,7 +33,7 @@ function Profile() {
           <Typography
             sx={{
               display: 'flex',
-              color: 'green',
+              color: color.green03,
               fontSize: 16,
               fontWeight: 700,
             }}
@@ -58,7 +59,7 @@ function Profile() {
           <Typography
             sx={{
               display: 'flex',
-              color: 'green',
+              color: color.green03,
               fontSize: 16,
               fontWeight: 700,
             }}
@@ -85,7 +86,7 @@ function Profile() {
           <Typography
             sx={{
               display: 'flex',
-              color: 'green',
+              color: color.green03,
               fontSize: 16,
               fontWeight: 700,
             }}
@@ -114,7 +115,7 @@ function Profile() {
               <LockOutlinedIcon sx={{marginRight: 1, width: 24, height: 24}} />
             }
             sx={{
-              color: 'green',
+              color: color.green03,
               textTransform: 'none',
               fontSize: 16,
               fontWeight: 700,

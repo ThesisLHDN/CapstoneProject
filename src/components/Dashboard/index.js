@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
-import {color} from 'src/style';
-import {Typography, Grid, Breadcrumbs, Link} from '@mui/material';
+import {Grid} from '@mui/material';
 import Workload from 'src/components/charts/Workload';
 import SprintBurndown from 'src/components/charts/SprintBurndown';
 import EpicCompletion from 'src/components/charts/EpicCompletion';
@@ -92,80 +91,32 @@ function Dashboard() {
 
   const [completionData, setCompletionData] = useState(CompletionData);
   const [performanceData, setPerformanceData] = useState(PerformceData);
-
   return (
-    <div>
-      <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <Breadcrumbs separator="›" aria-label="breadcrumb" sx={{mb: 2}}>
-            <Link
-              underline="hover"
-              key="1"
-              color="inherit"
-              href="/"
-              onClick={() => {}}
-              sx={{fontFamily: 'Open Sans, sans-serif'}}
-            >
-              Dang's Workspace
-            </Link>
-            <Link
-              underline="hover"
-              key="2"
-              color="inherit"
-              href="/backlog"
-              onClick={() => {}}
-              sx={{fontFamily: 'Open Sans, sans-serif'}}
-            >
-              First Scrum Project
-            </Link>
-            <Typography
-              key="3"
-              color="text.primary"
-              sx={{fontFamily: 'Open Sans, sans-serif'}}
-            >
-              Dashboard
-            </Typography>
-          </Breadcrumbs>
+    <Grid container sx={{marginTop: 2}}>
+      <Grid item xs={6}>
+        <Grid item sx={{paddingRight: 1, paddingBottom: 2}}>
+          <Workload chartData={workloadData} />
+        </Grid>
+        <Grid item sx={{paddingRight: 1, paddingBottom: 2}}>
+          <EpicCompletion chartData={completionData} />
+        </Grid>
+        <Grid item sx={{paddingRight: 1, paddingBottom: 2}}>
+          <Bugs chartData={bugsData} />
         </Grid>
       </Grid>
 
-      <Typography
-        variant="h5"
-        sx={{
-          color: color.green03,
-          fontWeight: 700,
-          fontFamily: 'Open Sans, sans-serif',
-        }}
-      >
-        Dashboard
-      </Typography>
-
-      <Grid container sx={{marginTop: 2}}>
-        <Grid item xs={6}>
-          <Grid item sx={{paddingRight: 1, paddingBottom: 2}}>
-            <Workload chartData={workloadData} />
-          </Grid>
-          <Grid item sx={{paddingRight: 1, paddingBottom: 2}}>
-            <EpicCompletion chartData={completionData} />
-          </Grid>
-          <Grid item sx={{paddingRight: 1, paddingBottom: 2}}>
-            <Bugs chartData={bugsData} />
-          </Grid>
+      <Grid item xs={6}>
+        <Grid item sx={{paddingLeft: 1, paddingBottom: 2}}>
+          <SprintBurndown chartData={burndownData} />
         </Grid>
-
-        <Grid item xs={6}>
-          <Grid item sx={{paddingLeft: 1, paddingBottom: 2}}>
-            <SprintBurndown chartData={burndownData} />
-          </Grid>
-          <Grid item sx={{paddingLeft: 1, paddingBottom: 2}}>
-            <DelayPrediction chartData={delayData} />
-          </Grid>
-          <Grid item sx={{paddingLeft: 1, paddingBottom: 2}}>
-            <MemberManagement data={performanceData} />
-          </Grid>
+        <Grid item sx={{paddingLeft: 1, paddingBottom: 2}}>
+          <DelayPrediction chartData={delayData} />
+        </Grid>
+        <Grid item sx={{paddingLeft: 1, paddingBottom: 2}}>
+          <MemberManagement data={performanceData} />
         </Grid>
       </Grid>
-    </div>
+    </Grid>
   );
 }
 

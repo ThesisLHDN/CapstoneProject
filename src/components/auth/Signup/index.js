@@ -1,5 +1,5 @@
 import React from 'react';
-import {colorHover} from 'src/style';
+import {color,colorHover} from 'src/style';
 
 import {
   Button,
@@ -236,7 +236,7 @@ export default function SignInSide() {
                 <Grid item>
                   <Typography variant="body2">
                     Already have an account?{' '}
-                    <Link href="/login" sx={{color:'green'}}>{'Login'}</Link>
+                    <Link href="/login" sx={{color:color.green03}}>{'Login'}</Link>
                   </Typography>
                 </Grid>
               </Grid>
@@ -359,7 +359,7 @@ export default function SignInSide() {
               <Grid item>
                 <Typography variant="body2">
                   Already have an account?{' '}
-                  <Link href="/login" sx={{color: 'green'}}>
+                  <Link href="/login" sx={{color: color.green03}}>
                     {'Login'}
                   </Link>
                 </Typography>

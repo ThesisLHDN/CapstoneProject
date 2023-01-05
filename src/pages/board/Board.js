@@ -12,6 +12,10 @@ import SortRoundedIcon from '@mui/icons-material/SortRounded';
 
 import Scrum from 'src/components/scrum';
 import SearchBar from 'src/components/search';
+import Filter from 'src/components/Filter';
+import Sort from 'src/components/Sort';
+
+import {color, colorHover} from 'src/style';
 
 function handleClick(event) {
   event.preventDefault();
@@ -28,7 +32,6 @@ const GrayButton = styled(Button)({
 });
 function Board() {
   return (
-    // <Scrum />
     <div style={{textAlign: 'left'}}>
       <Grid container spacing={2}>
         <Grid item xs={5}>
@@ -73,13 +76,23 @@ function Board() {
             <AccessTimeRoundedIcon sx={{mr: 1}} />
             10 days remaining
           </Typography>
-          <GrayButton>Complete sprint</GrayButton>
-          <GrayButton sx={{mx: 1, width: '32px !important', minWidth: 32}}>
+          <Button sx={{...colorHover.grayBtn, height: 32}}>
+            Complete sprint
+          </Button>
+          <Button
+            sx={{
+              mx: 1,
+              width: '32px !important',
+              minWidth: 32,
+              height: 32,
+              ...colorHover.grayBtn,
+            }}
+          >
             <MoreHorizIcon />
-          </GrayButton>
+          </Button>
         </Grid>
       </Grid>
-      <Typography variant="h5" sx={{color: 'green', fontWeight: 700}}>
+      <Typography variant="h5" sx={{color: color.green03, fontWeight: 700}}>
         Sprint 02
       </Typography>
       <Typography variant="caption" sx={{color: '#555'}}>
@@ -98,24 +111,19 @@ function Board() {
         }}
       >
         <SearchBar sx={{width: '250px'}} />
-        <Button
-          variant="text"
-          startIcon={<FilterAltRoundedIcon />}
-          sx={{color: '#181818'}}
-        >
-          Filter
-        </Button>
-        <Button
+        <Filter />
+        {/* <Button
           variant="text"
           startIcon={<SortRoundedIcon />}
           sx={{color: '#181818'}}
         >
           Sort
-        </Button>
+        </Button> */}
+        <Sort />
         <Button
           variant="text"
           startIcon={<PermIdentityRoundedIcon />}
-          sx={{color: '#181818'}}
+          sx={{color: '#181818', textTransform: 'none'}}
         >
           Me
         </Button>

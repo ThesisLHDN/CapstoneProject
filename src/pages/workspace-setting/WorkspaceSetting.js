@@ -1,5 +1,6 @@
 import React from 'react';
 import {styled} from '@mui/material/styles';
+import {color, colorHover} from 'src/style';
 
 import {
   Typography,
@@ -20,12 +21,14 @@ import {
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
+import PersonAddAltRoundedIcon from '@mui/icons-material/PersonAddAltRounded';
 
 import ProjectTable from 'src/components/project-list/ProjectTable';
 import AvatarList from './AvatarList';
+import Dashboard from 'src/components/Dashboard';
 
 const StyledTypo = styled(Typography)({
-  color: 'green',
+  color: color.green03,
   fontWeight: 'bold',
 });
 
@@ -57,7 +60,7 @@ const StyledAccordion = styled((props) => (
 const StyledAccordionSummary = styled((props) => (
   <AccordionSummary
     expandIcon={
-      <ArrowForwardIosSharpIcon sx={{fontSize: '0.9rem', color: 'green'}} />
+      <ArrowForwardIosSharpIcon sx={{fontSize: '0.9rem', color: color.green03}} />
     }
     {...props}
   />
@@ -91,7 +94,7 @@ function WorkspaceSetting() {
 
   return (
     <div style={{textAlign: 'left'}}>
-      <Typography variant="h5" sx={{color: 'green', fontWeight: 700}}>
+      <Typography variant="h5" sx={{color: color.green03, fontWeight: 700}}>
         Workspace Setting
       </Typography>
       <Box sx={{my: 2}}>
@@ -106,7 +109,7 @@ function WorkspaceSetting() {
             <StyledTypo>Workspace details</StyledTypo>
           </StyledAccordionSummary>
           <StyledAccordionDetails>
-          <Grid container spacing={2} sx={{alignItems: 'center'}}>
+            <Grid container spacing={2} sx={{alignItems: 'center'}}>
               <Grid item xs={2}>
                 <Typography sx={{my: 2}}>Rename</Typography>
               </Grid>
@@ -156,17 +159,29 @@ function WorkspaceSetting() {
           <StyledAccordionSummary
             aria-controls="panel2d-content"
             id="panel2d-header"
+            sx={{
+              // display: 'flex',
+              width: '100%',
+              position: 'relative',
+              // justifyContent: 'space-between',
+            }}
           >
             <StyledTypo>Projects</StyledTypo>{' '}
-          </StyledAccordionSummary>
-          <StyledAccordionDetails sx={{position: 'relative'}}>
-            <GradButton
-              sx={{right: '0px'}}
+            <Button
+              sx={{
+                position: 'absolute',
+                right: 0,
+                top: '50%',
+                transform: 'translateY(-50%)',
+                ...colorHover.greenGradBtn,
+              }}
               variant="contained"
               startIcon={<AddRoundedIcon />}
             >
               Create project
-            </GradButton>
+            </Button>
+          </StyledAccordionSummary>
+          <StyledAccordionDetails sx={{position: 'relative'}}>
             <ProjectTable />
           </StyledAccordionDetails>
         </StyledAccordion>
@@ -177,8 +192,22 @@ function WorkspaceSetting() {
           <StyledAccordionSummary
             aria-controls="panel3d-content"
             id="panel3d-header"
+            sx={{position: 'relative'}}
           >
             <StyledTypo>People</StyledTypo>
+            <Button
+              sx={{
+                position: 'absolute',
+                right: 0,
+                top: '50%',
+                transform: 'translateY(-50%)',
+                ...colorHover.greenGradBtn,
+              }}
+              variant="contained"
+              startIcon={<PersonAddAltRoundedIcon />}
+            >
+              Add members
+            </Button>
           </StyledAccordionSummary>
           <StyledAccordionDetails>
             <Grid container spacing={2}>
@@ -221,15 +250,7 @@ function WorkspaceSetting() {
             <StyledTypo>Dashboard</StyledTypo>
           </StyledAccordionSummary>
           <StyledAccordionDetails>
-            <Typography>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
-              pellentesque justo quam, eget mattis nisl pellentesque sed. In
-              odio urna, laoreet mattis tempor quis, consectetur ut massa.
-              Phasellus pharetra finibus tortor, ut dapibus nunc pretium in.
-              Pellentesque pellentesque et tellus vel sollicitudin. Pellentesque
-              fermentum mattis nunc a condimentum. Suspendisse potenti. Nulla
-              vitae diam nec turpis pharetra fermentum sodales interdum dui.
-            </Typography>
+            <Dashboard />
           </StyledAccordionDetails>
         </StyledAccordion>
       </Box>
