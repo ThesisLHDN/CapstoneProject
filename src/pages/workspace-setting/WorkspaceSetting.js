@@ -60,7 +60,9 @@ const StyledAccordion = styled((props) => (
 const StyledAccordionSummary = styled((props) => (
   <AccordionSummary
     expandIcon={
-      <ArrowForwardIosSharpIcon sx={{fontSize: '0.9rem', color: color.green03}} />
+      <ArrowForwardIosSharpIcon
+        sx={{fontSize: '0.9rem', color: color.green03}}
+      />
     }
     {...props}
   />

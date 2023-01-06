@@ -1,4 +1,5 @@
-import React, {useContext} from 'react';
+import {useState} from 'react';
+import {errorCodeConverter} from '../authFunction';
 // import {useNavigate} from 'react-router-dom';
 // import AuthContext from 'src/Context/AuthProvider';
 
@@ -28,6 +29,7 @@ import {
   FacebookAuthProvider,
   GoogleAuthProvider,
   signInWithPopup,
+  signInWithEmailAndPassword,
 } from 'firebase/auth';
 
 const facebookProvider = new FacebookAuthProvider();
@@ -36,19 +38,64 @@ const googleProvider = new GoogleAuthProvider();
 const theme = createTheme();
 
 export default function SignInSide() {
+  const [error, setError] = useState('');
+  const [formData, setFormData] = useState({});
+  const auth = getAuth();
   // const {user} = useContext(AuthContext);
+  const errorCodeHandler = (err) => {
+    if (err === 'auth/wrong-password') {
+      setError('Wrong password');
+    } else if (err === 'auth/invalid-email') {
+      setError('Invalid email');
+    } else if (err === 'auth/user-not-found') {
+      setError('User not found');
+    } else {
+      setError(err);
+    }
+  };
+  const onChangeHandler = (e) => {
+    e.preventDefault();
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
+    console.log(e.target.name);
+    console.log(e.target.value);
+    setFormData({
+      ...formData,
+
+      // Trimming any whitespace
+      [e.target.name]: e.target.value.trim(),
     });
+
+    // setFormData()
+  };
+
+  const onSubmitHandler = (event) => {
+    event.preventDefault();
+    const data = formData;
+    const email = data.email;
+    const password = data.password;
+    // console.log({
+    //   email: email,
+    //   password: password,
+    // });
+    if (!(email && password)) {
+      setError('All fields are required.');
+      return;
+    }
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+        setError(errorCodeConverter(errorCode));
+      });
   };
 
   const facebookLoginHandler = () => {
-    const auth = getAuth();
     signInWithPopup(auth, facebookProvider)
       .then((result) => {
         // The signed-in user info.
@@ -70,7 +117,6 @@ export default function SignInSide() {
   };
 
   const googleLoginHandler = () => {
-    const auth = getAuth();
     signInWithPopup(auth, googleProvider)
       .then((result) => {
         // The signed-in user info.
@@ -127,7 +173,7 @@ export default function SignInSide() {
             <Box
               component="form"
               noValidate
-              onSubmit={handleSubmit}
+              onSubmit={onSubmitHandler}
               sx={{
                 mt: 1,
                 '& .MuiInputLabel-root': {
@@ -218,6 +264,7 @@ export default function SignInSide() {
             backgroundColor: 'white',
             borderRadius: 10,
             width: '30vw',
+            minWidth: 400,
             px: 4,
             py: 2,
             justifySelf: 'center',
@@ -230,7 +277,7 @@ export default function SignInSide() {
           <Box
             component="form"
             noValidate
-            onSubmit={handleSubmit}
+            onSubmit={onSubmitHandler}
             sx={{
               mt: 1,
               '& .MuiInputLabel-root': {
@@ -248,6 +295,7 @@ export default function SignInSide() {
               name="email"
               autoComplete="email"
               autoFocus
+              onChange={onChangeHandler}
             />
             <TextField
               size="small"
@@ -259,29 +307,41 @@ export default function SignInSide() {
               type="password"
               id="password"
               autoComplete="current-password"
+              onChange={onChangeHandler}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             />
+            {error && (
+              <Typography
+                variant="subtitle2"
+                sx={{color: 'red', textAlign: 'center'}}
+              >
+                {error}
+              </Typography>
+            )}
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{mt: 3, mb: 2, ...colorHover.greenBtn}}
-              href="/"
+              // href="/"
+              // onClick={onSubmitHandler}
             >
               Login
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link
-                  href="/forget"
-                  variant="body2"
-                  sx={{color: color.green03}}
-                >
-                  Forgot password?
-                </Link>
+                <Typography variant="body2">
+                  <Link
+                    href="/forget"
+                    variant="body2"
+                    sx={{color: color.green03}}
+                  >
+                    Forgot password?
+                  </Link>
+                </Typography>
               </Grid>
               <Grid item>
                 <Typography variant="body2">

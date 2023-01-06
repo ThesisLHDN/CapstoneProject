@@ -47,7 +47,7 @@ function ProjectSetting() {
             >
               First Scrum Project
             </Link>
-            <Typography key="3" color="text.primary" sx = {{ fontFamily: "Open Sans, sans-serif" }}>
+            <Typography key="3" color="text.primary" sx={{fontSize: 'inherit'}}>
               Project Settings
             </Typography>
           </Breadcrumbs>

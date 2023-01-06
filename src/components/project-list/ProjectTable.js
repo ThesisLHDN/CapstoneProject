@@ -1,6 +1,6 @@
 import * as React from 'react';
 // import {styled} from '@mui/material/styles';
-import {color} from 'src/style'
+import {color} from 'src/style';
 import {
   Table,
   TableBody,
@@ -11,7 +11,7 @@ import {
   IconButton,
   TablePagination,
 } from '@mui/material';
-
+import {Link} from 'react-router-dom';
 // import TableBody from '@mui/material/TableBody';
 import TableCell, {tableCellClasses} from '@mui/material/TableCell';
 
@@ -125,7 +125,7 @@ export default function ProjectTable() {
           </TableHead>
           <TableBody>
             {rows.map((row) => (
-              <TableRow key={row.name} hover>
+              <TableRow key={row.name} component={Link} to="/roadmap" hover>
                 <TableCell scope="row">
                   <IconButton>
                     {row.star ? (

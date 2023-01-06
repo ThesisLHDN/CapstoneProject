@@ -1,6 +1,6 @@
 import React from 'react';
 import {format} from 'date-fns';
-import {color} from 'src/style'
+import {color} from 'src/style';
 import {
   Grid,
   Typography,
@@ -125,6 +125,7 @@ function ChatSideBar() {
             width: '100%',
             height: 'calc(100% - 104px)',
             overflowY: 'scroll',
+            scrollbarGutter: 'stable',
           }}
         >
           {dummyData.map(({name, photoURL, lastMessage, time}) => (

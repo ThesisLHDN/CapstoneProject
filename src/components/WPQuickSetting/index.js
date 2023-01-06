@@ -7,7 +7,8 @@ import {
   Paper,
   Popper,
   Button,
-  Typography
+  Typography,
+  ClickAwayListener,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 
@@ -33,44 +34,53 @@ function WPQuickSetting() {
   return (
     <div className="w-full absolute bottom-20">
       <Popper id={id} open={open} anchorEl={anchorEl}>
-        <Paper
-          sx={{width: 400, borderRadius: 3, overflow: 'hidden'}}
-          elevation={3}
-        >
-          <Grid container sx={{width: '100%'}}>
-            <Grid item xs={6}>
-              <Paper
-                elevation={2}
-                sx={{
-                  borderRadius: 0,
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  py: 2,
-                }}
-              >
-                <MenuList sx={{px: 0, width: '100%'}}>
-                  <StyledMenuItem><Link to='/workspace-setting'>Dang's Workspace</Link></StyledMenuItem>
-                  <StyledMenuItem><Link to='/workspace-setting'>Lam's Workspace</Link></StyledMenuItem>
+        <ClickAwayListener onClickAway={() => setOpen(false)}>
+          <Paper
+            sx={{width: 400, borderRadius: 3, overflow: 'hidden'}}
+            elevation={3}
+          >
+            <Grid container sx={{width: '100%'}}>
+              <Grid item xs={6}>
+                <Paper
+                  elevation={2}
+                  sx={{
+                    borderRadius: 0,
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    py: 2,
+                  }}
+                >
+                  <MenuList sx={{px: 0, width: '100%'}}>
+                    <StyledMenuItem>
+                      <Link to="/workspace-setting">Dang's Workspace</Link>
+                    </StyledMenuItem>
+                    <StyledMenuItem>
+                      <Link to="/workspace-setting">Lam's Workspace</Link>
+                    </StyledMenuItem>
+                  </MenuList>
+                  <Button
+                    sx={{...colorHover.greenGradBtn}}
+                    endIcon={<AddIcon />}
+                  >
+                    Create Workspace
+                  </Button>
+                </Paper>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography sx={{fontWeight: 700, textAlign: 'center', mt: 2}}>
+                  {' '}
+                  Workspace Setting
+                </Typography>
+                <MenuList>
+                  <MenuItem>Rename</MenuItem>
+                  <MenuItem>Dashboard</MenuItem>
                 </MenuList>
-                <Button sx={{...colorHover.greenGradBtn}} endIcon={<AddIcon />}>
-                  Create Workspace
-                </Button>
-              </Paper>
+              </Grid>
             </Grid>
-            <Grid item xs={6}>
-              <Typography sx={{fontWeight: 700, textAlign: 'center', mt: 2}}>
-                {' '}
-                Workspace Setting
-              </Typography>
-              <MenuList>
-                <MenuItem>Rename</MenuItem>
-                <MenuItem>Dashboard</MenuItem>
-              </MenuList>
-            </Grid>
-          </Grid>
-        </Paper>
+          </Paper>
+        </ClickAwayListener>
       </Popper>
       <p className="mx-6 h-px border-0 bg-gray-400 font-extrabold shadow-2xl"></p>
       <div className="hover:text-green-tx cursor-pointer" onClick={handleClick}>

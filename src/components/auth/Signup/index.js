@@ -1,5 +1,6 @@
 import React from 'react';
-import {color,colorHover} from 'src/style';
+import {color, colorHover} from 'src/style';
+import {errorCodeConverter} from '../authFunction';
 
 import {
   Button,
@@ -34,18 +35,21 @@ const googleProvider = new GoogleAuthProvider();
 const theme = createTheme();
 
 export default function SignInSide() {
-  const [errorMessage, setErrorMessage] = React.useState('');
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
+  const [error, setError] = React.useState('');
 
   const [formData, setFormData] = React.useState({});
+
+  const errorCodeHandler = (err) => {
+    if (err === 'auth/missing-email') {
+      setError('Missing email');
+    } else if (err === 'auth/email-already-in-use') {
+      setError('Email already in use');
+    } else if (err === 'auth/invalid-email') {
+      setError('Invalid email');
+    } else {
+      setError(err);
+    }
+  };
 
   const facebookLoginHandler = () => {
     const auth = getAuth();
@@ -61,11 +65,12 @@ export default function SignInSide() {
       .catch((error) => {
         // Handle Errors here.
         const errorCode = error.code;
-        const errorMessage = error.message;
+        // const errorMessage = error.message;
         // The email of the user's account used.
         const email = error.customData.email;
         // The AuthCredential type that was used.
         const credential = FacebookAuthProvider.credentialFromError(error);
+        setError(errorCodeConverter(errorCode));
       });
   };
 
@@ -83,7 +88,7 @@ export default function SignInSide() {
       .catch((error) => {
         // Handle Errors here.
         const errorCode = error.code;
-        const errorMessage = error.message;
+        const errorMesasage = error.message;
         // The email of the user's account used.
         const email = error.customData.email;
         // The AuthCredential type that was used.
@@ -94,8 +99,7 @@ export default function SignInSide() {
   const onChangeHandler = (e) => {
     e.preventDefault();
 
-    console.log(e.target.name);
-    console.log(e.target.value);
+    console.log(e.target.name + ': ' + e.target.value);
     setFormData({
       ...formData,
 
@@ -108,10 +112,15 @@ export default function SignInSide() {
 
   const signUpHandler = (event) => {
     event.preventDefault();
-    console.log(formData);
     const auth = getAuth();
     const email = formData.email;
     const password = formData.password;
+    const fName = formData.firstName;
+    const lName = formData.lastName;
+    if (!(email, password, fName, lName)) {
+      setError('All fields are required.');
+      return;
+    }
     console.log(email, password);
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
@@ -120,146 +129,17 @@ export default function SignInSide() {
         // ...
       })
       .catch((error) => {
-        setErrorMessage(error.code);
+        errorCodeHandler(error.code);
       });
   };
   return (
     <ThemeProvider theme={theme}>
-      {/* <Grid container component="main" sx={{height: '100vh'}}>
-        <CssBaseline />
-        <Grid
-          item
-          xs={false}
-          sm={4}
-          md={7}
-          sx={{
-            backgroundImage: 'url(https://source.unsplash.com/random)',
-            backgroundRepeat: 'no-repeat',
-            backgroundColor: (t) =>
-              t.palette.mode === 'light'
-                ? t.palette.grey[50]
-                : t.palette.grey[900],
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-        />
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-          <Box
-            sx={{
-              my: 8,
-              mx: 4,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
-            <Typography component="h1" variant="h5">
-              Sign up
-            </Typography>
-            <Box
-              component="form"
-              noValidate
-              onSubmit={handleSubmit}
-              sx={{mt: 3}}
-            >
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    size="small"
-                    autoComplete="given-name"
-                    name="firstName"
-                    required
-                    fullWidth
-                    id="firstName"
-                    label="First Name"
-                    autoFocus
-                    onChange={onChangeHandler}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    size="small"
-                    required
-                    fullWidth
-                    id="lastName"
-                    label="Last Name"
-                    name="lastName"
-                    autoComplete="family-name"
-                    onChange={onChangeHandler}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    size="small"
-                    required
-                    fullWidth
-                    id="email"
-                    label="Email Address"
-                    name="email"
-                    autoComplete="email"
-                    onChange={onChangeHandler}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    size="small"
-                    required
-                    fullWidth
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
-                    autoComplete="new-password"
-                    onChange={onChangeHandler}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox value="allowExtraEmails" color="primary" />
-                    }
-                    label="I want to receive inspiration, marketing promotions and updates via email."
-                  />
-                </Grid>
-              </Grid>
-              {errorMessage && <Typography>{errorMessage}</Typography>}
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{mt: 3, mb: 2, ...colorHover.greenBtn}}
-                onClick={signUpHandler}
-              >
-                Sign Up
-              </Button>
-              <Grid container justifyContent="flex-end">
-                <Grid item>
-                  <Typography variant="body2">
-                    Already have an account?{' '}
-                    <Link href="/login" sx={{color:color.green03}}>{'Login'}</Link>
-                  </Typography>
-                </Grid>
-              </Grid>
-              <Divider sx={{my: 1}}>
-                <Typography variant="body2">Or continue with</Typography>{' '}
-              </Divider>
-              <Box sx={{display: 'flex', gap: 1, justifyContent: 'center'}}>
-                <IconButton variant="contained" onClick={facebookLoginHandler}>
-                  <FacebookIcon style={{width: 32, height: 32}} />
-                </IconButton>
-                <IconButton variant="contained" onClick={googleLoginHandler}>
-                  <GoogleIcon style={{width: 32, height: 32}} />
-                </IconButton>
-              </Box>
-            </Box>
-          </Box>
-        </Grid>
-      </Grid> */}
       <Grid
         container
         component="main"
         sx={{
-          background: 'radial-gradient(farthest-corner at -100% -00%, #5DC75C, #7CC7B2, #5B69C6)',
+          background:
+            'radial-gradient(farthest-corner at -100% -00%, #5DC75C, #7CC7B2, #5B69C6)',
           height: '100vh',
           justifyContent: 'center',
           alignItems: 'center',
@@ -275,6 +155,7 @@ export default function SignInSide() {
             backgroundColor: 'white',
             borderRadius: 10,
             width: '30vw',
+            minWidth: 400,
             px: 4,
             py: 2,
             justifySelf: 'center',
@@ -284,7 +165,12 @@ export default function SignInSide() {
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 3}}>
+          <Box
+            component="form"
+            noValidate
+            onSubmit={signUpHandler}
+            sx={{mt: 3}}
+          >
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -339,23 +225,33 @@ export default function SignInSide() {
               <Grid item xs={12}>
                 <FormControlLabel
                   control={
-                    <Checkbox value="allowExtraEmails" color="primary" />
+                    <Checkbox
+                      value="allowExtraEmails"
+                      color="primary"
+                      sx={{fontSize: 'inherit'}}
+                    />
                   }
                   label="I want to receive inspiration, marketing promotions and updates via email."
                 />
               </Grid>
             </Grid>
-            {errorMessage && <Typography>{errorMessage}</Typography>}
+            {error && (
+              <Typography
+                variant="subtitle2"
+                sx={{color: 'red', textAlign: 'center'}}
+              >
+                {error}
+              </Typography>
+            )}
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{mt: 3, mb: 2, ...colorHover.greenBtn}}
-              onClick={signUpHandler}
             >
               Sign Up
             </Button>
-            <Grid container justifyContent="flex-end">
+            <Grid container justifyContent="flex-start">
               <Grid item>
                 <Typography variant="body2">
                   Already have an account?{' '}

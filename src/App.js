@@ -2,8 +2,8 @@ import './App.css';
 import {useState} from 'react';
 import {Routes, Route, useLocation} from 'react-router-dom';
 
-import {Box, Grid, Badge, IconButton, Modal} from '@mui/material';
-import ChatRoundedIcon from '@mui/icons-material/ChatRounded';
+// import {Box, Grid, Badge, IconButton, Modal} from '@mui/material';
+// import ChatRoundedIcon from '@mui/icons-material/ChatRounded';
 
 import Layout from 'src/components/layout';
 import AuthLayout from 'src/components/layout/AuthLayout';
@@ -28,7 +28,7 @@ import AuthProvider from 'src/Context/AuthProvider';
 
 function App() {
   const params = useLocation();
-  console.log(params);
+  // console.log(params);
   const [openChat, setOpenChat] = useState(false);
 
   return (
@@ -49,16 +49,18 @@ function App() {
                 element={<ProjectSetting></ProjectSetting>}
               ></Route>
               <Route path="dashboard" element={<Dashboard></Dashboard>}></Route>
-              <Route
-                path="workspace-setting"
-                element={<WorkspaceSetting></WorkspaceSetting>}
-              ></Route>{' '}
               <Route path="board" element={<Board />}></Route>
               <Route path="roadmap" element={<RoadMap />}></Route>
               <Route path="backlog" element={<Backlog />} />
               <Route path="document" element={<Document />} />
               <Route path="issue" element={<Issue />} />
               <Route path="profile" element={<Profile />} />
+            </Route>
+            <Route element={<Layout wp />}>
+              <Route
+                path="workspace-setting"
+                element={<WorkspaceSetting></WorkspaceSetting>}
+              ></Route>
             </Route>
           </Route>
         </Routes>

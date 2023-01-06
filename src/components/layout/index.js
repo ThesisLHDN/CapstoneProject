@@ -2,15 +2,14 @@ import React from 'react';
 import {Outlet} from 'react-router-dom';
 import {Box, Grid} from '@mui/material';
 import Header from './Header';
+import WPHeader from './WPHeader';
 import SideBar from './SideBar';
 import ChatButton from 'src/components/chat/ChatButton';
 
-function Layout({children}) {
-  console.log(children);
-
+function Layout(props) {
   return (
     <div>
-      <Header />
+      {props.wp ? <WPHeader /> : <Header />}
       <div style={{height: '48px'}}> </div>
       <Box sx={{flexGrow: 1}}>
         <Grid container spacing={2}>

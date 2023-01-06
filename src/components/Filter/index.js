@@ -9,6 +9,8 @@ import {
   Popper,
   Grow,
   MenuList,
+  TextField,
+  ClickAwayListener,
 } from '@mui/material';
 import FilterAltRoundedIcon from '@mui/icons-material/FilterAltRounded';
 
@@ -37,21 +39,25 @@ function FilterRow({property, values}) {
         {property[0].toUpperCase() + property.substring(1)}
       </Typography>
       <FormControl sx={{m: 1, minWidth: 120}}>
-        <Select
-          //   value={age}
-          //   onChange={handleChange}
+        <select
           displayEmpty
           inputProps={{'aria-label': 'Without label'}}
           size="small"
           defaultValue={''}
+          style={{
+            border: '1px solid',
+            width: '100%',
+            height: 40,
+            borderRadius: 4,
+          }}
         >
-          <MenuItem value="">
+          <option value="">
             <em>None</em>
-          </MenuItem>
+          </option>
           {values.map((value) => (
-            <MenuItem value={value}>{value}</MenuItem>
+            <option value={value}>{value}</option>
           ))}
-        </Select>
+        </select>
       </FormControl>
     </Box>
   );
@@ -115,51 +121,51 @@ function Filter() {
         sx={{zIndex: 5}}
       >
         {({TransitionProps, placement}) => (
-          <Grow
-            {...TransitionProps}
-            style={{
-              transformOrigin:
-                placement === 'bottom-start' ? 'left top' : 'left bottom',
-            }}
-          >
-            <Paper
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                py: 2,
-                gap: 1,
+          <ClickAwayListener onClickAway={handleClose}>
+            <Grow
+              {...TransitionProps}
+              style={{
+                transformOrigin:
+                  placement === 'bottom-start' ? 'left top' : 'left bottom',
               }}
             >
-              <Typography sx={{fontWeight: 700, color: color.green03}}>
-                Filter
-              </Typography>
-              {/* <ClickAwayListener onClickAway={handleClose}> */}
-              <MenuList
-                autoFocusItem={open}
-                id="composition-menu"
-                aria-labelledby="composition-button"
-                onKeyDown={handleListKeyDown}
+              <Paper
+                elevation={3}
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  py: 2,
+                  gap: 1,
+                }}
               >
-                {Object.entries(data).map(([key, value]) => (
-                  <MenuItem>
+                <Typography sx={{fontWeight: 700, color: color.green03}}>
+                  Filter
+                </Typography>
+                <MenuList
+                  autoFocusItem={open}
+                  id="composition-menu"
+                  aria-labelledby="composition-button"
+                  onKeyDown={handleListKeyDown}
+                  sx={{p: 3}}
+                >
+                  {Object.entries(data).map(([key, value]) => (
                     <FilterRow property={key} values={value} />
-                  </MenuItem>
-                ))}
-              </MenuList>
-              {/* </ClickAwayListener> */}
-              <Button
-                sx={{...colorHover.greenGradBtn}}
-                variant="contained"
-                onClick={handleToggle}
-              >
-                Confirm
-              </Button>
-              <Button variant="outlined" color="error">
-                Clear filter
-              </Button>
-            </Paper>
-          </Grow>
+                  ))}
+                </MenuList>
+                <Button
+                  sx={{...colorHover.greenGradBtn}}
+                  variant="contained"
+                  onClick={handleToggle}
+                >
+                  Confirm
+                </Button>
+                <Button variant="outlined" color="error">
+                  Clear filter
+                </Button>
+              </Paper>
+            </Grow>
+          </ClickAwayListener>
         )}
       </Popper>
     </>

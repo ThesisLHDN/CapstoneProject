@@ -7,8 +7,8 @@ import {
   MenuItem,
   Popper,
   Grow,
-  ClickAwayListener,
 } from '@mui/material';
+import {ClickAwayListener} from '@mui/base';
 import SortRoundedIcon from '@mui/icons-material/SortRounded';
 import {color, colorHover} from 'src/style';
 
@@ -31,9 +31,9 @@ function Sort() {
   };
 
   const handleClose = (event) => {
-    if (anchorRef.current && anchorRef.current.contains(event.target)) {
-      return;
-    }
+    // if (anchorRef.current && anchorRef.current.contains(event.target)) {
+    //   return;
+    // }
 
     setOpen(false);
   };
@@ -89,6 +89,7 @@ function Sort() {
             }}
           >
             <Paper
+              elevation={3}
               sx={{
                 display: 'flex',
                 flexDirection: 'column',

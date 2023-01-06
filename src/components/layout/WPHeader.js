@@ -12,7 +12,8 @@ import {
 } from '@mui/material';
 
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
-import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
+// import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
+import AddIcon from '@mui/icons-material/Add';
 
 import Avatar from '@mui/material/Avatar';
 
@@ -34,10 +35,6 @@ import {color, colorHover} from 'src/style';
 // }
 
 export default function Header() {
-  // const [open, setOpen] = React.useState(false);
-  // const handleOpen = () => setOpen(true);
-  // const handleClose = () => setOpen(false);
-
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -82,40 +79,6 @@ export default function Header() {
       <Link to="/">
         <img src={logo} width="150" alt="Logo" />
       </Link>
-      <Tabs
-        value={value}
-        onChange={handleChange}
-        aria-label="nav tabs example"
-        sx={{
-          mx: 2,
-          height: '100%',
-          '& .MuiTab-root.Mui-selected': {
-            color: color.green03,
-            fontWeight: 'bold',
-          },
-          '& .MuiTabs-indicator': {
-            backgroundColor: color.green03,
-            height: '3px',
-          },
-        }}
-      >
-        {/* <Tab label="Home" to="/" component={Link} /> */}
-        {/* <Tab label="Roadmap" to="/roadmap" component={Link} /> */}
-        {/* <Tab label="Dashboard" to="/dashboard" component={Link} /> */}
-        {/* <Tab label="Board" to="/board" component={Link} /> */}
-        <Tab
-          sx={{textTransform: 'none'}}
-          label="Your Works"
-          // to="/workspace-setting"
-          component={Link}
-        />
-        <Tab
-          sx={{textTransform: 'none'}}
-          label="Projects"
-          // to="/workspace-setting"
-          component={Link}
-        />
-      </Tabs>
 
       <SearchBar value={value}></SearchBar>
       <Box sx={{display: 'flex', gap: 1, alignItems: 'center'}}>
@@ -125,9 +88,9 @@ export default function Header() {
             height: 36,
             ...colorHover.greenGradBtn,
           }}
-          startIcon={<PersonAddOutlinedIcon />}
+          startIcon={<AddIcon />}
         >
-          Add member
+          Create workspace
         </Button>
         <IconButton
           color="primary"

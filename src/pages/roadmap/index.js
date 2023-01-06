@@ -3,7 +3,7 @@ import 'src/App.scss';
 import {Typography, Breadcrumbs, Link, Button, Box, Grid} from '@mui/material';
 import Gantt from './Gantt';
 import Toolbar from './toolbar';
-// import MessageArea from './messageArea';
+import Filter from 'src/components/Filter';
 import {styled} from '@mui/material/styles';
 import {color} from 'src/style';
 
@@ -66,7 +66,7 @@ function RoadMap() {
     <div style={{textAlign: 'left'}}>
       <Grid container spacing={2}>
         <Grid item xs={5}>
-          <Breadcrumbs separator=">" aria-label="breadcrumb" sx={{mb: 2}}>
+          <Breadcrumbs separator="›" aria-label="breadcrumb" sx={{mb: 2}}>
             [
             <Link
               underline="hover"
@@ -88,7 +88,7 @@ function RoadMap() {
               First Scrum Project
             </Link>
             ,
-            <Typography key="3" color="text.primary">
+            <Typography key="3" color="text.primary" sx={{fontSize: 'inherit'}}>
               Roadmap
             </Typography>
             , ]
@@ -132,13 +132,14 @@ function RoadMap() {
         }}
       >
         <SearchBar sx={{width: '250px'}} />
-        <Button
+        <Filter/>
+        {/* <Button
           variant="text"
           startIcon={<FilterAltRoundedIcon />}
           sx={{color: '#181818', textTransform: 'none'}}
         >
           Filter
-        </Button>
+        </Button> */}
         {/* <Button
           variant="text"
           startIcon={<SortRoundedIcon />}

@@ -35,7 +35,7 @@ function Board() {
     <div style={{textAlign: 'left'}}>
       <Grid container spacing={2}>
         <Grid item xs={5}>
-          <Breadcrumbs separator=">" aria-label="breadcrumb" sx={{mb: 2}}>
+          <Breadcrumbs separator="›" aria-label="breadcrumb" sx={{mb: 2}}>
             [
             <Link
               underline="hover"
@@ -57,7 +57,7 @@ function Board() {
               First Scrum Project
             </Link>
             ,
-            <Typography key="3" color="text.primary">
+            <Typography key="3" color="text.primary" sx={{fontSize: 'inherit'}}>
               Board
             </Typography>
             , ]

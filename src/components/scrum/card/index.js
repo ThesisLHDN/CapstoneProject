@@ -1,5 +1,6 @@
 import './card.scss';
 import format from 'date-fns/format';
+import {Link} from 'react-router-dom';
 
 import {Avatar, Typography, Chip, Paper} from '@mui/material';
 
@@ -96,40 +97,43 @@ const Card = (props) => {
   const task = props.children;
   console.log(task);
   return (
-    <Paper elevation={1} className="card">
-      <Typography>{task.title}</Typography>
-      <div style={{margin: '10px 0px'}}>
-        <Epic>{task.epic}</Epic>
-        <Chip
-          size="small"
-          icon={<AccessTimeRoundedIcon />}
-          label={format(new Date(task.due), 'dd-MM')}
-        />
-      </div>
-      <div style={{display: 'flex', justifyContent: 'space-between'}}>
-        <div
-          style={{
-            fontSize: '13px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 1,
-          }}
-        >
-          {issueIcon(task.type)}
-          <Typography variant="subtitle" sx={{ml: '5px'}}>
-            {task.code}
-          </Typography>
-        </div>
-        <div style={{display: 'inline-flex', alignItems: 'flex-end'}}>
-          <Chip size="small" label={task.point} />
-          <Avatar
-            src="X"
-            sx={{width: 32, height: 32, ml: 1}}
-            alt={task.assignee}
+    <Link to="/issue">
+      {' '}
+      <Paper elevation={1} className="card">
+        <Typography>{task.title}</Typography>
+        <div style={{margin: '10px 0px'}}>
+          <Epic>{task.epic}</Epic>
+          <Chip
+            size="small"
+            icon={<AccessTimeRoundedIcon />}
+            label={format(new Date(task.due), 'dd-MM')}
           />
         </div>
-      </div>
-    </Paper>
+        <div style={{display: 'flex', justifyContent: 'space-between'}}>
+          <div
+            style={{
+              fontSize: '13px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 1,
+            }}
+          >
+            {issueIcon(task.type)}
+            <Typography variant="subtitle" sx={{ml: '5px'}}>
+              {task.code}
+            </Typography>
+          </div>
+          <div style={{display: 'inline-flex', alignItems: 'flex-end'}}>
+            <Chip size="small" label={task.point} />
+            <Avatar
+              src="X"
+              sx={{width: 32, height: 32, ml: 1}}
+              alt={task.assignee}
+            />
+          </div>
+        </div>
+      </Paper>
+    </Link>
   );
 };
 

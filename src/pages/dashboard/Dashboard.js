@@ -118,11 +118,7 @@ function Dashboard() {
             >
               First Scrum Project
             </Link>
-            <Typography
-              key="3"
-              color="text.primary"
-              sx={{fontFamily: 'Open Sans, sans-serif'}}
-            >
+            <Typography key="3" color="text.primary" sx={{fontSize: 'inherit'}}>
               Dashboard
             </Typography>
           </Breadcrumbs>

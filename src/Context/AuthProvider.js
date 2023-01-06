@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, useLocation} from 'react-router-dom';
 import {auth} from 'src/firebase/config';
 import CircularProgress from '@mui/material/CircularProgress';
 
@@ -8,6 +8,9 @@ export const AuthContext = React.createContext();
 function AuthProvider({children}) {
   const [user, setUser] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const paths = useLocation();
+  // console.log(paths.pathname);
+  const pathName = paths.pathname;
 
   const history = useNavigate();
   React.useEffect(() => {
@@ -17,10 +20,17 @@ function AuthProvider({children}) {
         const {displayName, email, uid, photoURL} = user;
         console.log(displayName, email, uid, photoURL);
         setUser({displayName, email, uid, photoURL});
-        history('/');
+        if (pathName === '/login' || pathName === '/signup') {
+          history('/workspace-setting');
+        }
         setIsLoading(false);
       } else {
-        // history('/login');
+        if (pathName !== '/signup' && pathName !== '/forget') {
+          history('/login');
+          setIsLoading(false);
+        } else {
+          setIsLoading(false);
+        }
       }
     });
 
@@ -32,10 +42,11 @@ function AuthProvider({children}) {
 
   return (
     <AuthContext.Provider value={{user}}>
-      {children}
-      {/* {isLoading ? <CircularProgress /> : children} */}
+      {/* {children} */}
+      {isLoading ? <CircularProgress /> : children}
     </AuthContext.Provider>
-  ); // value is the thing that all children can access
+  );
+  // value is the thing that all children can access
 }
 
 export default AuthProvider;
