@@ -196,7 +196,7 @@ export default function SignInSide() {
             sx={{
               mt: 1,
               '& .MuiInputLabel-root': {
-                color: color.green03,
+                color: color.gray01,
               },
             }}
           >

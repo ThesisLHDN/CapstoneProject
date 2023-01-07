@@ -1,5 +1,5 @@
 import './scrum.scss';
-import {Button, Box} from '@mui/material';
+import {Button, Box, Paper, Typography} from '@mui/material';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
 import mockData from './mockData';
@@ -36,49 +36,10 @@ const Scrum = () => {
       setData(data);
     }
   };
-  // const onDragEnd = (result, columns, setColumns) => {
-  //   if (!result.destination) return;
-  //   console.log(result);
-  //   const {source, destination} = result;
-  //   console.log(source, destination);
-
-  //   // if (source.droppableId !== destination.droppableId) {
-  //   //   const sourceColumn = columns[source.droppableId];
-  //   //   const destColumn = columns[destination.droppableId];
-  //   //   const sourceItems = [...sourceColumn.items];
-  //   //   const destItems = [...destColumn.items];
-  //   //   const [removed] = sourceItems.splice(source.index, 1);
-  //   //   destItems.splice(destination.index, 0, removed);
-  //   //   setColumns({
-  //   //     ...columns,
-  //   //     [source.droppableId]: {
-  //   //       ...sourceColumn,
-  //   //       items: sourceItems,
-  //   //     },
-  //   //     [destination.droppableId]: {
-  //   //       ...destColumn,
-  //   //       items: destItems,
-  //   //     },
-  //   //   });
-  //   // }
-  //   // else {
-  //   //   const column = columns[source.droppableId];
-  //   //   const copiedItems = [...column.items];
-  //   //   const [removed] = copiedItems.splice(source.index, 1);
-  //   //   copiedItems.splice(destination.index, 0, removed);
-  //   //   setColumns({
-  //   //     ...columns,
-  //   //     [source.droppableId]: {
-  //   //       ...column,
-  //   //       items: copiedItems,
-  //   //     },
-  //   //   });
-  //   // }
-  // };
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <div className="scrum">
+      <Box className="scrum">
         {data.map((section) => (
           <Droppable key={section.id} droppableId={section.id}>
             {(provided) => (
@@ -86,14 +47,24 @@ const Scrum = () => {
                 {...provided.droppableProps}
                 className="scrum__section"
                 ref={provided.innerRef}
-                sx={{backgroundColor: '#efefef'}}
+                // sx={{backgroundColor: '#efefef'}}
+                sx={{
+                  width: 300,
+                  backgroundColor: '#e8e8e8',
+                  p: 1,
+                  borderRadius: 2,
+                }}
               >
-                <div className="scrum__section__title">
+                <Typography sx={{fontWeight: 700, mb: 1}}>
                   {section.title}{' '}
-                  <span className="scrum__section__title__num">
+                  <Typography
+                    variant="subtitle2"
+                    sx={{display: 'inline'}}
+                    className="scrum__section__title__num"
+                  >
                     {section.tasks.length} issues
-                  </span>
-                </div>
+                  </Typography>
+                </Typography>
                 <div className="scrum__section__content">
                   {section.tasks.map((task, index) => (
                     <Draggable
@@ -133,7 +104,7 @@ const Scrum = () => {
         >
           <AddRoundedIcon />
         </Button>
-      </div>
+      </Box>
     </DragDropContext>
   );
 };

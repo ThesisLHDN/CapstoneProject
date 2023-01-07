@@ -2,6 +2,8 @@ const color = {
   green01: '#008000',
   green02: '#29C63B',
   green03: '#00980F',
+  gray01: '#8E8E8E',
+  gray02: '#606060',
 };
 
 const colorHover = {

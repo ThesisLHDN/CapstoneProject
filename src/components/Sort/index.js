@@ -94,7 +94,8 @@ function Sort() {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                p: 2,
+                py: 2,
+                px: 0,
                 gap: 1,
               }}
             >
@@ -107,6 +108,7 @@ function Sort() {
                   id="composition-menu"
                   aria-labelledby="composition-button"
                   onKeyDown={handleListKeyDown}
+                  sx={{py: 0}}
                 >
                   {Object.entries(data).map(([key, value]) => (
                     <MenuItem

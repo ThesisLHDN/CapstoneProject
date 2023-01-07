@@ -29,7 +29,7 @@ function FilterRow({property, values}) {
   return (
     <Box
       sx={{
-        width: 200,
+        // width: 200,
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -38,7 +38,7 @@ function FilterRow({property, values}) {
       <Typography variant="body1">
         {property[0].toUpperCase() + property.substring(1)}
       </Typography>
-      <FormControl sx={{m: 1, minWidth: 120}}>
+      <FormControl sx={{m: 1, width: 120, mx: 0, ml: 1}}>
         <select
           displayEmpty
           inputProps={{'aria-label': 'Without label'}}
@@ -147,7 +147,7 @@ function Filter() {
                   id="composition-menu"
                   aria-labelledby="composition-button"
                   onKeyDown={handleListKeyDown}
-                  sx={{p: 3}}
+                  sx={{px: 2, py: 0}}
                 >
                   {Object.entries(data).map(([key, value]) => (
                     <FilterRow property={key} values={value} />

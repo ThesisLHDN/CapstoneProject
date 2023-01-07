@@ -102,7 +102,7 @@ function Dashboard() {
               underline="hover"
               key="1"
               color="inherit"
-              href="/"
+              href="/workspace-setting"
               onClick={() => {}}
               sx={{fontFamily: 'Open Sans, sans-serif'}}
             >
@@ -112,7 +112,7 @@ function Dashboard() {
               underline="hover"
               key="2"
               color="inherit"
-              href="/backlog"
+              href="/roadmap"
               onClick={() => {}}
               sx={{fontFamily: 'Open Sans, sans-serif'}}
             >

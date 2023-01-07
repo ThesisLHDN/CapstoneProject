@@ -60,7 +60,7 @@ function Document() {
               underline="hover"
               key="1"
               color="inherit"
-              href="/"
+              href="/workspace-setting"
               onClick={() => {}}
             >
               Dang's Workspace
@@ -69,7 +69,7 @@ function Document() {
               underline="hover"
               key="2"
               color="inherit"
-              href="/backlog"
+              href="/roadmap"
               onClick={() => {}}
             >
               First Scrum Project

@@ -139,110 +139,6 @@ export default function SignInSide() {
 
   return (
     <ThemeProvider theme={theme}>
-      {/* <Grid container component="main" sx={{height: '100vh'}}>
-        <CssBaseline />
-        <Grid
-          item
-          xs={false}
-          sm={4}
-          md={7}
-          sx={{
-            backgroundImage: 'url(https://source.unsplash.com/random)',
-            backgroundRepeat: 'no-repeat',
-            backgroundColor: (t) =>
-              t.palette.mode === 'light'
-                ? t.palette.grey[50]
-                : t.palette.grey[900],
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-        />
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-          <Box
-            sx={{
-              my: 8,
-              mx: 4,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
-            <Typography component="h1" variant="h5">
-              Login to your account
-            </Typography>
-            <Box
-              component="form"
-              noValidate
-              onSubmit={onSubmitHandler}
-              sx={{
-                mt: 1,
-                '& .MuiInputLabel-root': {
-                  color: color.green03,
-                },
-              }}
-            >
-              <TextField
-                size="small"
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Enter password"
-                name="email"
-                autoComplete="email"
-                autoFocus
-              />
-              <TextField
-                size="small"
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-              />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{mt: 3, mb: 2, ...colorHover.greenBtn}}
-              >
-                Login
-              </Button>
-              <Grid container>
-                <Grid item xs>
-                  <Link href="/forget" variant="body2" sx={{color:color.green03}}>
-                    Forgot password?
-                  </Link>
-                </Grid>
-                <Grid item>
-                  <Typography variant="body2">
-                    Don't have an account?{' '}
-                    <Link href="/signup" sx={{color:color.green03}}>{'Sign Up'}</Link>
-                  </Typography>
-                </Grid>
-              </Grid>
-              <Divider sx={{my: 1}}>
-                <Typography variant="body2">Or continue with</Typography>{' '}
-              </Divider>
-              <Box sx={{display: 'flex', gap: 1, justifyContent: 'center'}}>
-                <IconButton variant="contained" onClick={facebookLoginHandler}>
-                  <FacebookIcon style={{width: 32, height: 32}} />
-                </IconButton>
-                <IconButton variant="contained" onClick={googleLoginHandler}>
-                  <GoogleIcon style={{width: 32, height: 32}} />
-                </IconButton>
-              </Box>
-            </Box>
-          </Box>
-        </Grid>
-      </Grid> */}
       <Grid
         container
         component="main"
@@ -256,17 +152,15 @@ export default function SignInSide() {
       >
         <Box
           sx={{
-            my: 8,
-            mx: 4,
             display: 'flex',
+            gap: 1,
             flexDirection: 'column',
             alignItems: 'center',
             backgroundColor: 'white',
             borderRadius: 10,
             width: '30vw',
-            minWidth: 400,
-            px: 4,
-            py: 2,
+            minWidth: 460,
+            p: 4,
             justifySelf: 'center',
             height: 'fit-content',
           }}
@@ -279,9 +173,10 @@ export default function SignInSide() {
             noValidate
             onSubmit={onSubmitHandler}
             sx={{
-              mt: 1,
+              // mt: 1,
               '& .MuiInputLabel-root': {
-                color: color.green03,
+                color: color.gray01,
+                fontSize: 14,
               },
             }}
           >
@@ -291,11 +186,12 @@ export default function SignInSide() {
               required
               fullWidth
               id="email"
-              label="Enter password"
+              label="Enter email"
               name="email"
               autoComplete="email"
               autoFocus
               onChange={onChangeHandler}
+              sx={{borderWidth: 2, borderColor: 'green'}}
             />
             <TextField
               size="small"
@@ -303,7 +199,7 @@ export default function SignInSide() {
               required
               fullWidth
               name="password"
-              label="Password"
+              label="Enter password"
               type="password"
               id="password"
               autoComplete="current-password"
@@ -312,11 +208,19 @@ export default function SignInSide() {
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
+              sx={{
+                mb: 1,
+                fontSize: 12,
+                '& span': {
+                  color: color.gray01,
+                  fontSize: 14,
+                },
+              }}
             />
             {error && (
               <Typography
                 variant="subtitle2"
-                sx={{color: 'red', textAlign: 'center'}}
+                sx={{color: 'red', textAlign: 'center', mb: 2}}
               >
                 {error}
               </Typography>
@@ -325,15 +229,18 @@ export default function SignInSide() {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{mt: 3, mb: 2, ...colorHover.greenBtn}}
+              sx={{...colorHover.greenBtn}}
               // href="/"
               // onClick={onSubmitHandler}
             >
               Login
             </Button>
-            <Grid container>
+            <Grid
+              container
+              sx={{lineHeight: '40px', mt: 1, color: color.gray02}}
+            >
               <Grid item xs>
-                <Typography variant="body2">
+                <Typography variant="body2" sx={{lineHeight: 'inherit'}}>
                   <Link
                     href="/forget"
                     variant="body2"
@@ -344,7 +251,7 @@ export default function SignInSide() {
                 </Typography>
               </Grid>
               <Grid item>
-                <Typography variant="body2">
+                <Typography variant="body2" sx={{lineHeight: 'inherit'}}>
                   Don't have an account?{' '}
                   <Link href="/signup" sx={{color: color.green03}}>
                     {'Sign Up'}
@@ -353,7 +260,9 @@ export default function SignInSide() {
               </Grid>
             </Grid>
             <Divider sx={{my: 1}}>
-              <Typography variant="body2">Or continue with</Typography>{' '}
+              <Typography variant="body2" sx={{color: color.gray02}}>
+                Or continue with
+              </Typography>{' '}
             </Divider>
             <Box sx={{display: 'flex', gap: 1, justifyContent: 'center'}}>
               <IconButton variant="contained" onClick={facebookLoginHandler}>

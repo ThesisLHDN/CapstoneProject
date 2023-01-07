@@ -9,6 +9,7 @@ import {
   Paper,
   Modal,
   Popper,
+  ClickAwayListener,
 } from '@mui/material';
 
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
@@ -105,14 +106,14 @@ export default function Header() {
         {/* <Tab label="Board" to="/board" component={Link} /> */}
         <Tab
           sx={{textTransform: 'none'}}
-          label="Your Works"
-          // to="/workspace-setting"
+          label="Workspace Settings"
+          to="/workspace-setting"
           component={Link}
         />
         <Tab
           sx={{textTransform: 'none'}}
           label="Projects"
-          // to="/workspace-setting"
+          to="/project-setting"
           component={Link}
         />
       </Tabs>
@@ -146,36 +147,40 @@ export default function Header() {
           </IconButton>
 
           <Popper id={id} open={open} anchorEl={anchorEl}>
-            <Box
-              sx={{
-                backgroundColor: 'white',
-                borderRadius: '10px',
-                p: 2,
-                right: 0,
-                top: 0,
-                boxShadow: '2px 2px 5px #00000020',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 1,
-                position: 'absolute',
-              }}
-            >
-              <Button
-                variant="contained"
-                sx={{...colorHover.greenBtn}}
-                href="/profile"
+            <ClickAwayListener onClickAway={handleClick}>
+              <Box
+                sx={{
+                  backgroundColor: 'white',
+                  borderRadius: '10px',
+                  p: 2,
+                  right: 0,
+                  top: 0,
+                  boxShadow: '2px 2px 5px #00000020',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 1,
+                  position: 'absolute',
+                  width: 120,
+                }}
               >
-                Profile
-              </Button>
-              <Button
-                variant="outlined"
-                color="error"
-                onClick={handleLogout}
-                href="/login"
-              >
-                Logout
-              </Button>
-            </Box>
+                <Button
+                  variant="contained"
+                  sx={{...colorHover.greenGradBtn, textTransform: 'none'}}
+                  href="/profile"
+                >
+                  Profile
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="error"
+                  onClick={handleLogout}
+                  href="/login"
+                  sx={{textTransform: 'none'}}
+                >
+                  Log out
+                </Button>
+              </Box>
+            </ClickAwayListener>
           </Popper>
         </div>
       </Box>

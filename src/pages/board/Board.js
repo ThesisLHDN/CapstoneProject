@@ -41,7 +41,7 @@ function Board() {
               underline="hover"
               key="1"
               color="inherit"
-              href="/"
+              href="/workspace-setting"
               onClick={handleClick}
             >
               Dang&apos;s Workspace
@@ -51,7 +51,7 @@ function Board() {
               underline="hover"
               key="2"
               color="inherit"
-              href="/material-ui/getting-started/installation/"
+              href="/roadmap"
               onClick={handleClick}
             >
               First Scrum Project
