@@ -10,6 +10,8 @@ import {
   Modal,
   Popper,
   ClickAwayListener,
+  MenuList,
+  MenuItem
 } from '@mui/material';
 
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
@@ -152,18 +154,26 @@ export default function Header() {
                 sx={{
                   backgroundColor: 'white',
                   borderRadius: '10px',
-                  p: 2,
-                  right: 0,
+                  right: -15,
                   top: 0,
+                  border: 'solid 1px #ECEDF0',
                   boxShadow: '2px 2px 5px #00000020',
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: 1,
+                  gap: 2,
                   position: 'absolute',
-                  width: 120,
+                  width: 100,
                 }}
               >
-                <Button
+                <MenuList sx={{px: 0, width: '100%'}}>
+                  <MenuItem sx={{ py: 1, fontSize: 12 }}>
+                    <Link to="/profile" onClick={handleClick} className='text-base'>Profile</Link>
+                  </MenuItem>
+                  <MenuItem sx={{ py: 1, fontSize: 12 }}>
+                    <Link to="/login" onClick={handleLogout} className='text-base'>Log out</Link>
+                  </MenuItem>
+                </MenuList>
+                {/* <Button
                   variant="contained"
                   sx={{...colorHover.greenGradBtn, textTransform: 'none'}}
                   href="/profile"
@@ -178,7 +188,7 @@ export default function Header() {
                   sx={{textTransform: 'none'}}
                 >
                   Log out
-                </Button>
+                </Button> */}
               </Box>
             </ClickAwayListener>
           </Popper>

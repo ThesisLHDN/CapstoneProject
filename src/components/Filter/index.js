@@ -38,16 +38,17 @@ function FilterRow({property, values}) {
       <Typography variant="body1">
         {property[0].toUpperCase() + property.substring(1)}
       </Typography>
-      <FormControl sx={{m: 1, width: 120, mx: 0, ml: 1}}>
+      <FormControl sx={{m: 1, width: 120, mx: 0, ml: 1}} margin="none">
         <select
           displayEmpty
           inputProps={{'aria-label': 'Without label'}}
           size="small"
           defaultValue={''}
           style={{
-            border: '1px solid',
+            border: '1px solid #EFEDF0',
+            outline: "none",
             width: '100%',
-            height: 40,
+            height: 30,
             borderRadius: 4,
           }}
         >
@@ -135,7 +136,8 @@ function Filter() {
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
-                  py: 2,
+                  pt: 1.5,
+                  pb: 2,
                   gap: 1,
                 }}
               >
@@ -153,16 +155,18 @@ function Filter() {
                     <FilterRow property={key} values={value} />
                   ))}
                 </MenuList>
-                <Button
-                  sx={{...colorHover.greenGradBtn}}
-                  variant="contained"
-                  onClick={handleToggle}
-                >
-                  Confirm
-                </Button>
-                <Button variant="outlined" color="error">
-                  Clear filter
-                </Button>
+                <div className='flex'>
+                  <Button
+                    sx={{mr: 1, width: 80 ,...colorHover.greenGradBtn}}
+                    variant="contained"
+                    onClick={handleToggle}
+                  >
+                    Confirm
+                  </Button>
+                  <Button variant="outlined" color="error" sx={{ width: 80 }}>
+                    Clear
+                  </Button>
+                </div>
               </Paper>
             </Grow>
           </ClickAwayListener>

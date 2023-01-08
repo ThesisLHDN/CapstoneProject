@@ -61,7 +61,7 @@ const SearchBar = (props) => (
     <TextField
       //   id="outlined-adornment-password"
       size="small"
-      placeholder="Search for Issues"
+      placeholder="Search"
       sx={{
         backgroundColor: '#EEE',
         borderRadius: 2,

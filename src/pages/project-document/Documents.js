@@ -140,14 +140,14 @@ function Document() {
 
             <Grid item xs={4}>
               <Typography sx={{ marginTop: 1.5, fontSize: 14 }}>
-                <span className='font-bold'>Create by </span> 
+                <span className='font-bold'>Created by </span> 
                 {item.createBy}
               </Typography>
             </Grid>
 
             <Grid item xs={4}>
               <Typography sx={{ marginTop: 1.5, fontSize: 14 }}>
-                <span className='font-bold'>Update on </span> 
+                <span className='font-bold'>Updated on </span> 
                 {convertDate(item.updateOn)}
               </Typography>
             </Grid>
