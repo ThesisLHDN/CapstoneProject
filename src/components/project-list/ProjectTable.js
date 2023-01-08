@@ -9,7 +9,7 @@ import {
   TableRow,
   Paper,
   IconButton,
-  TablePagination,
+  // TablePagination,
 } from '@mui/material';
 import {Link} from 'react-router-dom';
 // import TableBody from '@mui/material/TableBody';
@@ -18,26 +18,6 @@ import TableCell, {tableCellClasses} from '@mui/material/TableCell';
 import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
 import StarRoundedIcon from '@mui/icons-material/StarRounded';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
-
-// const StyledTableCell = styled(TableCell)(({theme}) => ({
-//   [`&.${tableCellClasses.head}`]: {
-//     backgroundColor: color.green03,
-//     color: theme.palette.common.white,
-//   },
-//   [`&.${tableCellClasses.body}`]: {
-//     fontSize: 14,
-//   },
-// }));
-
-// const StyledTableRow = styled(TableRow)(({theme}) => ({
-//   '&:nth-of-type(odd)': {
-//     backgroundColor: theme.palette.action.hover,
-//   },
-//   // hide last border
-//   '&:last-child td, &:last-child th': {
-//     border: 0,
-//   },
-// }));
 
 function createData(star, name, type, owner) {
   return {star, name, type, owner};
@@ -91,17 +71,17 @@ const columns = [
 ];
 
 export default function ProjectTable() {
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  // const [page, setPage] = useState(0);
+  // const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
+  // const handleChangePage = (event, newPage) => {
+  //   setPage(newPage);
+  // };
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
+  // const handleChangeRowsPerPage = (event) => {
+  //   setRowsPerPage(+event.target.value);
+  //   setPage(0);
+  // };
   return (
     <Paper sx={{overflow: 'hidden', my: 2}}>
       <TableContainer>

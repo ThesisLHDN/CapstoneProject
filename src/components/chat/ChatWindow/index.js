@@ -248,7 +248,7 @@ function ChatWindow({messages}) {
       </Box>
       <Divider variant="middle" sx={{borderBottom: 2, color: '#666'}}></Divider>
       <Box sx={{py: 2, height: 'calc(100% - 116px)', overflowY: 'scroll'}}>
-        {messages.messages.map(({senderName, senderId, message, time}) => (
+        {messages.messages.reverse().map(({senderName, senderId, message, time}) => (
           <Message mine={senderId === 1911044}>
             {{senderName, senderId, message, time}}
           </Message>

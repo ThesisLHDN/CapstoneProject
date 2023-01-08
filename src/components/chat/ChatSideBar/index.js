@@ -137,7 +137,7 @@ function ChatSideBar(props) {
                 '&:hover': {backgroundColor: '#efefef'},
                 borderRadius: 3,
               }}
-              onClick={()=>props.onSelect(id)}
+              onClick={() => props.onSelect(id)}
             >
               <Box sx={{padding: 1}}>
                 <Grid container sx={{alignItems: 'center'}}>
@@ -156,7 +156,7 @@ function ChatSideBar(props) {
                         whiteSpace: 'nowrap',
                       }}
                     >
-                      {/* {lastMessage} */}
+                      {messages[0].message}
                     </Typography>
                   </Grid>
                   <Grid item xs={3}>

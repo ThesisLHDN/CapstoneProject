@@ -48,7 +48,8 @@ const channels = [
       {
         senderId: 1911044,
         senderName: 'Dang Nguyen',
-        message: 'Not good',
+        message:
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras est purus, placerat vitae ante ac, volutpat fringilla purus. Proin hendrerit nibh eros, in tempor enim tempor quis. Etiam tempor vestibulum libero id hendrerit. Cras egestas.',
         time: new Date(),
       },
       {
@@ -61,8 +62,9 @@ const channels = [
       {
         senderId: 1911044,
         senderName: 'Dang Nguyen',
-        message: 'Not good',
-        time: new Date(),
+        message:
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu felis at orci consectetur aliquam et eu tellus. Nunc dignissim risus erat, ac eleifend sapien viverra non. Aenean pellentesque ex sed metus accumsan porttitor. Phasellus vel tempor tortor. Nulla in.',
+        time: new Date(2022, 11, 2),
       },
     ],
   },
@@ -74,23 +76,18 @@ const channels = [
       'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     messages: [
       {
-        senderId: 1911044,
-        senderName: 'Dang Nguyen',
-        message: 'Not good',
-        time: new Date(),
-      },
-      {
         senderId: 1910298,
         senderName: 'Lam Nguyen',
         message:
-          "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-        time: new Date(2022, 11, 3),
+          'Lorem Ipsum is simply dummy text of the printing and typesetting industry. ',
+        time: new Date(),
       },
       {
         senderId: 1911044,
         senderName: 'Dang Nguyen',
-        message: 'Not good',
-        time: new Date(),
+        message:
+          "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+        time: new Date(2022, 11, 2),
       },
     ],
   },
@@ -111,7 +108,8 @@ const channels = [
       {
         senderId: 1911044,
         senderName: 'Dang Nguyen',
-        message: 'Not good',
+        message:
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras est purus, placerat vitae ante ac, volutpat fringilla purus. Proin hendrerit nibh eros, in tempor enim tempor quis. Etiam tempor vestibulum libero id hendrerit. Cras egestas.',
         time: new Date(),
       },
       {

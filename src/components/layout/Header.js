@@ -110,12 +110,12 @@ export default function Header() {
           to="/workspace-setting"
           component={Link}
         />
-        <Tab
+        {/* <Tab
           sx={{textTransform: 'none'}}
           label="Projects"
           to="/project-setting"
           component={Link}
-        />
+        /> */}
       </Tabs>
 
       <SearchBar value={value}></SearchBar>
