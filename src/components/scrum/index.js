@@ -1,5 +1,10 @@
 import './scrum.scss';
-import {Button, Box, Paper, Typography} from '@mui/material';
+import {
+  Button,
+  Box,
+  // Paper,
+  Typography,
+} from '@mui/material';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
 import mockData from './mockData';

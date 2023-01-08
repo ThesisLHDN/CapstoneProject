@@ -1,4 +1,4 @@
-import React from 'react';
+// import React from 'react';
 import 'src/App.scss';
 
 import {Typography, Breadcrumbs, Link, Grid, Button, Box} from '@mui/material';
@@ -7,8 +7,8 @@ import {styled} from '@mui/material/styles';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
 import PermIdentityRoundedIcon from '@mui/icons-material/PermIdentityRounded';
-import FilterAltRoundedIcon from '@mui/icons-material/FilterAltRounded';
-import SortRoundedIcon from '@mui/icons-material/SortRounded';
+// import FilterAltRoundedIcon from '@mui/icons-material/FilterAltRounded';
+// import SortRoundedIcon from '@mui/icons-material/SortRounded';
 
 import Scrum from 'src/components/scrum';
 import SearchBar from 'src/components/search';
@@ -21,15 +21,15 @@ function handleClick(event) {
   event.preventDefault();
   console.info('You clicked a breadcrumb.');
 }
-const GrayButton = styled(Button)({
-  backgroundColor: '#cdcdcd',
-  color: 'black',
-  borderRadius: 3,
-  height: 32,
-  '&:hover': {
-    backgroundColor: '#ddd',
-  },
-});
+// const GrayButton = styled(Button)({
+//   backgroundColor: '#cdcdcd',
+//   color: 'black',
+//   borderRadius: 3,
+//   height: 32,
+//   '&:hover': {
+//     backgroundColor: '#ddd',
+//   },
+// });
 function Board() {
   return (
     <div style={{textAlign: 'left'}}>

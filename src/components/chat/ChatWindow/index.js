@@ -129,7 +129,7 @@ const IOSSwitch = styled((props) => (
   },
 }));
 
-function ChatWindow() {
+function ChatWindow({messages}) {
   const [open, setOpen] = useState(false);
 
   const handleClose = () => {
@@ -142,8 +142,8 @@ function ChatWindow() {
     <Box container sx={{p: 2, height: '100%'}}>
       <Box sx={{display: 'flex', justifyContent: 'space-between', mb: 2}}>
         <Box sx={{display: 'flex', gap: 2, alignItems: 'center'}}>
-          <Avatar src="#" alt="Kênh chat 1"></Avatar>
-          <Typography variant="h5">Kênh chat 1</Typography>
+          <Avatar src={messages.picture} alt={messages.name}></Avatar>
+          <Typography variant="h5">{messages.name}</Typography>
         </Box>
         <Box sx={{display: 'flex', gap: 1}}>
           {/* <Button variant="contained" startIcon={<PersonAddAltRoundedIcon />}>
@@ -247,8 +247,8 @@ function ChatWindow() {
         </Box>
       </Box>
       <Divider variant="middle" sx={{borderBottom: 2, color: '#666'}}></Divider>
-      <Box sx={{height: 'calc(100% - 116px)', overflowY: 'scroll'}}>
-        {dummyMessage.messages.map(({senderName, senderId, message, time}) => (
+      <Box sx={{py: 2, height: 'calc(100% - 116px)', overflowY: 'scroll'}}>
+        {messages.messages.map(({senderName, senderId, message, time}) => (
           <Message mine={senderId === 1911044}>
             {{senderName, senderId, message, time}}
           </Message>

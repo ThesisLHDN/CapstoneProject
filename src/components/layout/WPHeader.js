@@ -1,13 +1,13 @@
-import React from 'react';
+import {useState} from 'react';
 import logo from 'src/assets/images/logo.png';
 import {
   Box,
-  Tabs,
-  Tab,
+  // Tabs,
+  // Modal,
+  // Tab,
   Button,
   IconButton,
   Paper,
-  Modal,
   Popper,
 } from '@mui/material';
 
@@ -35,7 +35,7 @@ import {color, colorHover} from 'src/style';
 // }
 
 export default function Header() {
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -50,7 +50,7 @@ export default function Header() {
         // An error happened.
       });
   };
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);

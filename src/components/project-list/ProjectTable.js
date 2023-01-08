@@ -1,4 +1,4 @@
-import * as React from 'react';
+import {useState} from 'react';
 // import {styled} from '@mui/material/styles';
 import {color} from 'src/style';
 import {
@@ -91,8 +91,8 @@ const columns = [
 ];
 
 export default function ProjectTable() {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);

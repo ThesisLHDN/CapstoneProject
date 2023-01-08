@@ -1,4 +1,4 @@
-import React from 'react';
+import {useEffect, useState, useRef} from 'react';
 import {
   Paper,
   Typography,
@@ -49,6 +49,7 @@ function FilterRow({property, values}) {
             width: '100%',
             height: 40,
             borderRadius: 4,
+            cursor: 'pointer',
           }}
         >
           <option value="">
@@ -64,8 +65,8 @@ function FilterRow({property, values}) {
 }
 
 function Filter() {
-  const [open, setOpen] = React.useState(false);
-  const anchorRef = React.useRef(null);
+  const [open, setOpen] = useState(false);
+  const anchorRef = useRef(null);
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -89,8 +90,8 @@ function Filter() {
   }
 
   // return focus to the button when we transitioned from !open -> open
-  const prevOpen = React.useRef(open);
-  React.useEffect(() => {
+  const prevOpen = useRef(open);
+  useEffect(() => {
     if (prevOpen.current === true && open === false) {
       anchorRef.current.focus();
     }
