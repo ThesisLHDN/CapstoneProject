@@ -1,4 +1,4 @@
-import React from 'react';
+import {useState} from 'react';
 import {color, colorHover} from 'src/style';
 import {errorCodeConverter} from '../authFunction';
 
@@ -35,9 +35,9 @@ const googleProvider = new GoogleAuthProvider();
 const theme = createTheme();
 
 export default function SignInSide() {
-  const [error, setError] = React.useState('');
+  const [error, setError] = useState('');
 
-  const [formData, setFormData] = React.useState({});
+  const [formData, setFormData] = useState({});
 
   // const errorCodeHandler = (err) => {
   //   if (err === 'auth/missing-email') {

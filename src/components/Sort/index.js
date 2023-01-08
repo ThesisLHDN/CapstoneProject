@@ -116,7 +116,8 @@ function Sort() {
                         width: 150,
                         ...(key === 'none' && {
                           fontWeight: 700,
-                          textTransform: 'italic',
+                          fontStyle: 'italic',
+                          color: color.gray02,
                         }),
                       }}
                     >

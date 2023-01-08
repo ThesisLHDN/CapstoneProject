@@ -1,4 +1,4 @@
-import React from 'react';
+import {useState} from 'react';
 import logo from 'src/assets/images/logo.png';
 import {
   Box,
@@ -37,11 +37,11 @@ import {color, colorHover} from 'src/style';
 // }
 
 export default function Header() {
-  // const [open, setOpen] = React.useState(false);
+  // const [open, setOpen] = useState(false);
   // const handleOpen = () => setOpen(true);
   // const handleClose = () => setOpen(false);
 
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -56,7 +56,7 @@ export default function Header() {
         // An error happened.
       });
   };
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
@@ -112,12 +112,12 @@ export default function Header() {
           to="/workspace-setting"
           component={Link}
         />
-        <Tab
+        {/* <Tab
           sx={{textTransform: 'none'}}
           label="Projects"
           to="/project-setting"
           component={Link}
-        />
+        /> */}
       </Tabs>
 
       <SearchBar value={value}></SearchBar>
