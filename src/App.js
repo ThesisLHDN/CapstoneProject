@@ -43,7 +43,7 @@ function App() {
               <Route path="forget" element={<ForgetPassword />}></Route>{' '}
             </Route>
             <Route element={<Layout />}>
-              {/* <Route path="" element={<Board />}></Route> */}
+              <Route path="" element={<RoadMap />}></Route>
               <Route
                 path="project-setting"
                 element={<ProjectSetting></ProjectSetting>}

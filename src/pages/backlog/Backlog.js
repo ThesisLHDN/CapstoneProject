@@ -66,22 +66,8 @@ function Backlog() {
         }}
       >
         <SearchBar sx={{width: '210px'}} />
-        {/* <Button
-          variant="text"
-          startIcon={<FilterAltRoundedIcon />}
-          sx={{ color: "#181818", textTransform: "none", fontFamily: "Open Sans, sans-serif" }}
-        >
-          Filter
-        </Button> */}
         <Filter />
         <Sort />
-        {/* <Button
-          variant="text"
-          startIcon={<SortRoundedIcon />}
-          sx={{ color: "#181818", textTransform: "none", fontFamily: "Open Sans, sans-serif" }}
-        >
-          Sort
-        </Button> */}
         <Button
           variant="text"
           startIcon={<PermIdentityRoundedIcon />}

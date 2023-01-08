@@ -1,5 +1,5 @@
-import React from 'react'
-import { Button, Avatar } from "@mui/material"
+import React, { useState } from 'react'
+import { Button, Avatar, Popper, ClickAwayListener, Box, MenuList, MenuItem } from "@mui/material"
 
 import DoneRoundedIcon from "@mui/icons-material/DoneRounded"
 import FiberManualRecordRoundedIcon from "@mui/icons-material/FiberManualRecordRounded"
@@ -7,6 +7,7 @@ import FlagRoundedIcon from "@mui/icons-material/FlagRounded"
 import QuestionMarkRoundedIcon from "@mui/icons-material/QuestionMarkRounded"
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded"
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import { NavLink } from 'react-router-dom'
 
 const IssueIcon = (type) => {
   switch (type) {
@@ -84,34 +85,51 @@ function convertDate(d) {
 }
 
 function TaskCard(props) {
-  return (
-    <div className='flex justify-between'>
-      <div className='flex ml-3'>
-        <div>
-          {IssueIcon(props.item.type)}
-        </div>
-        <div className='ml-3 font-bold text-sm pt-0.5'>
-          {props.item.id}
-        </div>
-        <div className='ml-3 font-medium text-sm pt-0.5'>
-          {props.item.name}
-        </div>
-        <div 
-          className='ml-3 text-sm h-6 pt-0.5 px-4 rounded-sm' 
-          style={{ backgroundColor: `${epicColor(props.item.epic)[0]}`, color: `${epicColor(props.item.epic)[1]}` }}
-        >
-          {props.item.epic}
-        </div>
-      </div>
+  const [status, setStatus] = useState(props.item.status)
+  const [anchorEl, setAnchorEl] = useState(null)
 
-      <div className='inline-flex items-end'>
+  const handleChange = (event, element) => {
+    setAnchorEl(anchorEl ? null : event.currentTarget)
+    setStatus(element)
+  }
+
+  const handleClick = (event) => {
+    setAnchorEl(anchorEl ? null : event.currentTarget)
+  };
+
+  const open = Boolean(anchorEl)
+  const id = open ? 'simple-popper' : undefined
+
+  return (
+    <div className='flex justify-between hover:cursor-pointer'>
+      <NavLink to="/issue">
+        <div className='flex ml-3 md:pr-md 2xl:pr-lg'>
+          <div>
+            {IssueIcon(props.item.type)}
+          </div>
+          <div className='ml-3 font-bold text-sm pt-0.5'>
+            {props.item.id}
+          </div>
+          <div className='ml-3 font-medium text-sm pt-0.5'>
+            {props.item.name}
+          </div>
+          <div 
+            className='ml-3 text-sm h-6 pt-0.5 px-4 rounded-sm' 
+            style={{ backgroundColor: `${epicColor(props.item.epic)[0]}`, color: `${epicColor(props.item.epic)[1]}` }}
+          >
+            {props.item.epic}
+          </div>
+        </div>
+      </NavLink>
+
+      <div className='inline-flex align-baseline'>
         <span className="flex px-1.5 py-1 rounded-xl bg-gray-400 text-xs mr-2">
           <AccessTimeRoundedIcon sx={{ height: 14, width: 14, marginRight: 0.5, marginTop: 0.1 }}/>
           {convertDate(props.item.due)}
         </span>
 
         <span className={`px-1.5 py-1 rounded-xl text-white text-xs mr-2
-        ${props.item.status === "Done" ? "bg-done-color" : (props.item.status === "In progress" ? "bg-in-progress-color" : "bg-to-do-color")}`}>
+        ${status === "Done" ? "bg-done-color" : (status === "In progress" ? "bg-in-progress-color" : "bg-to-do-color")}`}>
           {props.item.point}
         </span>
 
@@ -122,12 +140,48 @@ function TaskCard(props) {
             height: 24,
             borderRadius: 3,
             marginRight: 2,
-            backgroundColor: `${props.item.status === "Done" ? "#A4E7AB" : (props.item.status === "In progress" ? "#9AD1EF" : "#EDCBB9")}`,
-            color: `${props.item.status === "Done" ? "#009606" : (props.item.status === "In progress" ? "#006BA7" : "#EC6F28")}`
-          }} >
-          {props.item.status}
+            zIndex: 5,
+            backgroundColor: `${status === "Done" ? "#A4E7AB" : (status === "In progress" ? "#9AD1EF" : "#EDCBB9")}`,
+            color: `${status === "Done" ? "#009606" : (status === "In progress" ? "#006BA7" : "#EC6F28")}`
+          }} 
+          onClick={handleClick}>
+          {status}
           <ExpandMoreIcon />
         </Button>
+
+        <Popper id={id} open={open} anchorEl={anchorEl} sx={{zIndex: 5, }}>
+          <ClickAwayListener onClickAway={handleClick}>
+            <Box
+              sx={{
+                backgroundColor: 'white',
+                borderRadius: 1,
+                right: status === "In progress" ? -60 : -40,
+                marginTop: '5px',
+                border: 'solid 1px #ECEDF0',
+                boxShadow: '2px 2px 5px #00000020',
+                display: 'flex',
+                flexDirection: 'column',
+                position: 'absolute',
+                width: 120,
+              }}
+            >
+              <MenuList sx={{px: 0, width: '100%'}}>
+                {['To do', 'In progress', 'Done'].filter((element) => {return element != status}).map((element) => {
+                  return (
+                  <MenuItem 
+                    sx={{ 
+                      py: 1, 
+                      fontSize: 14,
+                      fontWeight: 900,
+                      color: `${element === "Done" ? "#009606" : (element === "In progress" ? "#006BA7" : "#EC6F28")}` 
+                    }} 
+                    onClick={(e) => handleChange(e, element)}
+                  >{element}</MenuItem>)
+                })}
+              </MenuList>
+            </Box>
+          </ClickAwayListener>
+        </Popper>
 
         <Avatar
           src="X"

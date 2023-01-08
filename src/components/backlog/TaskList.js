@@ -298,9 +298,7 @@ function TaskList(props) {
                                             }}
                                             onMouseOver
                                           >
-                                            <NavLink to="/issue">
-                                              <TaskCard item={item} />
-                                            </NavLink>
+                                            <TaskCard item={item} />
                                           </Box>
                                         );
                                       }}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import DatePicker from "react-datepicker"
-import { Grid, Typography, Button, TextField } from "@mui/material"
+import { Grid, Typography, Button, TextField, ClickAwayListener, Box, MenuItem, MenuList, Popper } from "@mui/material"
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import AttachFileIcon from '@mui/icons-material/AttachFile'
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd'
@@ -10,6 +10,20 @@ import Comments from './comment/Comments'
 
 function LeftIssueDetail() {
   const [startDate, setStartDate] = useState(new Date())
+  const [status, setStatus] = useState('In Progress')
+  const [anchorEl, setAnchorEl] = useState(null)
+
+  const handleChange = (event, element) => {
+    setAnchorEl(anchorEl ? null : event.currentTarget)
+    setStatus(element)
+  }
+
+  const handleClick = (event) => {
+    setAnchorEl(anchorEl ? null : event.currentTarget)
+  };
+
+  const open = Boolean(anchorEl)
+  const id = open ? 'simple-popper' : undefined
   
   return (
     <div className='pr-10'>
@@ -24,15 +38,48 @@ function LeftIssueDetail() {
             textTransform: "none",
             height: 34,
             borderRadius: 3,
-            // backgroundColor: `${props.item.status == "Done" ? "#A4E7AB" : (props.item.status == "In progress" ? "#9AD1EF" : "#EDCBB9")}`,
-            // color: `${props.item.status == "Done" ? "#009606" : (props.item.status == "In progress" ? "#006BA7" : "#EC6F28")}`
-            backgroundColor: "#9AD1EF",
-            color: "#006BA7"
-          }} >
+            backgroundColor: `${status == "Done" ? "#A4E7AB" : (status == "In progress" ? "#9AD1EF" : "#EDCBB9")}`,
+            color: `${status == "Done" ? "#009606" : (status == "In progress" ? "#006BA7" : "#EC6F28")}`
+          }} 
+          onClick={handleClick}>
           {/* {props.item.status} */}
-          In Progress
+          {status}
           <ExpandMoreIcon />
         </Button>
+
+        <Popper id={id} open={open} anchorEl={anchorEl} sx={{zIndex: 5, }}>
+          <ClickAwayListener onClickAway={handleClick}>
+            <Box
+              sx={{
+                backgroundColor: 'white',
+                borderRadius: 1,
+                right: status == 'In progress'? -60 : -80,
+                marginTop: '5px',
+                border: 'solid 1px #ECEDF0',
+                boxShadow: '2px 2px 5px #00000020',
+                display: 'flex',
+                flexDirection: 'column',
+                position: 'absolute',
+                width: 120,
+              }}
+            >
+              <MenuList sx={{px: 0, width: '100%'}}>
+                {['To do', 'In progress', 'Done'].filter((element) => {return element != status}).map((element) => {
+                  return (
+                  <MenuItem 
+                    sx={{ 
+                      py: 1, 
+                      fontSize: 14,
+                      fontWeight: 900,
+                      color: `${element === "Done" ? "#009606" : (element === "In progress" ? "#006BA7" : "#EC6F28")}` 
+                    }} 
+                    onClick={(e) => handleChange(e, element)}
+                  >{element}</MenuItem>)
+                })}
+              </MenuList>
+            </Box>
+          </ClickAwayListener>
+        </Popper>
 
         <Button 
           style={{ 
