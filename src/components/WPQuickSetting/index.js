@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
 import {color} from 'src/style';
 import {
   Grid,
@@ -21,8 +21,8 @@ const StyledMenuItem = styled(MenuItem)({
 });
 
 function WPQuickSetting() {
-  const [open, setOpen] = React.useState(false);
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [open, setOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);

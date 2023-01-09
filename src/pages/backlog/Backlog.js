@@ -2,8 +2,8 @@ import React, {useState} from 'react';
 import {color} from 'src/style';
 import {Typography, Box, Button, Grid, Breadcrumbs, Link} from '@mui/material';
 import SearchBar from 'src/components/search';
-import FilterAltRoundedIcon from '@mui/icons-material/FilterAltRounded';
-import SortRoundedIcon from '@mui/icons-material/SortRounded';
+// import FilterAltRoundedIcon from '@mui/icons-material/FilterAltRounded';
+// import SortRoundedIcon from '@mui/icons-material/SortRounded';
 import PermIdentityRoundedIcon from '@mui/icons-material/PermIdentityRounded';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
@@ -23,7 +23,7 @@ function Backlog() {
               underline="hover"
               key="1"
               color="inherit"
-              href="/"
+              href="/workspace-setting"
               onClick={() => {}}
               sx={{fontFamily: 'Open Sans, sans-serif'}}
             >
@@ -33,7 +33,7 @@ function Backlog() {
               underline="hover"
               key="2"
               color="inherit"
-              href="/backlog"
+              href="/roadmap"
               onClick={() => {}}
               sx={{fontFamily: 'Open Sans, sans-serif'}}
             >

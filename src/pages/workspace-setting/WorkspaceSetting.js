@@ -1,4 +1,4 @@
-import React from 'react';
+import {useState} from 'react';
 import {styled} from '@mui/material/styles';
 import {color, colorHover} from 'src/style';
 
@@ -86,13 +86,13 @@ const StyledAccordionDetails = styled(AccordionDetails)(({theme}) => ({
 }));
 
 function WorkspaceSetting() {
-  const [expanded, setExpanded] = React.useState('panel1');
+  const [expanded, setExpanded] = useState('panel1');
 
   const handleChange = (panel) => (event, newExpanded) => {
     setExpanded(newExpanded ? panel : false);
   };
 
-  const [rename, setRename] = React.useState(false);
+  const [rename, setRename] = useState(false);
 
   return (
     <div style={{textAlign: 'left'}}>

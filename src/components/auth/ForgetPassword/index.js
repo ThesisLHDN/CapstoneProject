@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import {useContext} from 'react';
 // import {useNavigate} from 'react-router-dom';
 // import AuthContext from 'src/Context/AuthProvider';
 import {color, colorHover} from 'src/style';
@@ -196,7 +196,7 @@ export default function SignInSide() {
             sx={{
               mt: 1,
               '& .MuiInputLabel-root': {
-                color: color.green03,
+                color: color.gray01,
               },
             }}
           >

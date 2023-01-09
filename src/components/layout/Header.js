@@ -1,4 +1,4 @@
-import React from 'react';
+import {useState} from 'react';
 import logo from 'src/assets/images/logo.png';
 import {
   Box,
@@ -9,6 +9,7 @@ import {
   Paper,
   Modal,
   Popper,
+  ClickAwayListener,
 } from '@mui/material';
 
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
@@ -34,11 +35,11 @@ import {color, colorHover} from 'src/style';
 // }
 
 export default function Header() {
-  // const [open, setOpen] = React.useState(false);
+  // const [open, setOpen] = useState(false);
   // const handleOpen = () => setOpen(true);
   // const handleClose = () => setOpen(false);
 
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -53,7 +54,7 @@ export default function Header() {
         // An error happened.
       });
   };
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
@@ -105,16 +106,16 @@ export default function Header() {
         {/* <Tab label="Board" to="/board" component={Link} /> */}
         <Tab
           sx={{textTransform: 'none'}}
-          label="Your Works"
-          // to="/workspace-setting"
+          label="Workspace Settings"
+          to="/workspace-setting"
           component={Link}
         />
-        <Tab
+        {/* <Tab
           sx={{textTransform: 'none'}}
           label="Projects"
-          // to="/workspace-setting"
+          to="/project-setting"
           component={Link}
-        />
+        /> */}
       </Tabs>
 
       <SearchBar value={value}></SearchBar>
@@ -146,36 +147,40 @@ export default function Header() {
           </IconButton>
 
           <Popper id={id} open={open} anchorEl={anchorEl}>
-            <Box
-              sx={{
-                backgroundColor: 'white',
-                borderRadius: '10px',
-                p: 2,
-                right: 0,
-                top: 0,
-                boxShadow: '2px 2px 5px #00000020',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 1,
-                position: 'absolute',
-              }}
-            >
-              <Button
-                variant="contained"
-                sx={{...colorHover.greenBtn}}
-                href="/profile"
+            <ClickAwayListener onClickAway={handleClick}>
+              <Box
+                sx={{
+                  backgroundColor: 'white',
+                  borderRadius: '10px',
+                  p: 2,
+                  right: 0,
+                  top: 0,
+                  boxShadow: '2px 2px 5px #00000020',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 1,
+                  position: 'absolute',
+                  width: 120,
+                }}
               >
-                Profile
-              </Button>
-              <Button
-                variant="outlined"
-                color="error"
-                onClick={handleLogout}
-                href="/login"
-              >
-                Logout
-              </Button>
-            </Box>
+                <Button
+                  variant="contained"
+                  sx={{...colorHover.greenGradBtn, textTransform: 'none'}}
+                  href="/profile"
+                >
+                  Profile
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="error"
+                  onClick={handleLogout}
+                  href="/login"
+                  sx={{textTransform: 'none'}}
+                >
+                  Log out
+                </Button>
+              </Box>
+            </ClickAwayListener>
           </Popper>
         </div>
       </Box>

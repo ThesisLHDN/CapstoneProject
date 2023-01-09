@@ -1,4 +1,4 @@
-import React from 'react';
+import {useState} from 'react';
 import {color, colorHover} from 'src/style';
 import {errorCodeConverter} from '../authFunction';
 
@@ -35,21 +35,21 @@ const googleProvider = new GoogleAuthProvider();
 const theme = createTheme();
 
 export default function SignInSide() {
-  const [error, setError] = React.useState('');
+  const [error, setError] = useState('');
 
-  const [formData, setFormData] = React.useState({});
+  const [formData, setFormData] = useState({});
 
-  const errorCodeHandler = (err) => {
-    if (err === 'auth/missing-email') {
-      setError('Missing email');
-    } else if (err === 'auth/email-already-in-use') {
-      setError('Email already in use');
-    } else if (err === 'auth/invalid-email') {
-      setError('Invalid email');
-    } else {
-      setError(err);
-    }
-  };
+  // const errorCodeHandler = (err) => {
+  //   if (err === 'auth/missing-email') {
+  //     setError('Missing email');
+  //   } else if (err === 'auth/email-already-in-use') {
+  //     setError('Email already in use');
+  //   } else if (err === 'auth/invalid-email') {
+  //     setError('Invalid email');
+  //   } else {
+  //     setError(err);
+  //   }
+  // };
 
   const facebookLoginHandler = () => {
     const auth = getAuth();
@@ -129,7 +129,7 @@ export default function SignInSide() {
         // ...
       })
       .catch((error) => {
-        errorCodeHandler(error.code);
+        setError(errorCodeConverter(error.code));
       });
   };
   return (
@@ -147,17 +147,14 @@ export default function SignInSide() {
       >
         <Box
           sx={{
-            my: 8,
-            mx: 4,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             backgroundColor: 'white',
             borderRadius: 10,
             width: '30vw',
-            minWidth: 400,
-            px: 4,
-            py: 2,
+            minWidth: 460,
+            p: 4,
             justifySelf: 'center',
             height: 'fit-content',
           }}
@@ -169,7 +166,13 @@ export default function SignInSide() {
             component="form"
             noValidate
             onSubmit={signUpHandler}
-            sx={{mt: 3}}
+            sx={{
+              mt: 3,
+              '& .MuiInputLabel-root': {
+                color: color.gray01,
+                fontSize: 14,
+              },
+            }}
           >
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
@@ -224,12 +227,15 @@ export default function SignInSide() {
               </Grid>
               <Grid item xs={12}>
                 <FormControlLabel
+                  sx={{
+                    mb: 2,
+                    '& span': {
+                      color: color.gray01,
+                      fontSize: 14,
+                    },
+                  }}
                   control={
-                    <Checkbox
-                      value="allowExtraEmails"
-                      color="primary"
-                      sx={{fontSize: 'inherit'}}
-                    />
+                    <Checkbox value="allowExtraEmails" color="primary" />
                   }
                   label="I want to receive inspiration, marketing promotions and updates via email."
                 />
@@ -238,7 +244,7 @@ export default function SignInSide() {
             {error && (
               <Typography
                 variant="subtitle2"
-                sx={{color: 'red', textAlign: 'center'}}
+                sx={{color: 'red', textAlign: 'center', mb: 2}}
               >
                 {error}
               </Typography>
@@ -247,13 +253,16 @@ export default function SignInSide() {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{mt: 3, mb: 2, ...colorHover.greenBtn}}
+              sx={{...colorHover.greenBtn}}
             >
               Sign Up
             </Button>
-            <Grid container justifyContent="flex-start">
+            <Grid container justifyContent="space-around">
               <Grid item>
-                <Typography variant="body2">
+                <Typography
+                  variant="body2"
+                  sx={{lineHeight: '40px', color: color.gray02, mt: 1}}
+                >
                   Already have an account?{' '}
                   <Link href="/login" sx={{color: color.green03}}>
                     {'Login'}
@@ -262,7 +271,9 @@ export default function SignInSide() {
               </Grid>
             </Grid>
             <Divider sx={{my: 1}}>
-              <Typography variant="body2">Or continue with</Typography>{' '}
+              <Typography variant="body2" sx={{color: color.gray02}}>
+                Or continue with
+              </Typography>{' '}
             </Divider>
             <Box sx={{display: 'flex', gap: 1, justifyContent: 'center'}}>
               <IconButton variant="contained" onClick={facebookLoginHandler}>

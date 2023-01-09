@@ -1,4 +1,4 @@
-import React from 'react';
+import {useState} from 'react';
 import {format} from 'date-fns';
 import {color} from 'src/style';
 import {
@@ -95,9 +95,9 @@ const dummyData = [
   },
 ];
 
-const chatSample = {name: 'Kênh chat 1', photoURL: '#'};
-
-function ChatSideBar() {
+function ChatSideBar(props) {
+  const data = props.data;
+  const [channelId, setChannelId] = useState('');
   return (
     <>
       <Grid
@@ -128,7 +128,7 @@ function ChatSideBar() {
             scrollbarGutter: 'stable',
           }}
         >
-          {dummyData.map(({name, photoURL, lastMessage, time}) => (
+          {data.map(({name, id, picture, messages}) => (
             <Box
               sx={{
                 textDecoration: 'none',
@@ -137,11 +137,12 @@ function ChatSideBar() {
                 '&:hover': {backgroundColor: '#efefef'},
                 borderRadius: 3,
               }}
+              onClick={() => props.onSelect(id)}
             >
               <Box sx={{padding: 1}}>
                 <Grid container sx={{alignItems: 'center'}}>
                   <Grid item xs={3}>
-                    <Avatar src={photoURL} alt={name} />
+                    <Avatar src={picture} alt={name} />
                   </Grid>
                   <Grid item xs={6}>
                     <Typography variant="body2" sx={{fontWeight: 'bold'}}>
@@ -151,17 +152,16 @@ function ChatSideBar() {
                       variant="body2"
                       sx={{
                         overflow: 'clip',
-                        // display: 'inline',
                         textOverflow: 'ellipsis',
                         whiteSpace: 'nowrap',
                       }}
                     >
-                      {lastMessage}
+                      {messages[0].message}
                     </Typography>
                   </Grid>
                   <Grid item xs={3}>
                     <Typography variant="subtitle2">
-                      {format(time, 'dd-MM, hh:mm')}
+                      {/* {format(time, 'dd-MM, hh:mm')} */}
                     </Typography>
                   </Grid>
                 </Grid>
