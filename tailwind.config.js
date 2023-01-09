@@ -18,6 +18,7 @@ module.exports = {
         "green-tx": "#008000",
         "tg-text-color": "#00980F",
         "tg-color": '#E0FFDD',
+        "done-tx": "#009606",
       },
       backgroundColor: {
         "main-bg": "#FAFBFB",
@@ -29,6 +30,7 @@ module.exports = {
         "to-do-color": '#EC6F28',
         "in-progress-color": '#006BA7',
         "done-color": '#009606',
+        "done-bg": "#A4E7AB",
         "hover-issue": '#D6D6D6',
         "tg-color": '#E0FFDD',
       },

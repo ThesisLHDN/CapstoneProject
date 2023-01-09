@@ -24,6 +24,7 @@ import SearchBar from 'src/components/search';
 import {Link} from 'react-router-dom';
 import {getAuth, signOut} from 'firebase/auth';
 import {color, colorHover} from 'src/style';
+import Notification from '../notification/Notification';
 
 // function LinkTab(props) {
 //   return (
@@ -95,13 +96,7 @@ export default function Header() {
         >
           Create workspace
         </Button>
-        <IconButton
-          color="primary"
-          aria-label="no notification"
-          sx={{color: color.green03}}
-        >
-          <NotificationsNoneIcon />
-        </IconButton>
+        <Notification />
         <div style={{position: 'relative'}}>
           <IconButton onClick={handleClick}>
             <Avatar

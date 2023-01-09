@@ -7,14 +7,12 @@ import {
   Button,
   IconButton,
   Paper,
-  Modal,
   Popper,
   ClickAwayListener,
   MenuList,
   MenuItem
 } from '@mui/material';
 
-import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
 
 import Avatar from '@mui/material/Avatar';
@@ -23,6 +21,7 @@ import SearchBar from 'src/components/search';
 import {Link} from 'react-router-dom';
 import {getAuth, signOut} from 'firebase/auth';
 import {color, colorHover} from 'src/style';
+import Notification from '../notification/Notification';
 
 // function LinkTab(props) {
 //   return (
@@ -132,13 +131,7 @@ export default function Header() {
         >
           Add member
         </Button>
-        <IconButton
-          color="primary"
-          aria-label="no notification"
-          sx={{color: color.green03}}
-        >
-          <NotificationsNoneIcon />
-        </IconButton>
+        <Notification />
         <div style={{position: 'relative'}}>
           <IconButton onClick={handleClick}>
             <Avatar
@@ -166,10 +159,10 @@ export default function Header() {
                 }}
               >
                 <MenuList sx={{px: 0, width: '100%'}}>
-                  <MenuItem sx={{ py: 1, fontSize: 12 }}>
+                  <MenuItem sx={{ py: 1, fontSize: 12, borderBottom: 'solid 1px #ECEDF0' }}>
                     <Link to="/profile" onClick={handleClick} className='text-base'>Profile</Link>
                   </MenuItem>
-                  <MenuItem sx={{ py: 1, fontSize: 12 }}>
+                  <MenuItem sx={{ py: 1, fontSize: 12, borderTop: 'solid 1px #ECEDF0' }}>
                     <Link to="/login" onClick={handleLogout} className='text-base'>Log out</Link>
                   </MenuItem>
                 </MenuList>

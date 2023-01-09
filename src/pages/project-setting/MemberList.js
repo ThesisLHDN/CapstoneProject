@@ -69,7 +69,6 @@ function MemberList() {
                         }}
                       >
                         <MenuList sx={{px: 0, width: '100%'}}>
-                          {console.log(member.role)}
                           {['Administrator', 'Project Owner', 'Team Member'].filter((element) => {return element != member.role}).map((element) => {
                             return (
                             <MenuItem 
