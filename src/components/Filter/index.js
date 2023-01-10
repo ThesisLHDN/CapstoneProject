@@ -164,7 +164,7 @@ function Filter() {
                   >
                     Confirm
                   </Button>
-                  <Button variant="outlined" color="error" sx={{ width: 80 }}>
+                  <Button variant="outlined" color="error" sx={{ width: 80 , textTransform:'none'}}>
                     Clear
                   </Button>
                 </div>

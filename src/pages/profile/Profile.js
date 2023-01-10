@@ -71,7 +71,7 @@ function Profile() {
         <Grid item xs={3.5}>
           <TextField
             value="lamngngng@gmail.com"
-            size="small"
+            size="small" disabled
             sx={{
               width: '100%',
               backgroundColor: '#ECECEC',
