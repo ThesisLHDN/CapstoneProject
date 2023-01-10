@@ -1,5 +1,5 @@
-import React from 'react'
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material'
+import React, { useState } from 'react'
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Popper, ClickAwayListener, MenuItem, MenuList, Box } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 function createData(name, email, role) {
@@ -13,6 +13,14 @@ const members = [
 ]
 
 function MemberList() {
+  const [anchorEl, setAnchorEl] = useState(null)
+
+  const handleClick = (event) => {
+    setAnchorEl(anchorEl ? null : event.currentTarget)
+  };
+
+  const open = Boolean(anchorEl)
+  const id = open ? 'simple-popper' : undefined
   return (
     <div style={{ width: "95%" }}>
       <TableContainer component={Paper} sx={{ marginLeft: 6, marginY: 2}}>
@@ -40,10 +48,38 @@ function MemberList() {
                       backgroundColor: "#ECECEC",
                       color: "black",
                       justifyContent: "space-between"
-                  }}>
+                    }}
+                    onClick={handleClick}>
                     <span className='pl-5'>{member.role}</span>
                     <ExpandMoreIcon style={{ display: "inline-flex", alignItems: "flex-end"}}/>
                   </Button>
+
+                  <Popper id={id} open={open} anchorEl={anchorEl} sx={{zIndex: 5, }}>
+                    <ClickAwayListener onClickAway={handleClick}>
+                      <Box
+                        sx={{
+                          backgroundColor: 'white',
+                          borderRadius: 1,
+                          marginTop: '5px',
+                          border: 'solid 1px #ECEDF0',
+                          boxShadow: '2px 2px 5px #00000020',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          width: 160,
+                        }}
+                      >
+                        <MenuList sx={{px: 0, width: '100%'}}>
+                          {['Administrator', 'Project Owner', 'Team Member'].filter((element) => {return element != member.role}).map((element) => {
+                            return (
+                            <MenuItem 
+                              sx={{ px: 4, py: 1, fontSize: 14}} 
+                              onClick={handleClick}
+                            >{element}</MenuItem>)
+                          })}
+                        </MenuList>
+                      </Box>
+                    </ClickAwayListener>
+                  </Popper>
                 </TableCell>
               </TableRow>
             ))}

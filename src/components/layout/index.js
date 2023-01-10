@@ -14,7 +14,7 @@ function Layout(props) {
       <Box sx={{flexGrow: 1}}>
         <Grid container spacing={2}>
           <Grid item xs={2}>
-            <SideBar />
+            <SideBar wp={props.wp}/>
           </Grid>
           <Grid item xs={10}>
             <Box sx={{p: 4}}>

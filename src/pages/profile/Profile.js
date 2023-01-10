@@ -8,7 +8,6 @@ import PhoneEnabledOutlinedIcon from '@mui/icons-material/PhoneEnabledOutlined';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 
 function Profile() {
-  console.log('Profile')
   return (
     <div>
       <Typography variant="h5" sx={{color: color.green03, fontWeight: 700}}>

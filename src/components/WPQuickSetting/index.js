@@ -1,6 +1,7 @@
 import {useState} from 'react';
 import {color} from 'src/style';
 import {
+  Box,
   Grid,
   MenuItem,
   MenuList,
@@ -36,46 +37,45 @@ function WPQuickSetting() {
       <Popper id={id} open={open} anchorEl={anchorEl}>
         <ClickAwayListener onClickAway={() => setOpen(false)}>
           <Paper
-            sx={{width: 400, borderRadius: 3, overflow: 'hidden'}}
+            sx={{width: 440, height: '40vh', borderRadius: 3, overflow: 'hidden', marginBottom: 2, marginLeft: 3}}
             elevation={3}
           >
             <Grid container sx={{width: '100%'}}>
               <Grid item xs={6}>
-                <Paper
-                  elevation={2}
+                <Box
                   sx={{
-                    borderRadius: 0,
                     height: '100%',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
-                    py: 2,
                   }}
                 >
                   <MenuList sx={{px: 0, width: '100%'}}>
-                    <StyledMenuItem>
-                      <Link to="/workspace-setting">Dang's Workspace</Link>
+                    <StyledMenuItem sx={{ py: 1 }}>
+                      <Link to="/workspace-setting" className='text-base'>Dang's Workspace</Link>
                     </StyledMenuItem>
-                    <StyledMenuItem>
-                      <Link to="/workspace-setting">Lam's Workspace</Link>
+                    <StyledMenuItem sx={{ py: 1 }}>
+                      <Link to="/workspace-setting" className='text-base'>Lam's Workspace</Link>
                     </StyledMenuItem>
                   </MenuList>
-                  <Button
-                    sx={{...colorHover.greenGradBtn}}
-                    endIcon={<AddIcon />}
-                  >
-                    Create Workspace
-                  </Button>
-                </Paper>
+                  <div className="absolute bottom-8">
+                    <Button
+                      sx={{...colorHover.greenGradBtn, fontSize: 16}}
+                      endIcon={<AddIcon />}
+                    >
+                      Create Workspace
+                    </Button>
+                  </div>
+                </Box>
               </Grid>
               <Grid item xs={6}>
-                <Typography sx={{fontWeight: 700, textAlign: 'center', mt: 2}}>
+                <Typography sx={{fontWeight: 700, textAlign: 'center', mt: 2, mb: 0.5}}>
                   {' '}
                   Workspace Setting
                 </Typography>
                 <MenuList>
-                  <MenuItem>Rename</MenuItem>
-                  <MenuItem>Dashboard</MenuItem>
+                  <MenuItem sx={{ py: 1 }}>Rename</MenuItem>
+                  <MenuItem sx={{ py: 1 }}>Dashboard</MenuItem>
                 </MenuList>
               </Grid>
             </Grid>

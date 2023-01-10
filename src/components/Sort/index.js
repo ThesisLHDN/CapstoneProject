@@ -89,12 +89,11 @@ function Sort() {
             }}
           >
             <Paper
-              elevation={3}
               sx={{
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                py: 2,
+                py: 1,
                 px: 0,
                 gap: 1,
               }}
@@ -114,7 +113,7 @@ function Sort() {
                     <MenuItem
                       onClick={handleClose}
                       sx={{
-                        width: 200,
+                        width: 150,
                         ...(key === 'none' && {
                           fontWeight: 700,
                           fontStyle: 'italic',
@@ -127,13 +126,13 @@ function Sort() {
                   ))}
                 </MenuList>
               </ClickAwayListener>
-              <Button
+              {/* <Button
                 sx={{...colorHover.greenGradBtn}}
                 variant="contained"
                 onClick={handleToggle}
               >
                 Confirm
-              </Button>
+              </Button> */}
             </Paper>
           </Grow>
         )}
