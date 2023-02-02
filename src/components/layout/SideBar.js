@@ -6,7 +6,7 @@ import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 import ViewTimelineOutlinedIcon from '@mui/icons-material/ViewTimelineOutlined';
 import ViewListOutlinedIcon from '@mui/icons-material/ViewListOutlined';
-import WPQuickSetting from '../WPQuickSetting';
+// import WPQuickSetting from '../WPQuickSetting';
 
 const links = [
   {
@@ -111,7 +111,7 @@ function SideBar(props) {
             </div>
           ))}
         </div>
-        <WPQuickSetting />
+        {/* <WPQuickSetting /> */}
       </div>}
     </div>
   );

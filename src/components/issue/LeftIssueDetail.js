@@ -10,7 +10,7 @@ import Comments from './comment/Comments'
 
 function LeftIssueDetail() {
   const [startDate, setStartDate] = useState(new Date())
-  const [status, setStatus] = useState('In Progress')
+  const [status, setStatus] = useState('In progress')
   const [anchorEl, setAnchorEl] = useState(null)
 
   const handleChange = (event, element) => {
