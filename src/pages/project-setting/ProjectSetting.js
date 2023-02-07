@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { styled } from "@mui/material/styles"
 import { Typography, Grid, Breadcrumbs, Link, Button, TextField } from '@mui/material'
 import SearchBar from 'src/components/search'
@@ -21,7 +21,20 @@ const PrivacyButton = styled(Button)({
   },
 });
 
+const GradButton = styled(Button)({
+  my: 1,
+  backgroundImage:
+    'radial-gradient(farthest-corner at -100% 200%, #ffff00, #008000)',
+  transition: 'background 2s',
+  '&:hover': {
+    backgroundImage:
+      'radial-gradient(farthest-corner at -100% 200%, #ffff22, #228822)',
+  },
+});
+
 function ProjectSetting() {
+  const [rename, setRename] = useState(false);
+  const [key, setKey] = useState(false);
   return (
     <div>
       <Grid container spacing={2}>
@@ -70,15 +83,25 @@ function ProjectSetting() {
         Rename
       </Typography>
 
-      <Grid item xs={3} sx={{marginLeft: 6, marginTop: 1, marginBottom: 3}}>
-        <TextField
-          value="First Scrum Project"
-          size="small"
-          sx={{
-            width: "100%",
-            backgroundColor: "#ECECEC",
-          }}
-        ></TextField>
+      <Grid container spacing={2}>
+        <Grid item xs={3} sx={{marginLeft: 6, marginTop: 1, marginBottom: 3}}>
+          <TextField
+            defaultValue="First Scrum Project"
+            size="small"
+            sx={{
+              width: "100%",
+              backgroundColor: "#ECECEC",
+            }}
+            onChange={() => setRename(true)}
+          ></TextField>
+        </Grid>
+        <Grid item xs={3} sx={{marginTop: 1}}>
+          {rename && (
+            <GradButton variant="contained" size="medium">
+              Save
+            </GradButton>
+          )}
+        </Grid>
       </Grid>
 
       <Typography sx={{ 
@@ -93,15 +116,25 @@ function ProjectSetting() {
         Project Key
       </Typography>
 
-      <Grid item xs={3} sx={{marginLeft: 6, marginTop: 1, marginBottom: 3}}>
-        <TextField
-          value="FSP"
-          size="small"
-          sx={{
-            width: "100%",
-            backgroundColor: "#ECECEC",
-          }}
-        ></TextField>
+      <Grid container spacing={2}>
+        <Grid item xs={3} sx={{marginLeft: 6, marginTop: 1, marginBottom: 3}}>
+          <TextField
+            defaultValue="FSP"
+            size="small"
+            sx={{
+              width: "100%",
+              backgroundColor: "#ECECEC",
+            }}
+            onChange={() => setKey(true)}
+          ></TextField>
+        </Grid>
+        <Grid item xs={3} sx={{marginTop: 1}}>
+          {key && (
+            <GradButton variant="contained" size="medium">
+              Save
+            </GradButton>
+          )}
+        </Grid>
       </Grid>
 
       <Typography sx={{ 
