@@ -7,6 +7,7 @@ const data = {
       duration: null,
       parent: 0,
       progress: 0,
+      status: 'Done',
       open: true,
     },
     {
@@ -15,6 +16,7 @@ const data = {
       start_date: new Date(2019, 1, 1),
       duration: 5,
       parent: 1,
+      status: 'Done',
       progress: 1,
     },
     {
@@ -23,6 +25,7 @@ const data = {
       start_date: new Date(2019, 1, 1),
       duration: 2,
       parent: 1,
+      status: 'Done',
       progress: 0.5,
     },
     {
@@ -32,6 +35,7 @@ const data = {
       duration: null,
       parent: 1,
       progress: 0.8,
+      status: 'To do',
       open: true,
     },
     {
@@ -41,6 +45,7 @@ const data = {
       duration: 2,
       parent: 4,
       progress: 0.2,
+      status: 'Done',
     },
     {
       id: 6,
@@ -49,6 +54,7 @@ const data = {
       duration: 1,
       parent: 4,
       progress: 0,
+      status: 'In Progress',
     },
   ],
   // links: [

@@ -1,8 +1,12 @@
 .gantt_task_progress {
-  background-color: rgb(44, 175, 44);
+  background-color: rgb(141, 226, 141);
 }
 .gantt_task_line {
-  background-color: #75bc7a;
+  background-color: #dfdfdf;
+  border-color: rgb(40, 177, 40);
+}
+.gantt_task_content {
+  color: black;
 }
 .gantt_grid_scale,
 .gantt_task_scale,
@@ -27,9 +31,39 @@
 .gantt_cal_light {
   padding: 10px;
   height: fit-content !important;
+  width: auto !important;
 }
 
 .gantt_section_time select {
   border-radius: 4px;
   padding: 5px 3px;
+}
+
+.statusChip {
+  height: 24px;
+  border-radius: 4px;
+  line-height: 16px;
+  padding: 4px 8px;
+  font-size: 14px;
+}
+
+.done {
+  background-color: #aeffa7;
+  color: green;
+}
+
+.progress {
+  background-color: #9ad1ef;
+  color: #054077;
+}
+
+.todo {
+  background-color: #e4e4e4;
+  color: #4a4a4a;
+}
+
+.gantt_tree_content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

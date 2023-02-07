@@ -121,35 +121,34 @@ export default class Gantt extends Component {
       { name: "description", height: 72, map_to: "text", type: "textarea", focus: true },
       { name: "parent", type: "parent", height: 42, allow_root: "true", root_label: "No parent" },
       { name: "priority", height: 42, map_to: "priority", type: "select", options: opts },
-      { name: "period", height: 42, map_to: "auto", type: "time" },
+      { name: "period", height: 42, map_to: "auto", type: "time", time_format: ["%d", "%m", "%Y", "%H:%i"] },
 
     ];
     gantt.locale.labels.section_priority = "Priority";
     gantt.locale.labels.section_period = "Time period";
     gantt.locale.labels.section_parent = "Parent";
 
+    gantt.config.columns = [
+      { name: "text", label: "Task name", width: "*", tree: true },
+      // { name: "start_date", label: "Start time", align: "center" },
+      // { name: "end_date", label: "End time", align: "center" },
+      // { name: "duration", label: "Duration", align: "center" },
+      { name: "status", label: "Status", align: "center", template: statusChip },
+      { name: "add", label: "", width: 44 }
+    ];
 
-
-    // gantt.showLightbox = function (id) {
-    //   taskId = id;
-    //   var task = gantt.getTask(id);
-
-    //   var form = getForm();
-    //   var input = form.querySelector("[name='description']");
-    //   input.focus();
-    //   input.value = task.text;
-
-    //   form.style.display = "block";
-
-    //   form.querySelector("[name='save']").onclick = save;
-    //   form.querySelector("[name='close']").onclick = cancel;
-    //   form.querySelector("[name='delete']").onclick = remove;
-    // };
-
-    // gantt.hideLightbox = function () {
-    //   getForm().style.display = "";
-    //   taskId = null;
-    // }
+    function statusChip(task) {
+      var color = null;
+      switch (task.status) {
+        case 'Done': color = 'done'; break;
+        case 'In Progress': color = "progress"; break;
+        default: color = 'todo'
+      }
+      // return "<div class = 'chip'>" + status + "</div>"
+      // if (task.priority == 1)
+      return "<div class='statusChip " + color + "'>" + task.status + " </div>";
+      // return task.text + " (" + task.users + ")";
+    };
 
     const { tasks } = this.props;
     gantt.init(this.ganttContainer);
