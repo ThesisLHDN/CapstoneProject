@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import {ClickAwayListener} from '@mui/base';
 import SortRoundedIcon from '@mui/icons-material/SortRounded';
-import {color, colorHover} from 'src/style';
+import {color} from 'src/style';
 
 const data = {
   status: 'Status',

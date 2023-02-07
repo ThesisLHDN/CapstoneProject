@@ -17,3 +17,19 @@
   font-size: 13px;
   border-bottom: 1px solid #cecece;
 }
+
+.gantt_cal_ltext textarea,
+.gantt_cal_ltext select {
+  border-radius: 5px;
+  padding: 8px 4px;
+}
+
+.gantt_cal_light {
+  padding: 10px;
+  height: fit-content !important;
+}
+
+.gantt_section_time select {
+  border-radius: 4px;
+  padding: 5px 3px;
+}

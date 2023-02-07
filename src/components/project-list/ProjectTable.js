@@ -1,6 +1,6 @@
-import {useState} from 'react';
+import { useState } from 'react';
 // import {styled} from '@mui/material/styles';
-import {color} from 'src/style';
+import { color } from 'src/style';
 import {
   Table,
   TableBody,
@@ -11,33 +11,30 @@ import {
   IconButton,
   // TablePagination,
 } from '@mui/material';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 // import TableBody from '@mui/material/TableBody';
-import TableCell, {tableCellClasses} from '@mui/material/TableCell';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 
 import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
 import StarRoundedIcon from '@mui/icons-material/StarRounded';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 
-function createData(star, name, type, owner) {
-  return {star, name, type, owner};
+function createData(name, type, owner) {
+  return { name, type, owner };
 }
 
 const rows = [
   createData(
-    true,
     'First Scrum Project',
     'Scrum project',
     'Nguyễn Trường Hải Đăng',
   ),
   createData(
-    false,
     'First Kanban Project',
     'Kanban project',
     'Nguyễn Hoàng Lâm',
   ),
   createData(
-    false,
     'Second Scrum Project',
     'Scrum project',
     'Nguyễn Hoàng Lâm',
@@ -45,8 +42,8 @@ const rows = [
 ];
 
 const columns = [
-  {id: 'name', label: 'Name', minWidth: 170},
-  {id: 'code', label: 'ISO\u00a0Code', minWidth: 100},
+  { id: 'name', label: 'Name', minWidth: 170 },
+  { id: 'code', label: 'ISO\u00a0Code', minWidth: 100 },
   {
     id: 'population',
     label: 'Population',
@@ -83,9 +80,9 @@ export default function ProjectTable() {
   //   setPage(0);
   // };
   return (
-    <Paper sx={{overflow: 'hidden', my: 2}}>
+    <Paper sx={{ overflow: 'hidden', my: 2 }}>
       <TableContainer>
-        <Table sx={{minWidth: 700}} aria-label="customized table">
+        <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead
             sx={{
               backgroundColor: color.green03,
@@ -96,7 +93,7 @@ export default function ProjectTable() {
             }}
           >
             <TableRow>
-              <TableCell></TableCell>
+              {/* <TableCell></TableCell> */}
               <TableCell align="left">Name</TableCell>
               <TableCell align="center">Project Type</TableCell>
               <TableCell align="center">Project owner</TableCell>
@@ -106,15 +103,15 @@ export default function ProjectTable() {
           <TableBody>
             {rows.map((row) => (
               <TableRow key={row.name} component={Link} to="/roadmap" hover>
-                <TableCell scope="row">
+                {/* <TableCell scope="row">
                   <IconButton>
                     {row.star ? (
-                      <StarRoundedIcon sx={{color: '#ffbf00'}} />
+                      <StarRoundedIcon sx={{ color: '#ffbf00' }} />
                     ) : (
                       <StarBorderRoundedIcon />
                     )}
                   </IconButton>
-                </TableCell>
+                </TableCell> */}
                 <TableCell align="left">{row.name}</TableCell>
                 <TableCell align="center">{row.type}</TableCell>
                 <TableCell align="center">{row.owner}</TableCell>

@@ -1,12 +1,12 @@
 import React from 'react';
 import format from 'date-fns/format';
 
-import {Box, Paper, Typography, Avatar} from '@mui/material';
+import { Box, Paper, Typography, Avatar } from '@mui/material';
 
-import {differenceInDays} from 'date-fns';
+import { differenceInDays } from 'date-fns';
 
-function Message({mine, children}) {
-  const {senderName, senderId, message, time} = children;
+function Message({ mine, children }) {
+  const { senderName, senderId, message, time } = children;
   // const dateDisplay = time;
   switch (differenceInDays(new Date(), time)) {
     case 0:
@@ -31,11 +31,11 @@ function Message({mine, children}) {
       }}
     >
       {!mine && (
-        <div style={{display: 'flex', alignItems: 'center'}}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
           <Avatar
             src="#"
             alt={senderName}
-            sx={{width: 32, height: 32, mr: 1}}
+            sx={{ width: 32, height: 32, mr: 1 }}
           ></Avatar>
           <Typography variant="body2">{senderName}</Typography>
         </div>
@@ -54,8 +54,8 @@ function Message({mine, children}) {
           sx={{
             maxWidth: '75%',
             ...(mine
-              ? {backgroundColor: '#04BF00', color: 'white'}
-              : {backgroundColor: '#DADADA'}),
+              ? { backgroundColor: '#04BF00', color: 'white' }
+              : { backgroundColor: '#DADADA' }),
             borderRadius: '25px',
             my: 2,
             py: 1,
@@ -71,7 +71,7 @@ function Message({mine, children}) {
         <Typography
           className="sendDate"
           variant="subtitle2"
-          sx={{textAlign: 'right', display: 'none'}}
+          sx={{ textAlign: 'right', display: 'none' }}
         >
           {dateDisplay}
         </Typography>

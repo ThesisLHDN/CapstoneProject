@@ -123,7 +123,7 @@ function AvatarList() {
               color="error"
               sx={{width: '100%', fontSize: 14}}
             >
-              Delete member
+              Remove member
             </Button>
           </Paper>
         </Box>

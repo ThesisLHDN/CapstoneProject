@@ -100,32 +100,32 @@ const mockData = [
 ];
 
 
-const itemsFromBackend = [
-    { id: uuid(), content: "First task" },
-    { id: uuid(), content: "Second task" },
-    { id: uuid(), content: "Third task" },
-    { id: uuid(), content: "Fourth task" },
-    { id: uuid(), content: "Fifth task" }
-];
+// const itemsFromBackend = [
+//     { id: uuid(), content: "First task" },
+//     { id: uuid(), content: "Second task" },
+//     { id: uuid(), content: "Third task" },
+//     { id: uuid(), content: "Fourth task" },
+//     { id: uuid(), content: "Fifth task" }
+// ];
 
-const columnsFromBackend = {
-    [uuid()]: {
-        name: "Requested",
-        items: itemsFromBackend
-    },
-    [uuid()]: {
-        name: "To do",
-        items: []
-    },
-    [uuid()]: {
-        name: "In Progress",
-        items: []
-    },
-    [uuid()]: {
-        name: "Done",
-        items: []
-    }
-};
+// const columnsFromBackend = {
+//     [uuid()]: {
+//         name: "Requested",
+//         items: itemsFromBackend
+//     },
+//     [uuid()]: {
+//         name: "To do",
+//         items: []
+//     },
+//     [uuid()]: {
+//         name: "In Progress",
+//         items: []
+//     },
+//     [uuid()]: {
+//         name: "Done",
+//         items: []
+//     }
+// };
 
 const onDragEnd = (result, columns, setColumns) => {
     if (!result.destination) return;

@@ -1,24 +1,24 @@
-import {useState} from 'react';
-import {color, colorHover} from 'src/style';
-import {errorCodeConverter} from '../authFunction';
+import { useState } from 'react';
+import { color, colorHover } from 'src/style';
+import { errorCodeConverter } from '../authFunction';
 
 import {
   Button,
   IconButton,
-  CssBaseline,
+  // CssBaseline,
   TextField,
   FormControlLabel,
   Checkbox,
   Link,
-  Paper,
+  // Paper,
   Box,
   Grid,
   Divider,
   Typography,
 } from '@mui/material';
-import {createTheme, ThemeProvider} from '@mui/material/styles';
-import {ReactComponent as FacebookIcon} from '../logo/Facebook.svg';
-import {ReactComponent as GoogleIcon} from '../logo/Google.svg';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { ReactComponent as FacebookIcon } from '../logo/Facebook.svg';
+import { ReactComponent as GoogleIcon } from '../logo/Google.svg';
 
 // import app, {auth} from 'src/firebase/config.js';
 import {
@@ -260,7 +260,7 @@ export default function SignInSide() {
             {error && (
               <Typography
                 variant="subtitle2"
-                sx={{color: 'red', textAlign: 'center', mb: 2}}
+                sx={{ color: 'red', textAlign: 'center', mb: 2 }}
               >
                 {error}
               </Typography>
@@ -269,7 +269,7 @@ export default function SignInSide() {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{...colorHover.greenBtn}}
+              sx={{ ...colorHover.greenBtn }}
             >
               Sign Up
             </Button>
@@ -277,26 +277,26 @@ export default function SignInSide() {
               <Grid item>
                 <Typography
                   variant="body2"
-                  sx={{lineHeight: '40px', color: color.gray02, mt: 1}}
+                  sx={{ lineHeight: '40px', color: color.gray02, mt: 1 }}
                 >
                   Already have an account?{' '}
-                  <Link href="/login" sx={{color: color.green03}}>
+                  <Link href="/login" sx={{ color: color.green03 }}>
                     {'Login'}
                   </Link>
                 </Typography>
               </Grid>
             </Grid>
-            <Divider sx={{my: 1}}>
-              <Typography variant="body2" sx={{color: color.gray02}}>
+            <Divider sx={{ my: 1 }}>
+              <Typography variant="body2" sx={{ color: color.gray02 }}>
                 Or continue with
               </Typography>{' '}
             </Divider>
-            <Box sx={{display: 'flex', gap: 1, justifyContent: 'center'}}>
+            <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}>
               <IconButton variant="contained" onClick={facebookLoginHandler}>
-                <FacebookIcon style={{width: 32, height: 32}} />
+                <FacebookIcon style={{ width: 32, height: 32 }} />
               </IconButton>
               <IconButton variant="contained" onClick={googleLoginHandler}>
-                <GoogleIcon style={{width: 32, height: 32}} />
+                <GoogleIcon style={{ width: 32, height: 32 }} />
               </IconButton>
             </Box>
           </Box>

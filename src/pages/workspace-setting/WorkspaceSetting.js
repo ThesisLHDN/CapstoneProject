@@ -32,17 +32,6 @@ const StyledTypo = styled(Typography)({
   fontWeight: 'bold',
 });
 
-const GradButton = styled(Button)({
-  my: 1,
-  backgroundImage:
-    'radial-gradient(farthest-corner at -100% 200%, #ffff00, #008000)',
-  transition: 'background 2s',
-  '&:hover': {
-    backgroundImage:
-      'radial-gradient(farthest-corner at -100% 200%, #ffff22, #228822)',
-  },
-});
-
 const StyledAccordion = styled((props) => (
   <Accordion disableGutters elevation={0} square {...props} />
 ))(({ theme }) => ({
@@ -131,9 +120,9 @@ function WorkspaceSetting() {
               </Grid>
               <Grid item xs={5}>
                 {rename && (
-                  <GradButton variant="contained" size="medium">
+                  <Button variant="contained" size="medium" sx={{ ...colorHover.greenGradBtn }}>
                     Save
-                  </GradButton>
+                  </Button>
                 )}
               </Grid>
             </Grid>
@@ -221,9 +210,6 @@ function WorkspaceSetting() {
                   sx={{
                     display: 'flex',
                     alignItems: 'center',
-                    '&:hover button': {
-                      display: 'block',
-                    },
                   }}
                 >
                   <Avatar alt="Remy Sharp" src="#" />
@@ -231,7 +217,7 @@ function WorkspaceSetting() {
                     {' '}
                     Nguyễn Trường Hải Đăng
                   </Typography>{' '}
-                  <IconButton sx={{ display: 'none' }}>
+                  <IconButton >
                     <EditRoundedIcon />
                   </IconButton>
                 </Box>
