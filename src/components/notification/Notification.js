@@ -5,12 +5,6 @@ import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import {color} from 'src/style';
 
-const noti = [
-  {
-    content: ''
-  }
-]
-
 function FilterRow() {
   return (
     <Box
