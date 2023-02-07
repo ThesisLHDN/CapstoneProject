@@ -1,7 +1,7 @@
 // import React from 'react';
 import 'src/App.scss';
 
-import {Typography, Breadcrumbs, Link, Grid, Button, Box} from '@mui/material';
+import { Typography, Breadcrumbs, Link, Grid, Button, Box } from '@mui/material';
 // import {styled} from '@mui/material/styles';
 
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -10,12 +10,13 @@ import PermIdentityRoundedIcon from '@mui/icons-material/PermIdentityRounded';
 // import FilterAltRoundedIcon from '@mui/icons-material/FilterAltRounded';
 // import SortRoundedIcon from '@mui/icons-material/SortRounded';
 
-import Scrum from 'src/components/scrum';
+// import Scrum from 'src/components/scrum';
+import AltScrum from 'src/components/scrum/altScrum';
 import SearchBar from 'src/components/search';
 import Filter from 'src/components/Filter';
 import Sort from 'src/components/Sort';
 
-import {color, colorHover} from 'src/style';
+import { color, colorHover } from 'src/style';
 
 function handleClick(event) {
   event.preventDefault();
@@ -32,10 +33,10 @@ function handleClick(event) {
 // });
 function Board() {
   return (
-    <div style={{textAlign: 'left'}}>
+    <Box style={{ textAlign: 'left'}}>
       <Grid container spacing={2}>
         <Grid item xs={5}>
-          <Breadcrumbs separator="›" aria-label="breadcrumb" sx={{mb: 2}}>
+          <Breadcrumbs separator="›" aria-label="breadcrumb" sx={{ mb: 2 }}>
             [
             <Link
               underline="hover"
@@ -57,7 +58,7 @@ function Board() {
               First Scrum Project
             </Link>
             ,
-            <Typography key="3" color="text.primary" sx={{fontSize: 'inherit'}}>
+            <Typography key="3" color="text.primary" sx={{ fontSize: 'inherit' }}>
               Board
             </Typography>
             , ]
@@ -72,11 +73,11 @@ function Board() {
             alignItems: 'center',
           }}
         >
-          <Typography sx={{mx: 1, display: 'flex', justifyItems: 'center'}}>
-            <AccessTimeRoundedIcon sx={{mr: 1}} />
+          <Typography sx={{ mx: 1, display: 'flex', alignItems: 'center', fontSize:14, mr:2 }}>
+            <AccessTimeRoundedIcon />
             10 days remaining
           </Typography>
-          <Button sx={{...colorHover.grayBtn, height: 32}}>
+          <Button sx={{ ...colorHover.grayBtn, height: 32 }}>
             Complete sprint
           </Button>
           <Button
@@ -92,10 +93,10 @@ function Board() {
           </Button>
         </Grid>
       </Grid>
-      <Typography variant="h5" sx={{color: color.green03, fontWeight: 700}}>
+      <Typography variant="h5" sx={{ color: color.green03, fontWeight: 700 }}>
         Sprint 02
       </Typography>
-      <Typography variant="caption" sx={{color: '#555'}}>
+      <Typography variant="caption" sx={{ color: '#555' }}>
         Lorem Ipsum is simply dummy text of the printing and typesetting
         industry. Lorem Ipsum has been the industry&apos; s standard dummy text
         ever since the 1500s, when an unknown printer took a galley of type and
@@ -110,7 +111,7 @@ function Board() {
           mt: 1,
         }}
       >
-        <SearchBar sx={{width: '250px'}} />
+        <SearchBar sx={{ width: '250px' }} />
         <Filter />
         {/* <Button
           variant="text"
@@ -123,14 +124,15 @@ function Board() {
         <Button
           variant="text"
           startIcon={<PermIdentityRoundedIcon />}
-          sx={{color: '#181818', textTransform: 'none'}}
+          sx={{ color: '#181818', textTransform: 'none' }}
         >
           Me
         </Button>
       </Box>
 
-      <Scrum />
-    </div>
+      {/* <Scrum /> */}
+      <AltScrum />
+    </Box>
   );
 }
 
