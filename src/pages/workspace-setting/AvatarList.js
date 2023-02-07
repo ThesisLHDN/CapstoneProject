@@ -88,6 +88,7 @@ function AvatarList() {
     >
       {members.map((member) => (
         <Box
+          key={member.replace(' ', '.').toLowerCase()}
           sx={{
             position: 'relative',
             '&:hover  .memberSelect': {

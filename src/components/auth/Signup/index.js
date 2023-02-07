@@ -27,6 +27,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   createUserWithEmailAndPassword,
+  sendEmailVerification,
 } from 'firebase/auth';
 
 const facebookProvider = new FacebookAuthProvider();
@@ -117,16 +118,31 @@ export default function SignInSide() {
     const password = formData.password;
     const fName = formData.firstName;
     const lName = formData.lastName;
+
     if (!(email, password, fName, lName)) {
       setError('All fields are required.');
       return;
     }
-    console.log(email, password);
+
+    console.log(auth.currentUser);
+
+    // sendEmailVerification(auth.currentUser).then(() => {
+    //   console.log('Email verification sent!');
+    //   // ...
+    // });
+
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
         // ...
+        console.log(user);
+      })
+      .then(() => {
+        sendEmailVerification(auth.currentUser).then(() => {
+          console.log('Email verification sent!');
+          // ...
+        });
       })
       .catch((error) => {
         setError(errorCodeConverter(error.code));

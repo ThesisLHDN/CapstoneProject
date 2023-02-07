@@ -1,6 +1,6 @@
-import {useState} from 'react';
-import {styled} from '@mui/material/styles';
-import {color, colorHover} from 'src/style';
+import { useState } from 'react';
+import { styled } from '@mui/material/styles';
+import { color, colorHover } from 'src/style';
 
 import {
   Typography,
@@ -45,7 +45,7 @@ const GradButton = styled(Button)({
 
 const StyledAccordion = styled((props) => (
   <Accordion disableGutters elevation={0} square {...props} />
-))(({theme}) => ({
+))(({ theme }) => ({
   //   border: `1px solid ${theme.palette.divider}`,
   '&:not(:last-child)': {
     borderBottom: 0,
@@ -61,12 +61,12 @@ const StyledAccordionSummary = styled((props) => (
   <AccordionSummary
     expandIcon={
       <ArrowForwardIosSharpIcon
-        sx={{fontSize: '0.9rem', color: color.green03}}
+        sx={{ fontSize: '0.9rem', color: color.green03 }}
       />
     }
     {...props}
   />
-))(({theme}) => ({
+))(({ theme }) => ({
   backgroundColor: 'rgba(0, 0, 0, 0)',
   // theme.palette.mode === "dark"
   //   ? "rgba(255, 255, 255, .05)"
@@ -80,7 +80,7 @@ const StyledAccordionSummary = styled((props) => (
   },
 }));
 
-const StyledAccordionDetails = styled(AccordionDetails)(({theme}) => ({
+const StyledAccordionDetails = styled(AccordionDetails)(({ theme }) => ({
   padding: theme.spacing(2),
   //   borderTop: "1px solid rgba(0, 0, 0, .125)",
 }));
@@ -95,11 +95,11 @@ function WorkspaceSetting() {
   const [rename, setRename] = useState(false);
 
   return (
-    <div style={{textAlign: 'left'}}>
-      <Typography variant="h5" sx={{color: color.green03, fontWeight: 700}}>
+    <div style={{ textAlign: 'left' }}>
+      <Typography variant="h5" sx={{ color: color.green03, fontWeight: 700 }}>
         Workspace Setting
       </Typography>
-      <Box sx={{my: 2}}>
+      <Box sx={{ my: 2 }}>
         <StyledAccordion
           expanded={expanded === 'panel1'}
           onChange={handleChange('panel1')}
@@ -111,9 +111,9 @@ function WorkspaceSetting() {
             <StyledTypo>Workspace details</StyledTypo>
           </StyledAccordionSummary>
           <StyledAccordionDetails>
-            <Grid container spacing={2} sx={{alignItems: 'center'}}>
+            <Grid container spacing={2} sx={{ alignItems: 'center' }}>
               <Grid item xs={2}>
-                <Typography sx={{my: 2}}>Rename</Typography>
+                <Typography sx={{ my: 2 }}>Rename</Typography>
               </Grid>
               <Grid item xs={5}>
                 <TextField
@@ -138,7 +138,7 @@ function WorkspaceSetting() {
               </Grid>
             </Grid>
 
-            <Typography sx={{my: 2}}>Workspace description</Typography>
+            <Typography sx={{ my: 2 }}>Workspace description</Typography>
             <TextField
               sx={{
                 width: '100%',
@@ -183,7 +183,7 @@ function WorkspaceSetting() {
               Create project
             </Button>
           </StyledAccordionSummary>
-          <StyledAccordionDetails sx={{position: 'relative'}}>
+          <StyledAccordionDetails sx={{ position: 'relative' }}>
             <ProjectTable />
           </StyledAccordionDetails>
         </StyledAccordion>
@@ -194,7 +194,7 @@ function WorkspaceSetting() {
           <StyledAccordionSummary
             aria-controls="panel3d-content"
             id="panel3d-header"
-            sx={{position: 'relative'}}
+            sx={{ position: 'relative' }}
           >
             <StyledTypo>People</StyledTypo>
             <Button
@@ -214,9 +214,9 @@ function WorkspaceSetting() {
           <StyledAccordionDetails>
             <Grid container spacing={2}>
               <Grid item xs={2}>
-                <Typography sx={{my: 2}}>Administrator</Typography>
+                <Typography sx={{ my: 2 }}>Administrator</Typography>
               </Grid>
-              <Grid item xs={10} sx={{display: 'flex', alignItems: 'center'}}>
+              <Grid item xs={10} sx={{ display: 'flex', alignItems: 'center' }}>
                 <Box
                   sx={{
                     display: 'flex',
@@ -227,17 +227,17 @@ function WorkspaceSetting() {
                   }}
                 >
                   <Avatar alt="Remy Sharp" src="#" />
-                  <Typography sx={{mx: 2}}>
+                  <Typography sx={{ mx: 2 }}>
                     {' '}
                     Nguyễn Trường Hải Đăng
                   </Typography>{' '}
-                  <IconButton sx={{display: 'none'}}>
+                  <IconButton sx={{ display: 'none' }}>
                     <EditRoundedIcon />
                   </IconButton>
                 </Box>
               </Grid>
             </Grid>
-            <Typography sx={{my: 2}}>Members</Typography>
+            <Typography sx={{ my: 2 }}>Members</Typography>
             <AvatarList />
           </StyledAccordionDetails>
         </StyledAccordion>

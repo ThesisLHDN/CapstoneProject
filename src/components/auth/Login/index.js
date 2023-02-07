@@ -42,17 +42,17 @@ export default function SignInSide() {
   const [formData, setFormData] = useState({});
   const auth = getAuth();
   // const {user} = useContext(AuthContext);
-  const errorCodeHandler = (err) => {
-    if (err === 'auth/wrong-password') {
-      setError('Wrong password');
-    } else if (err === 'auth/invalid-email') {
-      setError('Invalid email');
-    } else if (err === 'auth/user-not-found') {
-      setError('User not found');
-    } else {
-      setError(err);
-    }
-  };
+  // const errorCodeHandler = (err) => {
+  //   if (err === 'auth/wrong-password') {
+  //     setError('Wrong password');
+  //   } else if (err === 'auth/invalid-email') {
+  //     setError('Invalid email');
+  //   } else if (err === 'auth/user-not-found') {
+  //     setError('User not found');
+  //   } else {
+  //     setError(err);
+  //   }
+  // };
   const onChangeHandler = (e) => {
     e.preventDefault();
 
@@ -96,6 +96,7 @@ export default function SignInSide() {
   };
 
   const facebookLoginHandler = () => {
+    // const auth = getAuth();
     signInWithPopup(auth, facebookProvider)
       .then((result) => {
         // The signed-in user info.
@@ -108,11 +109,12 @@ export default function SignInSide() {
       .catch((error) => {
         // Handle Errors here.
         const errorCode = error.code;
-        const errorMessage = error.message;
+        // const errorMessage = error.message;
         // The email of the user's account used.
         const email = error.customData.email;
         // The AuthCredential type that was used.
         const credential = FacebookAuthProvider.credentialFromError(error);
+        setError(errorCodeConverter(errorCode));
       });
   };
 
@@ -123,7 +125,7 @@ export default function SignInSide() {
         const user = result.user;
 
         // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-        const credential = FacebookAuthProvider.credentialFromResult(result);
+        const credential = GoogleAuthProvider.credentialFromResult(result);
         const accessToken = credential.accessToken;
       })
       .catch((error) => {
@@ -133,7 +135,7 @@ export default function SignInSide() {
         // The email of the user's account used.
         const email = error.customData.email;
         // The AuthCredential type that was used.
-        const credential = FacebookAuthProvider.credentialFromError(error);
+        const credential = GoogleAuthProvider.credentialFromError(error);
       });
   };
 
