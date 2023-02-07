@@ -5,6 +5,12 @@ import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import {color} from 'src/style';
 
+const noti = [
+  {
+    content: ''
+  }
+]
+
 function FilterRow() {
   return (
     <Box
@@ -115,21 +121,25 @@ function Notification() {
                   pt: 1,
                 }}
               >
-                <div className='flex justify-between ml-2'>
-                  <div className='flex'>
-                    <Typography sx={{fontWeight: 600, fontSize: 14, ml: 1, mt: 0.5}}>Notification</Typography>
-                    <MenuList autoFocusItem={open} sx={{px: 2, py: 0}}><FilterRow /></MenuList>
+                <div className='border-b' style={{ marginBottom: -8}}>
+                  <div className='flex justify-between ml-2'>
+                    <div className='flex'>
+                      <Typography sx={{fontWeight: 600, fontSize: 14, ml: 1, mt: 0.5}}>Notification</Typography>
+                      <MenuList autoFocusItem={open} sx={{px: 2, py: 0}}><FilterRow /></MenuList>
+                    </div>
+                    <div className=''>
+                      <Button 
+                        endIcon={<CheckCircleOutlineIcon />}
+                        sx={{ textTransform: 'none', color: 'black', mt: -0.4, mr: 1 }}
+                      >
+                        Mark all as read
+                      </Button>
+                    </div>
                   </div>
-                  <Button 
-                    endIcon={<CheckCircleOutlineIcon />}
-                    sx={{ textTransform: 'none', color: 'black', mt: -0.4, mr: 1 }}
-                  >
-                    Mark all as read
-                  </Button>
                 </div>
-                <div className='flex justify-between overflow-y-scroll'>
+                <div className='flex justify-between'>
                   <MenuList>
-                    <MenuItem sx={{ pt: 1.5, pb: 1.5, fontSize: 14, borderBottom: '1px gray solid', whiteSpace: 'normal' }}>
+                    <MenuItem sx={{ pt: 1.5, pb: 1.5, fontSize: 14, borderBottom: '1px #E5E7EB solid', whiteSpace: 'normal' }}>
                       <Link to="/issue" onClick={handleToggle} sx={{ textOverflow: 'ellipsis'}} >
                         <div className='flex'>
                           <Avatar
