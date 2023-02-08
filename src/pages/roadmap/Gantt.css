@@ -1,5 +1,6 @@
 .gantt_task_progress {
   background-color: rgb(141, 226, 141);
+  height: 32px;
 }
 .gantt_task_line {
   background-color: #dfdfdf;
@@ -41,7 +42,7 @@
 
 .statusChip {
   height: 24px;
-  border-radius: 4px;
+  border-radius: 3px;
   line-height: 16px;
   padding: 4px 8px;
   font-size: 14px;

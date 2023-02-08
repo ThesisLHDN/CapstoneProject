@@ -1,6 +1,7 @@
 import React from 'react';
 import './Toolbar.css';
-import {Radio, RadioGroup, FormControlLabel} from '@mui/material';
+import { Radio, RadioGroup, FormControlLabel } from '@mui/material';
+import { color } from 'src/style'
 
 function Toolbar(props) {
   const handleZoomChange = (e) => {
@@ -15,11 +16,6 @@ function Toolbar(props) {
         control={<Radio />}
         label={value}
         onChange={handleZoomChange}
-        sx={{
-          '&.MuiButtonBase-root.MuiRadio-root.Mui-checked': {
-            color: 'green !important',
-          },
-        }}
       />
     );
   });
@@ -34,7 +30,7 @@ function Toolbar(props) {
         sx={{
           display: 'inline-block',
           ml: 2,
-          '& .MuiButtonBase-root.MuiRadio-root.Mui-checked': {color: 'green !important'},
+          '& .MuiButtonBase-root.MuiRadio-root.Mui-checked': { color: `${color.green03} !important` },
         }}
         defaultValue="Days"
       >

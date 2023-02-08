@@ -1,11 +1,11 @@
-import {useState} from 'react';
+import { useState } from 'react';
 import 'src/App.scss';
-import {Typography, Breadcrumbs, Link, Button, Box, Grid} from '@mui/material';
+import { Typography, Breadcrumbs, Link, Button, Box, Grid } from '@mui/material';
 import Gantt from './Gantt';
 import Toolbar from './toolbar';
 // import Filter from 'src/components/Filter';
-import {styled} from '@mui/material/styles';
-import {color} from 'src/style';
+import { styled } from '@mui/material/styles';
+import { color } from 'src/style';
 
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 // import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
@@ -40,7 +40,7 @@ function RoadMap() {
 
   const addMessage = (message) => {
     const maxLogLength = 5;
-    const newMessage = {message};
+    const newMessage = { message };
     const messages = [newMessage, ...messagesState];
 
     if (messages.length > maxLogLength) {
@@ -63,10 +63,10 @@ function RoadMap() {
   };
 
   return (
-    <div style={{textAlign: 'left'}}>
+    <div style={{ textAlign: 'left' }}>
       <Grid container spacing={2}>
         <Grid item xs={5}>
-          <Breadcrumbs separator="›" aria-label="breadcrumb" sx={{mb: 2}}>
+          <Breadcrumbs separator="›" aria-label="breadcrumb" sx={{ mb: 2 }}>
             [
             <Link
               underline="hover"
@@ -88,7 +88,7 @@ function RoadMap() {
               First Scrum Project
             </Link>
             ,
-            <Typography key="3" color="text.primary" sx={{fontSize: 'inherit'}}>
+            <Typography key="3" color="text.primary" sx={{ fontSize: 'inherit' }}>
               Roadmap
             </Typography>
             , ]
@@ -108,20 +108,20 @@ function RoadMap() {
             10 days remaining
           </Typography> */}
           {/* <GrayButton variant="contained">Complete sprint</GrayButton> */}
-          <GrayButton sx={{mx: 1, width: '32px !important', minWidth: 32}}>
+          {/* <GrayButton sx={{ mx: 1, width: '32px !important', minWidth: 32 }}>
             <MoreHorizIcon />
-          </GrayButton>
+          </GrayButton> */}
         </Grid>
       </Grid>
-      <Typography variant="h5" sx={{color: color.green03, fontWeight: 700}}>
+      <Typography variant="h5" sx={{ color: color.green03, fontWeight: 700 }}>
         RoadMap
       </Typography>
-      <Typography variant="caption" sx={{color: '#555'}}>
+      {/* <Typography variant="caption" sx={{ color: '#555' }}>
         Lorem Ipsum is simply dummy text of the printing and typesetting
         industry. Lorem Ipsum has been the industry&apos; s standard dummy text
         ever since the 1500s, when an unknown printer took a galley of type and
         scrambled it to make a type specimen book.
-      </Typography>
+      </Typography> */}
 
       {/* <Box
         sx={{
@@ -159,7 +159,7 @@ function RoadMap() {
       <Box>
         <Box
           className="zoom-bar"
-          sx={{display: 'flex', justifyContent: 'flex-end'}}
+          sx={{ display: 'flex', justifyContent: 'flex-end' }}
         >
           <Toolbar zoom={zoom} onZoomChange={handleZoomChange} />
         </Box>
