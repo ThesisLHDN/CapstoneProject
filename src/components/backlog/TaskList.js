@@ -1,16 +1,16 @@
 import  {useState} from 'react';
 import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
 import {styled} from '@mui/material/styles';
-import {NavLink} from 'react-router-dom';
 import MuiAccordion from '@mui/material/Accordion';
 import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
-import {Button, Box} from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import {Button, Box, TextField, FormControl, Select, MenuItem} from '@mui/material';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import SprintHeader from './SprintHeader';
 import TaskCard from './TaskCard';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import AddIcon from '@mui/icons-material/Add'
+import { IssueIcon } from './TaskCard';
 
 const tasks = [
   {
@@ -172,6 +172,41 @@ const AccordionDetails = styled(MuiAccordionDetails)(({theme}) => ({
 
 function TaskList(props) {
   const [columns, setColumns] = useState(columnsFromBackend);
+  const [createIssueCurSprint, setCreateIssueCurSprint] = useState(false);
+  const [createIssueBacklog, setCreateIssueBacklog] = useState(false);
+  const [issueType, setIssueType] = useState('story');
+  // const [isCreate, setIsCreate] = useState(false);
+
+  const handleIssueType = (event) => {
+    setIssueType(event.target.value);
+  };
+
+  const addIssue = (event, columnId) => {
+		if (event.target.value !== "") {
+			setColumns({
+        ...columns,
+        [columnId]: {
+          ...columns[columnId],
+          items: [...columns[columnId].items, {
+            id: 'SCR' + (Math.floor(Math.random() * 10)).toString(),
+            name: event.target.value,
+            status: 'To do',
+            type: issueType,
+            epic: '',
+            due: '',
+            point: 0,
+            assignee: '',
+          },]
+        }
+      })
+			event.target.value = "";
+		}
+    // setIsCreate(false)
+    setCreateIssueCurSprint(false);
+    setCreateIssueBacklog(false);
+    setIssueType('story');
+	};
+
   return (
     <div>
       <DragDropContext
@@ -312,22 +347,110 @@ function TaskList(props) {
                         </Droppable>
                       </div>
 
-                      {['1', '4'].includes(columnId) ? (
+                      {columnId === '4' ? (
                         <div>
-                          <Button
-                            variant="text"
-                            startIcon={<AddIcon />}
-                            sx={{
-                              color: 'black',
-                              fontSize: '14px',
-                              textTransform: 'none',
-                            }}
-                          >
-                            Create new issue
-                          </Button>
+                          {!createIssueBacklog && (
+                            <Button
+                              variant="text"
+                              startIcon={<AddIcon />}
+                              sx={{
+                                color: 'black',
+                                fontSize: '14px',
+                                textTransform: 'none',
+                              }}
+                              onClick={() => {setCreateIssueBacklog(true)}}
+                            >
+                              Create new issue
+                            </Button>
+                          )}
+                          {createIssueBacklog && (
+                            <div style={{ border: '1px solid gray', backgroundColor: 'white'}}>
+                              <Select
+                                variant="standard"
+                                value={issueType}
+                                onChange={handleIssueType}
+                                sx={{ backgroundColor: 'white', border: 'none', p: 0.75, pl: 1.5}}
+                                disableUnderline
+                              >
+                                <MenuItem value='story'>{IssueIcon('story')}</MenuItem>
+                                <MenuItem value='bug'>{IssueIcon('bug')}</MenuItem>
+                                <MenuItem value='task'>{IssueIcon('task')}</MenuItem>
+                              </Select>
+                              <TextField
+                                variant="standard"
+                                size="medium"
+                                sx={{ width: '85%', height: "45px", fontSize: 14, background: 'white', p: 1, pl: 2 }}
+                                InputProps={{ disableUnderline: true, style: { fontSize: 14 }}}
+                                onKeyUp={event => event.key === "Enter" ? addIssue(event, columnId) : null}
+                              ></TextField>
+                              <Button
+                                variant="text"
+                                sx={{
+                                  color: 'black',
+                                  borderRadius: '0',
+                                  fontSize: '14px',
+                                  height: '45px',
+                                  textTransform: 'none',
+                                }}
+                                onClick={() => {setCreateIssueBacklog(false)}}
+                              >
+                                Cancel
+                              </Button>
+                            </div>
+                          )}
                         </div>
                       ) : (
-                        <></>
+                        <div>
+                          {!createIssueCurSprint && (
+                            <Button
+                              variant="text"
+                              startIcon={<AddIcon />}
+                              sx={{
+                                color: 'black',
+                                fontSize: '14px',
+                                textTransform: 'none',
+                              }}
+                              onClick={() => {setCreateIssueCurSprint(true)}}
+                            >
+                              Create new issue
+                            </Button>
+                          )}
+                          {createIssueCurSprint && (
+                            <div style={{ border: '1px solid gray', backgroundColor: 'white'}}>
+                              <Select
+                                variant="standard"
+                                value={issueType}
+                                onChange={handleIssueType}
+                                sx={{ backgroundColor: 'white', border: 'none', p: 0.75, pl: 1.5}}
+                                disableUnderline
+                              >
+                                <MenuItem value='story'>{IssueIcon('story')}</MenuItem>
+                                <MenuItem value='bug'>{IssueIcon('bug')}</MenuItem>
+                                <MenuItem value='task'>{IssueIcon('task')}</MenuItem>
+                              </Select>
+                              <TextField
+                                variant="standard"
+                                size="medium"
+                                sx={{ width: '85%', height: "45px", fontSize: 14, background: 'white', p: 1, pl: 2 }}
+                                InputProps={{ disableUnderline: true, style: { fontSize: 14 }}}
+                                onKeyUp={event => event.key === "Enter" ? addIssue(event, columnId) : null}
+                              ></TextField>
+                              <Button
+                                variant="text"
+                                sx={{
+                                  color: 'black',
+                                  borderRadius: '0',
+                                  fontSize: '14px',
+                                  height: '45px',
+                                  textTransform: 'none',
+                                }}
+                                onClick={() => {setCreateIssueCurSprint(false)}}
+                              >
+                                Cancel
+                              </Button>
+                            </div>
+                          )}
+                        </div>
                       )}
                     </AccordionDetails>
                   </Accordion>
