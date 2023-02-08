@@ -114,4 +114,3 @@ const Scrum = () => {
   );
 };
 
-export default Scrum;

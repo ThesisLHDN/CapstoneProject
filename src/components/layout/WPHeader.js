@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import { useState } from 'react';
 import logo from 'src/assets/images/logo.png';
 import {
   Box,
@@ -14,16 +14,16 @@ import {
   MenuItem
 } from '@mui/material';
 
-import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
+// import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 // import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
 import AddIcon from '@mui/icons-material/Add';
 
 import Avatar from '@mui/material/Avatar';
 
 import SearchBar from 'src/components/search';
-import {Link} from 'react-router-dom';
-import {getAuth, signOut} from 'firebase/auth';
-import {color, colorHover} from 'src/style';
+import { Link } from 'react-router-dom';
+import { getAuth, signOut } from 'firebase/auth';
+import { colorHover } from 'src/style';
 import Notification from '../notification/Notification';
 
 // function LinkTab(props) {
@@ -85,7 +85,7 @@ export default function Header() {
       </Link>
 
       <SearchBar value={value}></SearchBar>
-      <Box sx={{display: 'flex', gap: 1, alignItems: 'center'}}>
+      <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
         <Button
           variant="contained"
           sx={{
@@ -97,12 +97,12 @@ export default function Header() {
           Create workspace
         </Button>
         <Notification />
-        <div style={{position: 'relative'}}>
+        <div style={{ position: 'relative' }}>
           <IconButton onClick={handleClick}>
             <Avatar
               alt="Remy Sharp"
               src="/static/images/avatar/1.jpg"
-              sx={{height: 32, width: 32}}
+              sx={{ height: 32, width: 32 }}
             />
           </IconButton>
 
@@ -123,7 +123,7 @@ export default function Header() {
                   width: 100,
                 }}
               >
-                <MenuList sx={{px: 0, width: '100%'}}>
+                <MenuList sx={{ px: 0, width: '100%' }}>
                   <MenuItem sx={{ py: 1, fontSize: 12, borderBottom: 'solid 1px #ECEDF0' }}>
                     <Link to="/profile" onClick={handleClick} className='text-base'>Profile</Link>
                   </MenuItem>

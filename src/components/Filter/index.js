@@ -1,21 +1,21 @@
-import {useEffect, useState, useRef} from 'react';
+import { useEffect, useState, useRef } from 'react';
 import {
   Paper,
   Typography,
   Button,
-  Select,
+  // Select,
   FormControl,
-  MenuItem,
+  // MenuItem,
   Popper,
   Grow,
   MenuList,
-  TextField,
+  // TextField,
   ClickAwayListener,
 } from '@mui/material';
 import FilterAltRoundedIcon from '@mui/icons-material/FilterAltRounded';
 
-import {Box} from '@mui/system';
-import {color, colorHover} from 'src/style';
+import { Box } from '@mui/system';
+import { color, colorHover } from 'src/style';
 
 const data = {
   status: ['To do', 'In progress', 'Done'],
@@ -25,7 +25,7 @@ const data = {
   priority: ['Critical', 'High', 'Medium', 'Low'],
 };
 
-function FilterRow({property, values}) {
+function FilterRow({ property, values }) {
   return (
     <Box
       sx={{
@@ -38,10 +38,10 @@ function FilterRow({property, values}) {
       <Typography variant="body1">
         {property[0].toUpperCase() + property.substring(1)}
       </Typography>
-      <FormControl sx={{m: 1, width: 120, mx: 0, ml: 1}} margin="none">
+      <FormControl sx={{ m: 1, width: 120, mx: 0, ml: 1 }} margin="none">
         <select
           displayEmpty
-          inputProps={{'aria-label': 'Without label'}}
+          inputProps={{ 'aria-label': 'Without label' }}
           size="small"
           defaultValue={''}
           style={{
@@ -108,7 +108,7 @@ function Filter() {
         aria-expanded={open ? 'true' : undefined}
         aria-haspopup="true"
         onClick={handleToggle}
-        sx={{textTransform: 'none', color: '#181818'}}
+        sx={{ textTransform: 'none', color: '#181818' }}
         startIcon={<FilterAltRoundedIcon />}
       >
         Filter
@@ -120,9 +120,9 @@ function Filter() {
         placement="bottom-start"
         transition
         disablePortal
-        sx={{zIndex: 5}}
+        sx={{ zIndex: 5 }}
       >
-        {({TransitionProps, placement}) => (
+        {({ TransitionProps, placement }) => (
           <ClickAwayListener onClickAway={handleClose}>
             <Grow
               {...TransitionProps}
@@ -142,7 +142,7 @@ function Filter() {
                   gap: 1,
                 }}
               >
-                <Typography sx={{fontWeight: 700, color: color.green03}}>
+                <Typography sx={{ fontWeight: 700, color: color.green03 }}>
                   Filter
                 </Typography>
                 <MenuList
@@ -150,7 +150,7 @@ function Filter() {
                   id="composition-menu"
                   aria-labelledby="composition-button"
                   onKeyDown={handleListKeyDown}
-                  sx={{px: 2, py: 0}}
+                  sx={{ px: 2, py: 0 }}
                 >
                   {Object.entries(data).map(([key, value]) => (
                     <FilterRow property={key} values={value} />
@@ -158,13 +158,13 @@ function Filter() {
                 </MenuList>
                 <div className='flex'>
                   <Button
-                    sx={{mr: 1, width: 80 ,...colorHover.greenGradBtn}}
+                    sx={{ mr: 1, width: 80, ...colorHover.greenGradBtn }}
                     variant="contained"
                     onClick={handleToggle}
                   >
                     Confirm
                   </Button>
-                  <Button variant="outlined" color="error" sx={{ width: 80 , textTransform:'none'}}>
+                  <Button variant="outlined" color="error" sx={{ width: 80, textTransform: 'none' }}>
                     Clear
                   </Button>
                 </div>

@@ -19,64 +19,64 @@ import PersonAddAltRoundedIcon from '@mui/icons-material/PersonAddAltRounded';
 import Message from './Message';
 import TypingArea from './TypingArea';
 
-const dummyMessage = {
-  name: 'Kenh chat 1',
-  id: 1,
-  members: [],
-  messages: [
-    {
-      senderId: 1911044,
-      senderName: 'Dang Nguyen',
-      message: 'How are you today?',
-      time: new Date(2022, 11, 1),
-    },
-    {
-      senderId: 1910298,
-      senderName: 'Lam Nguyen',
-      message: "I'm good",
-      time: new Date(2022, 11, 2),
-    },
-    {
-      senderId: 1910298,
-      senderName: 'Lam Nguyen',
-      message:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-      time: new Date(2022, 11, 3),
-    },
-    {
-      senderId: 1911044,
-      senderName: 'Dang Nguyen',
-      message: 'Not good',
-      time: new Date(),
-    },
-    {
-      senderId: 1910298,
-      senderName: 'Lam Nguyen',
-      message:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-      time: new Date(2022, 11, 3),
-    },
-    {
-      senderId: 1911044,
-      senderName: 'Dang Nguyen',
-      message: 'Not good',
-      time: new Date(),
-    },
-    {
-      senderId: 1910298,
-      senderName: 'Lam Nguyen',
-      message:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-      time: new Date(2022, 11, 3),
-    },
-    {
-      senderId: 1911044,
-      senderName: 'Dang Nguyen',
-      message: 'Not good',
-      time: new Date(),
-    },
-  ],
-};
+// const dummyMessage = {
+//   name: 'Kenh chat 1',
+//   id: 1,
+//   members: [],
+//   messages: [
+//     {
+//       senderId: 1911044,
+//       senderName: 'Dang Nguyen',
+//       message: 'How are you today?',
+//       time: new Date(2022, 11, 1),
+//     },
+//     {
+//       senderId: 1910298,
+//       senderName: 'Lam Nguyen',
+//       message: "I'm good",
+//       time: new Date(2022, 11, 2),
+//     },
+//     {
+//       senderId: 1910298,
+//       senderName: 'Lam Nguyen',
+//       message:
+//         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+//       time: new Date(2022, 11, 3),
+//     },
+//     {
+//       senderId: 1911044,
+//       senderName: 'Dang Nguyen',
+//       message: 'Not good',
+//       time: new Date(),
+//     },
+//     {
+//       senderId: 1910298,
+//       senderName: 'Lam Nguyen',
+//       message:
+//         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+//       time: new Date(2022, 11, 3),
+//     },
+//     {
+//       senderId: 1911044,
+//       senderName: 'Dang Nguyen',
+//       message: 'Not good',
+//       time: new Date(),
+//     },
+//     {
+//       senderId: 1910298,
+//       senderName: 'Lam Nguyen',
+//       message:
+//         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+//       time: new Date(2022, 11, 3),
+//     },
+//     {
+//       senderId: 1911044,
+//       senderName: 'Dang Nguyen',
+//       message: 'Not good',
+//       time: new Date(),
+//     },
+//   ],
+// };
 
 const IOSSwitch = styled((props) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
