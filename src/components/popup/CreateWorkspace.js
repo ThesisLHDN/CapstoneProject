@@ -102,7 +102,12 @@ export default function FullScreenDialog() {
               <TextField
                 variant="standard"
                 placeholder="Enter workspace's name"
-                sx={{width: '100%', height: 30, '& *': {fontSize: 24}}}
+                sx={{
+                  width: '100%',
+                  height: 30,
+                  '& *': {fontSize: 24},
+                  '& ::after': {border: `solid ${color.green03} 2px !important`},
+                }}
               ></TextField>
               <Box
                 sx={{

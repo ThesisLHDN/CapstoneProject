@@ -50,22 +50,20 @@ function AddMembers(props) {
   };
 
   return (
-    <Dialog onClose={handleClose} open={open}>
-      {/* <DialogTitle>Set backup account</DialogTitle> */}
-      <Box>
-        <AddMember
-          confirmContent="Add"
-          title={
-            <p>
-              Add Member to <i>First Scrum Project</i>
-            </p>
-          }
-          sx={{right: -100}}
-          placeholder="eg. dangnguyen@gmail.com"
-          fieldLabel="Enter emails"
-        />
-      </Box>
-    </Dialog>
+    <Box>
+      <AddMember
+        onClose={handleClose}
+        open={open}
+        confirmContent="Add"
+        title={
+          <p>
+            Add Member to <i>First Scrum Project</i>
+          </p>
+        }
+        placeholder="eg. dangnguyen@gmail.com"
+        fieldLabel="Enter emails"
+      />
+    </Box>
   );
 }
 
@@ -188,7 +186,7 @@ export default function Header() {
         >
           Add member
         </Button>
-        <Popper id={id} open={openAdd} anchorEl={anchorElAdd} sx={{zIndex: 5}}>
+        {/* <Popper id={id} open={openAdd} anchorEl={anchorElAdd} sx={{zIndex: 5}}>
           <ClickAwayListener onClickAway={handleClickAdd}>
             <div style={{position: 'absolute'}}>
               <AddMember
@@ -204,7 +202,7 @@ export default function Header() {
               />
             </div>
           </ClickAwayListener>
-        </Popper>
+        </Popper> */}
 
         <Notification />
         <div style={{position: 'relative'}}>
@@ -280,11 +278,12 @@ export default function Header() {
               </Box>
             </ClickAwayListener>
           </Popper>
-          <AddMembers
-            open={openAddMembers}
-            onClose={(value) => handleClose(value)}
-          ></AddMembers>
         </div>
+        <AddMembers
+          open={openAddMembers}
+          // onClose={(value) => handleClose(value)}
+          onClose={(value) => setOpenAddMembers(false)}
+        ></AddMembers>
       </Box>
     </Paper>
   );

@@ -37,7 +37,14 @@ function WPQuickSetting() {
       <Popper id={id} open={open} anchorEl={anchorEl}>
         <ClickAwayListener onClickAway={() => setOpen(false)}>
           <Paper
-            sx={{width: 440, height: '40vh', borderRadius: 3, overflow: 'hidden', marginBottom: 2, marginLeft: 3}}
+            sx={{
+              width: 440,
+              height: '40vh',
+              borderRadius: 3,
+              overflow: 'hidden',
+              marginBottom: 2,
+              marginLeft: 3,
+            }}
             elevation={3}
           >
             <Grid container sx={{width: '100%'}}>
@@ -51,11 +58,15 @@ function WPQuickSetting() {
                   }}
                 >
                   <MenuList sx={{px: 0, width: '100%'}}>
-                    <StyledMenuItem sx={{ py: 1 }}>
-                      <Link to="/workspace-setting" className='text-base'>Dang's Workspace</Link>
+                    <StyledMenuItem sx={{py: 1}}>
+                      <Link to="/workspace-setting" className="text-base">
+                        Dang's Workspace
+                      </Link>
                     </StyledMenuItem>
-                    <StyledMenuItem sx={{ py: 1 }}>
-                      <Link to="/workspace-setting" className='text-base'>Lam's Workspace</Link>
+                    <StyledMenuItem sx={{py: 1}}>
+                      <Link to="/workspace-setting" className="text-base">
+                        Lam's Workspace
+                      </Link>
                     </StyledMenuItem>
                   </MenuList>
                   <div className="absolute bottom-8">
@@ -69,13 +80,15 @@ function WPQuickSetting() {
                 </Box>
               </Grid>
               <Grid item xs={6}>
-                <Typography sx={{fontWeight: 700, textAlign: 'center', mt: 2, mb: 0.5}}>
+                <Typography
+                  sx={{fontWeight: 700, textAlign: 'center', mt: 2, mb: 0.5}}
+                >
                   {' '}
                   Workspace Setting
                 </Typography>
                 <MenuList>
-                  <MenuItem sx={{ py: 1 }}>Rename</MenuItem>
-                  <MenuItem sx={{ py: 1 }}>Dashboard</MenuItem>
+                  <MenuItem sx={{py: 1}}>Rename</MenuItem>
+                  <MenuItem sx={{py: 1}}>Dashboard</MenuItem>
                 </MenuList>
               </Grid>
             </Grid>
