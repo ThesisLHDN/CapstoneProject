@@ -9,7 +9,7 @@ import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded"
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { NavLink } from 'react-router-dom'
 
-const IssueIcon = (type) => {
+export const IssueIcon = (type) => {
   switch (type) {
     case "task":
       return (
@@ -113,24 +113,26 @@ function TaskCard(props) {
           <div className='ml-3 font-medium text-sm pt-0.5'>
             {props.item.name}
           </div>
-          <div 
-            className='ml-3 text-sm h-6 pt-0.5 px-4 rounded-sm' 
-            style={{ backgroundColor: `${epicColor(props.item.epic)[0]}`, color: `${epicColor(props.item.epic)[1]}` }}
-          >
-            {props.item.epic}
-          </div>
+          {props.item.epic && (
+            <div 
+              className='ml-3 text-sm h-6 pt-0.5 px-4 rounded-sm' 
+              style={{ backgroundColor: `${epicColor(props.item.epic)[0]}`, color: `${epicColor(props.item.epic)[1]}` }}
+            >
+              {props.item.epic}
+            </div>
+          )}
         </div>
       </NavLink>
 
       <div className='inline-flex align-baseline'>
         <span className="flex px-1.5 py-1 rounded-xl bg-gray-400 text-xs mr-2">
           <AccessTimeRoundedIcon sx={{ height: 14, width: 14, marginRight: 0.5, marginTop: 0.1 }}/>
-          {convertDate(props.item.due)}
+          {props.item.due ? (<p>{convertDate(props.item.due)}</p>) : (<p>-</p>)}
         </span>
 
         <span className={`px-1.5 py-1 rounded-xl text-white text-xs mr-2
         ${status === "Done" ? "bg-done-color" : (status === "In progress" ? "bg-in-progress-color" : "bg-to-do-color")}`}>
-          {props.item.point}
+          {props.item.due ? (<>{props.item.point}</>) : (<p>-</p>)}
         </span>
 
         <Button 

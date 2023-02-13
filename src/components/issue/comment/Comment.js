@@ -20,10 +20,12 @@ const Comment = ({
   const canReply = Boolean(currentUserId);
   const replyId = parentId ? parentId : comment.id;
   const createdAt = new Date(comment.createdAt).toLocaleDateString();
-  const timepassed = moment(createdAt, "DD/MM/YYYY").fromNow();
+  const timepassed = moment(createdAt, "MM/DD/YYYY").fromNow();
 
   return (
     <div key={comment.id} className="flex mb-5">
+      {console.log(createdAt)}
+      {console.log(timepassed)}
       <Avatar
         src="X"
         sx={{ width: 40, height: 40, backgroundColor: "#8993A4", marginRight: 1 }}

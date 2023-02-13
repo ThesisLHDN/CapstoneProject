@@ -5,28 +5,6 @@ import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import {color} from 'src/style';
 
-function ContentNoti() {
-  return (
-    <div className='flex'>
-      <Avatar
-        src="X"
-        sx={{ width: 24, height: 24, mt: 0.5, backgroundColor: "#8993A4" }}
-        alt="Lam Nguyen"
-      />
-      <div className='ml-3 max-h-96' style={{ width: '340px'}}>
-        <div className='flex'>
-          <span className='font-bold'>Lam Nguyen&nbsp;</span>
-          <span>updated&nbsp;</span>
-          <span className='font-bold text-done-tx'>DWP-11&nbsp;</span>
-          <p className='bg-done-bg px-2 rounded-sm text-done-tx'>Done</p>
-        </div>
-        <div className='overflow-clip'>Priority has been updated from <i>"High"</i> to <i>Critical</i></div>
-        <div className='text-gray-500 mt-3'>Today at 9:42 AM</div>
-      </div>
-    </div>
-  )
-}
-
 function FilterRow() {
   return (
     <Box
@@ -86,7 +64,6 @@ function Notification() {
     if (prevOpen.current === true && open === false) {
       anchorRef.current.focus();
     }
-
     prevOpen.current = open;
   }, [open]);
 
@@ -138,35 +115,49 @@ function Notification() {
                   pt: 1,
                 }}
               >
-                <div className='flex justify-between ml-2'>
-                  <div className='flex'>
-                    <Typography sx={{fontWeight: 600, fontSize: 14, mt: 0.5}}>Notification</Typography>
-                    <MenuList autoFocusItem={open} sx={{px: 2, py: 0}}><FilterRow /></MenuList>
+                <div className='border-b' style={{ marginBottom: -8}}>
+                  <div className='flex justify-between ml-2'>
+                    <div className='flex'>
+                      <Typography sx={{fontWeight: 600, fontSize: 14, ml: 1, mt: 0.5}}>Notification</Typography>
+                      <MenuList autoFocusItem={open} sx={{px: 2, py: 0}}><FilterRow /></MenuList>
+                    </div>
+                    <div className=''>
+                      <Button 
+                        endIcon={<CheckCircleOutlineIcon />}
+                        sx={{ textTransform: 'none', color: 'black', mt: -0.4, mr: 1 }}
+                      >
+                        Mark all as read
+                      </Button>
+                    </div>
                   </div>
-                  <Button 
-                    endIcon={<CheckCircleOutlineIcon />}
-                    sx={{ textTransform: 'none', color: 'black', mt: -0.4, mr: 1 }}
-                  >
-                    Mark all as read
-                  </Button>
                 </div>
-                <MenuList sx={{ mx: 0, width: '100%' }}>
-                  <MenuItem sx={{ pt: 1.5, pb: 1.5, fontSize: 14, width: '100%', maxHeight: '100%', borderBottom: '1px gray solid' }}>
-                    <Link to="/issue" onClick={handleToggle} className='text-base block'>
-                      <ContentNoti />
-                    </Link>
-                  </MenuItem>
-                  <MenuItem sx={{ pt: 1.5, pb: 1.5, fontSize: 14, width: '100%', maxHeight: '100%', borderBottom: '1px gray solid' }}>
-                    <Link to="/issue" onClick={handleToggle} className='text-base block'>
-                      <ContentNoti />
-                    </Link>
-                  </MenuItem>
-                  <MenuItem sx={{ pt: 1.5, pb: 1.5, fontSize: 14, width: '100%', maxHeight: '100%', borderBottom: '1px gray solid' }}>
-                    <Link to="/issue" onClick={handleToggle} className='text-base block'>
-                      <ContentNoti />
-                    </Link>
-                  </MenuItem>
-                </MenuList>
+                <div className='flex justify-between'>
+                  <MenuList>
+                    <MenuItem sx={{ pt: 1.5, pb: 1.5, fontSize: 14, borderBottom: '1px #E5E7EB solid', whiteSpace: 'normal' }}>
+                      <Link to="/issue" onClick={handleToggle} sx={{ textOverflow: 'ellipsis'}} >
+                        <div className='flex'>
+                          <Avatar
+                            src="X"
+                            sx={{ width: 24, height: 24, mt: 0.5, backgroundColor: "#8993A4" }}
+                            alt="Lam Nguyen"
+                          />
+                          <div className='ml-3'>
+                            <div className='flex'>
+                              <span className='font-bold'>Lam Nguyen&nbsp;</span>
+                              <span>updated&nbsp;</span>
+                              <span className='font-bold text-done-tx'>DWP-11&nbsp;</span>
+                              <p className='bg-done-bg px-2 rounded-sm text-done-tx'>Done</p>
+                            </div>
+                            <div className='mt-1 text-justify'>
+                              <p>A description has been added to the issue with content <i>Hello, how are you?</i>.</p>
+                            </div>
+                            <div className='text-gray-500 mt-3'>Today at 9:42 AM</div>
+                          </div>
+                        </div>
+                      </Link>
+                    </MenuItem>
+                  </MenuList>
+                </div>
               </Box>
               </div>
             </Grow>
