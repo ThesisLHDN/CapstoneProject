@@ -151,17 +151,6 @@ function WorkspaceSetting() {
           expanded={expanded === 'panel2'}
           onChange={handleChange('panel2')}
         >
-<<<<<<< HEAD
-          <div className='flex'>
-            <StyledAccordionSummary
-              aria-controls="panel2d-content"
-              id="panel2d-header"
-              sx={{
-                // display: 'flex',
-                width: '100%',
-                position: 'relative',
-                // justifyContent: 'space-between',
-=======
           <StyledAccordionSummary
             aria-controls="panel2d-content"
             id="panel2d-header"
@@ -175,27 +164,18 @@ function WorkspaceSetting() {
             <StyledTypo>Projects</StyledTypo>{' '}
           </StyledAccordionSummary>
           <StyledAccordionDetails sx={{position: 'relative'}}>
-            <Button
+            {/* <Button
               sx={{
                 // position: 'absolute',
                 // right: 0,
                 // top: '50%',
                 // transform: 'translateY(-50%)',
                 ...colorHover.greenGradBtn,
->>>>>>> dang
               }}
             >
-<<<<<<< HEAD
-              <StyledTypo>Projects</StyledTypo>{' '}
-            </StyledAccordionSummary>
-            <CreateProject />
-          </div>
-          
-          <StyledAccordionDetails sx={{ position: 'relative' }}>
-=======
               Create project
-            </Button>
->>>>>>> dang
+            </Button> */}
+            <CreateProject />
             <ProjectTable />
           </StyledAccordionDetails>
         </StyledAccordion>

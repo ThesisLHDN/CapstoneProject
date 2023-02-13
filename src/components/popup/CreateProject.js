@@ -61,8 +61,8 @@ function CreateProject() {
       </Button> 
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle sx={{ color: '#00980F', fontWeight: '900', textAlign: 'center', mt: 1 }}>Create project</DialogTitle>
-        <DialogContent>
-          <DialogContentText sx={{ color: 'black', fontSize: '14px' }}>
+        <DialogContent sx={{ pb: 0 }}>
+          <DialogContentText sx={{ color: 'black', fontSize: '12px' }}>
             You can change these details anytime in your project settings.
           </DialogContentText>
           <FormControl fullWidth>
@@ -77,6 +77,7 @@ function CreateProject() {
               <span style={{ color: 'red' }}>&nbsp;*</span>
             </Typography>
             <CssSelect
+              size='small'
               value={type}
               onChange={handleChangeType}
             >
@@ -93,6 +94,7 @@ function CreateProject() {
               <span style={{ color: 'red' }}>&nbsp;*</span>
             </Typography>
             <CssTextField
+              size='small'
               margin="dense"
               fullWidth
               variant="outlined"
@@ -107,6 +109,7 @@ function CreateProject() {
               <span style={{ color: 'red' }}>&nbsp;*</span>
             </Typography>
             <CssTextField
+              size='small'
               margin="dense"
               fullWidth
               variant="outlined"

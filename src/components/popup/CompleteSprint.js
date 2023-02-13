@@ -10,6 +10,9 @@ import {
   Select,
   MenuItem,
   Typography,
+  List,
+  ListItem,
+  ListSubheader
 } from '@mui/material';
 import {styled} from '@mui/material/styles';
 import { colorHover } from 'src/style';
@@ -45,35 +48,44 @@ function CompleteSprint() {
         onClose={handleClose} 
         PaperProps={{
           sx: {
-            maxWidth: '32%'
+            maxWidth: '25%'
           }
         }}
       >
-        <DialogTitle sx={{ color: '#00980F', fontWeight: '900', textAlign: 'center', mt: 1 }}>
-          Complete DFP Sprint 2
+        <DialogTitle sx={{ color: '#00980F', textAlign: 'center', mt: 1 }}>
+          <Typography sx={{ fontWeight: '900', fontSize: 20, '& *': {fontSize: 20},}}>
+            Complete <i>DFP Sprint 2</i>
+          </Typography>
         </DialogTitle>
-        <DialogContent>
-          <Typography sx={{ color: 'black', fontSize: '14px', fontWeight: '900' }}>This sprint has</Typography>
+        <DialogContent sx={{ pb: 1 }}>
+          <Typography sx={{ color: 'black', fontSize: '14px', fontWeight: '900' }}>
+            This sprint has
+          </Typography>
+          <List sx={{ listStyleType: 'disc', pl: 3 }}>
+            <ListItem sx={{ display: 'list-item', pl: 0, py: 0 }}>1 completed issue</ListItem>
+            <ListItem sx={{ display: 'list-item', pl: 0, py: 0 }}>4 open issues</ListItem>
+          </List>
           <FormControl fullWidth>
             <Typography sx={{ 
               color: 'black', 
               fontSize: '14px', 
               fontWeight: '900',
-              mt: 2,
               mb: 0.5
             }}>
               Move open issues to
             </Typography>
             <Select
+              size='small'
               value={sprint}
               onChange={handleChangeSprint}
+              sx={{ fontSize: '14px', py: 0.25, my: 0.5 }}
             >
               <MenuItem value='DFP Sprint 4'>DFP Sprint 4</MenuItem>
               <MenuItem value='DFP Sprint 5'>DFP Sprint 5</MenuItem>
               <MenuItem value='DFP Sprint 6'>DFP Sprint 6</MenuItem>
             </Select>
           </FormControl>
-          <DialogContentText sx={{ fontSize: '14px' }}>
+          <DialogContentText sx={{ fontSize: '12px' }}>
             Sub tasks are not included in the total(s) above, 
             and are always included in the same sprint as their parent issue.
           </DialogContentText>
