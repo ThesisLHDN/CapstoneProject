@@ -13,6 +13,7 @@ import {
   AccordionSummary,
   IconButton,
   AccordionDetails,
+  Dialog,
 } from '@mui/material';
 // import MuiAccordion from '@mui/material/Accordion';
 // import MuiAccordionSummary from '@mui/material/AccordionSummary';
@@ -44,8 +45,6 @@ const StyledAccordion = styled((props) => (
   },
 }));
 
-// const SettingPart = styled(Typography);
-
 const StyledAccordionSummary = styled((props) => (
   <AccordionSummary
     expandIcon={
@@ -75,6 +74,7 @@ const StyledAccordionDetails = styled(AccordionDetails)(({theme}) => ({
 }));
 
 function WorkspaceSetting() {
+
   const [expanded, setExpanded] = useState('panel1');
 
   const handleChange = (panel) => (event, newExpanded) => {

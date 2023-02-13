@@ -11,6 +11,8 @@ import {
   ClickAwayListener,
   MenuList,
   MenuItem,
+  Dialog,
+  DialogTitle,
 } from '@mui/material';
 
 import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
@@ -36,12 +38,44 @@ import AddMember from 'src/components/popup/Create';
 //   );
 // }
 
+function AddMembers(props) {
+  const {onClose, selectedValue, open} = props;
+
+  const handleClose = () => {
+    onClose(selectedValue);
+  };
+
+  const handleListItemClick = (value) => {
+    onClose(value);
+  };
+
+  return (
+    <Dialog onClose={handleClose} open={open}>
+      {/* <DialogTitle>Set backup account</DialogTitle> */}
+      <Box>
+        <AddMember
+          confirmContent="Add"
+          title={
+            <p>
+              Add Member to <i>First Scrum Project</i>
+            </p>
+          }
+          sx={{right: -100}}
+          placeholder="eg. dangnguyen@gmail.com"
+          fieldLabel="Enter emails"
+        />
+      </Box>
+    </Dialog>
+  );
+}
+
 export default function Header() {
   // const [open, setOpen] = useState(false);
   // const handleOpen = () => setOpen(true);
   // const handleClose = () => setOpen(false);
 
   const [value, setValue] = useState(0);
+  const [openAddMembers, setOpenAddMembers] = useState(false);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -71,6 +105,11 @@ export default function Header() {
   const open = Boolean(anchorEl);
   const openAdd = Boolean(anchorElAdd);
   const id = open ? 'simple-popper' : undefined;
+
+  function handleClose(value) {
+    // TODO get value
+    setOpenAddMembers(false);
+  }
 
   return (
     <Paper
@@ -144,7 +183,8 @@ export default function Header() {
             ...colorHover.greenGradBtn,
           }}
           startIcon={<PersonAddOutlinedIcon />}
-          onClick={handleClickAdd}
+          // onClick={handleClickAdd}
+          onClick={() => setOpenAddMembers(true)}
         >
           Add member
         </Button>
@@ -240,6 +280,10 @@ export default function Header() {
               </Box>
             </ClickAwayListener>
           </Popper>
+          <AddMembers
+            open={openAddMembers}
+            onClose={(value) => handleClose(value)}
+          ></AddMembers>
         </div>
       </Box>
     </Paper>

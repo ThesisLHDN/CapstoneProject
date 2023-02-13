@@ -6,6 +6,7 @@ import {
   Breadcrumbs,
   Link,
   Button,
+  Dialog,
   TextField,
 } from '@mui/material';
 import SearchBar from 'src/components/search';
@@ -43,6 +44,19 @@ const GradButton = styled(Button)({
 });
 
 function ProjectSetting() {
+  const [openLeave, setOpenLeave] = useState(false);
+  function handleCloseLeave(email) {
+    setOpenLeave(false);
+    setNewOwner(email);
+  }
+  const [openDelete, setOpenDelete] = useState(false);
+  function handleCloseDelete(result) {
+    setOpenDelete(false);
+  }
+
+  const [newOwner, setNewOwner] = useState(false);
+  const [delProject, setDelProject] = useState(false);
+
   const [rename, setRename] = useState(false);
   const [key, setKey] = useState(false);
   return (
@@ -221,6 +235,7 @@ function ProjectSetting() {
       <Grid container>
         <Grid item xs={3}>
           <Button
+            onClick={() => setOpenLeave(true)}
             variant="text"
             startIcon={
               <LogoutIcon sx={{marginRight: 1, width: 24, height: 24}} />
@@ -236,7 +251,10 @@ function ProjectSetting() {
           >
             Leave Project
           </Button>
+
           <LeavePopup
+            open={openLeave}
+            onClose={handleCloseLeave}
             projectInfo={{
               projectName: 'First Scrum Project',
               owner: 'dangnguyen@gmail.com',
@@ -265,6 +283,7 @@ function ProjectSetting() {
       <Grid container>
         <Grid item xs={2}>
           <Button
+            onClick={() => setOpenDelete(true)}
             variant="text"
             startIcon={
               <DeleteOutlineIcon sx={{marginRight: 1, width: 24, height: 24}} />
@@ -281,6 +300,8 @@ function ProjectSetting() {
             Delete
           </Button>
           <WarningPopup
+            open={openDelete}
+            onClose={handleCloseDelete}
             title={
               <p>
                 Delete <i>Project 01</i>
