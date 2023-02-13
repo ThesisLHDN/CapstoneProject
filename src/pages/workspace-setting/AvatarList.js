@@ -7,7 +7,11 @@ import {
   ImageList,
   ImageListItem,
   Avatar,
+  Popper,
+  ClickAwayListener,
 } from '@mui/material';
+import WarningPopup from 'src/components/popup/Warning';
+import {useState} from 'react';
 
 const members = [
   'Menaal Bloom',
@@ -71,7 +75,89 @@ function stringAvatar(name) {
   };
 }
 
+function ImageIndividual({member}) {
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(anchorEl ? null : event.currentTarget);
+  };
+
+  const open = Boolean(anchorEl);
+  return (
+    <Box
+      key={member.replace(' ', '.').toLowerCase()}
+      sx={{
+        position: 'relative',
+        '&:hover  .memberSelect': {
+          display: 'inline-block !important',
+        },
+        overflowX: 'visible !important',
+      }}
+    >
+      <ImageListItem key={member} sx={{overflowX: 'visible !important'}}>
+        <Avatar {...stringAvatar(member)} />
+        {/* <Avatar alt={member} className="avatarPic" src="#" /> */}
+      </ImageListItem>
+      <Paper
+        elevation={3}
+        className="memberSelect"
+        sx={{
+          display: 'none',
+          p: 1,
+          position: 'absolute',
+          top: 0,
+          left: 50,
+          zIndex: '5',
+          minWidth: 180,
+        }}
+      >
+        <Typography sx={{mb: 1, fontWeight: 700}}>{member}</Typography>
+        <Typography sx={{mb: 1, fontStyle: 'italic'}}>
+          {member.replace(' ', '.').toLowerCase() + '@gmail.com'}
+        </Typography>
+        <Button
+          variant="outlined"
+          color="error"
+          sx={{width: '100%', fontSize: 14}}
+          onClick={handleClick}
+        >
+          Remove member
+        </Button>
+        <Popper open={open} anchorEl={anchorEl} sx={{zIndex: 5}}>
+          <ClickAwayListener onClickAway={handleClick}>
+            <WarningPopup
+              sx={{position: 'absolute', top: 0}}
+              onClose={handleClick}
+              title={
+                <p>
+                  Remove <i>{member}?</i>
+                </p>
+              }
+              content={
+                <p>
+                  Remove{' '}
+                  <i>
+                    <b>{member}</b>
+                  </i>{' '}
+                  from{' '}
+                  <i>
+                    <b>First Scrum Project</b>
+                  </i>
+                  ? This will remove this member's access to all resources of
+                  the current project.
+                </p>
+              }
+              delContent={'Remove'}
+            ></WarningPopup>
+          </ClickAwayListener>
+        </Popper>
+      </Paper>
+    </Box>
+  );
+}
+
 function AvatarList() {
+  // const [open, setOpen] = useState(false);
   return (
     <ImageList
       sx={{
@@ -87,46 +173,7 @@ function AvatarList() {
       // sx={{}}
     >
       {members.map((member) => (
-        <Box
-          key={member.replace(' ', '.').toLowerCase()}
-          sx={{
-            position: 'relative',
-            '&:hover  .memberSelect': {
-              display: 'inline-block !important',
-            },
-            overflowX: 'visible !important',
-          }}
-        >
-          <ImageListItem key={member} sx={{overflowX: 'visible !important'}}>
-            <Avatar {...stringAvatar(member)} />
-            {/* <Avatar alt={member} className="avatarPic" src="#" /> */}
-          </ImageListItem>
-          <Paper
-            elevation={3}
-            className="memberSelect"
-            sx={{
-              display: 'none',
-              p: 1,
-              position: 'absolute',
-              top: 0,
-              left: 50,
-              zIndex: '5',
-              minWidth: 180,
-            }}
-          >
-            <Typography sx={{mb: 1, fontWeight: 700}}>{member}</Typography>
-            <Typography sx={{mb: 1, fontStyle: 'italic'}}>
-              {member.replace(' ', '.').toLowerCase() + '@gmail.com'}
-            </Typography>
-            <Button
-              variant="outlined"
-              color="error"
-              sx={{width: '100%', fontSize: 14}}
-            >
-              Remove member
-            </Button>
-          </Paper>
-        </Box>
+        <ImageIndividual member={member}></ImageIndividual>
       ))}
     </ImageList>
   );

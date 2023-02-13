@@ -10,7 +10,7 @@ import {
   Popper,
   ClickAwayListener,
   MenuList,
-  MenuItem
+  MenuItem,
 } from '@mui/material';
 
 import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
@@ -22,6 +22,7 @@ import {Link} from 'react-router-dom';
 import {getAuth, signOut} from 'firebase/auth';
 import {color, colorHover} from 'src/style';
 import Notification from '../notification/Notification';
+import AddMember from 'src/components/popup/Create';
 
 // function LinkTab(props) {
 //   return (
@@ -61,7 +62,14 @@ export default function Header() {
     setAnchorEl(anchorEl ? null : event.currentTarget);
   };
 
+  const [anchorElAdd, setAnchorElAdd] = useState(null);
+
+  const handleClickAdd = (event) => {
+    setAnchorElAdd(anchorElAdd ? null : event.currentTarget);
+  };
+
   const open = Boolean(anchorEl);
+  const openAdd = Boolean(anchorElAdd);
   const id = open ? 'simple-popper' : undefined;
 
   return (
@@ -96,8 +104,9 @@ export default function Header() {
             fontWeight: 'bold',
           },
           '& .MuiTabs-indicator': {
-            backgroundColor: color.green03,
-            height: '3px',
+            display: 'none',
+            // backgroundColor: color.green03,
+            // height: '3px',
           },
         }}
       >
@@ -120,7 +129,14 @@ export default function Header() {
       </Tabs>
 
       <SearchBar value={value}></SearchBar>
-      <Box sx={{display: 'flex', gap: 1, alignItems: 'center'}}>
+      <Box
+        sx={{
+          display: 'flex',
+          gap: 1,
+          alignItems: 'center',
+          position: 'relative',
+        }}
+      >
         <Button
           variant="contained"
           sx={{
@@ -128,9 +144,28 @@ export default function Header() {
             ...colorHover.greenGradBtn,
           }}
           startIcon={<PersonAddOutlinedIcon />}
+          onClick={handleClickAdd}
         >
           Add member
         </Button>
+        <Popper id={id} open={openAdd} anchorEl={anchorElAdd} sx={{zIndex: 5}}>
+          <ClickAwayListener onClickAway={handleClickAdd}>
+            <div style={{position: 'absolute'}}>
+              <AddMember
+                confirmContent="Add"
+                title={
+                  <p>
+                    Add Member to <i>First Scrum Project</i>
+                  </p>
+                }
+                sx={{position: 'absolute', right: -100}}
+                placeholder="eg. dangnguyen@gmail.com"
+                fieldLabel="Enter emails"
+              />
+            </div>
+          </ClickAwayListener>
+        </Popper>
+
         <Notification />
         <div style={{position: 'relative'}}>
           <IconButton onClick={handleClick}>
@@ -159,11 +194,31 @@ export default function Header() {
                 }}
               >
                 <MenuList sx={{px: 0, width: '100%'}}>
-                  <MenuItem sx={{ py: 1, fontSize: 12, borderBottom: 'solid 1px #ECEDF0' }}>
-                    <Link to="/profile" onClick={handleClick} className='text-base'>Profile</Link>
+                  <MenuItem
+                    sx={{
+                      py: 1,
+                      fontSize: 12,
+                      borderBottom: 'solid 1px #ECEDF0',
+                    }}
+                  >
+                    <Link
+                      to="/profile"
+                      onClick={handleClick}
+                      className="text-base"
+                    >
+                      Profile
+                    </Link>
                   </MenuItem>
-                  <MenuItem sx={{ py: 1, fontSize: 12, borderTop: 'solid 1px #ECEDF0' }}>
-                    <Link to="/login" onClick={handleLogout} className='text-base'>Log out</Link>
+                  <MenuItem
+                    sx={{py: 1, fontSize: 12, borderTop: 'solid 1px #ECEDF0'}}
+                  >
+                    <Link
+                      to="/login"
+                      onClick={handleLogout}
+                      className="text-base"
+                    >
+                      Log out
+                    </Link>
                   </MenuItem>
                 </MenuList>
                 {/* <Button
