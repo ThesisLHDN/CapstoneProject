@@ -81,7 +81,8 @@ function LeftIssueDetail() {
           </ClickAwayListener>
         </Popper>
 
-        <Button 
+        <Button
+          component='label'
           style={{ 
             display: "flex",
             textTransform: "none",
@@ -93,6 +94,7 @@ function LeftIssueDetail() {
           }} >
           <AttachFileIcon sx={{ rotate: "45deg", marginRight: 1 }}/>
           Attach
+          <input hidden accept="*" multiple type="file" />
         </Button>
 
         <Button 

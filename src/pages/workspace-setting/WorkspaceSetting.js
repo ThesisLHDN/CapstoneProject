@@ -19,13 +19,13 @@ import {
 // import MuiAccordionDetails from '@mui/material/AccordionDetails';
 
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
-import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import PersonAddAltRoundedIcon from '@mui/icons-material/PersonAddAltRounded';
 
 import ProjectTable from 'src/components/project-list/ProjectTable';
 import AvatarList from './AvatarList';
 import Dashboard from 'src/components/Dashboard';
+import CreateProject from 'src/components/popup/CreateProject';
 
 const StyledTypo = styled(Typography)({
   color: color.green03,
@@ -147,31 +147,22 @@ function WorkspaceSetting() {
           expanded={expanded === 'panel2'}
           onChange={handleChange('panel2')}
         >
-          <StyledAccordionSummary
-            aria-controls="panel2d-content"
-            id="panel2d-header"
-            sx={{
-              // display: 'flex',
-              width: '100%',
-              position: 'relative',
-              // justifyContent: 'space-between',
-            }}
-          >
-            <StyledTypo>Projects</StyledTypo>{' '}
-            <Button
+          <div className='flex'>
+            <StyledAccordionSummary
+              aria-controls="panel2d-content"
+              id="panel2d-header"
               sx={{
-                position: 'absolute',
-                right: 0,
-                top: '50%',
-                transform: 'translateY(-50%)',
-                ...colorHover.greenGradBtn,
+                // display: 'flex',
+                width: '100%',
+                position: 'relative',
+                // justifyContent: 'space-between',
               }}
-              variant="contained"
-              startIcon={<AddRoundedIcon />}
             >
-              Create project
-            </Button>
-          </StyledAccordionSummary>
+              <StyledTypo>Projects</StyledTypo>{' '}
+            </StyledAccordionSummary>
+            <CreateProject />
+          </div>
+          
           <StyledAccordionDetails sx={{ position: 'relative' }}>
             <ProjectTable />
           </StyledAccordionDetails>

@@ -46,7 +46,6 @@ function Notification() {
   const anchorRef = useRef(null);
 
   const handleToggle = () => {
-    console.log('alolo')
     setOpen((prevOpen) => !prevOpen);
   };
 

@@ -142,7 +142,7 @@ function TaskCard(props) {
             height: 24,
             borderRadius: 3,
             marginRight: 2,
-            zIndex: 5,
+            zIndex: 1,
             backgroundColor: `${status === "Done" ? "#A4E7AB" : (status === "In progress" ? "#9AD1EF" : "#EDCBB9")}`,
             color: `${status === "Done" ? "#009606" : (status === "In progress" ? "#006BA7" : "#EC6F28")}`
           }} 

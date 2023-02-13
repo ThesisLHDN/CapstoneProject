@@ -1,5 +1,6 @@
 import  {useState} from 'react';
 import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
+import ClickAwayListener from '@mui/base/ClickAwayListener';
 import {styled} from '@mui/material/styles';
 import MuiAccordion from '@mui/material/Accordion';
 import MuiAccordionSummary from '@mui/material/AccordionSummary';
@@ -11,6 +12,8 @@ import TaskCard from './TaskCard';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import AddIcon from '@mui/icons-material/Add'
 import { IssueIcon } from './TaskCard';
+import StartSprint from '../popup/StartSprint';
+import CompleteSprint from '../popup/CompleteSprint';
 
 const tasks = [
   {
@@ -274,11 +277,7 @@ function TaskList(props) {
                             )}
                           </div>
 
-                          <GrayButton>
-                            {column.name === 'Backlog'
-                              ? 'Start Sprint'
-                              : 'Complete sprint'}
-                          </GrayButton>
+                          {column.name === 'Backlog' ? <StartSprint /> : <CompleteSprint />}
 
                           <GrayButton
                             sx={{mx: 1, width: '24px !important', minWidth: 24}}
@@ -349,106 +348,74 @@ function TaskList(props) {
 
                       {columnId === '4' ? (
                         <div>
-                          {!createIssueBacklog && (
+                          {!createIssueBacklog ? (
                             <Button
                               variant="text"
                               startIcon={<AddIcon />}
-                              sx={{
-                                color: 'black',
-                                fontSize: '14px',
-                                textTransform: 'none',
-                              }}
+                              sx={{ color: 'black', fontSize: '14px', textTransform: 'none', }}
                               onClick={() => {setCreateIssueBacklog(true)}}
                             >
                               Create new issue
                             </Button>
-                          )}
-                          {createIssueBacklog && (
-                            <div style={{ border: '1px solid gray', backgroundColor: 'white'}}>
-                              <Select
-                                variant="standard"
-                                value={issueType}
-                                onChange={handleIssueType}
-                                sx={{ backgroundColor: 'white', border: 'none', p: 0.75, pl: 1.5}}
-                                disableUnderline
-                              >
-                                <MenuItem value='story'>{IssueIcon('story')}</MenuItem>
-                                <MenuItem value='bug'>{IssueIcon('bug')}</MenuItem>
-                                <MenuItem value='task'>{IssueIcon('task')}</MenuItem>
-                              </Select>
-                              <TextField
-                                variant="standard"
-                                size="medium"
-                                sx={{ width: '85%', height: "45px", fontSize: 14, background: 'white', p: 1, pl: 2 }}
-                                InputProps={{ disableUnderline: true, style: { fontSize: 14 }}}
-                                onKeyUp={event => event.key === "Enter" ? addIssue(event, columnId) : null}
-                              ></TextField>
-                              <Button
-                                variant="text"
-                                sx={{
-                                  color: 'black',
-                                  borderRadius: '0',
-                                  fontSize: '14px',
-                                  height: '45px',
-                                  textTransform: 'none',
-                                }}
-                                onClick={() => {setCreateIssueBacklog(false)}}
-                              >
-                                Cancel
-                              </Button>
-                            </div>
+                            ) : (
+                            <ClickAwayListener mouseEvent='onMouseUp' onClickAway={() => {setCreateIssueBacklog(false)}}>
+                              <Box style={{ border: '1px solid gray', backgroundColor: 'white'}}>
+                                <Select
+                                  variant="standard"
+                                  value={issueType}
+                                  onChange={handleIssueType}
+                                  sx={{ backgroundColor: 'white', border: 'none', p: 0.75, pl: 1.5}}
+                                  disableUnderline
+                                >
+                                  <MenuItem value='story'>{IssueIcon('story')}</MenuItem>
+                                  <MenuItem value='bug'>{IssueIcon('bug')}</MenuItem>
+                                  <MenuItem value='task'>{IssueIcon('task')}</MenuItem>
+                                </Select>
+                                <TextField
+                                  variant="standard"
+                                  size="medium"
+                                  sx={{ width: '85%', height: "45px", fontSize: 14, background: 'white', p: 1, pl: 2 }}
+                                  InputProps={{ disableUnderline: true, style: { fontSize: 14 }}}
+                                  onKeyUp={event => event.key === "Enter" ? addIssue(event, columnId) : null}
+                                ></TextField>
+                              </Box>
+                            </ClickAwayListener>
                           )}
                         </div>
                       ) : (
                         <div>
-                          {!createIssueCurSprint && (
+                          {!createIssueCurSprint ? (
                             <Button
                               variant="text"
                               startIcon={<AddIcon />}
-                              sx={{
-                                color: 'black',
-                                fontSize: '14px',
-                                textTransform: 'none',
-                              }}
+                              sx={{ color: 'black', fontSize: '14px', textTransform: 'none', }}
                               onClick={() => {setCreateIssueCurSprint(true)}}
                             >
                               Create new issue
                             </Button>
-                          )}
-                          {createIssueCurSprint && (
-                            <div style={{ border: '1px solid gray', backgroundColor: 'white'}}>
-                              <Select
-                                variant="standard"
-                                value={issueType}
-                                onChange={handleIssueType}
-                                sx={{ backgroundColor: 'white', border: 'none', p: 0.75, pl: 1.5}}
-                                disableUnderline
-                              >
-                                <MenuItem value='story'>{IssueIcon('story')}</MenuItem>
-                                <MenuItem value='bug'>{IssueIcon('bug')}</MenuItem>
-                                <MenuItem value='task'>{IssueIcon('task')}</MenuItem>
-                              </Select>
-                              <TextField
-                                variant="standard"
-                                size="medium"
-                                sx={{ width: '85%', height: "45px", fontSize: 14, background: 'white', p: 1, pl: 2 }}
-                                InputProps={{ disableUnderline: true, style: { fontSize: 14 }}}
-                                onKeyUp={event => event.key === "Enter" ? addIssue(event, columnId) : null}
-                              ></TextField>
-                              <Button
-                                variant="text"
-                                sx={{
-                                  color: 'black',
-                                  borderRadius: '0',
-                                  fontSize: '14px',
-                                  height: '45px',
-                                  textTransform: 'none',
-                                }}
-                                onClick={() => {setCreateIssueCurSprint(false)}}
-                              >
-                                Cancel
-                              </Button>
-                            </div>
+                            ) : (
+                            <ClickAwayListener mouseEvent='onMouseUp' onClickAway={() => {setCreateIssueCurSprint(false)}}>
+                              <Box style={{ border: '1px solid gray', backgroundColor: 'white'}}>
+                                <Select
+                                  variant="standard"
+                                  value={issueType}
+                                  onChange={handleIssueType}
+                                  sx={{ backgroundColor: 'white', border: 'none', p: 0.75, pl: 1.5}}
+                                  disableUnderline
+                                >
+                                  <MenuItem value='story'>{IssueIcon('story')}</MenuItem>
+                                  <MenuItem value='bug'>{IssueIcon('bug')}</MenuItem>
+                                  <MenuItem value='task'>{IssueIcon('task')}</MenuItem>
+                                </Select>
+                                <TextField
+                                  variant="standard"
+                                  size="medium"
+                                  sx={{ width: '85%', height: "45px", fontSize: 14, background: 'white', p: 1, pl: 2 }}
+                                  InputProps={{ disableUnderline: true, style: { fontSize: 14 }}}
+                                  onKeyUp={event => event.key === "Enter" ? addIssue(event, columnId) : null}
+                                ></TextField>
+                              </Box>
+                            </ClickAwayListener>
                           )}
                         </div>
                       )}
