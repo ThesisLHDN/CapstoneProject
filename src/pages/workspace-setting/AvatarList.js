@@ -76,13 +76,21 @@ function stringAvatar(name) {
 }
 
 function ImageIndividual({member}) {
-  const [anchorEl, setAnchorEl] = useState(null);
+  // const [anchorEl, setAnchorEl] = useState(null);
 
-  const handleClick = (event) => {
-    setAnchorEl(anchorEl ? null : event.currentTarget);
-  };
+  // const handleClick = (event) => {
+  //   setAnchorEl(anchorEl ? null : event.currentTarget);
+  // };
 
-  const open = Boolean(anchorEl);
+  // const open = Boolean(anchorEl);
+
+  const [open, setOpen] = useState(false);
+
+  function handleClose(result) {
+    setOpen(false);
+    // setNewOwner(email);
+  }
+
   return (
     <Box
       key={member.replace(' ', '.').toLowerCase()}
@@ -119,38 +127,38 @@ function ImageIndividual({member}) {
           variant="outlined"
           color="error"
           sx={{width: '100%', fontSize: 14}}
-          onClick={handleClick}
+          onClick={() => setOpen(true)}
         >
           Remove member
         </Button>
-        <Popper open={open} anchorEl={anchorEl} sx={{zIndex: 5}}>
-          <ClickAwayListener onClickAway={handleClick}>
-            <WarningPopup
-              sx={{position: 'absolute', top: 0}}
-              onClose={handleClick}
-              title={
-                <p>
-                  Remove <i>{member}?</i>
-                </p>
-              }
-              content={
-                <p>
-                  Remove{' '}
-                  <i>
-                    <b>{member}</b>
-                  </i>{' '}
-                  from{' '}
-                  <i>
-                    <b>First Scrum Project</b>
-                  </i>
-                  ? This will remove this member's access to all resources of
-                  the current project.
-                </p>
-              }
-              delContent={'Remove'}
-            ></WarningPopup>
-          </ClickAwayListener>
-        </Popper>
+        {/* <Popper open={open} anchorEl={anchorEl} sx={{zIndex: 5}}> */}
+        {/* <ClickAwayListener onClickAway={handleClick}> */}
+        <WarningPopup
+          onClose={handleClose}
+          open={open}
+          title={
+            <p>
+              Remove <i>{member}?</i>
+            </p>
+          }
+          content={
+            <p>
+              Remove{' '}
+              <i>
+                <b>{member}</b>
+              </i>{' '}
+              from{' '}
+              <i>
+                <b>First Scrum Project</b>
+              </i>
+              ? This will remove this member's access to all resources of the
+              current project.
+            </p>
+          }
+          delContent={'Remove'}
+        />
+        {/* </ClickAwayListener> */}
+        {/* </Popper> */}
       </Paper>
     </Box>
   );
@@ -173,7 +181,11 @@ function AvatarList() {
       // sx={{}}
     >
       {members.map((member) => (
-        <ImageIndividual member={member}></ImageIndividual>
+        <ImageIndividual
+          member={member}
+          // open={open}
+          // onClose={handleClose}
+        ></ImageIndividual>
       ))}
     </ImageList>
   );

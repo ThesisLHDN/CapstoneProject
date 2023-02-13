@@ -126,6 +126,7 @@ function WarningPopup({
             Confirm
           </Button>
           <Button
+            onClick={onClose}
             sx={{
               color: '#818181',
             }}
