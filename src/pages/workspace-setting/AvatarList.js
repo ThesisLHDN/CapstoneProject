@@ -7,8 +7,6 @@ import {
   ImageList,
   ImageListItem,
   Avatar,
-  Popper,
-  ClickAwayListener,
 } from '@mui/material';
 import WarningPopup from 'src/components/popup/Warning';
 import {useState} from 'react';
@@ -76,14 +74,6 @@ function stringAvatar(name) {
 }
 
 function ImageIndividual({member}) {
-  // const [anchorEl, setAnchorEl] = useState(null);
-
-  // const handleClick = (event) => {
-  //   setAnchorEl(anchorEl ? null : event.currentTarget);
-  // };
-
-  // const open = Boolean(anchorEl);
-
   const [open, setOpen] = useState(false);
 
   function handleClose(result) {
@@ -131,8 +121,6 @@ function ImageIndividual({member}) {
         >
           Remove member
         </Button>
-        {/* <Popper open={open} anchorEl={anchorEl} sx={{zIndex: 5}}> */}
-        {/* <ClickAwayListener onClickAway={handleClick}> */}
         <WarningPopup
           onClose={handleClose}
           open={open}
@@ -157,20 +145,16 @@ function ImageIndividual({member}) {
           }
           delContent={'Remove'}
         />
-        {/* </ClickAwayListener> */}
-        {/* </Popper> */}
       </Paper>
     </Box>
   );
 }
 
 function AvatarList() {
-  // const [open, setOpen] = useState(false);
   return (
     <ImageList
       sx={{
         width: 1000,
-        // '&::-webkit-scrollbar-track': {background: 'transparent'},
         scrollbarGutter: 'stable',
         scrollbarWidth: 'thin',
         overflowX: 'unset !important',
@@ -181,11 +165,7 @@ function AvatarList() {
       // sx={{}}
     >
       {members.map((member) => (
-        <ImageIndividual
-          member={member}
-          // open={open}
-          // onClose={handleClose}
-        ></ImageIndividual>
+        <ImageIndividual member={member}></ImageIndividual>
       ))}
     </ImageList>
   );

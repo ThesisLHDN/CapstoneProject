@@ -13,11 +13,11 @@ import {color} from 'src/style';
 import ReportRoundedIcon from '@mui/icons-material/ReportRounded';
 
 function WarningPopup({
-  title,
-  content,
-  delContent,
+  // title,
+  // content,
+  // delContent,
   cancelContent,
-  icon,
+  // icon,
   projectInfo,
   onClose,
   selectedValue,
@@ -29,9 +29,9 @@ function WarningPopup({
     onClose(selectedValue);
   };
 
-  const handleListItemClick = (value) => {
-    onClose(value);
-  };
+  // const handleListItemClick = (value) => {
+  //   onClose(value);
+  // };
 
   const projectName = projectInfo.projectName;
   const projectId = projectInfo.projectId;
