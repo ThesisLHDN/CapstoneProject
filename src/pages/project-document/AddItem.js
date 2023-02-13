@@ -67,7 +67,7 @@ function AddItem() {
               <MenuList
                 sx={{
                   width: 'fit-content',
-                  '& *': {fontSize: 14},
+                  '& *': {fontSize: '14px !important'},
                   '& li': {display: 'flex', gap: 1},
                   '& svg': {width: 24, height: 24},
                 }}
@@ -80,9 +80,10 @@ function AddItem() {
                   <CreateNewFolderRoundedIcon />
                   Create folder
                 </MenuItem>
-                <MenuItem>
+                <MenuItem sx={{fontSize: 14}}>
                   <NoteAddRoundedIcon />
-                  Upload file
+                  <input type="file" id="upload" hidden />
+                  <label for="upload">Upload file</label>
                 </MenuItem>
               </MenuList>
             </Paper>
