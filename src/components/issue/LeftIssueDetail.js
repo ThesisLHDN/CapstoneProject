@@ -7,11 +7,37 @@ import LibraryAddIcon from '@mui/icons-material/LibraryAdd'
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 import "react-datepicker/dist/react-datepicker.css"
 import Comments from './comment/Comments'
+import ChildIssues from './ChildIssues'
+
+const tasks = [
+  {
+    id: 'SCR1',
+    name: 'First task',
+    status: 'To do',
+    type: 'task',
+    epic: 'Epic 1',
+    due: '2022-02-01',
+    point: 15,
+    assignee: 'Đăng Nguyễn',
+  },
+  {
+    id: 'SCR2',
+    name: 'Second task',
+    status: 'To do',
+    type: 'task',
+    epic: 'Epic 1',
+    due: '2022-02-01',
+    point: 10,
+    assignee: 'Lâm Nguyễn',
+  },
+];
 
 function LeftIssueDetail() {
   const [startDate, setStartDate] = useState(new Date())
   const [status, setStatus] = useState('In progress')
   const [anchorEl, setAnchorEl] = useState(null)
+  const [childIssue, setChildIssue] = useState(false)
+  const [createChild, setCreateChild] = useState(false)
 
   const handleChange = (event, element) => {
     setAnchorEl(anchorEl ? null : event.currentTarget)
@@ -21,6 +47,13 @@ function LeftIssueDetail() {
   const handleClick = (event) => {
     setAnchorEl(anchorEl ? null : event.currentTarget)
   };
+
+  const handleChildIssue = () => {
+    if (tasks.length == 0) {
+      setChildIssue(true);
+    }
+    setCreateChild(true);
+  }
 
   const open = Boolean(anchorEl)
   const id = open ? 'simple-popper' : undefined
@@ -106,7 +139,9 @@ function LeftIssueDetail() {
             marginLeft: "20px",
             backgroundColor: "#EFEFEF",
             color: "black"
-          }}>
+          }}
+          onClick={handleChildIssue}
+        >
           <LibraryAddIcon sx={{ marginRight: 1 }}/>
           Add Child Issue
         </Button>
@@ -169,10 +204,17 @@ function LeftIssueDetail() {
         </Grid>
       </Grid>
 
+      <ChildIssues 
+        childIssue={childIssue}
+        setChildIssue={setChildIssue}
+        createChild={createChild}
+        setCreateChild={setCreateChild}
+        tasks={tasks}
+      />
+
       <Typography sx={{ marginTop: 3, fontSize: 16, fontWeight: 700 }}>
         Activity
       </Typography>
-
       <Comments currentUserId="1" />
     </div>
   )
