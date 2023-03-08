@@ -21,7 +21,8 @@ import Avatar from '@mui/material/Avatar';
 
 import SearchBar from 'src/components/search';
 import {Link} from 'react-router-dom';
-import {getAuth, signOut} from 'firebase/auth';
+import {signOut} from 'firebase/auth';
+import {auth} from 'src/firebase/config';
 import {color, colorHover} from 'src/style';
 import Notification from '../notification/Notification';
 import AddMember from 'src/components/popup/Create';
@@ -79,7 +80,7 @@ export default function Header() {
     setValue(newValue);
   };
   const handleLogout = () => {
-    const auth = getAuth();
+    // const auth = getAuth();
     signOut(auth)
       .then(() => {
         // Sign-out successful.

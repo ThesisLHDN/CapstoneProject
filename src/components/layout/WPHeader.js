@@ -22,10 +22,11 @@ import Avatar from '@mui/material/Avatar';
 
 import SearchBar from 'src/components/search';
 import {Link} from 'react-router-dom';
-import {getAuth, signOut} from 'firebase/auth';
+import {signOut} from 'firebase/auth';
 import {colorHover} from 'src/style';
 import Notification from '../notification/Notification';
 import CreateWorkspace from 'src/components/popup/CreateWorkspace';
+import {auth} from 'src/firebase/config'
 
 // function LinkTab(props) {
 //   return (
@@ -46,7 +47,7 @@ export default function Header() {
     setValue(newValue);
   };
   const handleLogout = () => {
-    const auth = getAuth();
+    // const auth = getAuth();
     signOut(auth)
       .then(() => {
         // Sign-out successful.
