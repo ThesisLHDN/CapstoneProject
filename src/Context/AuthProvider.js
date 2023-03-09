@@ -43,7 +43,11 @@ function AuthProvider({children}) {
   return (
     <AuthContext.Provider value={{user}}>
       {/* {children} */}
-      {isLoading ? <CircularProgress /> : children}
+      {isLoading ? (
+        <CircularProgress sx={{position: 'absolute', top: '50%', left:'50%', transform:'translate(-50%,-50%)'}} />
+      ) : (
+        children
+      )}
     </AuthContext.Provider>
   );
   // value is the thing that all children can access

@@ -17,11 +17,13 @@ import {createTheme, ThemeProvider} from '@mui/material/styles';
 
 // import app, {auth} from 'src/firebase/config.js';
 import {
-  getAuth,
+  // getAuth,
   FacebookAuthProvider,
   GoogleAuthProvider,
   signInWithPopup,
 } from 'firebase/auth';
+
+import {auth} from 'src/firebase/config'
 
 const facebookProvider = new FacebookAuthProvider();
 const googleProvider = new GoogleAuthProvider();
@@ -41,7 +43,7 @@ export default function SignInSide() {
   };
 
   const facebookLoginHandler = () => {
-    const auth = getAuth();
+    // const auth = getAuth();
     signInWithPopup(auth, facebookProvider)
       .then((result) => {
         // The signed-in user info.
@@ -63,7 +65,7 @@ export default function SignInSide() {
   };
 
   const googleLoginHandler = () => {
-    const auth = getAuth();
+    // const auth = getAuth();
     signInWithPopup(auth, googleProvider)
       .then((result) => {
         // The signed-in user info.

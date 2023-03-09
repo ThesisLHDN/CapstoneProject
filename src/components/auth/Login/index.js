@@ -30,7 +30,11 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   signInWithEmailAndPassword,
+  getAdditionalUserInfo,
 } from 'firebase/auth';
+import {db, auth} from 'src/firebase/config';
+import {addDocument} from 'src/firebase/services';
+import {collection, addDoc} from 'firebase/firestore';
 
 const facebookProvider = new FacebookAuthProvider();
 const googleProvider = new GoogleAuthProvider();
@@ -40,19 +44,8 @@ const theme = createTheme();
 export default function SignInSide() {
   const [error, setError] = useState('');
   const [formData, setFormData] = useState({});
-  const auth = getAuth();
-  // const {user} = useContext(AuthContext);
-  // const errorCodeHandler = (err) => {
-  //   if (err === 'auth/wrong-password') {
-  //     setError('Wrong password');
-  //   } else if (err === 'auth/invalid-email') {
-  //     setError('Invalid email');
-  //   } else if (err === 'auth/user-not-found') {
-  //     setError('User not found');
-  //   } else {
-  //     setError(err);
-  //   }
-  // };
+  // const auth = getAuth();
+
   const onChangeHandler = (e) => {
     e.preventDefault();
 
@@ -73,10 +66,7 @@ export default function SignInSide() {
     const data = formData;
     const email = data.email;
     const password = data.password;
-    // console.log({
-    //   email: email,
-    //   password: password,
-    // });
+
     if (!(email && password)) {
       setError('All fields are required.');
       return;
@@ -95,34 +85,78 @@ export default function SignInSide() {
       });
   };
 
-  const facebookLoginHandler = () => {
+  const facebookLoginHandler = async () => {
     // const auth = getAuth();
     signInWithPopup(auth, facebookProvider)
-      .then((result) => {
+      .then(async (result) => {
         // The signed-in user info.
         const user = result.user;
 
+        if (getAdditionalUserInfo(result).isNewUser) {
+          try {
+            // const docRef = await addDoc(collection(db, 'users'), {
+            //   displayName: user.displayName,
+            //   email: user.email,
+            //   photoURL: user.photoURL,
+            //   uid: user.uid,
+            //   provider: getAdditionalUserInfo(result).providerId,
+            // });
+            // console.log('Document written with ID: ', docRef.id);
+            addDocument('users', {
+              displayName: user.displayName,
+              email: user.email,
+              photoURL: user.photoURL,
+              uid: user.uid,
+              provider: getAdditionalUserInfo(result).providerId,
+            });
+          } catch (e) {
+            console.error('Error adding document: ', e);
+          }
+        }
+
         // This gives you a Facebook Access Token. You can use it to access the Facebook API.
         const credential = FacebookAuthProvider.credentialFromResult(result);
+        // console.log('credential: ', credential);
         const accessToken = credential.accessToken;
       })
       .catch((error) => {
         // Handle Errors here.
-        const errorCode = error.code;
+        setError(errorCodeConverter(error.code));
         // const errorMessage = error.message;
         // The email of the user's account used.
-        const email = error.customData.email;
+        // const email = error.customData.email;
         // The AuthCredential type that was used.
-        const credential = FacebookAuthProvider.credentialFromError(error);
-        setError(errorCodeConverter(errorCode));
+        // const credential = FacebookAuthProvider.credentialFromError(error);
       });
+    // console.log('Login facebook', {data});
   };
 
   const googleLoginHandler = () => {
     signInWithPopup(auth, googleProvider)
-      .then((result) => {
+      .then(async (result) => {
         // The signed-in user info.
         const user = result.user;
+        if (getAdditionalUserInfo(result).isNewUser) {
+          try {
+            // const docRef = await addDoc(collection(db, 'users'), {
+            //   displayName: user.displayName,
+            //   email: user.email,
+            //   photoURL: user.photoURL,
+            //   uid: user.uid,
+            //   providerId: getAdditionalUserInfo(result).providerId,
+            // });
+            // console.log('Document written with ID: ', docRef.id);
+            addDocument('users', {
+              displayName: user.displayName,
+              email: user.email,
+              photoURL: user.photoURL,
+              uid: user.uid,
+              provider: getAdditionalUserInfo(result).providerId,
+            });
+          } catch (e) {
+            console.error('Error adding document: ', e);
+          }
+        }
 
         // This gives you a Facebook Access Token. You can use it to access the Facebook API.
         const credential = GoogleAuthProvider.credentialFromResult(result);
@@ -130,12 +164,11 @@ export default function SignInSide() {
       })
       .catch((error) => {
         // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // The email of the user's account used.
-        const email = error.customData.email;
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
+        setError(errorCodeConverter(error.code));
+        // // The email of the user's account used.
+        // const email = error.customData.email;
+        // // The AuthCredential type that was used.
+        // const credential = GoogleAuthProvider.credentialFromError(error);
       });
   };
 

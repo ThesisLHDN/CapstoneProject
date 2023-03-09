@@ -4,19 +4,20 @@ const color = {
   green03: '#00980F',
   gray01: '#8E8E8E',
   gray02: '#606060',
-  red: '#D90000'
+  red: '#D90000',
 };
 
 const colorHover = {
   greenBtn: {
     backgroundColor: '#00980F',
-    '&:hover': { backgroundColor: '#00a922' },
+    '&:hover': {backgroundColor: '#00a922'},
   },
   greenIconBtn: {
     color: '#00980F',
-    '&:hover': { color: '#00a922' },
+    '&:hover': {color: '#00a922'},
   },
   greenGradBtn: {
+    fontWeight: 700,
     color: 'white',
     textTransform: 'none',
     backgroundImage:
@@ -31,8 +32,8 @@ const colorHover = {
     backgroundColor: '#cdcdcd',
     textTransform: 'none',
     color: '#181818',
-    '&:hover': { backgroundColor: '#ddd' },
+    '&:hover': {backgroundColor: '#ddd'},
   },
 };
 
-export { color, colorHover };
+export {color, colorHover};

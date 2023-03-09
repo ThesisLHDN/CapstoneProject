@@ -21,7 +21,8 @@ import Avatar from '@mui/material/Avatar';
 
 import SearchBar from 'src/components/search';
 import {Link} from 'react-router-dom';
-import {getAuth, signOut} from 'firebase/auth';
+import {signOut} from 'firebase/auth';
+import {auth} from 'src/firebase/config';
 import {color, colorHover} from 'src/style';
 import Notification from '../notification/Notification';
 import AddMember from 'src/components/popup/Create';
@@ -50,22 +51,20 @@ function AddMembers(props) {
   };
 
   return (
-    <Dialog onClose={handleClose} open={open}>
-      {/* <DialogTitle>Set backup account</DialogTitle> */}
-      <Box>
-        <AddMember
-          confirmContent="Add"
-          title={
-            <p>
-              Add Member to <i>First Scrum Project</i>
-            </p>
-          }
-          sx={{right: -100}}
-          placeholder="eg. dangnguyen@gmail.com"
-          fieldLabel="Enter emails"
-        />
-      </Box>
-    </Dialog>
+    <Box>
+      <AddMember
+        onClose={handleClose}
+        open={open}
+        confirmContent="Add"
+        title={
+          <p>
+            Add Member to <i>First Scrum Project</i>
+          </p>
+        }
+        placeholder="eg. dangnguyen@gmail.com"
+        fieldLabel="Enter emails"
+      />
+    </Box>
   );
 }
 
@@ -81,7 +80,7 @@ export default function Header() {
     setValue(newValue);
   };
   const handleLogout = () => {
-    const auth = getAuth();
+    // const auth = getAuth();
     signOut(auth)
       .then(() => {
         // Sign-out successful.
@@ -188,7 +187,7 @@ export default function Header() {
         >
           Add member
         </Button>
-        <Popper id={id} open={openAdd} anchorEl={anchorElAdd} sx={{zIndex: 5}}>
+        {/* <Popper id={id} open={openAdd} anchorEl={anchorElAdd} sx={{zIndex: 5}}>
           <ClickAwayListener onClickAway={handleClickAdd}>
             <div style={{position: 'absolute'}}>
               <AddMember
@@ -204,7 +203,7 @@ export default function Header() {
               />
             </div>
           </ClickAwayListener>
-        </Popper>
+        </Popper> */}
 
         <Notification />
         <div style={{position: 'relative'}}>
@@ -280,11 +279,12 @@ export default function Header() {
               </Box>
             </ClickAwayListener>
           </Popper>
-          <AddMembers
-            open={openAddMembers}
-            onClose={(value) => handleClose(value)}
-          ></AddMembers>
         </div>
+        <AddMembers
+          open={openAddMembers}
+          // onClose={(value) => handleClose(value)}
+          onClose={(value) => setOpenAddMembers(false)}
+        ></AddMembers>
       </Box>
     </Paper>
   );

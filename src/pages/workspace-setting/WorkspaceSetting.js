@@ -74,7 +74,6 @@ const StyledAccordionDetails = styled(AccordionDetails)(({theme}) => ({
 }));
 
 function WorkspaceSetting() {
-
   const [expanded, setExpanded] = useState('panel1');
 
   const handleChange = (panel) => (event, newExpanded) => {
@@ -82,6 +81,7 @@ function WorkspaceSetting() {
   };
 
   const [rename, setRename] = useState(false);
+  const [changeDescription, setChangeDescription] = useState(false);
 
   return (
     <div style={{textAlign: 'left'}}>
@@ -141,10 +141,20 @@ function WorkspaceSetting() {
                   textAlign: 'justify',
                 },
               }}
+              onChange={() => setChangeDescription(true)}
               multiline
               rows={4}
-              value="Lorem ipsum dolor sit amet, consectetio. Ut vestibulum viverra eros, quis laoreet nibh varius sed. In hac hllentesque tempus massa. Suspendisse eu tellus sapien. Donec egestas eu mi consectetur porta. Vivamus mattis magna quis est porttitor egestas. Vestibulum ante ipsum primis in faucibus orciluctus et ultrices posuere cubilia curae; Sed mollis aliquet urna, at finibus ante vulputate non. Vestibulum facilisis pharetra est, sit amet faucibus urna consequat id."
+              defaultValue="Lorem ipsum dolor sit amet, consectetio. Ut vestibulum viverra eros, quis laoreet nibh varius sed. In hac hllentesque tempus massa. Suspendisse eu tellus sapien. Donec egestas eu mi consectetur porta. Vivamus mattis magna quis est porttitor egestas. Vestibulum ante ipsum primis in faucibus orciluctus et ultrices posuere cubilia curae; Sed mollis aliquet urna, at finibus ante vulputate non. Vestibulum facilisis pharetra est, sit amet faucibus urna consequat id."
             ></TextField>
+            {changeDescription && (
+              <Button
+                variant="contained"
+                size="medium"
+                sx={{mt: 2, ...colorHover.greenGradBtn}}
+              >
+                Update description
+              </Button>
+            )}
           </StyledAccordionDetails>
         </StyledAccordion>
         <StyledAccordion
