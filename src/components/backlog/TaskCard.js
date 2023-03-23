@@ -92,8 +92,8 @@ function convertDate(d) {
   return date.getDate() + ' ' + date.toLocaleString('en-us', {month: 'short'});
 }
 
-function TaskCard(props) {
-  const [status, setStatus] = useState(props.item.status);
+function TaskCard({ item, isChild=false }) {
+  const [status, setStatus] = useState(item.status);
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleChange = (event, element) => {
@@ -109,23 +109,23 @@ function TaskCard(props) {
   const id = open ? 'simple-popper' : undefined;
 
   return (
-    <div className="flex justify-between hover:cursor-pointer">
+    <div className={`flex justify-between hover:cursor-pointer ${isChild ? 'my-2': ''}`}>
       <NavLink to="/issue">
-        <div className="flex ml-3 md:pr-md 2xl:pr-lg">
-          <div>{IssueIcon(props.item.type)}</div>
-          <div className="ml-3 font-bold text-sm pt-0.5">{props.item.id}</div>
+        <div className={`${isChild ? 'ml-1 md:pr-20 2xl:pr-24' : 'ml-3 md:pr-40 2xl:pr-60'} flex`}>
+          <div>{IssueIcon(item.type)}</div>
+          <div className="ml-3 font-bold text-sm pt-0.5">{item.id}</div>
           <div className="ml-3 font-medium text-sm pt-0.5">
-            {props.item.name}
+            {item.name}
           </div>
-          {props.item.epic && (
+          {item.epic && !isChild && (
             <div
               className="ml-3 text-sm h-6 pt-0.5 px-4 rounded-sm"
               style={{
-                backgroundColor: `${epicColor(props.item.epic)[0]}`,
-                color: `${epicColor(props.item.epic)[1]}`,
+                backgroundColor: `${epicColor(item.epic)[0]}`,
+                color: `${epicColor(item.epic)[1]}`,
               }}
             >
-              {props.item.epic}
+              {item.epic}
             </div>
           )}
         </div>
@@ -136,7 +136,7 @@ function TaskCard(props) {
           <AccessTimeRoundedIcon
             sx={{height: 14, width: 14, marginRight: 0.5, marginTop: 0.1}}
           />
-          {props.item.due ? <p>{convertDate(props.item.due)}</p> : <p>-</p>}
+          {item.due ? <p>{convertDate(item.due)}</p> : <p>-</p>}
         </span>
 
         <span
@@ -149,7 +149,7 @@ function TaskCard(props) {
             : 'bg-to-do-color'
         }`}
         >
-          {props.item.due ? <>{props.item.point}</> : <p>-</p>}
+          {item.due ? <>{item.point}</> : <p>-</p>}
         </span>
 
         <Button
@@ -159,24 +159,11 @@ function TaskCard(props) {
             height: 24,
             borderRadius: 3,
             marginRight: 2,
-            zIndex: 5,
-            backgroundColor: `${
-              status === 'Done'
-                ? '#A4E7AB'
-                : status === 'In progress'
-                ? '#9AD1EF'
-                : '#EDCBB9'
-            }`,
-            color: `${
-              status === 'Done'
-                ? '#009606'
-                : status === 'In progress'
-                ? '#006BA7'
-                : '#EC6F28'
-            }`,
-          }}
-          onClick={handleClick}
-        >
+            zIndex: 1,
+            backgroundColor: `${status === "Done" ? "#A4E7AB" : (status === "In progress" ? "#9AD1EF" : "#EDCBB9")}`,
+            color: `${status === "Done" ? "#009606" : (status === "In progress" ? "#006BA7" : "#EC6F28")}`
+          }} 
+          onClick={handleClick}>
           {status}
           <ExpandMoreIcon />
         </Button>
@@ -237,7 +224,7 @@ function TaskCard(props) {
             backgroundColor: '#8993A4',
             marginRight: 1,
           }}
-          alt={props.item.assignee}
+          alt={item.assignee}
         />
       </div>
     </div>

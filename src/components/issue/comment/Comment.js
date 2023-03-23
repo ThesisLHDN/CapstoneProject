@@ -24,8 +24,8 @@ const Comment = ({
 
   return (
     <div key={comment.id} className="flex mb-5">
-      {console.log(createdAt)}
-      {console.log(timepassed)}
+      {/* {console.log(createdAt)}
+      {console.log(timepassed)} */}
       <Avatar
         src="X"
         sx={{ width: 40, height: 40, backgroundColor: "#8993A4", marginRight: 1 }}
