@@ -1,4 +1,4 @@
-import React from 'react';
+import {useState} from 'react';
 import {
   Typography,
   Box,
@@ -13,7 +13,6 @@ import {
 } from '@mui/material';
 import SearchBar from 'src/components/search';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-// import SortRoundedIcon from "@mui/icons-material/SortRounded"
 import AddIcon from '@mui/icons-material/Add';
 import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRightOutlined';
 import FolderOutlinedIcon from '@mui/icons-material/FolderOutlined';
@@ -22,6 +21,9 @@ import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import Sort from 'src/components/Sort';
 import AddItem from './AddItem';
+
+import {ref, getDownloadURL, uploadBytesResumable} from 'firebase/storage';
+import {storage} from 'src/firebase/config';
 
 const folders = [
   {
@@ -67,6 +69,9 @@ function convertDate(d) {
 }
 
 function Document() {
+  const [file, setFile] = useState();
+
+  
   const rootDocument = folders
     .concat(files)
     .filter((item) => item.parent === '');
@@ -114,13 +119,6 @@ function Document() {
         }}
       >
         <SearchBar sx={{width: '210px'}} />
-        {/* <Button
-          variant="text"
-          startIcon={<SortRoundedIcon />}
-          sx={{ color: "#181818", textTransform: "none" }}
-        >
-          Sort
-        </Button> */}
         <Sort />
         <Button
           variant="text"
@@ -130,14 +128,6 @@ function Document() {
           View
         </Button>
       </Box>
-
-      {/* <Button
-        variant="text"
-        startIcon={<AddIcon />}
-        sx={{color: 'black', fontSize: '14px', textTransform: 'none', mt: 2}}
-      >
-        Add new item
-      </Button> */}
       <AddItem />
 
       {rootDocument.map((item) => {

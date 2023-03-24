@@ -1,5 +1,7 @@
 import {useEffect, useState, useContext} from 'react';
 import {AuthContext} from 'src/Context/AuthProvider';
+import {getFirestore} from 'firebase/firestore';
+import useFirestore, {useDoc} from 'src/hooks/useFirestore';
 import {color} from 'src/style';
 import {Typography, Grid, TextField, Button, Avatar} from '@mui/material';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
@@ -8,29 +10,50 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import PhoneEnabledOutlinedIcon from '@mui/icons-material/PhoneEnabledOutlined';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 
-import {doc, collection, onSnapshot} from 'firebase/firestore';
+import {collection, onSnapshot} from 'firebase/firestore';
 import {db} from 'src/firebase/config';
 
 function Profile() {
   const [userData, setUserData] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
-    user: {displayName, email, photoURL},
+    user: {displayName, email, photoURL, uid},
   } = useContext(AuthContext);
+  console.log('uid',uid)
 
-  useEffect(() => {
-    onSnapshot(collection(db, 'users'), (snapshot) => {
-      const data = snapshot.docs.map((doc) => ({...doc.data(), id: doc.id}));
-      // console.log(data);
-      setUserData(data[0]);
-    });
-    setIsLoading(false);
-  }, []);
-  console.log('user data', userData);
+  const users = useFirestore('users', {
+    fieldName: 'uid',
+    operator: '==',
+    compareValue: uid,
+  });
+  const user = users[0];
+  console.log(user);
+
+  console.log('usedoc', user);
+
+  // useEffect(() => {
+  //   onSnapshot(collection(db, 'users'), (snapshot) => {
+  //     const data = snapshot.docs.map((doc) => ({...doc.data(), id: doc.id}));
+  //     // console.log(data);
+  //     setUserData(data[0]);
+  //   });
+  //   setIsLoading(false);
+  // }, []);
+
+  // useEffect(() => {
+  //   const unsubscribe = onSnapshot(collection(db, 'users'), (snapshot) => {
+  //     const data = snapshot.docs.map((doc) => ({...doc.data(), id: doc.id}));
+  //     setUserData(data[0]);
+  //   });
+  //   setIsLoading(false);
+
+  //   return unsubscribe;
+  // }, []);
+
   return (
     <div>
-      {!isLoading ? (
+      {user ? (
         <div>
           <Typography variant="h5" sx={{color: color.green03, fontWeight: 700}}>
             Account Settings
@@ -38,7 +61,7 @@ function Profile() {
 
           <Grid container alignItems="center" justifyContent="center">
             <Avatar
-              src={userData.photoURL}
+              src={user.photoURL}
               sx={{
                 width: '15vw',
                 height: '15vw',
@@ -73,7 +96,7 @@ function Profile() {
 
             <Grid item xs={3.5}>
               <TextField
-                value={userData.displayName}
+                value={user.displayName}
                 size="small"
                 sx={{width: '100%', backgroundColor: '#ECECEC'}}
               ></TextField>
@@ -104,7 +127,7 @@ function Profile() {
 
             <Grid item xs={3.5}>
               <TextField
-                value={userData.email}
+                value={user.email}
                 size="small"
                 disabled
                 sx={{
@@ -139,7 +162,7 @@ function Profile() {
 
             <Grid item xs={3.5} alignItems="center" justifyContent="center">
               <TextField
-                defaultValue={userData.phone}
+                defaultValue={'0987654321'}
                 size="small"
                 sx={{width: '100%', backgroundColor: '#ECECEC'}}
               ></TextField>

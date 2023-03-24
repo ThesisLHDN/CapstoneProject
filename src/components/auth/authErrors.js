@@ -151,8 +151,9 @@ const authErrors = {
   'unverified-email': 'The operation requires a verified email.',
   'user-cancelled':
     'The user did not grant your application the permissions it requested.',
-  'user-not-found':
-    'There is no user record corresponding to this identifier. The user may have been deleted.',
+  // 'user-not-found':
+  //   'There is no user record corresponding to this identifier. The user may have been deleted.',
+  'user-not-found': 'User not found',
   'user-disabled': 'The user account has been disabled by an administrator.',
   'user-mismatch':
     'The supplied credentials do not correspond to the previously signed in user.',
@@ -162,5 +163,4 @@ const authErrors = {
     'This browser is not supported or 3rd party cookies and data may be disabled.',
 };
 
-
-export default authErrors
+export default authErrors;

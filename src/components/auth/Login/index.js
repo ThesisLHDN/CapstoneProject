@@ -32,9 +32,8 @@ import {
   signInWithEmailAndPassword,
   getAdditionalUserInfo,
 } from 'firebase/auth';
-import {db, auth} from 'src/firebase/config';
-import {addDocument} from 'src/firebase/services';
-import {collection, addDoc} from 'firebase/firestore';
+import {auth} from 'src/firebase/config';
+import {setDocument} from 'src/firebase/services';
 
 const facebookProvider = new FacebookAuthProvider();
 const googleProvider = new GoogleAuthProvider();
@@ -102,13 +101,17 @@ export default function SignInSide() {
             //   provider: getAdditionalUserInfo(result).providerId,
             // });
             // console.log('Document written with ID: ', docRef.id);
-            addDocument('users', {
-              displayName: user.displayName,
-              email: user.email,
-              photoURL: user.photoURL,
-              uid: user.uid,
-              provider: getAdditionalUserInfo(result).providerId,
-            });
+            setDocument(
+              'users',
+              {
+                displayName: user.displayName,
+                email: user.email,
+                photoURL: user.photoURL,
+                uid: user.uid,
+                provider: getAdditionalUserInfo(result).providerId,
+              },
+              user.uid,
+            );
           } catch (e) {
             console.error('Error adding document: ', e);
           }
@@ -146,7 +149,7 @@ export default function SignInSide() {
             //   providerId: getAdditionalUserInfo(result).providerId,
             // });
             // console.log('Document written with ID: ', docRef.id);
-            addDocument('users', {
+            setDocument('users', {
               displayName: user.displayName,
               email: user.email,
               photoURL: user.photoURL,

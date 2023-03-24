@@ -5,12 +5,10 @@ import {errorCodeConverter} from '../authFunction';
 import {
   Button,
   IconButton,
-  // CssBaseline,
   TextField,
   FormControlLabel,
   Checkbox,
   Link,
-  // Paper,
   Box,
   Grid,
   Divider,
@@ -20,7 +18,6 @@ import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {ReactComponent as FacebookIcon} from '../logo/Facebook.svg';
 import {ReactComponent as GoogleIcon} from '../logo/Google.svg';
 
-// import app, {auth} from 'src/firebase/config.js';
 import {
   FacebookAuthProvider,
   GoogleAuthProvider,
@@ -30,10 +27,8 @@ import {
   getAdditionalUserInfo,
 } from 'firebase/auth';
 
-import {collection, addDoc} from 'firebase/firestore';
-
-import {db, auth} from 'src/firebase/config';
-import {addDocument} from 'src/firebase/services';
+import {auth} from 'src/firebase/config';
+import {addDocument, setDocument} from 'src/firebase/services';
 
 const facebookProvider = new FacebookAuthProvider();
 const googleProvider = new GoogleAuthProvider();
@@ -43,7 +38,28 @@ const theme = createTheme();
 export default function SignInSide() {
   const [error, setError] = useState('');
   const [formData, setFormData] = useState({});
-  // const auth = getAuth();
+  const [userData, setUserData] = useState({});
+
+  const addNewUser = async (user, provider) => {
+    setDocument(
+      'users',
+      {
+        displayName: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL,
+        uid: user.uid,
+        provider,
+      },
+      user.uid,
+    ).then(() => {
+      addDocument('workspaces', {
+        name: user.displayName + "'s workspace",
+        adminId: user.uid,
+        adminEmail: user.email,
+      });
+    });
+    console.log('add new user');
+  };
 
   const facebookLoginHandler = async () => {
     // const auth = getAuth();
@@ -53,19 +69,9 @@ export default function SignInSide() {
         const user = result.user;
 
         if (getAdditionalUserInfo(result).isNewUser) {
-          addDocument('users', {
-            displayName: user.displayName,
-            email: user.email,
-            photoURL: user.photoURL,
-            uid: user.uid,
-            provider: getAdditionalUserInfo(result).providerId,
-          });
-          // const docRef = await addDoc(collection(db, 'users'), {
-
-          // });
-          // console.log('Document written with ID: ', docRef.id);
+          addNewUser(user, getAdditionalUserInfo(result).providerId);
         }
-
+        setUserData(user);
         // This gives you a Facebook Access Token. You can use it to access the Facebook API.
         const credential = FacebookAuthProvider.credentialFromResult(result);
         // console.log('credential: ', credential);
@@ -87,20 +93,16 @@ export default function SignInSide() {
     signInWithPopup(auth, googleProvider)
       .then(async (result) => {
         // The signed-in user info.
+
         const user = result.user;
         if (getAdditionalUserInfo(result).isNewUser) {
-          addDocument('users', {
-            displayName: user.displayName,
-            email: user.email,
-            photoURL: user.photoURL,
-            uid: user.uid,
-            provider: getAdditionalUserInfo(result).providerId,
-          });
+          addNewUser(user, getAdditionalUserInfo(result).providerId);
+          console.log('sign up google', userData);
         }
-
+        setUserData(result.user);
         // This gives you a Facebook Access Token. You can use it to access the Facebook API.
         const credential = GoogleAuthProvider.credentialFromResult(result);
-        const accessToken = credential.accessToken;
+        // const accessToken = credential.accessToken;
       })
       .catch((error) => {
         // Handle Errors here.
@@ -122,13 +124,17 @@ export default function SignInSide() {
       // Trimming any whitespace
       [e.target.name]: e.target.value.trim(),
     });
+  };
 
-    // setFormData()
+  const createFirstWorkspace = (displayName, id) => {
+    addDocument('workspaces', {
+      name: displayName + "'s workspace",
+      adminId: id,
+    });
   };
 
   const signUpHandler = (event) => {
     event.preventDefault();
-    // const auth = getAuth();
     const email = formData.email;
     const password = formData.password;
     const fName = formData.firstName;
@@ -141,28 +147,27 @@ export default function SignInSide() {
 
     console.log(auth.currentUser);
 
-    // sendEmailVerification(auth.currentUser).then(() => {
-    //   console.log('Email verification sent!');
-    //   // ...
-    // });
-
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Signed in
         const user = userCredential.user;
-        addDocument('users', {
-          displayName: user.displayName,
-          email: email,
-          uid: user.uid,
-          provider: getAdditionalUserInfo(userCredential).providerId,
-        });
-        // ...
+
+        addNewUser(user, getAdditionalUserInfo(userCredential).providerId);
+        setUserData(user);
+        // setDocument(
+        //   'users',
+        //   {
+        //     displayName: user.displayName,
+        //     email: email,
+        //     uid: user.uid,
+        //     provider: getAdditionalUserInfo(userCredential).providerId,
+        //   },
+        //   user.uid,
+        // );
         console.log(user);
       })
       .then(() => {
         sendEmailVerification(auth.currentUser).then(() => {
           console.log('Email verification sent!');
-          // ...
         });
       })
       .catch((error) => {
