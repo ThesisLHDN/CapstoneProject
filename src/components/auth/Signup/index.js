@@ -51,6 +51,7 @@ export default function SignInSide() {
         provider,
       },
       user.uid,
+      'create',
     ).then(() => {
       addDocument('workspaces', {
         name: user.displayName + "'s workspace",
@@ -117,7 +118,7 @@ export default function SignInSide() {
   const onChangeHandler = (e) => {
     e.preventDefault();
 
-    console.log(e.target.name + ': ' + e.target.value);
+    // console.log(e.target.name + ': ' + e.target.value);
     setFormData({
       ...formData,
 
@@ -153,16 +154,7 @@ export default function SignInSide() {
 
         addNewUser(user, getAdditionalUserInfo(userCredential).providerId);
         setUserData(user);
-        // setDocument(
-        //   'users',
-        //   {
-        //     displayName: user.displayName,
-        //     email: email,
-        //     uid: user.uid,
-        //     provider: getAdditionalUserInfo(userCredential).providerId,
-        //   },
-        //   user.uid,
-        // );
+
         console.log(user);
       })
       .then(() => {

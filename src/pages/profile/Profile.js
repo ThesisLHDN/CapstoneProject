@@ -1,7 +1,7 @@
 import {useEffect, useState, useContext} from 'react';
 import {AuthContext} from 'src/Context/AuthProvider';
 import {getFirestore} from 'firebase/firestore';
-import useFirestore, {useDoc} from 'src/hooks/useFirestore';
+import {useFirestore} from 'src/hooks/useFirestore';
 import {color} from 'src/style';
 import {Typography, Grid, TextField, Button, Avatar} from '@mui/material';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
@@ -10,12 +10,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import PhoneEnabledOutlinedIcon from '@mui/icons-material/PhoneEnabledOutlined';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 
-import {collection, onSnapshot} from 'firebase/firestore';
-import {db} from 'src/firebase/config';
-
 function Profile() {
-  const [userData, setUserData] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
 
   const {
     user: {displayName, email, photoURL, uid},
@@ -31,25 +26,6 @@ function Profile() {
   console.log(user);
 
   console.log('usedoc', user);
-
-  // useEffect(() => {
-  //   onSnapshot(collection(db, 'users'), (snapshot) => {
-  //     const data = snapshot.docs.map((doc) => ({...doc.data(), id: doc.id}));
-  //     // console.log(data);
-  //     setUserData(data[0]);
-  //   });
-  //   setIsLoading(false);
-  // }, []);
-
-  // useEffect(() => {
-  //   const unsubscribe = onSnapshot(collection(db, 'users'), (snapshot) => {
-  //     const data = snapshot.docs.map((doc) => ({...doc.data(), id: doc.id}));
-  //     setUserData(data[0]);
-  //   });
-  //   setIsLoading(false);
-
-  //   return unsubscribe;
-  // }, []);
 
   return (
     <div>

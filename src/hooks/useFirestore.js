@@ -4,7 +4,6 @@ import {
   query,
   orderBy,
   where,
-  limit,
   doc,
   onSnapshot,
   getDoc,
@@ -30,13 +29,10 @@ const useFirestore = (collectionName, condition = {}) => {
         );
       }
     }
-    const unsubscribe = onSnapshot(
-      q,
-      (snapshot) => {
-        const data = snapshot.docs.map((doc) => ({...doc.data(), id: doc.id}));
-        setDocuments(data);
-      },
-    );
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const data = snapshot.docs.map((doc) => ({...doc.data(), id: doc.id}));
+      setDocuments(data);
+    });
     return unsubscribe;
   }, []);
 
@@ -44,21 +40,18 @@ const useFirestore = (collectionName, condition = {}) => {
   return documents;
 };
 
-// export const useDoc = async (collectionName, id) => {
-//   // const [documents, setDocuments] = useState([]);
-//   console.log('useDocCall', collectionName, id);
+const useFirestoreDoc = (collectionPath, id) => {
+  const [document, setDocument] = useState({});
 
-//   const docRef = doc(db, collectionName, id);
-//   const docSnap = await getDoc(docRef);
+  useEffect(() => {
+    const unsubscribe = onSnapshot(doc(db, collectionPath, id), (doc) => {
+      setDocument({docId: doc.id, docData: doc.data()});
+    });
+    return unsubscribe;
+  }, []);
 
-//   if (docSnap.exists()) {
-//     console.log('Document data:', docSnap.data());
-//   } else {
-//     // doc.data() will be undefined in this case
-//     console.log('No such document!');
-//   }
+  console.log('Returned doc', document);
+  return document;
+};
 
-//   return docSnap;
-// };
-
-export default useFirestore;
+export {useFirestore, useFirestoreDoc};

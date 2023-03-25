@@ -1,70 +1,85 @@
-import { useState } from "react";
-import { Avatar, Button } from "@mui/material";
+import {useState} from 'react';
+import {Avatar, Button} from '@mui/material';
 
-const CommentForm = ({ isAvatar=true, initialText="", handleSubmit, handleCancel }) => {
+const CommentForm = ({
+  isAvatar = true,
+  initialText = '',
+  handleSubmit,
+  handleCancel,
+}) => {
   const [text, setText] = useState(initialText);
+  const [displayCancel, setDisplayCancel] = useState(false);
   const isTextareaDisabled = text.length === 0;
 
   const onSubmit = (event) => {
     event.preventDefault();
     handleSubmit(text);
-    setText("");
+    setText('');
   };
 
   const onCancel = (event) => {
-    setText("");
+    setText('');
+    setDisplayCancel(false);
     handleCancel();
-  }
+  };
 
   return (
-    <form >
+    <form>
       <div className="flex">
         {isAvatar ? (
           <Avatar
             src="X"
-            sx={{ width: 40, height: 40, backgroundColor: "#8993A4",  }}
+            sx={{width: 40, height: 40, backgroundColor: '#8993A4'}}
             alt="Lam Nguyen"
           />
-        ) : <></>}
-        
+        ) : (
+          <></>
+        )}
 
         <textarea
-          className={`w-full h-10 p-2 border-solid border-1 border-color text-sm ${isAvatar ? 'ml-2' : 'mt-2'}`}
+          className={`w-full h-10 p-2 border-solid border-1 border-color text-sm ${
+            isAvatar ? 'ml-2' : 'mt-2'
+          }`}
           value={text}
-          onChange={(e) => setText(e.target.value)}
+          onChange={(e) => {
+            setText(e.target.value);
+            setDisplayCancel(true);
+          }}
           placeholder="Add a comment..."
           rows={20}
         />
       </div>
-      
+
       <div className={`${isAvatar ? 'ml-12' : ''} mt-2`}>
         <Button
           variant="contained"
           onClick={isTextareaDisabled ? null : onSubmit}
           sx={{
-            textTransform: "none",
+            textTransform: 'none',
             height: 36,
             fontWeight: 700,
-            backgroundColor: "green",
-            '&:hover': { backgroundColor: "#42A100"}
+            backgroundColor: 'green',
+            '&:hover': {backgroundColor: '#42A100'},
           }}
         >
           Save
         </Button>
-        <Button
-          variant="text"
-          onClick={onCancel}
-          sx={{
-            textTransform: "none",
-            marginLeft: 1,
-            height: 36,
-            fontWeight: 700,
-            color: "#42526E",
-            padding: "8px 16px"
-          }}
-        >
-          Cancel
-        </Button>
+        {displayCancel && (
+          <Button
+            variant="text"
+            onClick={onCancel}
+            sx={{
+              textTransform: 'none',
+              marginLeft: 1,
+              height: 36,
+              fontWeight: 700,
+              color: '#42526E',
+              padding: '8px 16px',
+            }}
+          >
+            Cancel
+          </Button>
+        )}
       </div>
     </form>
   );

@@ -1,32 +1,18 @@
 import React from 'react';
 import {
-  Typography,
   Box,
   Button,
-  Grid,
-  Breadcrumbs,
-  Link,
   IconButton,
   Paper,
   MenuList,
   MenuItem,
-  Popper,
   ClickAwayListener,
   Snackbar,
   Alert,
 } from '@mui/material';
-import Sort from 'src/components/Sort';
-import SearchBar from 'src/components/search';
-import CreatePopup from 'src/components/popup/Create';
 
-import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-// import SortRoundedIcon from "@mui/icons-material/SortRounded"
+import CreatePopup from 'src/components/popup/Create';
 import AddIcon from '@mui/icons-material/Add';
-import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRightOutlined';
-import FolderOutlinedIcon from '@mui/icons-material/FolderOutlined';
-import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
-import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
-import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import CreateNewFolderRoundedIcon from '@mui/icons-material/CreateNewFolderRounded';
 import NoteAddRoundedIcon from '@mui/icons-material/NoteAddRounded';
 import CloseIcon from '@mui/icons-material/Close';
@@ -64,17 +50,12 @@ function AddItem() {
               setOpenSnackbar(true);
             }
             console.log(downloadURL);
-            // }
           });
         },
       );
     }
     return;
   };
-
-  // function handleClickAway() {
-  //   setOpenMenu(false);
-  // }
 
   const [openMenu, setOpenMenu] = useState(false);
 
@@ -178,7 +159,7 @@ function AddItem() {
           severity="success"
           sx={{width: '100%'}}
         >
-          This is a success message!
+          Upload file successfully
         </Alert>
       </Snackbar>
     </>

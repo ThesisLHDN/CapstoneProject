@@ -3,7 +3,6 @@ import firebase from '../firebase';
 const storage = firebase.storage();
 const firestore = firebase.firestore();
 
-
 function ImageUpload() {
   const [image, setImage] = useState(null); // state for storing image file
   const [url, setUrl] = useState(''); // state for storing image url
@@ -20,18 +19,15 @@ function ImageUpload() {
     uploadTask.on(
       'state_changed',
       (snapshot) => {
-        // progress function ...
         const progress = Math.round(
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100,
         );
         console.log('upload is ' + progress + '% done');
       },
       (error) => {
-        // error function ...
         console.log(error);
       },
       () => {
-        // complete function ...
         storage
           .ref('images')
           .child(image.name)

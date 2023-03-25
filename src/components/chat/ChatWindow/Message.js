@@ -20,8 +20,6 @@ function Message({ mine, children }) {
       break;
     // ! must check for year diff
   }
-  // if (differenceInDays(time, new Date())==0) {dateDisplay =}
-  // console.log(differenceInDays(new Date(), time));
   return (
     <Box
       sx={{
