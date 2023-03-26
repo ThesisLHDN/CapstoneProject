@@ -29,14 +29,14 @@ const useFirestore = (collectionName, condition = {}) => {
         );
       }
     }
-    const unsubscribe = onSnapshot(q, (snapshot) => {
+    const unsubscribe = onSnapshot(query(q, orderBy('createdAt','desc')), (snapshot) => {
       const data = snapshot.docs.map((doc) => ({...doc.data(), id: doc.id}));
       setDocuments(data);
     });
     return unsubscribe;
   }, []);
 
-  console.log('return documents', documents);
+  // console.log('return documents', documents);
   return documents;
 };
 
@@ -53,5 +53,37 @@ const useFirestoreDoc = (collectionPath, id) => {
   console.log('Returned doc', document);
   return document;
 };
+
+// const useFirestoreComment = (issueId) => {
+//   const [documents, setDocuments] = useState({});
+
+//   useEffect(() => {
+//     const unsubscribe = onSnapshot(
+//       collection(db, 'issues', issueId, 'comments'),
+//       (snapshot) => {
+//         for (doc of snapshot.docs) {
+//           const unsubscribe = onSnapshot(
+//             collection(db, 'issues', issueId, 'comments', doc.id, 'replies'),
+//             (doc) => {
+//               const data = snapshot.docs.map((doc) => ({
+//                 ...doc.data(),
+//                 id: doc.id,
+//               }));
+//             },
+//           );
+//         }
+//         // const comments = snapshot.docs.map((doc) => ({
+//         //   ...doc.data(),
+//         //   id: doc.id,
+//         // }));
+//         // setDocuments(comments);
+//       },
+//     );
+//     return unsubscribe;
+//   }, []);
+
+//   console.log('Returned doc', document);
+//   return document;
+// };
 
 export {useFirestore, useFirestoreDoc};

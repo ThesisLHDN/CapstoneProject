@@ -2,13 +2,14 @@ import {useState} from 'react';
 import {Avatar, Button} from '@mui/material';
 
 const CommentForm = ({
+  currentUser,
   isAvatar = true,
   initialText = '',
   handleSubmit,
   handleCancel,
 }) => {
   const [text, setText] = useState(initialText);
-  const [displayCancel, setDisplayCancel] = useState(false);
+  const [displayBtns, setDisplayBtns] = useState(true);
   const isTextareaDisabled = text.length === 0;
 
   const onSubmit = (event) => {
@@ -19,8 +20,8 @@ const CommentForm = ({
 
   const onCancel = (event) => {
     setText('');
-    setDisplayCancel(false);
-    handleCancel();
+    setDisplayBtns(false);
+    // handleCancel();
   };
 
   return (
@@ -28,14 +29,13 @@ const CommentForm = ({
       <div className="flex">
         {isAvatar ? (
           <Avatar
-            src="X"
+            src={currentUser.photoURL}
             sx={{width: 40, height: 40, backgroundColor: '#8993A4'}}
-            alt="Lam Nguyen"
+            alt={currentUser.displayName}
           />
         ) : (
           <></>
         )}
-
         <textarea
           className={`w-full h-10 p-2 border-solid border-1 border-color text-sm ${
             isAvatar ? 'ml-2' : 'mt-2'
@@ -43,28 +43,29 @@ const CommentForm = ({
           value={text}
           onChange={(e) => {
             setText(e.target.value);
-            setDisplayCancel(true);
+            setDisplayBtns(true);
           }}
           placeholder="Add a comment..."
           rows={20}
         />
       </div>
 
-      <div className={`${isAvatar ? 'ml-12' : ''} mt-2`}>
-        <Button
-          variant="contained"
-          onClick={isTextareaDisabled ? null : onSubmit}
-          sx={{
-            textTransform: 'none',
-            height: 36,
-            fontWeight: 700,
-            backgroundColor: 'green',
-            '&:hover': {backgroundColor: '#42A100'},
-          }}
-        >
-          Save
-        </Button>
-        {displayCancel && (
+      {displayBtns && (
+        <div className={`${isAvatar ? 'ml-12' : ''} mt-2`}>
+          <Button
+            variant="contained"
+            onClick={isTextareaDisabled ? null : onSubmit}
+            sx={{
+              textTransform: 'none',
+              height: 36,
+              fontWeight: 700,
+              backgroundColor: 'green',
+              '&:hover': {backgroundColor: '#42A100'},
+            }}
+          >
+            Save
+          </Button>
+
           <Button
             variant="text"
             onClick={onCancel}
@@ -79,8 +80,8 @@ const CommentForm = ({
           >
             Cancel
           </Button>
-        )}
-      </div>
+        </div>
+      )}
     </form>
   );
 };

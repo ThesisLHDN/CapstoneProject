@@ -1,9 +1,14 @@
-import {useState, useContext} from 'react';
+import {useState} from 'react';
 import CommentForm from './CommentForm';
 import Comment from './Comment';
 
-import {useFirestore, useFirestoreDoc} from 'src/hooks/useFirestore';
-import {AuthContext} from 'src/Context/AuthProvider';
+import {useFirestore} from 'src/hooks/useFirestore';
+import {
+  addDocument,
+  setDocument,
+  deleteDocument,
+  updateDocument,
+} from 'src/firebase/services';
 
 import {Button} from '@mui/material';
 // const comments = [
@@ -41,8 +46,11 @@ import {Button} from '@mui/material';
 //   },
 // ];
 
-const Comments = ({currentUserId, issueId}) => {
-  const comments = useFirestore('issues/' + issueId + '/comments');
+const Comments = ({currentUser, issueId}) => {
+  const refPath = 'issues/' + issueId + '/comments';
+  const currentUserId = currentUser.uid;
+  const comments = useFirestore(refPath);
+  // console.log(comments);
 
   const [backendComments, setBackendComments] = useState(comments);
   const [activeComment, setActiveComment] = useState(null);
@@ -58,50 +66,57 @@ const Comments = ({currentUserId, issueId}) => {
   //         new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
   //     );
 
-  const addComment = (text, parentId) => {
-    const createComment = async (text, parentId = null) => {
-      return {
-        body: text,
-        parentId,
-        userId: currentUserId,
-        username: 'John',
-        createdAt: new Date().toISOString(),
-      };
+  // const addCommentHandler = (text) => {};
+  const addComment = (content, parentId = null) => {
+    // TODO
+    // console.log(issueId, content, parentId);
+    const commentContent = {
+      authorId: currentUser.uid,
+      authorAvatar: currentUser.photoURL,
+      authorName: currentUser.displayName,
+      //todo check content la kieu gi
+      ...content,
     };
-    createComment(text, parentId).then((comment) => {
-      setBackendComments([comment, ...backendComments]);
-      setActiveComment(null);
-    });
+    let path = refPath;
+    if (parentId) path = path + '/' + parentId + '/replies';
+    // console.log(path);
+
+    addDocument(path, commentContent);
+    setActiveComment(null);
   };
 
-  const updateComment = (text, commentId) => {
-    const updateComment = async (text) => {
-      return {text};
-    };
-    updateComment(text).then(() => {
-      const updatedBackendComments = backendComments.map((backendComment) => {
-        if (backendComment.id === commentId) {
-          return {...backendComment, body: text};
-        }
-        return backendComment;
-      });
-      setBackendComments(updatedBackendComments);
-      setActiveComment(null);
-    });
+  const updateComment = (text, commentId, parentId = false) => {
+    let path = refPath;
+    if (parentId) {
+      path = refPath + '/' + parentId + '/replies/';
+    }
+    console.log(path, text, commentId, parentId);
+    updateDocument(path, {body: text}, commentId);
+
+    // TODO Update comment to Firestore using setDocument
+    // const updateComment = async (text) => {
+    //   return {text};
+    // };
+    // updateComment(text).then(() => {
+    //   const updatedBackendComments = backendComments.map((backendComment) => {
+    //     if (backendComment.id === commentId) {
+    //       return {...backendComment, body: text};
+    //     }
+    //     return backendComment;
+    //   });
+    //   setBackendComments(updatedBackendComments);
+    setActiveComment(null);
+    // });
   };
 
-  const deleteComment = (commentId) => {
-    const deleteComment = async () => {
-      return {};
-    };
-    // if (window.confirm("Are you sure you want to remove comment?"))
-    {
-      deleteComment().then(() => {
-        const updatedBackendComments = backendComments.filter(
-          (backendComment) => backendComment.id !== commentId,
-        );
-        setBackendComments(updatedBackendComments);
-      });
+  const deleteComment = (thisId, parentId = null) => {
+    // TODO
+    let path = refPath;
+    if (parentId) path = path + '/' + parentId + '/replies/';
+    // console.log(parentId, thisId, path);
+
+    if (window.confirm('Are you sure you want to remove comment?')) {
+      deleteDocument(path, thisId);
     }
   };
 
@@ -168,10 +183,15 @@ const Comments = ({currentUserId, issueId}) => {
 
       {activeCommentBtn ? (
         <div>
-          <CommentForm handleSubmit={addComment} />
+          <CommentForm
+            currentUser={currentUser}
+            handleSubmit={(text) => addComment({body: text, type: 'text'})}
+          />
           <div className="mt-8">
             {comments.map((comment) => (
               <Comment
+                issueId={issueId}
+                currentUser={currentUser}
                 id={comment.id}
                 key={comment.id}
                 comment={comment}

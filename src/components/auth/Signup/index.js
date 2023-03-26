@@ -51,7 +51,6 @@ export default function SignInSide() {
         provider,
       },
       user.uid,
-      'create',
     ).then(() => {
       addDocument('workspaces', {
         name: user.displayName + "'s workspace",

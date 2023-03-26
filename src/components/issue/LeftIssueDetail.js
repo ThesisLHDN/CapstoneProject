@@ -19,7 +19,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import Comments from './comment/Comments';
 import ChildIssues from './ChildIssues';
 
-import {useFirestore, useFirestoreDoc} from 'src/hooks/useFirestore';
+// import {useFirestore, useFirestoreDoc} from 'src/hooks/useFirestore';
 
 import {AuthContext} from 'src/Context/AuthProvider';
 
@@ -47,9 +47,7 @@ const tasks = [
 ];
 
 function LeftIssueDetail() {
-  const {
-    user: {uid},
-  } = useContext(AuthContext);
+  const user = useContext(AuthContext);
 
   // const sampleIssueId = 'xr51hoP9uZHlzUXqTpPH';
   // const issueDetail = useFirestoreDoc('issues', sampleIssueId);
@@ -73,7 +71,7 @@ function LeftIssueDetail() {
   };
 
   const handleChildIssue = () => {
-    if (tasks.length == 0) {
+    if (tasks.length === 0) {
       setChildIssue(true);
     }
     setCreateChild(true);
@@ -99,16 +97,16 @@ function LeftIssueDetail() {
             height: 34,
             borderRadius: 3,
             backgroundColor: `${
-              status == 'Done'
+              status === 'Done'
                 ? '#A4E7AB'
-                : status == 'In progress'
+                : status === 'In progress'
                 ? '#9AD1EF'
                 : '#EDCBB9'
             }`,
             color: `${
-              status == 'Done'
+              status === 'Done'
                 ? '#009606'
-                : status == 'In progress'
+                : status === 'In progress'
                 ? '#006BA7'
                 : '#EC6F28'
             }`,
@@ -126,7 +124,7 @@ function LeftIssueDetail() {
               sx={{
                 backgroundColor: 'white',
                 borderRadius: 1,
-                right: status == 'In progress' ? -60 : -80,
+                right: status === 'In progress' ? -60 : -80,
                 marginTop: '5px',
                 border: 'solid 1px #ECEDF0',
                 boxShadow: '2px 2px 5px #00000020',
@@ -139,7 +137,7 @@ function LeftIssueDetail() {
               <MenuList sx={{px: 0, width: '100%'}}>
                 {['To do', 'In progress', 'Done']
                   .filter((element) => {
-                    return element != status;
+                    return element !== status;
                   })
                   .map((element) => {
                     return (
@@ -272,7 +270,7 @@ function LeftIssueDetail() {
       <Typography sx={{marginTop: 3, fontSize: 16, fontWeight: 700}}>
         Activity
       </Typography>
-      <Comments currentUserId={uid} issueId="xr51hoP9uZHlzUXqTpPH" />
+      <Comments currentUser={user.user} issueId="xr51hoP9uZHlzUXqTpPH" />
     </div>
   );
 }
