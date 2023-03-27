@@ -1,5 +1,3 @@
-// import React from 'react'
-
 function convertDate(d) {
   const date = new Date(d)
   return date.getDate() + " " + date.toLocaleString('en-us', { month: 'short' })

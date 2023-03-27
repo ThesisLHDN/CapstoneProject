@@ -40,7 +40,7 @@ const setDocument = async (collectionPath, data, id) => {
   }
 };
 
-const updateDocument = async (collectionPath, data, id) => {
+const updateDocument = async (collectionPath, id, data) => {
   try {
     const docData = {
       ...data,

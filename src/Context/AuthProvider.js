@@ -6,7 +6,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 export const AuthContext = React.createContext();
 
 function AuthProvider({children}) {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const paths = useLocation();
   // console.log(paths.pathname);
@@ -40,7 +40,7 @@ function AuthProvider({children}) {
   }, [history]);
 
   return (
-    <AuthContext.Provider value={{user}}>
+    <AuthContext.Provider value={user}>
       {/* {children} */}
       {isLoading ? (
         <CircularProgress

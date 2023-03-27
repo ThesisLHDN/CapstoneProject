@@ -4,7 +4,7 @@ import moment from 'moment/moment';
 import {Avatar} from '@mui/material';
 import {useFirestore} from 'src/hooks/useFirestore';
 
-import {addDocument, setDocument} from 'src/firebase/services';
+// import {addDocument, setDocument} from 'src/firebase/services';
 
 const Comment = ({
   issueId,
@@ -40,9 +40,12 @@ const Comment = ({
   const canReply = Boolean(currentUserId) && !subcomment;
   // const replyId = parentId ? parentId : id;
 
-  // const start = moment(comment.createdAt.toDate());
-  // const timepassed = moment(start, 'MM/DD/YYYY').fromNow();
-  const timepassed = '';
+  var timepassed = '';
+  if (comment.createdAt) {
+    const start = moment(comment.createdAt.toDate());
+    timepassed = moment(start, 'MM/DD/YYYY').fromNow();
+  }
+  // const timepassed = '';
 
   const addCommentHandler = (text) => {
     const commentData = {

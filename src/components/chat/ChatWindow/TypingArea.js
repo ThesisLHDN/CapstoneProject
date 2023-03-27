@@ -1,4 +1,4 @@
-import React from 'react';
+import {useState} from 'react';
 
 import {
   InputAdornment,
@@ -11,17 +11,38 @@ import {
 import PhotoRoundedIcon from '@mui/icons-material/PhotoRounded';
 import SmartDisplayRoundedIcon from '@mui/icons-material/SmartDisplayRounded';
 import InsertDriveFileRoundedIcon from '@mui/icons-material/InsertDriveFileRounded';
-import SendRoundedIcon from '@mui/icons-material/Send';
+// import SendRoundedIcon from '@mui/icons-material/Send';
 
 import {colorHover} from 'src/style';
+import {addDocument, updateDocument} from 'src/firebase/services';
 
-function TypingArea() {
+function TypingArea({currentUser, roomId}) {
+  const [message, setMessage] = useState('');
+  const handleChange = (e) => {
+    setMessage(e.target.value);
+  };
+
+  const handleOnSubmit = () => {
+    if (message.length) {
+      const messageData = {
+        authorId: currentUser.uid,
+        body: message,
+        type: 'text',
+      };
+      const path = `rooms/${roomId}/messages`;
+      addDocument(path, messageData);
+      updateDocument('rooms', roomId, {lastMessage: messageData});
+      setMessage('');
+    }
+  };
   return (
     <>
       <Divider variant="middle" sx={{mb: 2, borderBottom: 2}}></Divider>
       <Grid container spacing={2} sx={{bottom: '0px', width: '100%'}}>
         <Grid item xs={10}>
           <TextField
+            value={message}
+            onChange={handleChange}
             size="small"
             placeholder="Aa"
             sx={{width: '100%'}}
@@ -70,7 +91,8 @@ function TypingArea() {
           <Button
             variant="contained"
             sx={{width: '100%', height: '100%', ...colorHover.greenBtn}}
-            endIcon={<SendRoundedIcon />}
+            onClick={handleOnSubmit}
+            // endIcon={<SendRoundedIcon />}
           >
             Send
           </Button>

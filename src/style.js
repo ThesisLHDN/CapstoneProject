@@ -10,6 +10,8 @@ const color = {
 const colorHover = {
   greenBtn: {
     backgroundColor: '#00980F',
+    color: 'white',
+    textTransform: 'none',
     '&:hover': {backgroundColor: '#00a922'},
   },
   greenIconBtn: {

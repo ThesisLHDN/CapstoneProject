@@ -1,5 +1,5 @@
 import './App.css';
-import {useState} from 'react';
+import {useContext, useState} from 'react';
 import {Routes, Route, useLocation} from 'react-router-dom';
 
 // import {Box, Grid, Badge, IconButton, Modal} from '@mui/material';
@@ -25,52 +25,52 @@ import ProjectSetting from './pages/project-setting/ProjectSetting';
 import WorkspaceSetting from './pages/workspace-setting/WorkspaceSetting';
 
 import AuthProvider from 'src/Context/AuthProvider';
+import AppProvider from './Context/AppProvider';
 
 function App() {
-  const params = useLocation();
-  // console.log(params);
-  const [openChat, setOpenChat] = useState(false);
-
   return (
     <AuthProvider>
-      <div className="App">
-        {/* <Layout> */}
-        <Routes>
-          <Route path="/">
-            <Route element={<AuthLayout />}>
-              <Route path="login" element={<Login />}></Route>
-              <Route path="signup" element={<Signup />}></Route>
-              <Route path="forget" element={<ForgetPassword />}></Route>{' '}
+      <AppProvider>
+        <div className="App">
+          {/* <Layout> */}
+          <Routes>
+            <Route path="/">
+              <Route element={<AuthLayout />}>
+                <Route path="login" element={<Login />}></Route>
+                <Route path="signup" element={<Signup />}></Route>
+                <Route path="forget" element={<ForgetPassword />}></Route>{' '}
+              </Route>
+              <Route element={<Layout />}>
+                <Route path="" element={<RoadMap />}></Route>
+                <Route
+                  path="project-setting"
+                  element={<ProjectSetting></ProjectSetting>}
+                ></Route>
+                <Route
+                  path="dashboard"
+                  element={<Dashboard></Dashboard>}
+                ></Route>
+                <Route path="board" element={<Board />}></Route>
+                <Route path="roadmap" element={<RoadMap />}></Route>
+                <Route path="backlog" element={<Backlog />} />
+                <Route path="document" element={<Document />} />
+                <Route path="issue" element={<Issue />} />
+                <Route path="profile" element={<Profile />} />
+              </Route>
+              <Route element={<Layout wp />}>
+                <Route
+                  path="workspace-setting"
+                  element={<WorkspaceSetting></WorkspaceSetting>}
+                ></Route>
+                <Route
+                  path="abc"
+                  element={<WorkspaceSetting></WorkspaceSetting>}
+                ></Route>
+              </Route>
             </Route>
-            <Route element={<Layout />}>
-              <Route path="" element={<RoadMap />}></Route>
-              <Route
-                path="project-setting"
-                element={<ProjectSetting></ProjectSetting>}
-              ></Route>
-              <Route path="dashboard" element={<Dashboard></Dashboard>}></Route>
-              <Route path="board" element={<Board />}></Route>
-              <Route path="roadmap" element={<RoadMap />}></Route>
-              <Route path="backlog" element={<Backlog />} />
-              <Route path="document" element={<Document />} />
-              <Route path="issue" element={<Issue />} />
-              <Route path="profile" element={<Profile />} />
-            </Route>
-            <Route element={<Layout wp />}>
-              <Route
-                path="workspace-setting"
-                element={<WorkspaceSetting></WorkspaceSetting>}
-              ></Route>
-              <Route
-                path="abc"
-                element={<WorkspaceSetting></WorkspaceSetting>}
-              ></Route>
-            </Route>
-          </Route>
-        </Routes>
-        {/* </Layout> */}
-        {/* <ChatButton /> */}
-      </div>
+          </Routes>
+        </div>
+      </AppProvider>
     </AuthProvider>
   );
 }

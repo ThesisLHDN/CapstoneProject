@@ -6,7 +6,6 @@ import {
   where,
   doc,
   onSnapshot,
-  getDoc,
   collection,
 } from 'firebase/firestore';
 
@@ -15,7 +14,6 @@ const useFirestore = (collectionName, condition = {}) => {
 
   useEffect(() => {
     const collectionRef = collection(db, collectionName);
-    // let q = query(collectionRef, orderBy('createAt'));
     let q = query(collectionRef);
     if (condition) {
       if (condition.compareValue && condition.compareValue.length) {
@@ -29,14 +27,16 @@ const useFirestore = (collectionName, condition = {}) => {
         );
       }
     }
-    const unsubscribe = onSnapshot(query(q, orderBy('createdAt','desc')), (snapshot) => {
-      const data = snapshot.docs.map((doc) => ({...doc.data(), id: doc.id}));
-      setDocuments(data);
-    });
+    const unsubscribe = onSnapshot(
+      query(q, orderBy('createdAt', 'desc')),
+      (snapshot) => {
+        const data = snapshot.docs.map((doc) => ({...doc.data(), id: doc.id}));
+        setDocuments(data);
+      },
+    );
     return unsubscribe;
-  }, []);
-
-  // console.log('return documents', documents);
+  }, [collectionName]);
+  console.log('query results', collectionName, condition, documents);
   return documents;
 };
 
@@ -45,7 +45,7 @@ const useFirestoreDoc = (collectionPath, id) => {
 
   useEffect(() => {
     const unsubscribe = onSnapshot(doc(db, collectionPath, id), (doc) => {
-      setDocument({docId: doc.id, docData: doc.data()});
+      setDocument({id: doc.id, ...doc.data()});
     });
     return unsubscribe;
   }, []);
@@ -53,37 +53,5 @@ const useFirestoreDoc = (collectionPath, id) => {
   console.log('Returned doc', document);
   return document;
 };
-
-// const useFirestoreComment = (issueId) => {
-//   const [documents, setDocuments] = useState({});
-
-//   useEffect(() => {
-//     const unsubscribe = onSnapshot(
-//       collection(db, 'issues', issueId, 'comments'),
-//       (snapshot) => {
-//         for (doc of snapshot.docs) {
-//           const unsubscribe = onSnapshot(
-//             collection(db, 'issues', issueId, 'comments', doc.id, 'replies'),
-//             (doc) => {
-//               const data = snapshot.docs.map((doc) => ({
-//                 ...doc.data(),
-//                 id: doc.id,
-//               }));
-//             },
-//           );
-//         }
-//         // const comments = snapshot.docs.map((doc) => ({
-//         //   ...doc.data(),
-//         //   id: doc.id,
-//         // }));
-//         // setDocuments(comments);
-//       },
-//     );
-//     return unsubscribe;
-//   }, []);
-
-//   console.log('Returned doc', document);
-//   return document;
-// };
 
 export {useFirestore, useFirestoreDoc};

@@ -126,12 +126,12 @@ export default function SignInSide() {
     });
   };
 
-  const createFirstWorkspace = (displayName, id) => {
-    addDocument('workspaces', {
-      name: displayName + "'s workspace",
-      adminId: id,
-    });
-  };
+  // const createFirstWorkspace = (displayName, id) => {
+  //   addDocument('workspaces', {
+  //     name: displayName + "'s workspace",
+  //     adminId: id,
+  //   });
+  // };
 
   const signUpHandler = (event) => {
     event.preventDefault();

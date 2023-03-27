@@ -21,7 +21,7 @@ const CommentForm = ({
   const onCancel = (event) => {
     setText('');
     setDisplayBtns(false);
-    // handleCancel();
+    handleCancel();
   };
 
   return (

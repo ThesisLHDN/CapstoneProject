@@ -49,6 +49,8 @@ const tasks = [
 function LeftIssueDetail() {
   const user = useContext(AuthContext);
 
+
+
   // const sampleIssueId = 'xr51hoP9uZHlzUXqTpPH';
   // const issueDetail = useFirestoreDoc('issues', sampleIssueId);
   // const comments = useFirestore('issues/' + sampleIssueId + '/comments');
@@ -270,7 +272,7 @@ function LeftIssueDetail() {
       <Typography sx={{marginTop: 3, fontSize: 16, fontWeight: 700}}>
         Activity
       </Typography>
-      <Comments currentUser={user.user} issueId="xr51hoP9uZHlzUXqTpPH" />
+      <Comments currentUser={user} issueId="xr51hoP9uZHlzUXqTpPH" />
     </div>
   );
 }

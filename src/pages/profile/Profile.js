@@ -1,7 +1,6 @@
-import {useEffect, useState, useContext} from 'react';
+import {useContext} from 'react';
 import {AuthContext} from 'src/Context/AuthProvider';
-import {getFirestore} from 'firebase/firestore';
-import {useFirestore} from 'src/hooks/useFirestore';
+import {useFirestoreDoc} from 'src/hooks/useFirestore';
 import {color} from 'src/style';
 import {Typography, Grid, TextField, Button, Avatar} from '@mui/material';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
@@ -11,18 +10,16 @@ import PhoneEnabledOutlinedIcon from '@mui/icons-material/PhoneEnabledOutlined';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 
 function Profile() {
+  const {displayName, email, photoURL, uid} = useContext(AuthContext);
+  console.log('uid', uid);
 
-  const {
-    user: {displayName, email, photoURL, uid},
-  } = useContext(AuthContext);
-  console.log('uid',uid)
-
-  const users = useFirestore('users', {
-    fieldName: 'uid',
-    operator: '==',
-    compareValue: uid,
-  });
-  const user = users[0];
+  // const users = useFirestore('users', {
+  //   fieldName: 'uid',
+  //   operator: '==',
+  //   compareValue: uid,
+  // });
+  // const user = users[0];
+  const user = useFirestoreDoc('users', uid);
   console.log(user);
 
   console.log('usedoc', user);
