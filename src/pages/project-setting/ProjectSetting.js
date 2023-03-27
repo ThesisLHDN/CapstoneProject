@@ -188,7 +188,7 @@ function ProjectSetting() {
         Sharing & Permission
       </Typography>
 
-      <Typography
+      {/* <Typography
         sx={{
           marginTop: 2,
           marginLeft: 6,
@@ -227,7 +227,7 @@ function ProjectSetting() {
         }}
       >
         Access
-      </Typography>
+      </Typography> */}
 
       <SearchBar sx={{width: '250px', marginLeft: 6, marginTop: 2}} />
       <MemberList />

@@ -16,7 +16,7 @@ function Profile() {
   const [isLoading, setIsLoading] = useState(true);
 
   const {
-    user: {displayName, email, photoURL},
+    user: {displayName, email, photoURL, phone},
   } = useContext(AuthContext);
 
   useEffect(() => {
@@ -38,7 +38,7 @@ function Profile() {
 
           <Grid container alignItems="center" justifyContent="center">
             <Avatar
-              src={userData.photoURL}
+              src={photoURL}
               sx={{
                 width: '15vw',
                 height: '15vw',
@@ -73,7 +73,7 @@ function Profile() {
 
             <Grid item xs={3.5}>
               <TextField
-                value={userData.displayName}
+                value={displayName}
                 size="small"
                 sx={{width: '100%', backgroundColor: '#ECECEC'}}
               ></TextField>
@@ -104,7 +104,7 @@ function Profile() {
 
             <Grid item xs={3.5}>
               <TextField
-                value={userData.email}
+                value={email}
                 size="small"
                 disabled
                 sx={{
@@ -139,7 +139,7 @@ function Profile() {
 
             <Grid item xs={3.5} alignItems="center" justifyContent="center">
               <TextField
-                defaultValue={userData.phone}
+                defaultValue={phone}
                 size="small"
                 sx={{width: '100%', backgroundColor: '#ECECEC'}}
               ></TextField>

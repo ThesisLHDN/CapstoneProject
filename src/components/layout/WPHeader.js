@@ -26,7 +26,7 @@ import {signOut} from 'firebase/auth';
 import {colorHover} from 'src/style';
 import Notification from '../notification/Notification';
 import CreateWorkspace from 'src/components/popup/CreateWorkspace';
-import {auth} from 'src/firebase/config'
+import {auth} from 'src/firebase/config';
 
 // function LinkTab(props) {
 //   return (
@@ -88,7 +88,7 @@ export default function Header() {
 
       <SearchBar value={value}></SearchBar>
       <Box sx={{display: 'flex', gap: 1, alignItems: 'center'}}>
-        {/* <Button
+        <Button
           variant="contained"
           sx={{
             height: 36,
@@ -96,9 +96,9 @@ export default function Header() {
           }}
           startIcon={<AddIcon />}
         >
-          Create workspace
-        </Button> */}
-        <CreateWorkspace  />
+          <Link to="/create-workspace">Create workspace</Link>
+        </Button>
+        {/* <CreateWorkspace /> */}
         <Notification />
         <div style={{position: 'relative'}}>
           <IconButton onClick={handleClick}>

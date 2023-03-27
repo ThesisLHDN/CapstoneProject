@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import logo from 'src/assets/images/logo.png';
 import {
   Box,
@@ -26,6 +26,9 @@ import {auth} from 'src/firebase/config';
 import {color, colorHover} from 'src/style';
 import Notification from '../notification/Notification';
 import AddMember from 'src/components/popup/Create';
+import {AuthContext} from 'src/Context/AuthProvider';
+import {AppContext} from 'src/Context/AppProvider';
+import axios from 'axios';
 
 // function LinkTab(props) {
 //   return (
@@ -75,6 +78,19 @@ export default function Header() {
 
   const [value, setValue] = useState(0);
   const [openAddMembers, setOpenAddMembers] = useState(false);
+  const [lastWorkspace, setLastWorkspace] = useState('');
+  const {
+    user: {uid},
+  } = useContext(AuthContext);
+
+  const getLastestWorkspace = async () => {
+    try {
+      const res = await axios.get(`http://localhost:8800/lastworkspace/${uid}`);
+      setLastWorkspace(res.data.id);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -109,6 +125,10 @@ export default function Header() {
     // TODO get value
     setOpenAddMembers(false);
   }
+
+  useEffect(() => {
+    getLastestWorkspace();
+  }, []);
 
   return (
     <Paper
@@ -155,7 +175,7 @@ export default function Header() {
         <Tab
           sx={{textTransform: 'none'}}
           label="Workspace Settings"
-          to="/workspace-setting"
+          to={`/workspace-setting/${lastWorkspace}?user=${uid}`}
           component={Link}
         />
         {/* <Tab

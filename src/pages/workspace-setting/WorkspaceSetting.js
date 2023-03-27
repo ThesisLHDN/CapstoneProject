@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import {styled} from '@mui/material/styles';
 import {color, colorHover} from 'src/style';
 
@@ -22,11 +22,16 @@ import {
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import PersonAddAltRoundedIcon from '@mui/icons-material/PersonAddAltRounded';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
 import ProjectTable from 'src/components/project-list/ProjectTable';
 import AvatarList from './AvatarList';
 import Dashboard from 'src/components/Dashboard';
 import CreateProject from 'src/components/popup/CreateProject';
+import axios from 'axios';
+import {Link, useLocation} from 'react-router-dom';
+import useSWR from 'swr';
+import {AppContext} from 'src/Context/AppProvider';
 
 const StyledTypo = styled(Typography)({
   color: color.green03,
@@ -82,6 +87,34 @@ function WorkspaceSetting() {
 
   const [rename, setRename] = useState(false);
   const [changeDescription, setChangeDescription] = useState(false);
+  const {workspace, setWorkspace} = useContext(AppContext);
+
+  const location = useLocation();
+  const wsId = location.pathname.split('/')[2];
+  const fetchWorkspace = async () => {
+    try {
+      const res = await axios.get(`http://localhost:8800/workspace/${wsId}`);
+      setWorkspace(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleRename = (e) => {
+    e.preventDefault();
+    setRename(true);
+    setWorkspace({...workspace, [e.target.name]: [e.target.value]});
+  };
+
+  const handleChangeDescription = (e) => {
+    e.preventDefault();
+    setChangeDescription(true);
+    setWorkspace({...workspace, [e.target.name]: [e.target.value]});
+  };
+
+  useEffect(() => {
+    fetchWorkspace();
+  }, []);
 
   return (
     <div style={{textAlign: 'left'}}>
@@ -102,14 +135,13 @@ function WorkspaceSetting() {
           <StyledAccordionDetails>
             <Grid container spacing={2} sx={{alignItems: 'center'}}>
               <Grid item xs={2}>
-                <Typography sx={{my: 2}}>Rename</Typography>
+                <Typography sx={{my: 2}}>Name:</Typography>
               </Grid>
               <Grid item xs={5}>
                 <TextField
-                  defaultValue="HaiDang's Workspace"
-                  onChange={() => {
-                    setRename(true);
-                  }}
+                  value={workspace.wsname}
+                  name="wsname"
+                  onChange={handleRename}
                   size="small"
                   sx={{
                     width: '100%',
@@ -131,7 +163,7 @@ function WorkspaceSetting() {
               </Grid>
             </Grid>
 
-            <Typography sx={{my: 2}}>Workspace description</Typography>
+            <Typography sx={{my: 2}}>Description:</Typography>
             <TextField
               sx={{
                 width: '100%',
@@ -141,10 +173,11 @@ function WorkspaceSetting() {
                   textAlign: 'justify',
                 },
               }}
-              onChange={() => setChangeDescription(true)}
+              onChange={handleChangeDescription}
+              name="descript"
               multiline
-              rows={4}
-              defaultValue="Lorem ipsum dolor sit amet, consectetio. Ut vestibulum viverra eros, quis laoreet nibh varius sed. In hac hllentesque tempus massa. Suspendisse eu tellus sapien. Donec egestas eu mi consectetur porta. Vivamus mattis magna quis est porttitor egestas. Vestibulum ante ipsum primis in faucibus orciluctus et ultrices posuere cubilia curae; Sed mollis aliquet urna, at finibus ante vulputate non. Vestibulum facilisis pharetra est, sit amet faucibus urna consequat id."
+              rows={2}
+              value={workspace.descript}
             ></TextField>
             {changeDescription && (
               <Button
@@ -174,18 +207,20 @@ function WorkspaceSetting() {
             <StyledTypo>Projects</StyledTypo>{' '}
           </StyledAccordionSummary>
           <StyledAccordionDetails sx={{position: 'relative'}}>
-            {/* <Button
+            <Button
               sx={{
-                // position: 'absolute',
-                // right: 0,
-                // top: '50%',
-                // transform: 'translateY(-50%)',
+                width: '155px',
+                height: '38px',
                 ...colorHover.greenGradBtn,
               }}
+              variant="contained"
+              startIcon={<AddRoundedIcon />}
             >
-              Create project
-            </Button> */}
-            <CreateProject />
+              <Link to="/create-project" state={{background: location}}>
+                Create project
+              </Link>
+            </Button>
+            {/* <CreateProject /> */}
             <ProjectTable />
           </StyledAccordionDetails>
         </StyledAccordion>
@@ -246,7 +281,7 @@ function WorkspaceSetting() {
             <AvatarList />
           </StyledAccordionDetails>
         </StyledAccordion>
-        <StyledAccordion
+        {/* <StyledAccordion
           expanded={expanded === 'panel4'}
           onChange={handleChange('panel4')}
         >
@@ -259,7 +294,7 @@ function WorkspaceSetting() {
           <StyledAccordionDetails>
             <Dashboard />
           </StyledAccordionDetails>
-        </StyledAccordion>
+        </StyledAccordion> */}
       </Box>
     </div>
   );
