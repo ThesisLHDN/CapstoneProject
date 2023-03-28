@@ -24,7 +24,7 @@ const addDocument = async (coll, data) => {
   }
 };
 
-const setDocument = async (collectionPath, data, id) => {
+const setDocument = async (collectionPath, id, data) => {
   try {
     const docData = {
       ...data,

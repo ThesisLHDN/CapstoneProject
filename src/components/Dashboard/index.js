@@ -13,7 +13,7 @@ import {
   BugsData,
   DelayData,
   PerformceData,
-} from '../../components/charts/Data';
+} from 'src/components/charts/Data';
 
 function convertDate(d) {
   const date = new Date(d);

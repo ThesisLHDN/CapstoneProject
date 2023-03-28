@@ -7,13 +7,9 @@ import {
   Breadcrumbs,
   Link,
   IconButton,
-  Paper,
-  MenuList,
-  MenuItem,
 } from '@mui/material';
 import SearchBar from 'src/components/search';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-import AddIcon from '@mui/icons-material/Add';
 import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRightOutlined';
 import FolderOutlinedIcon from '@mui/icons-material/FolderOutlined';
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
@@ -21,9 +17,6 @@ import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import Sort from 'src/components/Sort';
 import AddItem from './AddItem';
-
-import {ref, getDownloadURL, uploadBytesResumable} from 'firebase/storage';
-import {storage} from 'src/firebase/config';
 
 const folders = [
   {
@@ -71,7 +64,6 @@ function convertDate(d) {
 function Document() {
   const [file, setFile] = useState();
 
-  
   const rootDocument = folders
     .concat(files)
     .filter((item) => item.parent === '');

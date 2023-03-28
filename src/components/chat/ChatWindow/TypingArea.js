@@ -14,7 +14,7 @@ import InsertDriveFileRoundedIcon from '@mui/icons-material/InsertDriveFileRound
 // import SendRoundedIcon from '@mui/icons-material/Send';
 
 import {colorHover} from 'src/style';
-import {addDocument, updateDocument} from 'src/firebase/services';
+import {addDocument, updateDocument} from 'src/firebase/firestoreServices';
 
 function TypingArea({currentUser, roomId}) {
   const [message, setMessage] = useState('');

@@ -7,8 +7,7 @@ import {AuthContext} from './AuthProvider';
 export const AppContext = React.createContext();
 
 export default function AppProvider({children}) {
-  const user = useContext(AuthContext);
-  const [isLoading, setIsLoading] = useState(true);
+  const {user: uid} = useContext(AuthContext);
   const [selectedRoomId, setSelectedRoomId] = useState('');
   // console.log('AppProvider', user);
 
@@ -16,9 +15,9 @@ export default function AppProvider({children}) {
     () => ({
       fieldName: 'members',
       operator: 'array-contains',
-      compareValue: user.uid,
+      compareValue: uid,
     }),
-    [user.uid],
+    [uid],
   );
 
   const rooms = useFirestore('rooms', RoomsCondition);

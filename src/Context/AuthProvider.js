@@ -14,7 +14,7 @@ function AuthProvider({children}) {
 
   const history = useNavigate();
   React.useEffect(() => {
-  const unsubscribed = auth.onAuthStateChanged((user) => {
+    const unsubscribed = auth.onAuthStateChanged((user) => {
       if (user) {
         const {displayName, email, uid, photoURL} = user;
         console.log(displayName, email, uid, photoURL);
@@ -40,7 +40,7 @@ function AuthProvider({children}) {
   }, [history]);
 
   return (
-    <AuthContext.Provider value={user}>
+    <AuthContext.Provider value={{user}}>
       {/* {children} */}
       {isLoading ? (
         <CircularProgress

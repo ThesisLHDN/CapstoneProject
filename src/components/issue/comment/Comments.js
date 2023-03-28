@@ -7,7 +7,7 @@ import {
   addDocument,
   deleteDocument,
   updateDocument,
-} from 'src/firebase/services';
+} from 'src/firebase/firestoreServices';
 
 import {Button} from '@mui/material';
 

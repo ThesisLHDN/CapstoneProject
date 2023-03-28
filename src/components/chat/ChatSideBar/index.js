@@ -26,7 +26,7 @@ import PersonAddAltRoundedIcon from '@mui/icons-material/PersonAddAltRounded';
 
 import SearchBar from 'src/components/search';
 import CreationPopup from 'src/components/popup/Create';
-import {addDocument} from 'src/firebase/services';
+import {addDocument} from 'src/firebase/firestoreServices';
 
 import {AppContext} from 'src/Context/AppProvider';
 

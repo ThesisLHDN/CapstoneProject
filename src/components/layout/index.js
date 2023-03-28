@@ -8,7 +8,7 @@ import ChatButton from 'src/components/chat/ChatButton';
 
 import {AuthContext} from 'src/Context/AuthProvider';
 function Layout(props) {
-  const user = useContext(AuthContext);
+  const {user} = useContext(AuthContext);
 
   return (
     <div>

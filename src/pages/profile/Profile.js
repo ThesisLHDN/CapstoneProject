@@ -10,7 +10,9 @@ import PhoneEnabledOutlinedIcon from '@mui/icons-material/PhoneEnabledOutlined';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 
 function Profile() {
-  const {displayName, email, photoURL, uid} = useContext(AuthContext);
+  const {
+    user: {displayName, email, photoURL, uid},
+  } = useContext(AuthContext);
   console.log('uid', uid);
 
   // const users = useFirestore('users', {
@@ -111,7 +113,7 @@ function Profile() {
             </Grid>
           </Grid>
 
-          <Grid
+          {/* <Grid
             container
             alignItems="center"
             justifyContent="center"
@@ -140,7 +142,7 @@ function Profile() {
                 sx={{width: '100%', backgroundColor: '#ECECEC'}}
               ></TextField>
             </Grid>
-          </Grid>
+          </Grid> */}
 
           <Grid
             container

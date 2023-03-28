@@ -47,9 +47,7 @@ const tasks = [
 ];
 
 function LeftIssueDetail() {
-  const user = useContext(AuthContext);
-
-
+  const {user} = useContext(AuthContext);
 
   // const sampleIssueId = 'xr51hoP9uZHlzUXqTpPH';
   // const issueDetail = useFirestoreDoc('issues', sampleIssueId);
