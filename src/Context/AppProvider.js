@@ -7,7 +7,10 @@ import {AuthContext} from './AuthProvider';
 export const AppContext = React.createContext();
 
 export default function AppProvider({children}) {
-  const {user: uid} = useContext(AuthContext);
+  const {
+    user: {uid},
+  } = useContext(AuthContext);
+  console.log('app provider', uid);
   const [selectedRoomId, setSelectedRoomId] = useState('');
   // console.log('AppProvider', user);
 
@@ -19,6 +22,8 @@ export default function AppProvider({children}) {
     }),
     [uid],
   );
+
+  console.log('roomsCondition', RoomsCondition);
 
   const rooms = useFirestore('rooms', RoomsCondition);
 
