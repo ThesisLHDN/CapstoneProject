@@ -57,11 +57,6 @@ const updateDocument = async (collectionPath, id, data) => {
 
 const deleteDocument = async (collectionPath, id = null) => {
   try {
-    // const docRef = await setDoc(doc(db, collectionPath, id), {
-    //   ...data,
-    //   updatedAt: serverTimestamp(),
-    //   ...(type === 'create' && {createdAt: serverTimestamp()}),
-    // });
     const docRef = await deleteDoc(doc(db, collectionPath, id));
 
     console.log('Deleted document with id: ', id);

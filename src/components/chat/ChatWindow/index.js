@@ -81,12 +81,19 @@ const StyledDiv = styled(`div`)({
 function ChatWindow({currentUser}) {
   const [open, setOpen] = useState(false);
   const {selectedRoom, selectedRoomId, roomMembers} = useContext(AppContext);
-
-  const path = useMemo(
-    () => `rooms/${selectedRoom.id}/messages`,
-    [selectedRoom.id],
+  const messagesCondition = useMemo(
+    () => ({
+      fieldName: 'roomId',
+      operator: '==',
+      compareValue: 'ltuDQNnSDBxw6LX3iJpw',
+    }),
+    [],
   );
-  const messages = useFirestore(path);
+
+  const messages = useFirestore('messages', messagesCondition);
+
+  // const path = useMemo(() => `rooms/${selectedRoom.id}/messages`, []);
+  // const messages = useFirestore(path);
   if (messages && roomMembers) {
     var newMess = messages.map((message) => {
       return {
@@ -94,7 +101,6 @@ function ChatWindow({currentUser}) {
         ...message,
       };
     });
-    console.log('newMess', newMess);
   }
 
   const handleClose = () => {
@@ -128,9 +134,6 @@ function ChatWindow({currentUser}) {
           </Box>
         </Box>
         <Box sx={{display: 'flex', gap: 1}}>
-          {/* <Button variant="contained" startIcon={<PersonAddAltRoundedIcon />}>
-            Add Member
-          </Button> */}
           <Box sx={{position: 'relative'}}>
             <IconButton
               sx={{color: color.green03}}
@@ -239,7 +242,7 @@ function ChatWindow({currentUser}) {
           </Message>
         ))}
       </Box>
-      <TypingArea currentUser={currentUser} roomId={selectedRoomId} />
+      <TypingArea currentUser={currentUser} roomId={selectedRoom.id} />
     </Box>
   );
 }

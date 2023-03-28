@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useMemo, useState} from 'react';
 import CommentForm from './CommentForm';
 import Comment from './Comment';
 
@@ -14,8 +14,14 @@ import {Button} from '@mui/material';
 const Comments = ({currentUser, issueId}) => {
   const refPath = 'issues/' + issueId + '/comments';
   const currentUserId = currentUser.uid;
+  const commentsCodition = useMemo(
+    () => ({
+      sort: 'desc',
+    }),
+    [],
+  );
   const comments = useFirestore(refPath);
-  
+
   const [activeComment, setActiveComment] = useState(null);
   const [activeAllBtn, setActiveAllBtn] = useState(false);
   const [activeCommentBtn, setActiveCommentBtn] = useState(true);

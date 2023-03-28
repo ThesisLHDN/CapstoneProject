@@ -30,7 +30,7 @@ import AppProvider from './Context/AppProvider';
 function App() {
   return (
     <AuthProvider>
-      <AppProvider>
+      {/* <AppProvider> */}
         <div className="App">
           {/* <Layout> */}
           <Routes>
@@ -70,7 +70,7 @@ function App() {
             </Route>
           </Routes>
         </div>
-      </AppProvider>
+      {/* </AppProvider> */}
     </AuthProvider>
   );
 }
