@@ -54,18 +54,20 @@ function App() {
               <Route element={<Layout />}>
                 <Route path="" element={<RoadMap />}></Route>
                 <Route
-                  path="project-setting"
+                  path="project-setting/:id"
                   element={<ProjectSetting></ProjectSetting>}
                 ></Route>
                 <Route
-                  path="dashboard"
+                  path="dashboard/:id"
                   element={<Dashboard></Dashboard>}
                 ></Route>
-                <Route path="board" element={<Board />}></Route>
-                <Route path="roadmap" element={<RoadMap />}></Route>
-                <Route path="backlog" element={<Backlog />} />
-                <Route path="document" element={<Document />} />
-                <Route path="issue" element={<Issue />} />
+                <Route path="board/:id" element={<Board />}></Route>
+                <Route path="roadmap/:id" element={<RoadMap />}></Route>
+                <Route path="backlog/:id" element={<Backlog />} />
+                <Route path="document/:id" element={<Document />} />
+                <Route path="issue/:id" element={<Issue />} />
+              </Route>
+              <Route element={<Layout pf />}>
                 <Route path="profile" element={<Profile />} />
               </Route>
               <Route element={<Layout wp />}>

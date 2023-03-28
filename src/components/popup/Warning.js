@@ -14,6 +14,7 @@ function WarningPopup({
   onClose,
   selectedValue,
   open,
+  handleSubmit,
 }) {
   const handleClose = () => {
     onClose(selectedValue);
@@ -83,6 +84,7 @@ function WarningPopup({
               color: 'white',
               '&:hover': {backgroundColor: '#FF2424'},
             }}
+            onClick={handleSubmit}
           >
             {delContent ? delContent : 'Delete'}
           </Button>

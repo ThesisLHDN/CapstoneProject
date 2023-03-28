@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useContext, useState} from 'react';
 import logo from 'src/assets/images/logo.png';
 import {
   Box,
@@ -27,6 +27,7 @@ import {colorHover} from 'src/style';
 import Notification from '../notification/Notification';
 import CreateWorkspace from 'src/components/popup/CreateWorkspace';
 import {auth} from 'src/firebase/config';
+import {AuthContext} from 'src/Context/AuthProvider';
 
 // function LinkTab(props) {
 //   return (
@@ -42,6 +43,9 @@ import {auth} from 'src/firebase/config';
 
 export default function Header() {
   const [value, setValue] = useState(0);
+  const {
+    user: {displayName},
+  } = useContext(AuthContext);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -103,7 +107,7 @@ export default function Header() {
         <div style={{position: 'relative'}}>
           <IconButton onClick={handleClick}>
             <Avatar
-              alt="Remy Sharp"
+              alt={displayName ? displayName : ''}
               src="/static/images/avatar/1.jpg"
               sx={{height: 32, width: 32}}
             />

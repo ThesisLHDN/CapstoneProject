@@ -36,7 +36,7 @@ export default function CreateWorkspace() {
   const [lastWorkspace, setLastWorkspace] = React.useState('');
 
   const date = new Date();
-  date.setUTCHours(17);
+  // date.setUTCHours(17);
 
   const location = useLocation();
   const user = location.search;

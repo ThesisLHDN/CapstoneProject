@@ -29,7 +29,7 @@ function Profile() {
   }, []);
   console.log('user data', userData);
   return (
-    <div>
+    <div style={{marginLeft: '-15vw'}}>
       {!isLoading ? (
         <div>
           <Typography variant="h5" sx={{color: color.green03, fontWeight: 700}}>

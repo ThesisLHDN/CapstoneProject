@@ -83,9 +83,10 @@ export default function ProjectTable() {
   //   setRowsPerPage(+event.target.value);
   //   setPage(0);
   // };
-  const {projects, setProjects} = useContext(AppContext);
+  const {workspace, projects, setProjects} = useContext(AppContext);
+  // console.log(workspace);
   const {
-    user: {displayName},
+    user: {displayName, uid},
   } = useContext(AuthContext);
   const location = useLocation();
   const wsId = location.pathname.split('/')[2];
@@ -93,7 +94,12 @@ export default function ProjectTable() {
 
   const fetchProjects = async () => {
     try {
-      const res = await axios.get(`http://localhost:8800/projects/${wsId}`);
+      const res = await axios.get(
+        `http://localhost:8800/projects/${wsId}?user=${
+          uid == workspace.adminId ? '' : uid
+        }`,
+      );
+      // console.log(res.data);
       setProjects(res.data);
       //return res.data;
     } catch (err) {
@@ -104,6 +110,8 @@ export default function ProjectTable() {
   useEffect(() => {
     fetchProjects();
   }, [wsId, projects]);
+
+  // console.log(projects);
 
   // const {data, error} = useSWR('projects', fetchProjects);
   // if (!data) return <h2>Loading...</h2>;
@@ -134,7 +142,7 @@ export default function ProjectTable() {
               <TableRow
                 key={project.id}
                 component={Link}
-                to={`/roadmap?p=${project.id}`}
+                to={`/roadmap/${project.id}`}
                 hover
               >
                 {/* <TableCell scope="row">
@@ -151,7 +159,7 @@ export default function ProjectTable() {
                 {project.username ? (
                   <TableCell align="center">{project.username}</TableCell>
                 ) : (
-                  <TableCell align="center">{displayName}</TableCell>
+                  <TableCell align="center">{project.email}</TableCell>
                 )}
 
                 {/* <TableCell align="center">

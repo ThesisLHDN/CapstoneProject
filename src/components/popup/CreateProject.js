@@ -45,6 +45,7 @@ function CreateProject() {
 
   const [project, setProject] = useState({
     pname: '',
+    pkey: '',
     createTime: null,
     ownerId: uid,
     workspaceId: workspace.id,
@@ -53,7 +54,7 @@ function CreateProject() {
   const navigate = useNavigate();
 
   const date = new Date();
-  date.setUTCHours(17);
+  // date.setUTCHours(17);
 
   const handleChangeType = (event) => {
     setType(event.target.value);
@@ -161,6 +162,8 @@ function CreateProject() {
               fullWidth
               variant="outlined"
               sx={{width: '50%', fontSize: '14px'}}
+              name="pkey"
+              onChange={handleChange}
             />
           </FormControl>
         </DialogContent>

@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import {AuthContext} from 'src/Context/AuthProvider';
 import {NavLink, useLocation, useNavigate} from 'react-router-dom';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
@@ -11,76 +11,79 @@ import axios from 'axios';
 import useSWR from 'swr';
 import {AppContext} from 'src/Context/AppProvider';
 
-const links = [
-  {
-    name: 'Roadmap',
-    link: '/roadmap',
-    icon: <ViewTimelineOutlinedIcon style={{fontSize: '34px'}} />,
-  },
-  {
-    name: 'Backlog',
-    link: '/backlog',
-    icon: <ViewListOutlinedIcon style={{fontSize: '34px'}} />,
-  },
-  {
-    name: 'Board',
-    link: '/board',
-    icon: <ViewWeekOutlinedIcon style={{fontSize: '34px'}} />,
-  },
-  {
-    name: 'Document',
-    link: '/document',
-    icon: <DescriptionOutlinedIcon style={{fontSize: '34px'}} />,
-  },
-  {
-    name: 'Dashboard',
-    link: '/dashboard',
-    icon: <DashboardOutlinedIcon style={{fontSize: '34px'}} />,
-  },
-  {
-    name: 'Project Settings',
-    link: '/project-setting',
-    icon: <SettingsOutlinedIcon style={{fontSize: '34px'}} />,
-  },
-];
-
-// const sampleWP = [
-//   {
-//     name: "Hai Dang's Workspace",
-//     link: '/workspace-setting',
-//   },
-//   {
-//     name: "Lam Nguyen's Workspaces of ABC",
-//     link: '/abc',
-//   },
-// ]
-
 function SideBar(props) {
+  const location = useLocation();
+  const user = location.search;
+  const pId = location.pathname.split('/')[2];
+  const links = [
+    {
+      name: 'Roadmap',
+      link: '/roadmap/' + pId,
+      icon: <ViewTimelineOutlinedIcon style={{fontSize: '34px'}} />,
+    },
+    {
+      name: 'Backlog',
+      link: '/backlog/' + pId,
+      icon: <ViewListOutlinedIcon style={{fontSize: '34px'}} />,
+    },
+    {
+      name: 'Board',
+      link: '/board/' + pId,
+      icon: <ViewWeekOutlinedIcon style={{fontSize: '34px'}} />,
+    },
+    {
+      name: 'Document',
+      link: '/document/' + pId,
+      icon: <DescriptionOutlinedIcon style={{fontSize: '34px'}} />,
+    },
+    {
+      name: 'Dashboard',
+      link: '/dashboard/' + pId,
+      icon: <DashboardOutlinedIcon style={{fontSize: '34px'}} />,
+    },
+    {
+      name: 'Project Settings',
+      link: '/project-setting/' + pId,
+      icon: <SettingsOutlinedIcon style={{fontSize: '34px'}} />,
+    },
+  ];
   const [isActive, setIsActive] = useState(false);
   const [workspaces, setWorkspaces] = useState([]);
-  const {workspace, setWorkspace} = useContext(AppContext);
+  const {workspace, setWorkspace, project, setProject} = useContext(AppContext);
+  const [char, setChar] = useState('');
 
   const {
     user: {uid},
   } = useContext(AuthContext);
 
-  const navigate = useNavigate();
-  const location = useLocation();
-  const user = location.search;
-  // const wsId = location.pathname.split('/')[2];
-
   const fetchWorkspaceData = async () => {
     try {
       const res = await axios.get(`http://localhost:8800/workspaces${user}`);
+      setWorkspaces(res.data);
       // console.log(res.data);
-      return res.data;
+      // return res.data;
     } catch (err) {
       console.log(err);
     }
   };
 
-  const {data, error} = useSWR('workspaces', fetchWorkspaceData);
-  if (!data) return <h2>Loading...</h2>;
+  const fetchProjectData = async () => {
+    try {
+      const res = await axios.get(`http://localhost:8800/project/${pId}`);
+      setProject(res.data);
+      setChar(res.data.pname.charAt(0));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchProjectData();
+    fetchWorkspaceData();
+  }, [location.pathname]);
+
+  // const {data, error} = useSWR('workspaces', fetchWorkspaceData);
+  // if (!data) return <h2>Loading...</h2>;
 
   const handleClick = (id) => {
     setIsActive(!isActive);
@@ -109,7 +112,7 @@ function SideBar(props) {
             <p className="mx-6 mt-4 h-0.5 border-0 bg-black font-extrabold shadow-2xl"></p>
           </div>
           <div className="mt-3">
-            {data.map((wp) => (
+            {workspaces.map((wp) => (
               <NavLink
                 to={`/workspace-setting/${wp.id}?user=${uid}`}
                 onClick={() => handleClick(wp.id)}
@@ -139,10 +142,10 @@ function SideBar(props) {
               }}
               className="text-4xl font-extrabold px-3 py-0.5 rounded text-white"
             >
-              F
+              {char.toUpperCase()}
             </p>
             <p className="ml-3 2xl:text-base xl:text-sm py-3 font-semibold text-green-tx overflow-hidden truncate">
-              First Scrum Project
+              {project.pname}
             </p>
           </div>
 

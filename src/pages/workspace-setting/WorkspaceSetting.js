@@ -32,6 +32,7 @@ import axios from 'axios';
 import {Link, useLocation} from 'react-router-dom';
 import useSWR from 'swr';
 import {AppContext} from 'src/Context/AppProvider';
+import {AuthContext} from 'src/Context/AuthProvider';
 
 const StyledTypo = styled(Typography)({
   color: color.green03,
@@ -87,10 +88,15 @@ function WorkspaceSetting() {
 
   const [rename, setRename] = useState(false);
   const [changeDescription, setChangeDescription] = useState(false);
-  const {workspace, setWorkspace} = useContext(AppContext);
+  // const [admin, setAdmin] = useState({});
+  const {
+    user: {uid},
+  } = useContext(AuthContext);
+  const {workspace, setWorkspace, admin, setAdmin} = useContext(AppContext);
 
   const location = useLocation();
   const wsId = location.pathname.split('/')[2];
+
   const fetchWorkspace = async () => {
     try {
       const res = await axios.get(`http://localhost:8800/workspace/${wsId}`);
@@ -100,21 +106,49 @@ function WorkspaceSetting() {
     }
   };
 
+  const fetchAdmin = async () => {
+    try {
+      const res = await axios.get(`http://localhost:8800/admin/${wsId}`);
+      console.log(res.data);
+      setAdmin(res.data);
+      // console.log('AAAAAAAA', res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const handleRename = (e) => {
     e.preventDefault();
     setRename(true);
-    setWorkspace({...workspace, [e.target.name]: [e.target.value]});
+    setWorkspace({...workspace, [e.target.name]: e.target.value});
   };
 
   const handleChangeDescription = (e) => {
     e.preventDefault();
     setChangeDescription(true);
-    setWorkspace({...workspace, [e.target.name]: [e.target.value]});
+    setWorkspace({...workspace, [e.target.name]: e.target.value});
+  };
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.put(
+        `http://localhost:8800/workspace/${wsId}`,
+        workspace,
+      );
+      // console.log(workspace);
+      // console.log(res);
+      setRename(false);
+      setChangeDescription(false);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useEffect(() => {
     fetchWorkspace();
-  }, []);
+    fetchAdmin();
+  }, [wsId]);
 
   return (
     <div style={{textAlign: 'left'}}>
@@ -142,6 +176,7 @@ function WorkspaceSetting() {
                   value={workspace.wsname}
                   name="wsname"
                   onChange={handleRename}
+                  disabled={uid === workspace.adminId ? false : true}
                   size="small"
                   sx={{
                     width: '100%',
@@ -151,11 +186,12 @@ function WorkspaceSetting() {
                 ></TextField>
               </Grid>
               <Grid item xs={5}>
-                {rename && (
+                {uid === workspace.adminId && rename && (
                   <Button
                     variant="contained"
                     size="medium"
                     sx={{...colorHover.greenGradBtn}}
+                    onClick={handleUpdate}
                   >
                     Save
                   </Button>
@@ -177,13 +213,15 @@ function WorkspaceSetting() {
               name="descript"
               multiline
               rows={2}
-              value={workspace.descript}
+              value={workspace.descript ? workspace.descript : ''}
+              disabled={uid === workspace.adminId ? false : true}
             ></TextField>
-            {changeDescription && (
+            {uid === workspace.adminId && changeDescription && (
               <Button
                 variant="contained"
                 size="medium"
                 sx={{mt: 2, ...colorHover.greenGradBtn}}
+                onClick={handleUpdate}
               >
                 Update description
               </Button>
@@ -207,19 +245,21 @@ function WorkspaceSetting() {
             <StyledTypo>Projects</StyledTypo>{' '}
           </StyledAccordionSummary>
           <StyledAccordionDetails sx={{position: 'relative'}}>
-            <Button
-              sx={{
-                width: '155px',
-                height: '38px',
-                ...colorHover.greenGradBtn,
-              }}
-              variant="contained"
-              startIcon={<AddRoundedIcon />}
-            >
-              <Link to="/create-project" state={{background: location}}>
-                Create project
-              </Link>
-            </Button>
+            {uid === workspace.adminId && (
+              <Button
+                sx={{
+                  width: '155px',
+                  height: '38px',
+                  ...colorHover.greenGradBtn,
+                }}
+                variant="contained"
+                startIcon={<AddRoundedIcon />}
+              >
+                <Link to="/create-project" state={{background: location}}>
+                  Create project
+                </Link>
+              </Button>
+            )}
             {/* <CreateProject /> */}
             <ProjectTable />
           </StyledAccordionDetails>
@@ -237,7 +277,7 @@ function WorkspaceSetting() {
           </StyledAccordionSummary>
           <StyledAccordionDetails>
             <Grid container spacing={2}>
-              <Grid item>
+              {/* <Grid item>
                 <Button
                   sx={{
                     // position: 'absolute',
@@ -251,7 +291,7 @@ function WorkspaceSetting() {
                 >
                   Add members
                 </Button>
-              </Grid>
+              </Grid> */}
 
               <Grid container item>
                 <Grid item xs={2}>
@@ -265,14 +305,17 @@ function WorkspaceSetting() {
                       alignItems: 'center',
                     }}
                   >
-                    <Avatar alt="Remy Sharp" src="#" />
+                    <Avatar
+                      alt={admin.username ? admin.username : admin.email}
+                      src="#"
+                    />
                     <Typography sx={{mx: 2}}>
                       {' '}
-                      Nguyễn Trường Hải Đăng
+                      {admin.username ? admin.username : admin.email}
                     </Typography>{' '}
-                    <IconButton>
+                    {/* <IconButton>
                       <EditRoundedIcon />
-                    </IconButton>
+                    </IconButton> */}
                   </Box>
                 </Grid>
               </Grid>

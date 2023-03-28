@@ -20,12 +20,12 @@ import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
 import Avatar from '@mui/material/Avatar';
 
 import SearchBar from 'src/components/search';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import {signOut} from 'firebase/auth';
 import {auth} from 'src/firebase/config';
 import {color, colorHover} from 'src/style';
 import Notification from '../notification/Notification';
-import AddMember from 'src/components/popup/Create';
+import AddMember from 'src/components/popup/AddMember';
 import {AuthContext} from 'src/Context/AuthProvider';
 import {AppContext} from 'src/Context/AppProvider';
 import axios from 'axios';
@@ -42,35 +42,6 @@ import axios from 'axios';
 //   );
 // }
 
-function AddMembers(props) {
-  const {onClose, selectedValue, open} = props;
-
-  const handleClose = () => {
-    onClose(selectedValue);
-  };
-
-  const handleListItemClick = (value) => {
-    onClose(value);
-  };
-
-  return (
-    <Box>
-      <AddMember
-        onClose={handleClose}
-        open={open}
-        confirmContent="Add"
-        title={
-          <p>
-            Add Member to <i>First Scrum Project</i>
-          </p>
-        }
-        placeholder="eg. dangnguyen@gmail.com"
-        fieldLabel="Enter emails"
-      />
-    </Box>
-  );
-}
-
 export default function Header() {
   // const [open, setOpen] = useState(false);
   // const handleOpen = () => setOpen(true);
@@ -78,15 +49,15 @@ export default function Header() {
 
   const [value, setValue] = useState(0);
   const [openAddMembers, setOpenAddMembers] = useState(false);
-  const [lastWorkspace, setLastWorkspace] = useState('');
   const {
-    user: {uid},
+    user: {displayName, uid},
   } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const getLastestWorkspace = async () => {
     try {
       const res = await axios.get(`http://localhost:8800/lastworkspace/${uid}`);
-      setLastWorkspace(res.data.id);
+      navigate(`/workspace-setting/${res.data.id}?user=${uid}`);
     } catch (err) {
       console.log(err);
     }
@@ -125,10 +96,6 @@ export default function Header() {
     // TODO get value
     setOpenAddMembers(false);
   }
-
-  useEffect(() => {
-    getLastestWorkspace();
-  }, []);
 
   return (
     <Paper
@@ -175,8 +142,9 @@ export default function Header() {
         <Tab
           sx={{textTransform: 'none'}}
           label="Workspace Settings"
-          to={`/workspace-setting/${lastWorkspace}?user=${uid}`}
-          component={Link}
+          // to={`/workspace-setting/${lastWorkspace}?user=${uid}`}
+          // component={Link}
+          onClick={getLastestWorkspace}
         />
         {/* <Tab
           sx={{textTransform: 'none'}}
@@ -229,7 +197,7 @@ export default function Header() {
         <div style={{position: 'relative'}}>
           <IconButton onClick={handleClick}>
             <Avatar
-              alt="Remy Sharp"
+              alt={displayName ? displayName : ''}
               src="/static/images/avatar/1.jpg"
               sx={{height: 32, width: 32}}
             />
@@ -300,11 +268,11 @@ export default function Header() {
             </ClickAwayListener>
           </Popper>
         </div>
-        <AddMembers
+        <AddMember
           open={openAddMembers}
           // onClose={(value) => handleClose(value)}
-          onClose={(value) => setOpenAddMembers(false)}
-        ></AddMembers>
+          onClose={() => setOpenAddMembers(false)}
+        ></AddMember>
       </Box>
     </Paper>
   );
