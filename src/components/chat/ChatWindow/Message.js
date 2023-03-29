@@ -1,27 +1,19 @@
 import React from 'react';
 import format from 'date-fns/format';
+import moment from 'moment/moment';
 
-import { Box, Paper, Typography, Avatar } from '@mui/material';
+import {Box, Paper, Typography, Avatar} from '@mui/material';
 
-import { differenceInDays } from 'date-fns';
+import {differenceInDays} from 'date-fns';
 
-function Message({ mine, children }) {
-  const { senderName, senderId, message, time } = children;
-  // const dateDisplay = time;
-  switch (differenceInDays(new Date(), time)) {
-    case 0:
-      var dateDisplay = 'Today, ' + format(time, 'hh:mm');
-      break;
-    case 1:
-      dateDisplay = 'Yesterday, ' + format(time, 'hh:mm');
-      break;
-    default:
-      dateDisplay = format(time, 'dd-MM, hh:mm');
-      break;
-    // ! must check for year diff
+function Message({mine, children}) {
+  const {author, authorId, body, type, createdAt} = children;
+  var timepassed = '';
+  if (createdAt) {
+    const start = moment(createdAt.toDate());
+    timepassed = moment(start, 'MM/DD/YYYY').fromNow();
   }
-  // if (differenceInDays(time, new Date())==0) {dateDisplay =}
-  // console.log(differenceInDays(new Date(), time));
+  // const dateDisplay = 'hehe';
   return (
     <Box
       sx={{
@@ -31,13 +23,13 @@ function Message({ mine, children }) {
       }}
     >
       {!mine && (
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div style={{display: 'flex', alignItems: 'center'}}>
           <Avatar
             src="#"
-            alt={senderName}
-            sx={{ width: 32, height: 32, mr: 1 }}
+            alt={author.displayName}
+            sx={{width: 32, height: 32, mr: 1}}
           ></Avatar>
-          <Typography variant="body2">{senderName}</Typography>
+          <Typography variant="body2">{author.displayName}</Typography>
         </div>
       )}
       <Box
@@ -54,8 +46,8 @@ function Message({ mine, children }) {
           sx={{
             maxWidth: '75%',
             ...(mine
-              ? { backgroundColor: '#04BF00', color: 'white' }
-              : { backgroundColor: '#DADADA' }),
+              ? {backgroundColor: '#04BF00', color: 'white'}
+              : {backgroundColor: '#DADADA'}),
             borderRadius: '25px',
             my: 2,
             py: 1,
@@ -66,14 +58,14 @@ function Message({ mine, children }) {
             },
           }}
         >
-          <Typography variant="body2">{message}</Typography>
+          <Typography variant="body2">{body}</Typography>
         </Paper>
         <Typography
           className="sendDate"
           variant="subtitle2"
-          sx={{ textAlign: 'right', display: 'none' }}
+          sx={{textAlign: 'right', display: 'none'}}
         >
-          {dateDisplay}
+          {timepassed}
         </Typography>
       </Box>
     </Box>

@@ -9,18 +9,15 @@ function Toolbar(props) {
       props.onZoomChange(e.target.value);
     }
   };
-  const zoomRadios = ['Hours', 'Days', 'Months'].map((value) => {
-    return (
-      <FormControlLabel
-        key={value}
-        value={value}
-        control={<Radio />}
-        label={value}
-        onChange={handleZoomChange}
-      />
-    );
-  });
-
+  const zoomRadios = ['Hours', 'Days', 'Months'].map((value, index) => (
+    <FormControlLabel
+      key={index}
+      value={value}
+      control={<Radio />}
+      label={value}
+      onChange={handleZoomChange}
+    />
+  ));
   return (
     <div className="tool-bar">
       <b>Zooming: </b>

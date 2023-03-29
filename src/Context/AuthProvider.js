@@ -7,7 +7,7 @@ import axios from 'axios';
 export const AuthContext = React.createContext();
 
 function AuthProvider({children}) {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const paths = useLocation();
   // console.log(paths.pathname);
@@ -34,7 +34,6 @@ function AuthProvider({children}) {
 
   React.useEffect(() => {
     const unsubscribed = auth.onAuthStateChanged((user) => {
-      console.log({user});
       if (user) {
         const {displayName, email, uid, photoURL} = user;
         console.log(displayName, email, uid, photoURL);

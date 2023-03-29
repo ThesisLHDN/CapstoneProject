@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useMemo, useState} from 'react';
 import {styled} from '@mui/material/styles';
 import {color} from 'src/style';
 import {
@@ -18,65 +18,8 @@ import PersonAddAltRoundedIcon from '@mui/icons-material/PersonAddAltRounded';
 
 import Message from './Message';
 import TypingArea from './TypingArea';
-
-// const dummyMessage = {
-//   name: 'Kenh chat 1',
-//   id: 1,
-//   members: [],
-//   messages: [
-//     {
-//       senderId: 1911044,
-//       senderName: 'Dang Nguyen',
-//       message: 'How are you today?',
-//       time: new Date(2022, 11, 1),
-//     },
-//     {
-//       senderId: 1910298,
-//       senderName: 'Lam Nguyen',
-//       message: "I'm good",
-//       time: new Date(2022, 11, 2),
-//     },
-//     {
-//       senderId: 1910298,
-//       senderName: 'Lam Nguyen',
-//       message:
-//         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-//       time: new Date(2022, 11, 3),
-//     },
-//     {
-//       senderId: 1911044,
-//       senderName: 'Dang Nguyen',
-//       message: 'Not good',
-//       time: new Date(),
-//     },
-//     {
-//       senderId: 1910298,
-//       senderName: 'Lam Nguyen',
-//       message:
-//         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-//       time: new Date(2022, 11, 3),
-//     },
-//     {
-//       senderId: 1911044,
-//       senderName: 'Dang Nguyen',
-//       message: 'Not good',
-//       time: new Date(),
-//     },
-//     {
-//       senderId: 1910298,
-//       senderName: 'Lam Nguyen',
-//       message:
-//         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-//       time: new Date(2022, 11, 3),
-//     },
-//     {
-//       senderId: 1911044,
-//       senderName: 'Dang Nguyen',
-//       message: 'Not good',
-//       time: new Date(),
-//     },
-//   ],
-// };
+import {ChatContext} from 'src/Context/ChatProvider';
+import {useFirestore} from 'src/hooks/useFirestore';
 
 const IOSSwitch = styled((props) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
@@ -129,8 +72,38 @@ const IOSSwitch = styled((props) => (
   },
 }));
 
-function ChatWindow({messages}) {
+const StyledDiv = styled(`div`)({
+  padding: '8px',
+  borderRadius: '4px',
+  '&:hover': {backgroundColor: '#00000010', cursor: 'pointer'},
+});
+
+function ChatWindow({currentUser}) {
   const [open, setOpen] = useState(false);
+  const {selectedRoom, selectedRoomId, roomMembers} = useContext(ChatContext);
+
+  const messagesCondition = useMemo(
+    () => ({
+      fieldName: 'roomId',
+      operator: '==',
+      compareValue: 'ltuDQNnSDBxw6LX3iJpw',
+      sort: 'desc',
+    }),
+    [],
+  );
+
+  const messages = useFirestore('messages', messagesCondition);
+
+  // const path = useMemo(() => `rooms/${selectedRoom.id}/messages`, []);
+  // const messages = useFirestore(path);
+  if (messages && roomMembers) {
+    var newMess = messages.map((message) => {
+      return {
+        author: roomMembers.find((member) => member.uid === message.authorId),
+        ...message,
+      };
+    });
+  }
 
   const handleClose = () => {
     setOpen(false);
@@ -140,15 +113,29 @@ function ChatWindow({messages}) {
 
   return (
     <Box container sx={{p: 2, height: '100%'}}>
-      <Box sx={{display: 'flex', justifyContent: 'space-between', mb: 2}}>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          mb: 2,
+          height: '50px',
+        }}
+      >
         <Box sx={{display: 'flex', gap: 2, alignItems: 'center'}}>
-          <Avatar src={messages.picture} alt={messages.name}></Avatar>
-          <Typography variant="h5">{messages.name}</Typography>
+          <Avatar
+            src={selectedRoom.coverPicture}
+            alt={selectedRoom.name}
+          ></Avatar>
+
+          <Box>
+            {' '}
+            <Typography variant="h6">{selectedRoom.name}</Typography>
+            <Typography variant="subtitle2">
+              {selectedRoom.description}
+            </Typography>
+          </Box>
         </Box>
         <Box sx={{display: 'flex', gap: 1}}>
-          {/* <Button variant="contained" startIcon={<PersonAddAltRoundedIcon />}>
-            Add Member
-          </Button> */}
           <Box sx={{position: 'relative'}}>
             <IconButton
               sx={{color: color.green03}}
@@ -175,14 +162,17 @@ function ChatWindow({messages}) {
                     position: 'absolute',
                     top: 0,
                     right: 0,
-                    p: 2,
+                    p: 1,
                   }}
                 >
-                  <Typography variant="h6" sx={{color: color.green03}}>
+                  <Typography
+                    variant="h6"
+                    sx={{textAlign: 'center', color: color.green03}}
+                  >
                     Setting
                   </Typography>
                   <Divider sx={{my: 1}}></Divider>
-                  <div
+                  <StyledDiv
                     style={{
                       display: 'flex',
                       justifyContent: 'space-between',
@@ -191,8 +181,8 @@ function ChatWindow({messages}) {
                     }}
                   >
                     <Typography>Rename</Typography>
-                  </div>
-                  <div
+                  </StyledDiv>
+                  <StyledDiv
                     style={{
                       display: 'flex',
                       justifyContent: 'space-between',
@@ -202,9 +192,9 @@ function ChatWindow({messages}) {
                     }}
                   >
                     <Typography>Notifications</Typography>
-                    <IOSSwitch defaultChecked />
-                  </div>
-                  <div
+                    <Switch defaultChecked />
+                  </StyledDiv>
+                  <StyledDiv
                     style={{
                       display: 'flex',
                       justifyContent: 'space-between',
@@ -214,9 +204,9 @@ function ChatWindow({messages}) {
                     }}
                   >
                     <Typography>Public</Typography>
-                    <IOSSwitch defaultChecked />
-                  </div>
-                  <div
+                    <Switch defaultChecked />
+                  </StyledDiv>
+                  <StyledDiv
                     style={{
                       display: 'flex',
                       justifyContent: 'space-between',
@@ -225,7 +215,7 @@ function ChatWindow({messages}) {
                     }}
                   >
                     <Typography>Members</Typography>
-                  </div>
+                  </StyledDiv>
                 </Paper>
               </Box>
             )}
@@ -247,14 +237,14 @@ function ChatWindow({messages}) {
         </Box>
       </Box>
       <Divider variant="middle" sx={{borderBottom: 2, color: '#666'}}></Divider>
-      <Box sx={{py: 2, height: 'calc(100% - 116px)', overflowY: 'scroll'}}>
-        {messages.messages.reverse().map(({senderName, senderId, message, time}) => (
-          <Message mine={senderId === 1911044}>
-            {{senderName, senderId, message, time}}
+      <Box sx={{py: 2, height: 'calc(100% - 126px)', overflowY: 'scroll'}}>
+        {newMess.reverse().map(({author, authorId, body, type, createdAt}) => (
+          <Message mine={authorId === currentUser.uid}>
+            {{author, authorId, body, type, createdAt}}
           </Message>
         ))}
       </Box>
-      <TypingArea />
+      <TypingArea currentUser={currentUser} roomId={selectedRoom.id} />
     </Box>
   );
 }

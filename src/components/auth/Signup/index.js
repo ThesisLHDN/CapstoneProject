@@ -1,16 +1,14 @@
-import {useState} from 'react';
+import {useMemo, useState} from 'react';
 import {color, colorHover} from 'src/style';
-import {errorCodeConverter} from '../authFunction';
+import {errorCodeConverter} from 'src/firebase/authFunction';
 
 import {
   Button,
   IconButton,
-  // CssBaseline,
   TextField,
   FormControlLabel,
   Checkbox,
   Link,
-  // Paper,
   Box,
   Grid,
   Divider,
@@ -19,8 +17,12 @@ import {
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {ReactComponent as FacebookIcon} from '../logo/Facebook.svg';
 import {ReactComponent as GoogleIcon} from '../logo/Google.svg';
+import {
+  addNewUser,
+  facebookLoginHandler,
+  googleLoginHandler,
+} from 'src/firebase/authServices';
 
-// import app, {auth} from 'src/firebase/config.js';
 import {
   FacebookAuthProvider,
   GoogleAuthProvider,
@@ -30,10 +32,8 @@ import {
   getAdditionalUserInfo,
 } from 'firebase/auth';
 
-import {collection, addDoc} from 'firebase/firestore';
-
-import {db, auth} from 'src/firebase/config';
-import {addDocument} from 'src/firebase/services';
+import {auth} from 'src/firebase/config';
+import {addDocument, setDocument} from 'src/firebase/firestoreServices';
 
 const facebookProvider = new FacebookAuthProvider();
 const googleProvider = new GoogleAuthProvider();
@@ -43,92 +43,70 @@ const theme = createTheme();
 export default function SignInSide() {
   const [error, setError] = useState('');
   const [formData, setFormData] = useState({});
-  // const auth = getAuth();
+  const [userData, setUserData] = useState({});
 
-  const facebookLoginHandler = async () => {
-    // const auth = getAuth();
-    signInWithPopup(auth, facebookProvider)
-      .then(async (result) => {
-        // The signed-in user info.
-        const user = result.user;
+  // const addNewUser = (user, provider) => {
+  //   if (user) {
+  //     setDocument('users', user.uid, {
+  //       displayName: user.displayName,
+  //       email: user.email,
+  //       photoURL: user.photoURL,
+  //       uid: user.uid,
+  //       provider,
+  //     });
+  //   }
+  // };
 
-        if (getAdditionalUserInfo(result).isNewUser) {
-          addDocument('users', {
-            displayName: user.displayName,
-            email: user.email,
-            photoURL: user.photoURL,
-            uid: user.uid,
-            provider: getAdditionalUserInfo(result).providerId,
-          });
-          // const docRef = await addDoc(collection(db, 'users'), {
+  // const facebookLoginHandler = async () => {
+  //   signInWithPopup(auth, facebookProvider)
+  //     .then(async (result) => {
+  //       const user = result.user;
 
-          // });
-          // console.log('Document written with ID: ', docRef.id);
-        }
+  //       if (getAdditionalUserInfo(result).isNewUser) {
+  //         try {
+  //           addNewUser(user, getAdditionalUserInfo(result).providerId);
+  //         } catch (e) {
+  //           console.error('Error adding document: ', e);
+  //         }
+  //       }
+  //       setUserData(user);
+  //     })
+  //     .catch((error) => {
+  //       setError(errorCodeConverter(error.code));
+  //     });
+  // };
 
-        // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-        const credential = FacebookAuthProvider.credentialFromResult(result);
-        // console.log('credential: ', credential);
-        const accessToken = credential.accessToken;
-      })
-      .catch((error) => {
-        // Handle Errors here.
-        setError(errorCodeConverter(error.code));
-        // const errorMessage = error.message;
-        // The email of the user's account used.
-        // const email = error.customData.email;
-        // The AuthCredential type that was used.
-        // const credential = FacebookAuthProvider.credentialFromError(error);
-      });
-    // console.log('Login facebook', {data});
-  };
-
-  const googleLoginHandler = () => {
-    signInWithPopup(auth, googleProvider)
-      .then(async (result) => {
-        // The signed-in user info.
-        const user = result.user;
-        if (getAdditionalUserInfo(result).isNewUser) {
-          addDocument('users', {
-            displayName: user.displayName,
-            email: user.email,
-            photoURL: user.photoURL,
-            uid: user.uid,
-            provider: getAdditionalUserInfo(result).providerId,
-          });
-        }
-
-        // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const accessToken = credential.accessToken;
-      })
-      .catch((error) => {
-        // Handle Errors here.
-        setError(errorCodeConverter(error.code));
-        // // The email of the user's account used.
-        // const email = error.customData.email;
-        // // The AuthCredential type that was used.
-        // const credential = GoogleAuthProvider.credentialFromError(error);
-      });
-  };
+  // const googleLoginHandler = () => {
+  //   signInWithPopup(auth, googleProvider)
+  //     .then(async (result) => {
+  //       const user = result.user;
+  //       if (getAdditionalUserInfo(result).isNewUser) {
+  //         try {
+  //           addNewUser(user, getAdditionalUserInfo(result).providerId);
+  //         } catch (e) {
+  //           console.error('Error adding document: ', e);
+  //         }
+  //       }
+  //       setUserData(user);
+  //     })
+  //     .catch((error) => {
+  //       setError(errorCodeConverter(error.code));
+  //     });
+  // };
 
   const onChangeHandler = (e) => {
     e.preventDefault();
 
-    console.log(e.target.name + ': ' + e.target.value);
     setFormData({
       ...formData,
 
       // Trimming any whitespace
       [e.target.name]: e.target.value.trim(),
     });
-
-    // setFormData()
   };
 
   const signUpHandler = (event) => {
     event.preventDefault();
-    // const auth = getAuth();
     const email = formData.email;
     const password = formData.password;
     const fName = formData.firstName;
@@ -139,36 +117,26 @@ export default function SignInSide() {
       return;
     }
 
-    console.log(auth.currentUser);
-
-    // sendEmailVerification(auth.currentUser).then(() => {
-    //   console.log('Email verification sent!');
-    //   // ...
-    // });
-
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Signed in
         const user = userCredential.user;
-        addDocument('users', {
-          displayName: user.displayName,
-          email: email,
-          uid: user.uid,
-          provider: getAdditionalUserInfo(userCredential).providerId,
-        });
-        // ...
-        console.log(user);
+
+        const newUser = {...user, displayName: `${fName} ${lName}`};
+        console.log(newUser);
+
+        addNewUser(newUser, getAdditionalUserInfo(userCredential).providerId);
+        setUserData(newUser);
       })
       .then(() => {
         sendEmailVerification(auth.currentUser).then(() => {
           console.log('Email verification sent!');
-          // ...
         });
       })
       .catch((error) => {
         setError(errorCodeConverter(error.code));
       });
   };
+
   return (
     <ThemeProvider theme={theme}>
       <Grid
@@ -185,6 +153,7 @@ export default function SignInSide() {
         <Box
           sx={{
             display: 'flex',
+            gap: 1,
             flexDirection: 'column',
             alignItems: 'center',
             backgroundColor: 'white',
@@ -204,7 +173,7 @@ export default function SignInSide() {
             noValidate
             onSubmit={signUpHandler}
             sx={{
-              mt: 3,
+              // mt: 1,
               '& .MuiInputLabel-root': {
                 color: color.gray01,
                 fontSize: 14,
@@ -262,7 +231,7 @@ export default function SignInSide() {
                   onChange={onChangeHandler}
                 />
               </Grid>
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}>
                 <FormControlLabel
                   sx={{
                     mb: 2,
@@ -276,7 +245,7 @@ export default function SignInSide() {
                   }
                   label="I want to receive inspiration, marketing promotions and updates via email."
                 />
-              </Grid>
+              </Grid> */}
             </Grid>
             {error && (
               <Typography
@@ -290,7 +259,7 @@ export default function SignInSide() {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{...colorHover.greenBtn}}
+              sx={{mt: 2, ...colorHover.greenBtn}}
             >
               Sign Up
             </Button>
@@ -313,10 +282,16 @@ export default function SignInSide() {
               </Typography>{' '}
             </Divider>
             <Box sx={{display: 'flex', gap: 1, justifyContent: 'center'}}>
-              <IconButton variant="contained" onClick={facebookLoginHandler}>
+              <IconButton
+                variant="contained"
+                onClick={() => setError(facebookLoginHandler)}
+              >
                 <FacebookIcon style={{width: 32, height: 32}} />
               </IconButton>
-              <IconButton variant="contained" onClick={googleLoginHandler}>
+              <IconButton
+                variant="contained"
+                onClick={() => setError(googleLoginHandler)}
+              >
                 <GoogleIcon style={{width: 32, height: 32}} />
               </IconButton>
             </Box>

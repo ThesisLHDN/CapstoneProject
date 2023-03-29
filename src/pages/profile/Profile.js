@@ -1,5 +1,6 @@
-import {useEffect, useState, useContext} from 'react';
+import {useContext} from 'react';
 import {AuthContext} from 'src/Context/AuthProvider';
+import {useFirestoreDoc} from 'src/hooks/useFirestore';
 import {color} from 'src/style';
 import {Typography, Grid, TextField, Button, Avatar} from '@mui/material';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
@@ -8,29 +9,26 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import PhoneEnabledOutlinedIcon from '@mui/icons-material/PhoneEnabledOutlined';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 
-import {doc, collection, onSnapshot} from 'firebase/firestore';
-import {db} from 'src/firebase/config';
-
 function Profile() {
-  const [userData, setUserData] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
-
   const {
-    user: {displayName, email, photoURL, phone},
+    user: {displayName, email, photoURL, uid},
   } = useContext(AuthContext);
+  console.log('uid', uid);
 
-  useEffect(() => {
-    onSnapshot(collection(db, 'users'), (snapshot) => {
-      const data = snapshot.docs.map((doc) => ({...doc.data(), id: doc.id}));
-      // console.log(data);
-      setUserData(data[0]);
-    });
-    setIsLoading(false);
-  }, []);
-  console.log('user data', userData);
+  // const users = useFirestore('users', {
+  //   fieldName: 'uid',
+  //   operator: '==',
+  //   compareValue: uid,
+  // });
+  // const user = users[0];
+  const user = useFirestoreDoc('users', uid);
+  console.log(user);
+
+  console.log('usedoc', user);
+
   return (
     <div style={{marginLeft: '-15vw'}}>
-      {!isLoading ? (
+      {user ? (
         <div>
           <Typography variant="h5" sx={{color: color.green03, fontWeight: 700}}>
             Account Settings
@@ -38,7 +36,7 @@ function Profile() {
 
           <Grid container alignItems="center" justifyContent="center">
             <Avatar
-              src={photoURL}
+              src={user.photoURL}
               sx={{
                 width: '15vw',
                 height: '15vw',
@@ -73,7 +71,7 @@ function Profile() {
 
             <Grid item xs={3.5}>
               <TextField
-                value={displayName}
+                value={user.displayName}
                 size="small"
                 sx={{width: '100%', backgroundColor: '#ECECEC'}}
               ></TextField>
@@ -104,7 +102,7 @@ function Profile() {
 
             <Grid item xs={3.5}>
               <TextField
-                value={email}
+                value={user.email}
                 size="small"
                 disabled
                 sx={{
@@ -115,7 +113,7 @@ function Profile() {
             </Grid>
           </Grid>
 
-          <Grid
+          {/* <Grid
             container
             alignItems="center"
             justifyContent="center"
@@ -139,12 +137,12 @@ function Profile() {
 
             <Grid item xs={3.5} alignItems="center" justifyContent="center">
               <TextField
-                defaultValue={phone}
+                defaultValue={'0987654321'}
                 size="small"
                 sx={{width: '100%', backgroundColor: '#ECECEC'}}
               ></TextField>
             </Grid>
-          </Grid>
+          </Grid> */}
 
           <Grid
             container
