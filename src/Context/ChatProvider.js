@@ -4,15 +4,15 @@ import {useFirestore} from 'src/hooks/useFirestore';
 import {auth} from 'src/firebase/config';
 import CircularProgress from '@mui/material/CircularProgress';
 import {AuthContext} from './AuthProvider';
-export const AppContext = React.createContext();
+export const ChatContext = React.createContext();
 
-export default function AppProvider({children}) {
+export default function ChatProvider({children}) {
   const {
     user: {uid},
   } = useContext(AuthContext);
-  console.log('app provider', uid);
+  console.log('Chat provider', uid);
   const [selectedRoomId, setSelectedRoomId] = useState('');
-  // console.log('AppProvider', user);
+  // console.log('ChatProvider', user);
 
   const RoomsCondition = useMemo(
     () => ({
@@ -59,7 +59,7 @@ export default function AppProvider({children}) {
   // );
 
   return (
-    <AppContext.Provider
+    <ChatContext.Provider
       value={{
         rooms,
         roomMembers,
@@ -69,7 +69,7 @@ export default function AppProvider({children}) {
       }}
     >
       {children}
-    </AppContext.Provider>
+    </ChatContext.Provider>
   );
   // value is the thing that all children can access
 }

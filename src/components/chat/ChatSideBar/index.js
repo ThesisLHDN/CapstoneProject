@@ -28,7 +28,7 @@ import SearchBar from 'src/components/search';
 import CreationPopup from 'src/components/popup/Create';
 import {addDocument} from 'src/firebase/firestoreServices';
 
-import {AppContext} from 'src/Context/AppProvider';
+import {ChatContext} from 'src/Context/ChatProvider';
 
 const CssTextField = styled(TextField)({
   '& label.Mui-focused': {
@@ -44,7 +44,7 @@ const CssTextField = styled(TextField)({
   },
 });
 function ChatSideBar({data, currentUser}) {
-  const {selectedRoomId, setSelectedRoomId} = useContext(AppContext);
+  const {selectedRoomId, setSelectedRoomId} = useContext(ChatContext);
   const [open, setOpen] = useState(false);
   const [newRoom, setNewRoom] = useState('');
   const [description, setDescription] = useState('');

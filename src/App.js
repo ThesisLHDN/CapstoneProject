@@ -25,12 +25,12 @@ import ProjectSetting from './pages/project-setting/ProjectSetting';
 import WorkspaceSetting from './pages/workspace-setting/WorkspaceSetting';
 
 import AuthProvider from 'src/Context/AuthProvider';
-import AppProvider from './Context/AppProvider';
+import ChatProvider from './Context/ChatProvider';
 
 function App() {
   return (
     <AuthProvider>
-      <AppProvider>
+      {/* <ChatProvider> */}
         <div className="App">
           {/* <Layout> */}
           <Routes>
@@ -70,7 +70,7 @@ function App() {
             </Route>
           </Routes>
         </div>
-      </AppProvider>
+      {/* </ChatProvider> */}
     </AuthProvider>
   );
 }

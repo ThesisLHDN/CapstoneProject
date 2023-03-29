@@ -3,14 +3,14 @@ import {useContext} from 'react';
 import ChatSideBar from './ChatSideBar';
 import ChatWindow from './ChatWindow';
 
-import {AppContext} from 'src/Context/AppProvider';
+import {ChatContext} from 'src/Context/ChatProvider';
 
 import {Grid, Paper} from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import {useFirestore} from 'src/hooks/useFirestore';
 
 function ChatRoom({currentUser}) {
-  const {rooms, selectedRoom} = useContext(AppContext);
+  const {rooms, selectedRoom} = useContext(ChatContext);
 
   return (
     <Paper

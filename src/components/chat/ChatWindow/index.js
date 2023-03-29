@@ -18,7 +18,7 @@ import PersonAddAltRoundedIcon from '@mui/icons-material/PersonAddAltRounded';
 
 import Message from './Message';
 import TypingArea from './TypingArea';
-import {AppContext} from 'src/Context/AppProvider';
+import {ChatContext} from 'src/Context/ChatProvider';
 import {useFirestore} from 'src/hooks/useFirestore';
 
 const IOSSwitch = styled((props) => (
@@ -80,7 +80,7 @@ const StyledDiv = styled(`div`)({
 
 function ChatWindow({currentUser}) {
   const [open, setOpen] = useState(false);
-  const {selectedRoom, selectedRoomId, roomMembers} = useContext(AppContext);
+  const {selectedRoom, selectedRoomId, roomMembers} = useContext(ChatContext);
 
   const path = useMemo(
     () => `rooms/${selectedRoom.id}/messages`,
