@@ -4,6 +4,7 @@ import SearchBar from 'src/components/search';
 import Sort from 'src/components/Sort';
 import AddItem from './AddItem';
 import {useFirestore} from 'src/hooks/useFirestore';
+import WarningPopup from 'src/components/popup/Warning';
 
 import {
   Typography,
@@ -16,13 +17,14 @@ import {
   CircularProgress,
 } from '@mui/material';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRightOutlined';
+// import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRightOutlined';
 import FolderOutlinedIcon from '@mui/icons-material/FolderOutlined';
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
-import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
+// import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
-import DocProvider, {DocContext} from 'src/Context/DocProvider';
+import {DocContext} from 'src/Context/DocProvider';
+import {deleteDocument} from 'src/firebase/firestoreServices';
 
 const folders = [
   {
@@ -71,7 +73,9 @@ function Document({projectId = '1OkWkDDY5XyJjJ16eP70', parentId}) {
   // const projectId = '1OkWkDDY5XyJjJ16eP70';
   const {selectedParentId, selectedProjectId, setParent, rawDocuments} =
     useContext(DocContext);
-  console.log('selectedParentId', selectedParentId);
+
+  const [openDeletePopup, setOpenDeletePopup] = useState(false);
+  const [selectedFile, setSelectedFile] = useState();
 
   const documents = rawDocuments
     ? rawDocuments.filter(
@@ -80,7 +84,15 @@ function Document({projectId = '1OkWkDDY5XyJjJ16eP70', parentId}) {
     : [];
   console.log('documents', rawDocuments, documents);
 
-  const deleteFileHandler = () => {};
+  const deleteFileHandler = (confirmed) => {
+    const path = `projects/${selectedProjectId}/documents`;
+    console.log('delete', path, selectedFile);
+    if (confirmed) {
+      deleteDocument(path, selectedFile.id);
+    }
+    setOpenDeletePopup(false);
+    setSelectedFile();
+  };
 
   // const rootDocument = folders
   //   .concat(files)
@@ -90,7 +102,6 @@ function Document({projectId = '1OkWkDDY5XyJjJ16eP70', parentId}) {
 
   return (
     <div>
-      {/* <DocProvider> */}
       {documents ? (
         <div>
           <Grid container spacing={2}>
@@ -166,7 +177,9 @@ function Document({projectId = '1OkWkDDY5XyJjJ16eP70', parentId}) {
                           marginLeft: 3.5,
                           cursor: 'pointer',
                         }}
-                        onClick={() => setParent(item.id, item.name)}
+                        onClick={() =>
+                          item ? setParent(item.id, item.name) : null
+                        }
                       />
                     ) : (
                       <a href={item.downloadURL} target="_blank" download>
@@ -220,7 +233,13 @@ function Document({projectId = '1OkWkDDY5XyJjJ16eP70', parentId}) {
                         </IconButton>
                       </a>
                     )}
-                    <IconButton size="medium">
+                    <IconButton
+                      size="medium"
+                      onClick={() => {
+                        setOpenDeletePopup(true);
+                        setSelectedFile({id: item.id, name: item.name});
+                      }}
+                    >
                       <MoreHorizOutlinedIcon sx={{color: '#181818'}} />
                     </IconButton>
                   </Grid>
@@ -228,6 +247,14 @@ function Document({projectId = '1OkWkDDY5XyJjJ16eP70', parentId}) {
               </Grid>
             );
           })}
+          <WarningPopup
+            title={`Do you really want to delete "${
+              selectedFile ? selectedFile.name : null
+            }"`}
+            open={openDeletePopup}
+            onClose={deleteFileHandler}
+            content="This file will be permanently deleted"
+          ></WarningPopup>
         </div>
       ) : (
         <CircularProgress

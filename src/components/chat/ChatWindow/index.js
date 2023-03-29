@@ -237,7 +237,14 @@ function ChatWindow({currentUser}) {
         </Box>
       </Box>
       <Divider variant="middle" sx={{borderBottom: 2, color: '#666'}}></Divider>
-      <Box sx={{py: 2, height: 'calc(100% - 126px)', overflowY: 'scroll'}}>
+      <Box
+        sx={{
+          py: 2,
+          height: 'calc(100% - 126px)',
+          overflowY: 'scroll',
+          scrollSnapType: 'y proximity',
+        }}
+      >
         {newMess.reverse().map(({author, authorId, body, type, createdAt}) => (
           <Message mine={authorId === currentUser.uid}>
             {{author, authorId, body, type, createdAt}}

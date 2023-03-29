@@ -32,6 +32,7 @@ function WarningPopup({
           flexDirection: 'column',
           gap: '10px',
           paddingTop: '5px',
+          backgroundColor: '#00000000',
           ...sx,
         }}
       >
@@ -83,11 +84,12 @@ function WarningPopup({
               color: 'white',
               '&:hover': {backgroundColor: '#FF2424'},
             }}
+            onClick={() => onClose(true)}
           >
             {delContent ? delContent : 'Delete'}
           </Button>
           <Button
-            onClick={onClose}
+            onClick={() => onClose(false)}
             sx={{
               color: '#818181',
             }}

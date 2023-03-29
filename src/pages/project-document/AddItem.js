@@ -34,48 +34,67 @@ function AddItem({parentId, projectId}) {
 
   const [openSnackbar, setOpenSnackbar] = useState('');
   const [snackbarContent, setSnackbarContent] = useState('');
+  const [selectedFile, setSelectedFile] = useState();
 
   const upLoadHandler = async (files) => {
     if (files) {
-      var file = files[0];
-    }
-    console.log('Updating');
-    if (file) {
-      console.log(file);
-      const fileRef = ref(storage, `documents/${file.name}`);
-      const upLoadTask = uploadBytesResumable(fileRef, file);
-      upLoadTask.on(
-        'state_changed',
-        (snapshot) => {
-          const progress = Math.round(
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100,
-          );
-          setSnackbarContent('Upload is ' + progress + '% done');
-        },
-        (err) => {
-          console.log(err);
-        },
-        () => {
-          getDownloadURL(upLoadTask.snapshot.ref).then(async (url) => {
-            let downloadURL = url;
-            if (downloadURL) {
-              // setOpenSnackbar(true);
-              const newDocData = {
-                authorId: uid,
-                name: file.name,
-                parentId: parentId,
-                type: file.type,
-                downloadURL: downloadURL,
-              };
-              console.log(newDocData);
-              addDocument(`projects/${projectId}/documents`, newDocData);
-            }
-            console.log(downloadURL);
-          });
-        },
-      );
+      let file = files[0];
+      console.log('Updating');
+      if (file) {
+        console.log(file);
+        const path = `documents/${new Date().getTime() + file.name}`;
+        const fileRef = ref(storage, path);
+        const upLoadTask = uploadBytesResumable(fileRef, file);
+        upLoadTask.on(
+          'state_changed',
+          (snapshot) => {
+            const progress = Math.round(
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100,
+            );
+            setSnackbarContent('Upload is ' + progress + '% done');
+          },
+          (err) => {
+            console.log(err);
+          },
+          () => {
+            getDownloadURL(upLoadTask.snapshot.ref).then(async (url) => {
+              let downloadURL = url;
+              if (downloadURL) {
+                const newDocData = {
+                  authorId: uid,
+                  name: file.name,
+                  parentId: parentId,
+                  type: file.type,
+                  downloadURL: downloadURL,
+                  storagePath: path,
+                };
+                console.log('new doc added', newDocData);
+                addDocument(`projects/${projectId}/documents`, newDocData);
+              }
+
+              console.log(downloadURL);
+              setSelectedFile();
+            });
+          },
+        );
+      }
     }
     return;
+  };
+
+  const createFolderHandler = (folderName) => {
+    if (folderName && typeof folderName === 'string') {
+      const newFolderData = {
+        authorId: uid,
+        name: folderName,
+        parentId: parentId,
+        type: 'folder',
+      };
+      console.log('new doc added', newFolderData);
+      addDocument(`projects/${projectId}/documents`, newFolderData);
+    }
+
+    setOpen(false);
   };
 
   const [openMenu, setOpenMenu] = useState(false);
@@ -151,6 +170,7 @@ function AddItem({parentId, projectId}) {
                     onChange={(event) => {
                       upLoadHandler(event.target.files);
                     }}
+                    onClick={(e) => (e.target.value = null)}
                   />
                   <label for="upload">Upload file</label>
                 </MenuItem>
@@ -164,7 +184,7 @@ function AddItem({parentId, projectId}) {
         fieldLabel={"Enter folder's name"}
         placeholder={'Folder name'}
         confirmContent={'Create'}
-        onClose={handleClose}
+        onClose={createFolderHandler}
         open={open}
       />
       <Snackbar

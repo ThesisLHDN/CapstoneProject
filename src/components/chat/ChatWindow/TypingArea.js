@@ -22,6 +22,14 @@ function TypingArea({currentUser, roomId}) {
     setMessage(e.target.value);
   };
 
+  const handleKeyPress = (e) => {
+    //it triggers by pressing the enter key
+    console.log('key pressed', e);
+    if (e.key === 'Enter') {
+      handleOnSubmit();
+    }
+  };
+
   const handleOnSubmit = () => {
     if (roomId) {
       if (message.length) {
@@ -49,6 +57,7 @@ function TypingArea({currentUser, roomId}) {
             size="small"
             placeholder="Aa"
             sx={{width: '100%'}}
+            onKeyPress={handleKeyPress}
             InputProps={{
               endAdornment: (
                 <>
