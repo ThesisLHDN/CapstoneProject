@@ -23,17 +23,20 @@ export default function ChatProvider({children}) {
     [uid],
   );
 
-  console.log('roomsCondition', RoomsCondition);
-
   const rooms = useFirestore('rooms', RoomsCondition);
 
-  const selectedRoom = useMemo(() => {
-    if (selectedRoomId) {
-      return rooms.find((room) => room.id === selectedRoomId);
-    } else {
-      return rooms[0];
-    }
-  }, [rooms, selectedRoomId]);
+  const selectedRoom = selectedRoomId
+    ? rooms.find((room) => room.id === selectedRoomId)
+    : rooms[0];
+
+  // const messages = useFirestore('messages');
+  // = useMemo(() => {
+  //   if (selectedRoomId) {
+  //     return rooms.find((room) => room.id === selectedRoomId);
+  //   } else {
+  //     return rooms[0];
+  //   }
+  // }, [rooms, selectedRoomId]));
 
   const membersCondition = useMemo(
     () => ({
@@ -44,19 +47,31 @@ export default function ChatProvider({children}) {
     [selectedRoom ? selectedRoom.members : []],
   );
 
+  console.log('membersCondition', membersCondition);
+
   const roomMembers = useFirestore('users', membersCondition);
+  // const roomMemberssas = useFirestore('users');
 
-  // const messagesCondition = useMemo(() => {
-  //   if (selectedRoomId) {
-  //     return rooms.find((room) => room.id === selectedRoomId);
-  //   } else {
-  //     return rooms[0];
-  //   }
-  // }, [rooms, selectedRoomId]);
-
-  // const messages = useFirestore(
-  //   `rooms/${selectedRoomId ? selectedRoomId : 'a'}/messages`,
+  // const path = useMemo(
+  //   () =>
+  //     selectedRoom
+  //       ? `rooms/${selectedRoom.id}/messages`
+  //       : `rooms/trash/messages`,
+  //   [selectedRoom],
   // );
+  const messagesCondition = useMemo(() => {}, []);
+  // const messages = useFirestore('rooms', messagesCondition);
+  // const messages = useFirestore('rooms/ltuDQNnSDBxw6LX3iJpw/messages');
+
+  // const messages = useFirestore(path);
+  // if (messages && roomMembers) {
+  //   var newMess = messages.map((message) => {
+  //     return {
+  //       author: roomMembers.find((member) => member.uid === message.authorId),
+  //       ...message,
+  //     };
+  //   });
+  // }
 
   return (
     <ChatContext.Provider

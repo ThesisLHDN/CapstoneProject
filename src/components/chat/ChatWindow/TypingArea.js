@@ -23,16 +23,19 @@ function TypingArea({currentUser, roomId}) {
   };
 
   const handleOnSubmit = () => {
-    if (message.length) {
-      const messageData = {
-        authorId: currentUser.uid,
-        body: message,
-        type: 'text',
-      };
-      const path = `rooms/${roomId}/messages`;
-      addDocument(path, messageData);
-      updateDocument('rooms', roomId, {lastMessage: messageData});
-      setMessage('');
+    if (roomId) {
+      if (message.length) {
+        const messageData = {
+          authorId: currentUser.uid,
+          body: message,
+          type: 'text',
+          roomId: roomId,
+        };
+        console.log('new message', messageData);
+        addDocument('messages', messageData);
+        updateDocument('rooms', roomId, {lastMessage: messageData});
+        setMessage('');
+      }
     }
   };
   return (
