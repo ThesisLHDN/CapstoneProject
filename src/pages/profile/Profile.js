@@ -8,6 +8,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import PhoneEnabledOutlinedIcon from '@mui/icons-material/PhoneEnabledOutlined';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
+import {useNavigate} from 'react-router-dom';
 
 function Profile() {
   const {
@@ -26,6 +27,12 @@ function Profile() {
 
   console.log('usedoc', user);
 
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate('/forget');
+  };
+
   return (
     <div style={{marginLeft: '-15vw'}}>
       {user ? (
@@ -36,7 +43,7 @@ function Profile() {
 
           <Grid container alignItems="center" justifyContent="center">
             <Avatar
-              src={user.photoURL}
+              src={photoURL}
               sx={{
                 width: '15vw',
                 height: '15vw',
@@ -71,7 +78,7 @@ function Profile() {
 
             <Grid item xs={3.5}>
               <TextField
-                value={user.displayName}
+                value={displayName}
                 size="small"
                 sx={{width: '100%', backgroundColor: '#ECECEC'}}
               ></TextField>
@@ -102,7 +109,7 @@ function Profile() {
 
             <Grid item xs={3.5}>
               <TextField
-                value={user.email}
+                value={email}
                 size="small"
                 disabled
                 sx={{
@@ -166,6 +173,7 @@ function Profile() {
                   paddingX: 2,
                   marginTop: 1,
                 }}
+                onClick={handleClick}
               >
                 Change password
               </Button>
@@ -173,7 +181,7 @@ function Profile() {
             <Grid item xs={2.75}></Grid>
           </Grid>
 
-          <Grid
+          {/* <Grid
             container
             alignItems="center"
             justifyContent="center"
@@ -200,7 +208,7 @@ function Profile() {
               </Button>
             </Grid>
             <Grid item xs={2.75}></Grid>
-          </Grid>
+          </Grid> */}
         </div>
       ) : (
         <div>'Loading'</div>
