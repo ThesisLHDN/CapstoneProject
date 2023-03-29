@@ -11,11 +11,32 @@ import {
 
 const useFirestore = (collectionName, condition = {}) => {
   const [documents, setDocuments] = useState([]);
-
+  console.log(
+    'pre query for',
+    collectionName,
+    'with',
+    condition.fieldName,
+    condition.operator,
+    condition.compareValue,
+    condition.compareValue ? condition.compareValue.length : 'Gì dãy trời',
+    'is',
+    documents,
+  );
   useEffect(() => {
     const collectionRef = collection(db, collectionName);
     let q = query(collectionRef);
     if (condition) {
+      console.log(
+        'in query for',
+        collectionName,
+        'with',
+        condition.fieldName,
+        condition.operator,
+        condition.compareValue,
+        condition.compareValue ? condition.compareValue.length : 'Gì dãy trời',
+        'is',
+        documents,
+      );
       if (condition.compareValue && condition.compareValue.length) {
         q = query(
           collectionRef,
@@ -28,15 +49,25 @@ const useFirestore = (collectionName, condition = {}) => {
       }
     }
     const unsubscribe = onSnapshot(
-      query(q, orderBy('createdAt', 'desc')),
+      condition.sort ? query(q, orderBy('createdAt', condition.sort)) : q,
       (snapshot) => {
         const data = snapshot.docs.map((doc) => ({...doc.data(), id: doc.id}));
         setDocuments(data);
       },
     );
     return unsubscribe;
-  }, [collectionName]);
-  console.log('query results', collectionName, condition, documents);
+  }, []);
+  console.log(
+    'post query for',
+    collectionName,
+    'with',
+    condition.fieldName,
+    condition.operator,
+    condition.compareValue,
+    condition.compareValue ? condition.compareValue.length : 'Gì dãy trời',
+    'is',
+    documents,
+  );
   return documents;
 };
 

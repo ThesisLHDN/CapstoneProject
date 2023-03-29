@@ -25,18 +25,13 @@ export default function AppProvider({children}) {
 
   const rooms = useFirestore('rooms', RoomsCondition);
 
-  const selectedRoom = selectedRoomId
-    ? rooms.find((room) => room.id === selectedRoomId)
-    : rooms[0];
-
-  // const messages = useFirestore('messages');
-  // = useMemo(() => {
-  //   if (selectedRoomId) {
-  //     return rooms.find((room) => room.id === selectedRoomId);
-  //   } else {
-  //     return rooms[0];
-  //   }
-  // }, [rooms, selectedRoomId]));
+  const selectedRoom = useMemo(() => {
+    if (selectedRoomId) {
+      return rooms.find((room) => room.id === selectedRoomId);
+    } else {
+      return rooms[0];
+    }
+  }, [rooms, selectedRoomId]);
 
   const membersCondition = useMemo(
     () => ({
@@ -50,28 +45,14 @@ export default function AppProvider({children}) {
   console.log('membersCondition', membersCondition);
 
   const roomMembers = useFirestore('users', membersCondition);
-  // const roomMemberssas = useFirestore('users');
 
-  // const path = useMemo(
-  //   () =>
-  //     selectedRoom
-  //       ? `rooms/${selectedRoom.id}/messages`
-  //       : `rooms/trash/messages`,
-  //   [selectedRoom],
-  // );
-  const messagesCondition = useMemo(() => {}, []);
-  // const messages = useFirestore('rooms', messagesCondition);
-  // const messages = useFirestore('rooms/ltuDQNnSDBxw6LX3iJpw/messages');
-
-  // const messages = useFirestore(path);
-  // if (messages && roomMembers) {
-  //   var newMess = messages.map((message) => {
-  //     return {
-  //       author: roomMembers.find((member) => member.uid === message.authorId),
-  //       ...message,
-  //     };
-  //   });
-  // }
+  const path = useMemo(
+    () =>
+      selectedRoom
+        ? `rooms/${selectedRoom.id}/messages`
+        : `rooms/trash/messages`,
+    [selectedRoom],
+  );
 
   return (
     <AppContext.Provider
