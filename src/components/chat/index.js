@@ -26,7 +26,7 @@ function ChatRoom({currentUser}) {
         transform: 'translate(-50%,-50%)',
       }}
     >
-      {rooms && rooms.length ? (
+      {rooms ? (
         <Grid
           container
           sx={{

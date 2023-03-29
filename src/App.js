@@ -26,50 +26,55 @@ import WorkspaceSetting from './pages/workspace-setting/WorkspaceSetting';
 
 import AuthProvider from 'src/Context/AuthProvider';
 import ChatProvider from './Context/ChatProvider';
+import DocProvider from './Context/DocProvider';
 
 function App() {
   return (
     <AuthProvider>
       {/* <ChatProvider> */}
-        <div className="App">
-          {/* <Layout> */}
-          <Routes>
-            <Route path="/">
-              <Route element={<AuthLayout />}>
-                <Route path="login" element={<Login />}></Route>
-                <Route path="signup" element={<Signup />}></Route>
-                <Route path="forget" element={<ForgetPassword />}></Route>{' '}
-              </Route>
-              <Route element={<Layout />}>
-                <Route path="" element={<RoadMap />}></Route>
-                <Route
-                  path="project-setting"
-                  element={<ProjectSetting></ProjectSetting>}
-                ></Route>
-                <Route
-                  path="dashboard"
-                  element={<Dashboard></Dashboard>}
-                ></Route>
-                <Route path="board" element={<Board />}></Route>
-                <Route path="roadmap" element={<RoadMap />}></Route>
-                <Route path="backlog" element={<Backlog />} />
-                <Route path="document" element={<Document />} />
-                <Route path="issue" element={<Issue />} />
-                <Route path="profile" element={<Profile />} />
-              </Route>
-              <Route element={<Layout wp />}>
-                <Route
-                  path="workspace-setting"
-                  element={<WorkspaceSetting></WorkspaceSetting>}
-                ></Route>
-                <Route
-                  path="abc"
-                  element={<WorkspaceSetting></WorkspaceSetting>}
-                ></Route>
-              </Route>
+      <div className="App">
+        {/* <Layout> */}
+        <Routes>
+          <Route path="/">
+            <Route element={<AuthLayout />}>
+              <Route path="login" element={<Login />}></Route>
+              <Route path="signup" element={<Signup />}></Route>
+              <Route path="forget" element={<ForgetPassword />}></Route>{' '}
             </Route>
-          </Routes>
-        </div>
+            <Route element={<Layout />}>
+              <Route path="" element={<RoadMap />}></Route>
+              <Route
+                path="project-setting"
+                element={<ProjectSetting></ProjectSetting>}
+              ></Route>
+              <Route path="dashboard" element={<Dashboard></Dashboard>}></Route>
+              <Route path="board" element={<Board />}></Route>
+              <Route path="roadmap" element={<RoadMap />}></Route>
+              <Route path="backlog" element={<Backlog />} />
+              <Route
+                path="document"
+                element={
+                  <DocProvider>
+                    <Document />
+                  </DocProvider>
+                }
+              />
+              <Route path="issue" element={<Issue />} />
+              <Route path="profile" element={<Profile />} />
+            </Route>
+            <Route element={<Layout wp />}>
+              <Route
+                path="workspace-setting"
+                element={<WorkspaceSetting></WorkspaceSetting>}
+              ></Route>
+              <Route
+                path="abc"
+                element={<WorkspaceSetting></WorkspaceSetting>}
+              ></Route>
+            </Route>
+          </Route>
+        </Routes>
+      </div>
       {/* </ChatProvider> */}
     </AuthProvider>
   );

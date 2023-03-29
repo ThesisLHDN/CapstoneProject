@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {
   Box,
   Button,
@@ -19,14 +19,21 @@ import CloseIcon from '@mui/icons-material/Close';
 import {useState} from 'react';
 import {storage} from 'src/firebase/config';
 import {getDownloadURL, ref, uploadBytesResumable} from 'firebase/storage';
+import {addDocument} from 'src/firebase/firestoreServices';
+import {AuthContext} from 'src/Context/AuthProvider';
 
-function AddItem() {
+function AddItem({parentId, projectId}) {
+  const {
+    user: {uid},
+  } = useContext(AuthContext);
+
   const [open, setOpen] = useState(false);
   function handleClose() {
     setOpen(false);
   }
 
-  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState('');
+  const [snackbarContent, setSnackbarContent] = useState('');
 
   const upLoadHandler = async (files) => {
     if (files) {
@@ -39,7 +46,12 @@ function AddItem() {
       const upLoadTask = uploadBytesResumable(fileRef, file);
       upLoadTask.on(
         'state_changed',
-        (snapshot) => {},
+        (snapshot) => {
+          const progress = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100,
+          );
+          setSnackbarContent('Upload is ' + progress + '% done');
+        },
         (err) => {
           console.log(err);
         },
@@ -47,7 +59,16 @@ function AddItem() {
           getDownloadURL(upLoadTask.snapshot.ref).then(async (url) => {
             let downloadURL = url;
             if (downloadURL) {
-              setOpenSnackbar(true);
+              // setOpenSnackbar(true);
+              const newDocData = {
+                authorId: uid,
+                name: file.name,
+                parentId: parentId,
+                type: file.type,
+                downloadURL: downloadURL,
+              };
+              console.log(newDocData);
+              addDocument(`projects/${projectId}/documents`, newDocData);
             }
             console.log(downloadURL);
           });
@@ -147,10 +168,10 @@ function AddItem() {
         open={open}
       />
       <Snackbar
-        open={openSnackbar}
-        autoHideDuration={5000}
+        open={snackbarContent}
+        autoHideDuration={3000}
         onClose={() => {
-          setOpenSnackbar(false);
+          setSnackbarContent(false);
         }}
         action={action}
       >
@@ -159,7 +180,7 @@ function AddItem() {
           severity="success"
           sx={{width: '100%'}}
         >
-          Upload file successfully
+          {snackbarContent}
         </Alert>
       </Snackbar>
     </>
