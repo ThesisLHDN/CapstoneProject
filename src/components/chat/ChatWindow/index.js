@@ -80,12 +80,14 @@ const StyledDiv = styled(`div`)({
 
 function ChatWindow({currentUser}) {
   const [open, setOpen] = useState(false);
-  const {selectedRoom, selectedRoomId, roomMembers} = useContext(AppContext);
+  const {selectedRoom, selectedRoomId, roomMembers} = useContext(ChatContext);
+
   const messagesCondition = useMemo(
     () => ({
       fieldName: 'roomId',
       operator: '==',
       compareValue: 'ltuDQNnSDBxw6LX3iJpw',
+      sort: 'desc',
     }),
     [],
   );
