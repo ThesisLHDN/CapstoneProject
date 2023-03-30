@@ -13,21 +13,21 @@ function Layout(props) {
 
   return (
     <div>
-      <ChatProvider>
-        {props.wp ? <WPHeader /> : <Header />}
-        <div style={{height: '48px'}}> </div>
-        <Box sx={{flexGrow: 1}}>
-          <Grid container spacing={2}>
-            <Grid item xs={2}>
-              {props.pf ? <></> : <SideBar wp={props.wp} />}
-            </Grid>
-            <Grid item xs={10}>
-              <Box sx={{p: 4}}>
-                <Outlet />
-              </Box>
-            </Grid>
+      {props.wp ? <WPHeader /> : <Header />}
+      <div style={{height: '48px'}}> </div>
+      <Box sx={{flexGrow: 1}}>
+        <Grid container spacing={2}>
+          <Grid item xs={2}>
+            {props.pf ? <></> : <SideBar wp={props.wp} />}
           </Grid>
-        </Box>
+          <Grid item xs={10}>
+            <Box sx={{p: 4}}>
+              <Outlet />
+            </Box>
+          </Grid>
+        </Grid>
+      </Box>{' '}
+      <ChatProvider>
         <ChatButton currentUser={user} />
       </ChatProvider>
     </div>

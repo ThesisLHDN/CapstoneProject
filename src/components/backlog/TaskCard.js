@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   Button,
   Avatar,
@@ -15,7 +15,9 @@ import FlagRoundedIcon from '@mui/icons-material/FlagRounded';
 import QuestionMarkRoundedIcon from '@mui/icons-material/QuestionMarkRounded';
 import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {NavLink} from 'react-router-dom';
+import {NavLink, Link} from 'react-router-dom';
+import {AppContext} from 'src/Context/AppProvider';
+import axios from 'axios';
 
 export const IssueIcon = (type) => {
   switch (type) {
@@ -92,13 +94,16 @@ function convertDate(d) {
   return date.getDate() + ' ' + date.toLocaleString('en-us', {month: 'short'});
 }
 
-function TaskCard({ item, isChild=false }) {
-  const [status, setStatus] = useState(item.status);
+function TaskCard({issue, setTrigger, isChild = false}) {
+  console.log(issue);
+  const {project} = useContext(AppContext);
+  const [status, setStatus] = useState(issue.issuestatus);
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleChange = (event, element) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
     setStatus(element);
+    updateIssue(element);
   };
 
   const handleClick = (event) => {
@@ -108,16 +113,40 @@ function TaskCard({ item, isChild=false }) {
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popper' : undefined;
 
+  const updateIssue = async (element) => {
+    try {
+      const res = await axios.put(`http://localhost:8800/issue/${issue.id}`, {
+        cId: issue.cycleId,
+        status: element,
+      });
+      setTrigger(true);
+      // console.log(res);
+      // setIssues([...res.data]);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
-    <div className={`flex justify-between hover:cursor-pointer ${isChild ? 'my-2': ''}`}>
-      <NavLink to="/issue">
-        <div className={`${isChild ? 'ml-1 md:pr-20 2xl:pr-24' : 'ml-3 md:pr-40 2xl:pr-60'} flex`}>
-          <div>{IssueIcon(item.type)}</div>
-          <div className="ml-3 font-bold text-sm pt-0.5">{item.id}</div>
-          <div className="ml-3 font-medium text-sm pt-0.5">
-            {item.name}
+    <div
+      className={`flex justify-between hover:cursor-pointer ${
+        isChild ? 'my-2' : ''
+      }`}
+    >
+      <Link to={`/issue/${project.id}/${issue.id}`}>
+        <div
+          className={`${
+            isChild ? 'ml-1 md:pr-20 2xl:pr-24' : 'ml-3 md:pr-40 2xl:pr-60'
+          } flex`}
+        >
+          <div>{IssueIcon(issue.issueType)}</div>
+          <div className="ml-3 font-bold text-sm pt-0.5">
+            {project.pkey + '-' + issue.id}
           </div>
-          {item.epic && !isChild && (
+          <div className="ml-3 font-medium text-sm pt-0.5">
+            {issue.issuename}
+          </div>
+          {/* {issue.epicId && !isChild && (
             <div
               className="ml-3 text-sm h-6 pt-0.5 px-4 rounded-sm"
               style={{
@@ -125,18 +154,18 @@ function TaskCard({ item, isChild=false }) {
                 color: `${epicColor(item.epic)[1]}`,
               }}
             >
-              {item.epic}
+              {issue.epicId}
             </div>
-          )}
+          )} */}
         </div>
-      </NavLink>
+      </Link>
 
       <div className="inline-flex align-baseline">
         <span className="flex px-1.5 py-1 rounded-xl bg-gray-400 text-xs mr-2">
           <AccessTimeRoundedIcon
             sx={{height: 14, width: 14, marginRight: 0.5, marginTop: 0.1}}
           />
-          {item.due ? <p>{convertDate(item.due)}</p> : <p>-</p>}
+          {issue.endDate ? <p>{convertDate(issue.endDate)}</p> : <p>-</p>}
         </span>
 
         <span
@@ -149,7 +178,7 @@ function TaskCard({ item, isChild=false }) {
             : 'bg-to-do-color'
         }`}
         >
-          {item.due ? <>{item.point}</> : <p>-</p>}
+          {issue.estimatePoint ? <>{issue.estimatePoint}</> : <p>-</p>}
         </span>
 
         <Button
@@ -160,10 +189,23 @@ function TaskCard({ item, isChild=false }) {
             borderRadius: 3,
             marginRight: 2,
             zIndex: 1,
-            backgroundColor: `${status === "Done" ? "#A4E7AB" : (status === "In progress" ? "#9AD1EF" : "#EDCBB9")}`,
-            color: `${status === "Done" ? "#009606" : (status === "In progress" ? "#006BA7" : "#EC6F28")}`
-          }} 
-          onClick={handleClick}>
+            backgroundColor: `${
+              status === 'Done'
+                ? '#A4E7AB'
+                : status === 'In progress'
+                ? '#9AD1EF'
+                : '#EDCBB9'
+            }`,
+            color: `${
+              status === 'Done'
+                ? '#009606'
+                : status === 'In progress'
+                ? '#006BA7'
+                : '#EC6F28'
+            }`,
+          }}
+          onClick={handleClick}
+        >
           {status}
           <ExpandMoreIcon />
         </Button>
@@ -224,7 +266,7 @@ function TaskCard({ item, isChild=false }) {
             backgroundColor: '#8993A4',
             marginRight: 1,
           }}
-          alt={item.assignee}
+          alt={issue.assigneeId}
         />
       </div>
     </div>

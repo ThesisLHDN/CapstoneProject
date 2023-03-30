@@ -65,7 +65,7 @@ function App() {
                 <Route path="roadmap/:id" element={<RoadMap />}></Route>
                 <Route path="backlog/:id" element={<Backlog />} />
                 <Route path="document/:id" element={<Document />} />
-                <Route path="issue/:id" element={<Issue />} />
+                <Route path="issue/:id/:id" element={<Issue />} />
               </Route>
               <Route element={<Layout pf />}>
                 <Route path="profile" element={<Profile />} />

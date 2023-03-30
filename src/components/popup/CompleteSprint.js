@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Button,
   Dialog,
@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import {styled} from '@mui/material/styles';
 import {colorHover} from 'src/style';
+import axios from 'axios';
 
 const GrayButton = styled(Button)({
   textTransform: 'none',
@@ -29,9 +30,10 @@ const GrayButton = styled(Button)({
   },
 });
 
-function CompleteSprint() {
+function CompleteSprint({setTriggerIssue, sprintId}) {
   const [open, setOpen] = useState(false);
   const [sprint, setSprint] = useState('DFP Sprint 4');
+  const [display, setDisplay] = useState(true);
 
   const handleClose = () => {
     setOpen(false);
@@ -40,15 +42,34 @@ function CompleteSprint() {
   const handleChangeSprint = (event) => {
     setSprint(event.target.value);
   };
+
+  const handleClick = async (e) => {
+    e.preventDefault();
+    setDisplay(false);
+    try {
+      const res = await axios.put(`http://localhost:8800/sprint/${sprintId}`);
+      // console.log(res);
+      // setTriggerSprint(true);
+      setTriggerIssue(true);
+      // setIsSprint(false);
+      setOpen(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // useEffect(() => {}, [display]);
   return (
     <div>
-      <GrayButton
-        onClick={() => {
-          setOpen(true);
-        }}
-      >
-        Complete Sprint
-      </GrayButton>
+      {display && (
+        <GrayButton
+          onClick={() => {
+            setOpen(true);
+          }}
+        >
+          Complete Sprint
+        </GrayButton>
+      )}
       <Dialog
         open={open}
         onClose={handleClose}
@@ -67,6 +88,11 @@ function CompleteSprint() {
         </DialogTitle>
         <DialogContent sx={{pb: 1}}>
           <Typography
+            sx={{color: 'black', fontSize: '14px', fontWeight: '500'}}
+          >
+            Move open issues of this sprint to Backlog?
+          </Typography>
+          {/* <Typography
             sx={{color: 'black', fontSize: '14px', fontWeight: '900'}}
           >
             This sprint has
@@ -104,13 +130,13 @@ function CompleteSprint() {
           <DialogContentText sx={{fontSize: '12px'}}>
             Sub tasks are not included in the total(s) above, and are always
             included in the same sprint as their parent issue.
-          </DialogContentText>
+          </DialogContentText> */}
         </DialogContent>
         <DialogActions>
           <Button
             sx={{...colorHover.greenGradBtn, width: '108px'}}
             variant="contained"
-            onClick={handleClose}
+            onClick={handleClick}
           >
             Complete
           </Button>

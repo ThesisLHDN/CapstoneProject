@@ -68,7 +68,7 @@ function Backlog() {
         <SearchBar sx={{width: '210px'}} />
         <Filter />
         <Sort />
-        <Button
+        {/* <Button
           variant="text"
           startIcon={<PermIdentityRoundedIcon />}
           sx={{
@@ -78,7 +78,7 @@ function Backlog() {
           }}
         >
           Me
-        </Button>
+        </Button> */}
         {isHide ? (
           <Button
             variant="text"

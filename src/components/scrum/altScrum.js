@@ -1,266 +1,224 @@
-
-import React, { useState } from "react";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import { v4 as uuid } from "uuid";
-import Card from './card'
+import React, {useEffect, useState} from 'react';
+import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
+import {v4 as uuid} from 'uuid';
+import Card from './card/index.js';
 import './scrum.scss';
-import {
-    Button,
-    Box,
-    Typography,
-} from '@mui/material';
+import {Button, Box, Typography} from '@mui/material';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import { colorHover } from 'src/style';
+import {colorHover} from 'src/style';
+import axios from 'axios';
+import {useLocation} from 'react-router-dom';
 
-const mockData = [
-    {
-        id: uuid(),
-        title: 'To do',
-        items: [
-            {
-                id: uuid(),
-                title: 'Learn JavaScript',
-                priority: 'High',
-                type: 'task',
-                epic: 'Epic 1',
-                due: Date('2/1/22'),
-                point: 15,
-                code: 'DWP-1',
-                assignee: 'Lâm Nguyễn',
-            },
-            {
-                id: uuid(),
-                title: 'Learn Git',
-                priority: 'High',
-                type: 'bug',
-                epic: 'Epic 2',
-                due: Date('2/1/22'),
-                point: 15,
-                code: 'DWP-1',
-                assignee: 'Đăng Nguyễn',
-            },
-            {
-                id: uuid(),
-                title: 'Learn Python',
-                priority: 'High',
-                type: 'task',
-                epic: 'Epic 3',
-                due: Date('2/1/22'),
-                point: 15,
-                code: 'DWP-1',
-                assignee: 'Lâm Nguyễn',
-            },
-        ],
-    },
-    {
-        id: uuid(),
-        title: 'In progress',
-        items: [
-            {
-                id: uuid(),
-                title: 'Learn CSS',
-                priority: 'High',
-                type: 'story',
-                epic: 'Epic 4',
-                due: Date('2/1/22'),
-                point: 15,
-                code: 'DWP-1',
-                assignee: 'Đăng Nguyễn',
-            },
-            {
-                id: uuid(),
-                title: 'Learn Golang',
-                priority: 'High',
-                type: 'bug',
-                epic: 'Epic 2',
-                due: Date('2/1/22'),
-                point: 15,
-                code: 'DWP-1',
-                assignee: 'Đăng Nguyễn',
-            },
-        ],
-    },
-    {
-        id: uuid(),
-        title: 'Completed',
-        items: [
-            {
-                id: uuid(),
-                title: 'Learn HTML',
-                priority: 'High',
-                type: 'task',
-                epic: 'Epic 1',
-                due: Date('2/1/22'),
-                point: 15,
-                code: 'DWP-1',
-                assignee: 'Lâm Nguyễn',
-            },
-        ],
-    },
+const columns = [
+  {
+    id: '1',
+    title: 'To do',
+  },
+  {
+    id: '2',
+    title: 'In progress',
+  },
+  {
+    id: '3',
+    title: 'Done',
+  },
 ];
 
+function Scrum({sprint, pathname}) {
+  const [issues, setIssues] = useState([]);
+  const [triggerBoard, setTriggerBoard] = useState(false);
 
-// const itemsFromBackend = [
-//     { id: uuid(), content: "First task" },
-//     { id: uuid(), content: "Second task" },
-//     { id: uuid(), content: "Third task" },
-//     { id: uuid(), content: "Fourth task" },
-//     { id: uuid(), content: "Fifth task" }
-// ];
+  const fetchIssuesData = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:8800/sprintissue/${sprint.id}`,
+      );
+      setIssues(res.data);
+      setTriggerBoard(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-// const columnsFromBackend = {
-//     [uuid()]: {
-//         name: "Requested",
-//         items: itemsFromBackend
-//     },
-//     [uuid()]: {
-//         name: "To do",
-//         items: []
-//     },
-//     [uuid()]: {
-//         name: "In Progress",
-//         items: []
-//     },
-//     [uuid()]: {
-//         name: "Done",
-//         items: []
-//     }
-// };
+  const updateIssue = async (cId, id, status) => {
+    try {
+      const res = await axios.put(`http://localhost:8800/issue/${id}`, {
+        cId: cId,
+        status: status,
+      });
+      // setIssues([...res.data]);
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-const onDragEnd = (result, columns, setColumns) => {
+  const onDragEnd = (result, columns, setColumns) => {
     if (!result.destination) return;
-    const { source, destination } = result;
+    const {source, destination} = result;
 
     if (source.droppableId !== destination.droppableId) {
-        const sourceColumn = columns[source.droppableId];
-        const destColumn = columns[destination.droppableId];
-        const sourceItems = [...sourceColumn.items];
-        const destItems = [...destColumn.items];
-        const [removed] = sourceItems.splice(source.index, 1);
-        destItems.splice(destination.index, 0, removed);
-        setColumns({
-            ...columns,
-            [source.droppableId]: {
-                ...sourceColumn,
-                items: sourceItems
-            },
-            [destination.droppableId]: {
-                ...destColumn,
-                items: destItems
-            }
-        });
+      const sourceColumn = columns.filter((column) => {
+        return column.id == source.droppableId;
+      });
+      const destColumn = columns.filter((column) => {
+        return column.id == destination.droppableId;
+      });
+      const sourceIssues = issues.filter((issue) => {
+        return issue.issuestatus == sourceColumn[0].title;
+      });
+      const destIssues = issues.filter((issue) => {
+        return issue.issuestatus == destColumn[0].title;
+      });
+      const [removed] = sourceIssues.splice(source.index, 1);
+      destIssues.splice(destination.index, 0, removed);
+      updateIssue(removed.cycleId, removed.id, destColumn[0].title);
+      setTriggerBoard(true);
+      // setColumns({
+      //   ...columns,
+      //   [source.droppableId]: {
+      //     ...sourceColumn,
+      //     items: sourceItems,
+      //   },
+      //   [destination.droppableId]: {
+      //     ...destColumn,
+      //     items: destItems,
+      //   },
+      // });
     } else {
-        const column = columns[source.droppableId];
-        const copiedItems = [...column.items];
-        const [removed] = copiedItems.splice(source.index, 1);
-        copiedItems.splice(destination.index, 0, removed);
-        setColumns({
-            ...columns,
-            [source.droppableId]: {
-                ...column,
-                items: copiedItems
-            }
-        });
+      const column = columns.filter((column) => {
+        return column.id == source.droppableId;
+      });
+      const copiedItems = issues.filter((issue) => {
+        return issue.cycleId == column[0].id;
+      });
+      const [removed] = copiedItems.splice(source.index, 1);
+      copiedItems.splice(destination.index, 0, removed);
+      updateIssue(removed.cycleId, removed.id, column[0].title);
+      setTriggerBoard(true);
+      // setColumns({
+      //   ...columns,
+      //   [source.droppableId]: {
+      //     ...column,
+      //     items: copiedItems,
+      //   },
+      // });
     }
-};
+  };
 
-function Scrum() {
-    const [columns, setColumns] = useState(mockData);
-    return (
-        <Box style={{ display: "flex", justifyContent: "flex-start", height: "100%", marginTop: 10 }}>
-            <DragDropContext
-                onDragEnd={result => onDragEnd(result, columns, setColumns)}
+  useEffect(() => {
+    fetchIssuesData();
+  }, [sprint, triggerBoard]);
+
+  return (
+    <Box
+      style={{
+        display: 'flex',
+        justifyContent: 'flex-start',
+        height: '100%',
+        marginTop: 10,
+      }}
+    >
+      <DragDropContext onDragEnd={(result) => onDragEnd(result, columns)}>
+        {columns.map((column) => {
+          return (
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
+              key={column.id}
             >
-                {Object.entries(columns).map(([columnId, column], index) => {
+              <Box style={{marginRight: 8}}>
+                <Droppable droppableId={column.id} key={column.id}>
+                  {(provided, snapshot) => {
                     return (
-                        <div
-                            style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                alignItems: "center"
-                            }}
-                            key={columnId}
+                      <Box>
+                        <Box
+                          {...provided.droppableProps}
+                          ref={provided.innerRef}
+                          style={{
+                            background: snapshot.isDraggingOver
+                              ? '#ccf2ff'
+                              : '#e8e8e8',
+                            padding: 8,
+                            width: 300,
+                            minHeight: 500,
+                            borderRadius: 5,
+                          }}
                         >
-
-                            <Box style={{ marginRight: 8 }}>
-                                <Droppable droppableId={columnId} key={columnId}>
-                                    {(provided, snapshot) => {
-                                        return (
-                                            <Box>
-                                                <Box
-                                                    {...provided.droppableProps}
-                                                    ref={provided.innerRef}
-                                                    style={{
-                                                        background: snapshot.isDraggingOver
-                                                            ? "#ccf2ff"
-                                                            : "#e8e8e8",
-                                                        padding: 8,
-                                                        width: 300,
-                                                        minHeight: 500,
-                                                        borderRadius: 5,
-                                                    }}
-                                                >
-                                                    <Typography sx={{ fontWeight: 700, mb: 1 }}>
-                                                        {column.title}{' '}
-                                                        <Typography
-                                                            variant="subtitle2"
-                                                            sx={{ display: 'inline' }}
-                                                            className="scrum__section__title__num"
-                                                        >
-                                                            {column.items.length + (column.items.length > 1 ? " issues" : ' issue')}
-                                                        </Typography>
-                                                    </Typography>
-                                                    {column.items.map((item, index) => {
-                                                        return (
-                                                            <Draggable
-                                                                key={item.id}
-                                                                draggableId={item.id}
-                                                                index={index}
-                                                            >
-                                                                {(provided, snapshot) => {
-                                                                    return (
-                                                                        <Box
-                                                                            ref={provided.innerRef}
-                                                                            {...provided.draggableProps}
-                                                                            {...provided.dragHandleProps}
-                                                                            style={{
-                                                                                ...provided.draggableProps.style,
-                                                                                userSelect: "none",
-                                                                                margin: "0 0 8px 0",
-                                                                                minHeight: "50px",
-                                                                                opacity: snapshot.isDragging ? '0.7' : '1',
-                                                                            }}
-                                                                        >
-                                                                            <Card>{item}</Card>
-                                                                        </Box>
-                                                                    );
-                                                                }}
-                                                            </Draggable>
-                                                        );
-                                                    })}
-                                                    {provided.placeholder}
-                                                </Box>
-                                            </Box>
-                                        );
-                                    }}
-                                </Droppable>
-                            </Box>
-                        </div>
+                          {/* {console.log('###########', issues)} */}
+                          <Typography sx={{fontWeight: 700, mb: 1}}>
+                            {column.title}{' '}
+                            {/* <Typography
+                              variant="subtitle2"
+                              sx={{display: 'inline'}}
+                              className="scrum__section__title__num"
+                            >
+                              {column.items.length +
+                                (column.items.length > 1
+                                  ? ' issues'
+                                  : ' issue')}
+                            </Typography> */}
+                          </Typography>
+                          {issues
+                            .filter((issue) => {
+                              return issue.issuestatus == column.title;
+                            })
+                            .map((issue, index) => {
+                              return (
+                                <Draggable
+                                  key={issue.id}
+                                  draggableId={issue.id?.toString()}
+                                  index={index}
+                                >
+                                  {(provided, snapshot) => {
+                                    return (
+                                      <Box
+                                        ref={provided.innerRef}
+                                        {...provided.draggableProps}
+                                        {...provided.dragHandleProps}
+                                        style={{
+                                          ...provided.draggableProps.style,
+                                          userSelect: 'none',
+                                          margin: '0 0 8px 0',
+                                          minHeight: '50px',
+                                          opacity: snapshot.isDragging
+                                            ? '0.7'
+                                            : '1',
+                                        }}
+                                      >
+                                        <Card issue={issue} />
+                                      </Box>
+                                    );
+                                  }}
+                                </Draggable>
+                              );
+                            })}
+                          {provided.placeholder}
+                        </Box>
+                      </Box>
                     );
-                })}
-            </DragDropContext>
-            <Button
-                sx={{
-                    height: 40,
-                    width: 40,
-                    minWidth: 40,
-                    ...colorHover.grayBtn,
-                }}
-            >
-                <AddRoundedIcon />
-            </Button>
-        </Box>
-    );
+                  }}
+                </Droppable>
+              </Box>
+            </div>
+          );
+        })}
+      </DragDropContext>
+      {/* <Button
+        sx={{
+          height: 40,
+          width: 40,
+          minWidth: 40,
+          ...colorHover.grayBtn,
+        }}
+      >
+        <AddRoundedIcon />
+      </Button> */}
+    </Box>
+  );
 }
 
 export default Scrum;

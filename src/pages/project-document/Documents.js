@@ -98,7 +98,7 @@ function Document({projectId = '1OkWkDDY5XyJjJ16eP70', parentId}) {
 
   return (
     <div>
-      {documents && documents.length ? (
+      {documents ? (
         <div>
           <Grid container spacing={2}>
             <Grid item xs={6}>

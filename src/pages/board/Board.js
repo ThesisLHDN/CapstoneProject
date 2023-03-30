@@ -1,7 +1,7 @@
 // import React from 'react';
 import 'src/App.scss';
 
-import { Typography, Breadcrumbs, Link, Grid, Button, Box } from '@mui/material';
+import {Typography, Breadcrumbs, Link, Grid, Button, Box} from '@mui/material';
 // import {styled} from '@mui/material/styles';
 
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -16,7 +16,10 @@ import SearchBar from 'src/components/search';
 import Filter from 'src/components/Filter';
 import Sort from 'src/components/Sort';
 
-import { color, colorHover } from 'src/style';
+import {color, colorHover} from 'src/style';
+import {useEffect, useState} from 'react';
+import axios from 'axios';
+import {useLocation} from 'react-router-dom';
 
 function handleClick(event) {
   event.preventDefault();
@@ -32,11 +35,28 @@ function handleClick(event) {
 //   },
 // });
 function Board() {
+  const location = useLocation();
+  const pId = location.pathname.split('/')[2];
+  const [lastestSprint, setLastestSprint] = useState({});
+
+  const fetchLastestSprint = async () => {
+    try {
+      const res = await axios.get(`http://localhost:8800/lastsprint/${pId}`);
+      setLastestSprint(res.data);
+      console.log(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchLastestSprint();
+  }, []);
   return (
-    <Box style={{ textAlign: 'left'}}>
+    <Box style={{textAlign: 'left'}}>
       <Grid container spacing={2}>
         <Grid item xs={5}>
-          <Breadcrumbs separator="›" aria-label="breadcrumb" sx={{ mb: 2 }}>
+          <Breadcrumbs separator="›" aria-label="breadcrumb" sx={{mb: 2}}>
             [
             <Link
               underline="hover"
@@ -58,7 +78,7 @@ function Board() {
               First Scrum Project
             </Link>
             ,
-            <Typography key="3" color="text.primary" sx={{ fontSize: 'inherit' }}>
+            <Typography key="3" color="text.primary" sx={{fontSize: 'inherit'}}>
               Board
             </Typography>
             , ]
@@ -73,13 +93,27 @@ function Board() {
             alignItems: 'center',
           }}
         >
-          <Typography sx={{ mx: 1, display: 'flex', alignItems: 'center', fontSize:14, mr:2 }}>
+          <Typography
+            sx={{
+              mx: 1,
+              display: 'flex',
+              alignItems: 'center',
+              fontSize: 14,
+              mr: 2,
+            }}
+          >
             <AccessTimeRoundedIcon />
-            10 days remaining
+            {lastestSprint
+              ? Math.ceil(
+                  Math.abs(new Date(lastestSprint.endDate) - new Date()) /
+                    (1000 * 60 * 60 * 24),
+                )
+              : '0'}{' '}
+            days remaining
           </Typography>
-          <Button sx={{ ...colorHover.grayBtn, height: 32 }}>
+          {/* <Button sx={{ ...colorHover.grayBtn, height: 32 }}>
             Complete sprint
-          </Button>
+          </Button> */}
           <Button
             sx={{
               mx: 1,
@@ -93,14 +127,11 @@ function Board() {
           </Button>
         </Grid>
       </Grid>
-      <Typography variant="h5" sx={{ color: color.green03, fontWeight: 700 }}>
-        Sprint 02
+      <Typography variant="h5" sx={{color: color.green03, fontWeight: 700}}>
+        {lastestSprint ? lastestSprint.cyclename : 'Board'}
       </Typography>
-      <Typography variant="caption" sx={{ color: '#555' }}>
-        Lorem Ipsum is simply dummy text of the printing and typesetting
-        industry. Lorem Ipsum has been the industry&apos; s standard dummy text
-        ever since the 1500s, when an unknown printer took a galley of type and
-        scrambled it to make a type specimen book.
+      <Typography variant="caption" sx={{color: '#555'}}>
+        {lastestSprint ? lastestSprint.goal : ''}
       </Typography>
 
       <Box
@@ -108,10 +139,10 @@ function Board() {
           display: 'flex',
           gap: 1,
           gridTemplateColumns: 'repeat(4, 1fr)',
-          mt: 1,
+          mt: 2,
         }}
       >
-        <SearchBar sx={{ width: '250px' }} />
+        <SearchBar sx={{width: '250px'}} />
         <Filter />
         {/* <Button
           variant="text"
@@ -121,17 +152,17 @@ function Board() {
           Sort
         </Button> */}
         <Sort />
-        <Button
+        {/* <Button
           variant="text"
           startIcon={<PermIdentityRoundedIcon />}
-          sx={{ color: '#181818', textTransform: 'none' }}
+          sx={{color: '#181818', textTransform: 'none'}}
         >
           Me
-        </Button>
+        </Button> */}
       </Box>
 
       {/* <Scrum /> */}
-      <AltScrum />
+      <AltScrum sprint={lastestSprint} pathname={location.pathname} />
     </Box>
   );
 }

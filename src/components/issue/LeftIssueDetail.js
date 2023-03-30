@@ -224,9 +224,9 @@ function LeftIssueDetail() {
           <Typography sx={{marginTop: 2, fontSize: 14, fontWeight: 700}}>
             Priority
           </Typography>
-          <Typography sx={{marginTop: 2, fontSize: 14, fontWeight: 700}}>
+          {/* <Typography sx={{marginTop: 2, fontSize: 14, fontWeight: 700}}>
             Time Estimate
-          </Typography>
+          </Typography> */}
         </Grid>
 
         <Grid item xs={5}>
@@ -249,23 +249,23 @@ function LeftIssueDetail() {
               <KeyboardDoubleArrowUpIcon />
             </Button>
           </div>
-          <TextField
+          {/* <TextField
             variant="standard"
             placeholder="None"
             size="small"
             sx={{marginLeft: 3, marginTop: 2, width: '100%'}}
             InputProps={{disableUnderline: true, style: {fontSize: 14}}}
-          ></TextField>
+          ></TextField> */}
         </Grid>
       </Grid>
 
-      <ChildIssues
+      {/* <ChildIssues
         childIssue={childIssue}
         setChildIssue={setChildIssue}
         createChild={createChild}
         setCreateChild={setCreateChild}
         tasks={tasks}
-      />
+      /> */}
 
       <Typography sx={{marginTop: 3, fontSize: 16, fontWeight: 700}}>
         Activity

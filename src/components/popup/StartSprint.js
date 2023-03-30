@@ -1,11 +1,11 @@
-import React, {useState} from 'react'
-import { 
+import React, {useContext, useState} from 'react';
+import {
   Button,
-  Dialog, 
-  DialogTitle, 
-  DialogActions, 
-  DialogContent, 
-  DialogContentText, 
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
   TextField,
   FormControl,
   Select,
@@ -13,9 +13,11 @@ import {
   Typography,
 } from '@mui/material';
 import {styled} from '@mui/material/styles';
-import { CssTextField } from './CreateProject';
-import { colorHover } from 'src/style';
+import {CssTextField} from './CreateProject';
+import {colorHover} from 'src/style';
 import DatePicker from 'react-datepicker';
+import {AppContext} from 'src/Context/AppProvider';
+import axios from 'axios';
 
 const GrayButton = styled(Button)({
   textTransform: 'none',
@@ -30,130 +32,199 @@ const GrayButton = styled(Button)({
 });
 
 function formatDate(date) {
-  return date.substring(6, 10) + '-' + date.substring(3, 5) + '-' + date.substring(0, 2)
+  return (
+    date.substring(6, 10) +
+    '-' +
+    date.substring(3, 5) +
+    '-' +
+    date.substring(0, 2)
+  );
 }
 
-function StartSprint() {
+function StartSprint({setTriggerSprint}) {
+  const {project} = useContext(AppContext);
   const [open, setOpen] = useState(false);
+  const [display, setDisplay] = useState(true);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date(Date.now() + 12096e5));
-  
+  const [sprint, setSprint] = useState({
+    cyclename: '',
+    startDate: formatDate(startDate.toLocaleDateString('en-GB')),
+    endDate: formatDate(endDate.toLocaleDateString('en-GB')),
+    cstatus: 1,
+    goal: '',
+    ownerId: project.ownerId,
+    projectId: project.id,
+  });
+
+  const handleChange = (e) => {
+    e.preventDefault();
+    setSprint({...sprint, [e.target.name]: e.target.value});
+    // console.log(sprint);
+  };
+
+  const handleClick = async (e) => {
+    e.preventDefault();
+    setDisplay(false);
+    try {
+      await axios.post('http://localhost:8800/sprint', sprint);
+      setOpen(false);
+      setTriggerSprint(true);
+      // setIsSprint(true);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <div>
-      <GrayButton onClick={() => {setOpen(true)}}>Start Sprint</GrayButton>
-      <Dialog 
-        open={open} 
-        onClose={() => setOpen(false)} 
+      {display && (
+        <GrayButton
+          onClick={() => {
+            setOpen(true);
+          }}
+        >
+          Start Sprint
+        </GrayButton>
+      )}
+      <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
         PaperProps={{
           sx: {
-            minWidth: '32%'
-          }
+            minWidth: '32%',
+          },
         }}
       >
-        <DialogTitle sx={{ color: '#00980F', fontWeight: '900', textAlign: 'center', mt: 1 }}>
-          Create project
+        <DialogTitle
+          sx={{color: '#00980F', fontWeight: '900', textAlign: 'center', mt: 1}}
+        >
+          Start A New Sprint
         </DialogTitle>
-        <DialogContent sx={{ pb: 0.5}}>
-          <DialogContentText sx={{ color: 'black', fontSize: '12px' }}>
+        <DialogContent sx={{pb: 0.5}}>
+          {/* <DialogContentText sx={{ color: 'black', fontSize: '12px' }}>
             2 issues will be included in this sprint.
-          </DialogContentText>
+          </DialogContentText> */}
           <FormControl fullWidth>
-            <Typography sx={{ 
-              color: 'black', 
-              fontSize: '12px', 
-              fontWeight: '900',
-              mt: 1,
-            }}>
+            <Typography
+              sx={{
+                color: 'black',
+                fontSize: '12px',
+                fontWeight: '900',
+                mt: 1,
+              }}
+            >
               Sprint name
-              <span style={{ color: 'red' }}>&nbsp;*</span>
+              <span style={{color: 'red'}}>&nbsp;*</span>
             </Typography>
             <CssTextField
-              size='small'
+              size="small"
               margin="dense"
               fullWidth
               variant="outlined"
-              sx={{ width: '60%', fontSize: '14px' }}
+              sx={{width: '60%', fontSize: '14px'}}
+              name="cyclename"
+              onChange={handleChange}
             />
-            <Typography sx={{ 
-              color: 'black', 
-              fontSize: '12px', 
-              fontWeight: '900',
-              my: 0.75
-            }}>
+            {/* <Typography
+              sx={{
+                color: 'black',
+                fontSize: '12px',
+                fontWeight: '900',
+                my: 0.75,
+              }}
+            >
               Duration
-              <span style={{ color: 'red' }}>&nbsp;*</span>
+              <span style={{color: 'red'}}>&nbsp;*</span>
             </Typography>
-            <Select size='small' sx={{ width: '60%', fontSize: '14px' }}>
-              <MenuItem value='scrum'>custom</MenuItem>
-              <MenuItem value='kanban'>1 weeks</MenuItem>
-              <MenuItem value='kanban'>2 weeks</MenuItem>
-              <MenuItem value='kanban'>3 weeks</MenuItem>
-              <MenuItem value='kanban'>4 weeks</MenuItem>
-            </Select>
-            <Typography sx={{ 
-              color: 'black', 
-              fontSize: '12px', 
-              fontWeight: '900',
-              my: 1,
-            }}>
+            <Select size="small" sx={{width: '60%', fontSize: '14px'}}>
+              <MenuItem value="scrum">custom</MenuItem>
+              <MenuItem value="kanban">1 weeks</MenuItem>
+              <MenuItem value="kanban">2 weeks</MenuItem>
+              <MenuItem value="kanban">3 weeks</MenuItem>
+              <MenuItem value="kanban">4 weeks</MenuItem>
+            </Select> */}
+            <Typography
+              sx={{
+                color: 'black',
+                fontSize: '12px',
+                fontWeight: '900',
+                my: 1,
+              }}
+            >
               Start date
-              <span style={{ color: 'red' }}>&nbsp;*</span>
+              <span style={{color: 'red'}}>&nbsp;*</span>
             </Typography>
             <TextField
-              size='small'
+              size="small"
               type="date"
               defaultValue={formatDate(startDate.toLocaleDateString('en-GB'))}
-              sx={{ width: '60%' }}
+              sx={{width: '60%'}}
               InputLabelProps={{
                 shrink: true,
               }}
+              name="startDate"
+              onChange={handleChange}
             />
-            <Typography sx={{ 
-              color: 'black', 
-              fontSize: '12px', 
-              fontWeight: '900',
-              mt: 1,
-            }}>
+            <Typography
+              sx={{
+                color: 'black',
+                fontSize: '12px',
+                fontWeight: '900',
+                mt: 1,
+              }}
+            >
               End date
-              <span style={{ color: 'red' }}>&nbsp;*</span>
+              <span style={{color: 'red'}}>&nbsp;*</span>
             </Typography>
             <TextField
-              size='small'
+              size="small"
               type="date"
               defaultValue={formatDate(endDate.toLocaleDateString('en-GB'))}
-              sx={{ width: '60%' }}
+              sx={{width: '60%'}}
               InputLabelProps={{
                 shrink: true,
               }}
+              name="endDate"
+              onChange={handleChange}
             />
-            <Typography sx={{ 
-              color: 'black', 
-              fontSize: '12px', 
-              fontWeight: '900',
-              mt: 1,
-            }}>
+            <Typography
+              sx={{
+                color: 'black',
+                fontSize: '12px',
+                fontWeight: '900',
+                mt: 1,
+              }}
+            >
               Sprint goal
             </Typography>
             <CssTextField
-              size='small'
+              size="small"
               multiline
               rows={3}
               margin="dense"
               fullWidth
               variant="outlined"
+              name="goal"
+              onChange={handleChange}
             />
           </FormControl>
         </DialogContent>
         <DialogActions>
           <Button
-            sx={{ ...colorHover.greenGradBtn, width: '85px' }}
+            sx={{...colorHover.greenGradBtn, width: '85px'}}
             variant="contained"
-            onClick={() => setOpen(false)}
+            onClick={handleClick}
           >
             Create
-          </Button> 
-          <Button 
-            sx={{ color: '#818181', textTransform: 'none', fontWeight: '900', width: '85px' }}
+          </Button>
+          <Button
+            sx={{
+              color: '#818181',
+              textTransform: 'none',
+              fontWeight: '900',
+              width: '85px',
+            }}
             variant="text"
             onClick={() => setOpen(false)}
           >
@@ -162,7 +233,7 @@ function StartSprint() {
         </DialogActions>
       </Dialog>
     </div>
-  )
+  );
 }
 
-export default StartSprint
+export default StartSprint;
