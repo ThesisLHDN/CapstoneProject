@@ -98,8 +98,6 @@ function App() {
               <Route path="create-project" element={<CreateProject />}></Route>
             </Routes>
           )}
-          {/* </Layout> */}
-          {/* <ChatButton /> */}
         </div>
       </AppProvider>
     </AuthProvider>

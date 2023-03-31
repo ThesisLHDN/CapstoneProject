@@ -15,6 +15,7 @@ import {
 } from '@mui/material';
 import {useTheme} from '@mui/material/styles';
 import MuiAppBar from '@mui/material/AppBar';
+import PersonRemoveAlt1RoundedIcon from '@mui/icons-material/PersonRemoveAlt1Rounded';
 import Toolbar from '@mui/material/Toolbar';
 import CssBaseline from '@mui/material/CssBaseline';
 import List from '@mui/material/List';
@@ -46,7 +47,7 @@ const StyledDiv = styled(`div`)({
   padding: '12px',
   '&:hover': {backgroundColor: '#00000010', cursor: 'pointer'},
 });
-const drawerWidth = 200;
+const drawerWidth = 260;
 
 const Main = styled('main', {shouldForwardProp: (prop) => prop !== 'open'})(
   ({theme, open}) => ({
@@ -146,7 +147,7 @@ function ChatWindow({currentUser}) {
       if (!(member.id in roomMembers)) {
         selectedRoom.members.push(member.id);
         console.log('start update', member);
-        console.log('rooms', selectedRoom.id, selectedRoom.members);
+        // console.log('rooms', selectedRoom.id, selectedRoom.members);
         updateDocument('rooms', selectedRoom.id, {
           members: selectedRoom.members,
         });
@@ -308,16 +309,50 @@ function ChatWindow({currentUser}) {
             </StyledDiv> */}
             <StyledDiv
               style={{
+                // display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                height: 40,
+                columnGap: 1,
+              }}
+            >
+              <Typography>Members</Typography>
+              {roomMembers.map((member) => (
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    mb: 1,
+                  }}
+                >
+                  <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>
+                    {' '}
+                    <Avatar src={member.photoURL} alt={member.name}></Avatar>
+                    {member.displayName}
+                  </Box>
+
+                  <IconButton>
+                    <PersonRemoveAlt1RoundedIcon />
+                  </IconButton>
+                </Box>
+              ))}
+            </StyledDiv>{' '}
+            <StyledDiv
+              style={{
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 height: 40,
               }}
             >
-              <Typography>Members</Typography>
+              <Typography>Delete room</Typography>
             </StyledDiv>
           </Drawer>
-          <TypingArea currentUser={currentUser} roomId={selectedRoom.id} />
+          <TypingArea
+            currentUser={currentUser}
+            roomId={selectedRoom ? selectedRoom.id : ''}
+          />
         </Box>
       ) : (
         <CircularProgress

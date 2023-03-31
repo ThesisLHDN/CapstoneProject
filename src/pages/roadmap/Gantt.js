@@ -39,18 +39,6 @@ import {Paper} from '@mui/material';
 // }
 
 export default class Gantt extends Component {
-
-  // id: 1,
-  //     text: 'Epic 01',
-  //     start_date: null,
-  //     duration: null,
-  //     parent: 0,
-  //     progress: 0,
-  //     status: 'Done',
-  //     open: true,
-
-  
-
   // instance of gantt.dataProcessor
   dataProcessor = null;
 
@@ -183,7 +171,7 @@ export default class Gantt extends Component {
         case 'Done':
           color = 'done';
           break;
-        case 'In Progress':
+        case 'In progress':
           color = 'progress';
           break;
         default:
@@ -195,17 +183,21 @@ export default class Gantt extends Component {
       // return task.text + " (" + task.users + ")";
     }
 
-    const {tasks} = this.props;
+    // const {tasks} = this.props;
     gantt.init(this.ganttContainer);
     this.initGanttDataProcessor();
-    gantt.parse(tasks);
+    gantt.parse(this.props.tasks);
   }
 
   componentWillUnmount() {
     if (this.dataProcessor) {
+      gantt.clearAll();
       this.dataProcessor.destructor();
       this.dataProcessor = null;
     }
+  }
+  componentWillReceiveProps(nextProps) {
+    this.setState({tasks: nextProps.tasks});
   }
 
   render() {

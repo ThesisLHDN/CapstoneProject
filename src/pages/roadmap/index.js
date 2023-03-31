@@ -57,13 +57,14 @@ function RoadMap() {
           text: issue.issuename,
           id: issue.id,
           start_date: new Date(issue.createTime),
-          duration: null,
-          parent: issue.parentId,
+          duration: 1,
+          parent: issue.parentId ? issue.parentId : 0,
           progress: 100,
           status: issue.issuestatus,
           open: true,
         })),
       };
+
       setIssues(data);
     } catch (err) {
       console.log(err);
@@ -74,7 +75,7 @@ function RoadMap() {
     fetchIssuesData();
   }, []);
 
-  console.log('formatted issues', issues);
+  // console.log('formatted issues', issues, tasks);
 
   const addMessage = (message) => {
     const maxLogLength = 5;
@@ -202,13 +203,23 @@ function RoadMap() {
           <Toolbar zoom={zoom} onZoomChange={handleZoomChange} />
         </Box>
         <Box className="gantt-container">
-          {issues ? (
-            <Gantt 
-            tasks={issues}
-            // tasks={tasks} 
-            zoom={zoom} onDataUpdated={logDataUpdate} />
+          {issues && issues.data.length ? (
+            <Gantt
+              tasks={issues}
+              // tasks={tasks}
+              zoom={zoom}
+              onDataUpdated={logDataUpdate}
+            />
           ) : (
-            <CircularProgress />
+            <>
+              {' '}
+              <Gantt
+                tasks={{data: []}}
+                zoom={zoom}
+                onDataUpdated={logDataUpdate}
+              />
+              {/* <CircularProgress /> */}
+            </>
           )}
         </Box>
         {/* <MessageArea messages={messagesState} /> */}
