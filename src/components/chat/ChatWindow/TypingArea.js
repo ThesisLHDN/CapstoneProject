@@ -24,7 +24,6 @@ function TypingArea({currentUser, roomId}) {
 
   const handleKeyPress = (e) => {
     //it triggers by pressing the enter key
-    console.log('key pressed', e);
     if (e.key === 'Enter') {
       handleOnSubmit();
     }

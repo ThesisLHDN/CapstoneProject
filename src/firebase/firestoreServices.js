@@ -3,10 +3,13 @@ import {
   collection,
   addDoc,
   doc,
+  getDocs,
   setDoc,
   serverTimestamp,
   deleteDoc,
   updateDoc,
+  query,
+  where,
 } from 'firebase/firestore';
 // import {v4 as uuidv4} from 'uuid';
 
@@ -68,4 +71,24 @@ const deleteDocument = async (collectionPath, id = null) => {
   }
 };
 
-export {addDocument, setDocument, deleteDocument, updateDocument};
+const getDocumentWithCondition = (collectionName, condition) => {
+  const q = query(
+    collection(db, collectionName),
+    where(condition.fieldName, condition.operator, condition.compareValue),
+  );
+
+  const querySnapshot = getDocs(q);
+  // querySnapshot.forEach((doc) => {
+  //   // doc.data() is never undefined for query doc snapshots
+  //   console.log(doc.id, ' => ', doc.data());
+  // });
+  return querySnapshot;
+};
+
+export {
+  addDocument,
+  setDocument,
+  deleteDocument,
+  updateDocument,
+  getDocumentWithCondition,
+};

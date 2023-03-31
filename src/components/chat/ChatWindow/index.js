@@ -1,6 +1,6 @@
 import React, {useContext, useMemo, useState} from 'react';
 import {styled} from '@mui/material/styles';
-import {color} from 'src/style';
+import {color, colorHover} from 'src/style';
 import {
   Box,
   Modal,
@@ -16,11 +16,16 @@ import {
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import PersonAddAltRoundedIcon from '@mui/icons-material/PersonAddAltRounded';
 import CircularProgress from '@mui/material/CircularProgress';
+import CreationPopup from 'src/components/popup/Create';
 
 import Message from './Message';
 import TypingArea from './TypingArea';
 import {ChatContext} from 'src/Context/ChatProvider';
 import {useFirestore} from 'src/hooks/useFirestore';
+import {
+  getDocumentWithCondition,
+  updateDocument,
+} from 'src/firebase/firestoreServices';
 
 // const IOSSwitch = styled((props) => (
 //   <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
@@ -95,6 +100,35 @@ function ChatWindow({currentUser}) {
 
   const messages = useFirestore('messages', messagesCondition);
 
+  const addMemberHandler = async (email) => {
+    console.log(email);
+    // todo validate
+    const newMemberList = await getDocumentWithCondition('users', {
+      fieldName: 'email',
+      operator: '==',
+      compareValue: email,
+    });
+
+    console.log(newMemberList);
+    const member = newMemberList.docs.map((member) => ({
+      id: member.id,
+      ...member.data(),
+    }))[0];
+    console.log(member);
+    if (member) {
+      if (!(member.id in roomMembers)) {
+        selectedRoom.members.push(member.id);
+        console.log('start update', member);
+        console.log('rooms', selectedRoom.id, selectedRoom.members);
+        updateDocument('rooms', selectedRoom.id, {
+          members: selectedRoom.members,
+        });
+      }
+    }
+
+    setOpen(false);
+  };
+
   // const path = useMemo(() => `rooms/${selectedRoom.id}/messages`, []);
   // const messages = useFirestore(path);
   if (messages && roomMembers) {
@@ -122,7 +156,7 @@ function ChatWindow({currentUser}) {
               display: 'flex',
               justifyContent: 'space-between',
               mb: 2,
-              height: '50px',
+              // height: '50px',
             }}
           >
             <Box sx={{display: 'flex', gap: 2, alignItems: 'center'}}>
@@ -138,9 +172,19 @@ function ChatWindow({currentUser}) {
                   {selectedRoom.description}
                 </Typography>
               </Box>
-            </Box>
+            </Box>{' '}
             <Box sx={{display: 'flex', gap: 1}}>
               <Box sx={{position: 'relative'}}>
+                <Button
+                  variant="contained"
+                  sx={{...colorHover.greenBtn}}
+                  startIcon={<PersonAddAltRoundedIcon />}
+                  onClick={() => {
+                    setOpen(true);
+                  }}
+                >
+                  Add Member
+                </Button>
                 <IconButton
                   sx={{color: color.green03}}
                   onClick={() => setSettingModal(true)}
@@ -223,7 +267,7 @@ function ChatWindow({currentUser}) {
                     </Paper>
                   </Box>
                 )}
-                <Modal open={open} onClose={handleClose}>
+                {/* <Modal open={open} onClose={handleClose}>
                   <Paper
                     elevation={3}
                     sx={{position: 'absolute', right: 0, top: 0}}
@@ -236,10 +280,15 @@ function ChatWindow({currentUser}) {
                       Add Member
                     </Button>
                   </Paper>
-                </Modal>
+                </Modal> */}
               </Box>
             </Box>
-          </Box>
+          </Box>{' '}
+          {roomMembers.map((mem) => (
+            <Typography>
+              {mem.id} {mem.displayName}
+            </Typography>
+          ))}
           <Divider
             variant="middle"
             sx={{borderBottom: 2, color: '#666'}}
@@ -272,6 +321,14 @@ function ChatWindow({currentUser}) {
           }}
         />
       )}
+      <CreationPopup
+        title="Add member"
+        fieldLabel={'Please enter an email'}
+        open={open}
+        onClose={() => setOpen(false)}
+        onSubmit={addMemberHandler}
+        confirmContent={'Add'}
+      ></CreationPopup>
     </Box>
   );
 }

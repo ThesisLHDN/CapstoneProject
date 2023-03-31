@@ -183,7 +183,8 @@ function AddItem({parentId, projectId}) {
         fieldLabel={"Enter folder's name"}
         placeholder={'Folder name'}
         confirmContent={'Create'}
-        onClose={createFolderHandler}
+        onSubmit={createFolderHandler}
+        onClose={() => setOpen(false)}
         open={open}
       />
       <Snackbar

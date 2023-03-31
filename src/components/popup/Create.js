@@ -5,6 +5,7 @@ import ReportRoundedIcon from '@mui/icons-material/ReportRounded';
 
 function CreationPopup({
   title,
+  onSubmit,
   content,
   confirmContent,
   cancelContent,
@@ -18,9 +19,8 @@ function CreationPopup({
   const [input, setInput] = useState('');
   const handleKeyPress = (e) => {
     //it triggers by pressing the enter key
-    console.log('key pressed', e);
     if (e.key === 'Enter') {
-      onClose(input);
+      onSubmit(input);
     }
   };
 
@@ -89,7 +89,7 @@ function CreationPopup({
         >
           {' '}
           <Button
-            onClick={() => onClose(false)}
+            onClick={onClose}
             sx={{
               color: '#818181',
             }}
@@ -104,7 +104,7 @@ function CreationPopup({
               '&:hover': {backgroundColor: '#1BB738'},
             }}
             onClick={() => {
-              onClose(input);
+              onSubmit(input);
               setInput(false);
             }}
           >
