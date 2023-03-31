@@ -11,7 +11,22 @@ import {
   Typography,
   Avatar,
   Switch,
+  Drawer,
 } from '@mui/material';
+import {useTheme} from '@mui/material/styles';
+import MuiAppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import CssBaseline from '@mui/material/CssBaseline';
+import List from '@mui/material/List';
+import MenuIcon from '@mui/icons-material/Menu';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import MailIcon from '@mui/icons-material/Mail';
 
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import PersonAddAltRoundedIcon from '@mui/icons-material/PersonAddAltRounded';
@@ -27,64 +42,76 @@ import {
   updateDocument,
 } from 'src/firebase/firestoreServices';
 
-// const IOSSwitch = styled((props) => (
-//   <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
-// ))(({theme}) => ({
-//   width: 40,
-//   height: 22,
-//   padding: 0,
-//   '& .MuiSwitch-switchBase': {
-//     padding: 0,
-//     margin: 2,
-//     transitionDuration: '300ms',
-//     '&.Mui-checked': {
-//       transform: 'translateX(18px)',
-//       color: '#fff',
-//       '& + .MuiSwitch-track': {
-//         backgroundColor: theme.palette.mode === 'dark' ? '#2ECA45' : '#65C466',
-//         opacity: 1,
-//         border: 0,
-//       },
-//       '&.Mui-disabled + .MuiSwitch-track': {
-//         opacity: 0.5,
-//       },
-//     },
-//     '&.Mui-focusVisible .MuiSwitch-thumb': {
-//       color: '#33cf4d',
-//       border: '6px solid #fff',
-//     },
-//     '&.Mui-disabled .MuiSwitch-thumb': {
-//       color:
-//         theme.palette.mode === 'light'
-//           ? theme.palette.grey[100]
-//           : theme.palette.grey[600],
-//     },
-//     '&.Mui-disabled + .MuiSwitch-track': {
-//       opacity: theme.palette.mode === 'light' ? 0.7 : 0.3,
-//     },
-//   },
-//   '& .MuiSwitch-thumb': {
-//     boxSizing: 'border-box',
-//     width: 18,
-//     height: 18,
-//   },
-//   '& .MuiSwitch-track': {
-//     borderRadius: 24 / 2,
-//     backgroundColor: theme.palette.mode === 'light' ? '#E9E9EA' : '#39393D',
-//     opacity: 1,
-//     transition: theme.transitions.create(['background-color'], {
-//       duration: 500,
-//     }),
-//   },
-// }));
-
 const StyledDiv = styled(`div`)({
-  padding: '8px',
-  borderRadius: '4px',
+  padding: '12px',
   '&:hover': {backgroundColor: '#00000010', cursor: 'pointer'},
 });
+const drawerWidth = 200;
+
+const Main = styled('main', {shouldForwardProp: (prop) => prop !== 'open'})(
+  ({theme, open}) => ({
+    height: 'calc(100% - 70px)',
+    flexGrow: 1,
+    // width: '100%',
+    transition: theme.transitions.create(['margin', 'width'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    marginRight: 0,
+    ...(open && {
+      transition: theme.transitions.create(['margin', 'width'], {
+        easing: theme.transitions.easing.easeOut,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+      marginRight: drawerWidth,
+    }),
+  }),
+);
+
+const AppBar = styled(MuiAppBar, {
+  shouldForwardProp: (prop) => prop !== 'open',
+})(({theme, open}) => ({
+  backgroundColor: 'white',
+  color: '#181818',
+  shadow: 'none',
+  left: 0,
+  position: 'absolute',
+  width: '100%',
+  transition: theme.transitions.create(['margin', 'width'], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  ...(open && {
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(['margin', 'width'], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    // marginRight: drawerWidth,
+  }),
+}));
+
+const DrawerHeader = styled('div')(({theme}) => ({
+  display: 'flex',
+  alignItems: 'center',
+  padding: theme.spacing(0, 1),
+  // necessary for content to be below app bar
+  ...theme.mixins.toolbar,
+  justifyContent: 'flex-start',
+}));
 
 function ChatWindow({currentUser}) {
+  const theme = useTheme();
+  const [openDrawer, setOpenDrawer] = useState(false);
+
+  const handleDrawerOpen = () => {
+    setOpenDrawer(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpenDrawer(false);
+  };
+
   const [open, setOpen] = useState(false);
   const {selectedRoom, roomMembers} = useContext(ChatContext);
 
@@ -140,41 +167,29 @@ function ChatWindow({currentUser}) {
     });
   }
 
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const [settingModal, setSettingModal] = useState(false);
+  // const [settingModal, setSettingModal] = useState(false);
 
   return (
-    <Box container sx={{p: 2, height: '100%'}}>
+    <Box container sx={{height: '100%', position: 'relative'}}>
       {selectedRoom ? (
-        <>
-          {' '}
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              mb: 2,
-              // height: '50px',
-            }}
-          >
-            <Box sx={{display: 'flex', gap: 2, alignItems: 'center'}}>
-              <Avatar
-                src={selectedRoom.coverPicture}
-                alt={selectedRoom.name}
-              ></Avatar>
+        <Box sx={{backgroundColor: '#efefef', height: '100%'}}>
+          <AppBar open={openDrawer}>
+            <Toolbar sx={{display: 'flex', justifyContent: 'space-between'}}>
+              <Box sx={{display: 'flex', gap: 2, alignItems: 'center'}}>
+                <Avatar
+                  src={selectedRoom.coverPicture}
+                  alt={selectedRoom.name}
+                ></Avatar>
 
-              <Box>
-                {' '}
-                <Typography variant="h6">{selectedRoom.name}</Typography>
-                <Typography variant="subtitle2">
-                  {selectedRoom.description}
-                </Typography>
+                <Box>
+                  {' '}
+                  <Typography variant="h6">{selectedRoom.name}</Typography>
+                  <Typography variant="subtitle2">
+                    {selectedRoom.description}
+                  </Typography>
+                </Box>
               </Box>
-            </Box>{' '}
-            <Box sx={{display: 'flex', gap: 1}}>
-              <Box sx={{position: 'relative'}}>
+              <Box>
                 <Button
                   variant="contained"
                   sx={{...colorHover.greenBtn}}
@@ -186,131 +201,124 @@ function ChatWindow({currentUser}) {
                   Add Member
                 </Button>
                 <IconButton
-                  sx={{color: color.green03}}
-                  onClick={() => setSettingModal(true)}
+                  color="inherit"
+                  aria-label="open drawer"
+                  edge="end"
+                  onClick={handleDrawerOpen}
+                  sx={{...(openDrawer && {display: 'none'})}}
                 >
-                  <MoreVertIcon />
+                  <MenuIcon />
                 </IconButton>
-                {settingModal && (
-                  <Box>
-                    <Box
-                      sx={{
-                        width: '100vw',
-                        height: '100vh',
-                        position: 'fixed',
-                        top: 0,
-                        left: 0,
-                        backgroundColor: '#00000020',
-                      }}
-                      onClick={() => setSettingModal(false)}
-                    ></Box>{' '}
-                    <Paper
-                      elevation={3}
-                      sx={{
-                        position: 'absolute',
-                        top: 0,
-                        right: 0,
-                        p: 1,
-                      }}
-                    >
-                      <Typography
-                        variant="h6"
-                        sx={{textAlign: 'center', color: color.green03}}
-                      >
-                        Setting
-                      </Typography>
-                      <Divider sx={{my: 1}}></Divider>
-                      <StyledDiv
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                          height: 40,
-                        }}
-                      >
-                        <Typography>Rename</Typography>
-                      </StyledDiv>
-                      <StyledDiv
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                          height: 40,
-                          gap: 2,
-                        }}
-                      >
-                        <Typography>Notifications</Typography>
-                        <Switch defaultChecked />
-                      </StyledDiv>
-                      <StyledDiv
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                          height: 40,
-                          gap: 2,
-                        }}
-                      >
-                        <Typography>Public</Typography>
-                        <Switch defaultChecked />
-                      </StyledDiv>
-                      <StyledDiv
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                          height: 40,
-                        }}
-                      >
-                        <Typography>Members</Typography>
-                      </StyledDiv>
-                    </Paper>
-                  </Box>
-                )}
-                {/* <Modal open={open} onClose={handleClose}>
-                  <Paper
-                    elevation={3}
-                    sx={{position: 'absolute', right: 0, top: 0}}
-                  >
-                    <Button variant="text">Rename</Button>
-                    <Button
-                      variant="contained"
-                      startIcon={<PersonAddAltRoundedIcon />}
-                    >
-                      Add Member
-                    </Button>
-                  </Paper>
-                </Modal> */}
               </Box>
+            </Toolbar>
+          </AppBar>
+          <Main open={openDrawer}>
+            <DrawerHeader sx={{width: '100%'}} />{' '}
+            {/* Tạm thôi{' '}
+            {roomMembers.map((mem) => (
+              <Typography>
+                {mem.id} {mem.displayName}
+              </Typography>
+            ))}
+            <Divider
+              variant="middle"
+              sx={{borderBottom: 2, color: '#666'}}
+            ></Divider> */}
+            <Box
+              sx={{
+                height: 'calc(100% - 64px)',
+                overflowY: 'scroll',
+                // scrollSnapType: 'y proximity',
+              }}
+            >
+              {newMess
+                .reverse()
+                .map(({author, authorId, body, type, createdAt}) => (
+                  <Message mine={authorId === currentUser.uid}>
+                    {{author, authorId, body, type, createdAt}}
+                  </Message>
+                ))}{' '}
             </Box>
-          </Box>{' '}
-          {roomMembers.map((mem) => (
-            <Typography>
-              {mem.id} {mem.displayName}
-            </Typography>
-          ))}
-          <Divider
-            variant="middle"
-            sx={{borderBottom: 2, color: '#666'}}
-          ></Divider>
-          <Box
+            {/* <DrawerFooter sx={{backgroundColor: 'green', width: '100%'}} />{' '} */}
+          </Main>{' '}
+          <Drawer
             sx={{
-              py: 2,
-              height: 'calc(100% - 126px)',
-              overflowY: 'scroll',
-              scrollSnapType: 'y proximity',
+              width: drawerWidth,
+              flexShrink: 0,
+              '& .MuiDrawer-paper': {
+                width: drawerWidth,
+              },
             }}
+            variant="persistent"
+            anchor="right"
+            open={openDrawer}
           >
-            {newMess
-              .reverse()
-              .map(({author, authorId, body, type, createdAt}) => (
-                <Message mine={authorId === currentUser.uid}>
-                  {{author, authorId, body, type, createdAt}}
-                </Message>
-              ))}
-          </Box>
+            <DrawerHeader>
+              <Button onClick={handleDrawerClose} sx={{textTransform: 'none'}}>
+                {theme.direction === 'rtl' ? (
+                  <ChevronLeftIcon />
+                ) : (
+                  <>
+                    {' '}
+                    <ChevronRightIcon />
+                    <Typography
+                      variant="h6"
+                      sx={{textAlign: 'center', color: color.green03}}
+                    >
+                      Setting
+                    </Typography>
+                  </>
+                )}
+              </Button>
+            </DrawerHeader>
+            <Divider />
+            <StyledDiv
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                height: 40,
+              }}
+            >
+              <Typography>Rename</Typography>
+            </StyledDiv>
+            {/* <StyledDiv
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                height: 40,
+                gap: 2,
+              }}
+            >
+              <Typography>Notifications</Typography>
+              <Switch defaultChecked />
+            </StyledDiv>
+            <StyledDiv
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                height: 40,
+                gap: 2,
+              }}
+            >
+              <Typography>Public</Typography>
+              <Switch defaultChecked />
+            </StyledDiv> */}
+            <StyledDiv
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                height: 40,
+              }}
+            >
+              <Typography>Members</Typography>
+            </StyledDiv>
+          </Drawer>
           <TypingArea currentUser={currentUser} roomId={selectedRoom.id} />
-        </>
+        </Box>
       ) : (
         <CircularProgress
           sx={{

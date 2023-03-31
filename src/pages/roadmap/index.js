@@ -49,7 +49,6 @@ function RoadMap() {
   const [messagesState, setMessagesState] = useState([]);
   const [issues, setIssues] = useState({data: []});
 
-  console.log('roadmap', issues);
   const fetchIssuesData = async () => {
     try {
       const res = await axios.get(`http://localhost:8800/issues/${pId}`);
@@ -72,10 +71,10 @@ function RoadMap() {
   };
 
   useEffect(() => {
-    const unsubscribe = fetchIssuesData();
+    fetchIssuesData();
   }, []);
 
-  console.log('formatted', issues, tasks);
+  console.log('formatted issues', issues);
 
   const addMessage = (message) => {
     const maxLogLength = 5;
@@ -204,12 +203,10 @@ function RoadMap() {
         </Box>
         <Box className="gantt-container">
           {issues ? (
-            <Gantt
-              tasks={issues}
-              issues={issues}
-              zoom={zoom}
-              onDataUpdated={logDataUpdate}
-            />
+            <Gantt 
+            tasks={issues}
+            // tasks={tasks} 
+            zoom={zoom} onDataUpdated={logDataUpdate} />
           ) : (
             <CircularProgress />
           )}

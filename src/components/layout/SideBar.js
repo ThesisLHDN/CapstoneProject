@@ -146,7 +146,7 @@ function SideBar(props) {
             </p>
             <p className="ml-3 2xl:text-base xl:text-sm py-3 font-semibold text-green-tx overflow-hidden truncate">
               {project.pname}
-              {console.log(project.pname)}
+              {/* {console.log(project.pname)} */}
             </p>
           </div>
 

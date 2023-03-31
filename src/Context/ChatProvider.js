@@ -10,7 +10,7 @@ export default function ChatProvider({children}) {
   const {
     user: {uid},
   } = useContext(AuthContext);
-  console.log('Chat provider', uid);
+  // console.log('Chat provider', uid);
   const [selectedRoomId, setSelectedRoomId] = useState('');
   // console.log('ChatProvider', user);
 
@@ -47,7 +47,7 @@ export default function ChatProvider({children}) {
     [selectedRoom ? selectedRoom.members : []],
   );
 
-  console.log('membersCondition', membersCondition);
+  // console.log('membersCondition', membersCondition);
 
   const roomMembers = useFirestore('users', membersCondition);
 

@@ -46,70 +46,79 @@ function TypingArea({currentUser, roomId}) {
     }
   };
   return (
-    <>
-      <Divider variant="middle" sx={{mb: 2, borderBottom: 2}}></Divider>
-      <Grid container spacing={2} sx={{bottom: '0px', width: '100%'}}>
-        <Grid item xs={10}>
-          <TextField
-            value={message}
-            onChange={handleChange}
-            size="small"
-            placeholder="Aa"
-            sx={{width: '100%'}}
-            onKeyPress={handleKeyPress}
-            InputProps={{
-              endAdornment: (
-                <>
-                  <InputAdornment position="end">
-                    <IconButton
-                      size="small"
-                      edge="end"
-                      sx={{...colorHover.greenIconBtn}}
-                      component="label"
-                    >
-                      <input hidden accept="*" multiple type="file" />
-                      <InsertDriveFileRoundedIcon />
-                    </IconButton>
-                  </InputAdornment>
-                  <InputAdornment position="end">
-                    <IconButton
-                      size="small"
-                      edge="end"
-                      sx={{...colorHover.greenIconBtn}}
-                      component="label"
-                    >
-                      <input hidden accept="image/*" type="file" />
-                      <PhotoRoundedIcon />
-                    </IconButton>
-                  </InputAdornment>
-                  <InputAdornment position="end">
-                    <IconButton
-                      size="small"
-                      edge="end"
-                      sx={{...colorHover.greenIconBtn}}
-                      component="label"
-                    >
-                      <input hidden accept="video/*" multiple type="file" />
-                      <SmartDisplayRoundedIcon />
-                    </IconButton>
-                  </InputAdornment>
-                </>
-              ),
-            }}
-          ></TextField>
-        </Grid>{' '}
-        <Grid item xs={2}>
-          <Button
-            variant="contained"
-            sx={{width: '100%', height: '100%', ...colorHover.greenBtn}}
-            onClick={handleOnSubmit}
-            // endIcon={<SendRoundedIcon />}
-          >
-            Send
-          </Button>
-        </Grid>
+    <Grid
+      container
+      spacing={2}
+      sx={{
+        backgroundColor: 'white',
+        position: 'absolute',
+        bottom: '0px',
+        width: '100%',
+        m: 0,
+        pb: 2,
+        pr: 2,
+      }}
+    >
+      <Grid item xs={10}>
+        <TextField
+          value={message}
+          onChange={handleChange}
+          size="small"
+          placeholder="Aa"
+          sx={{width: '100%'}}
+          onKeyPress={handleKeyPress}
+          InputProps={{
+            endAdornment: (
+              <>
+                <InputAdornment position="end">
+                  <IconButton
+                    size="small"
+                    edge="end"
+                    sx={{...colorHover.greenIconBtn}}
+                    component="label"
+                  >
+                    <input hidden accept="*" multiple type="file" />
+                    <InsertDriveFileRoundedIcon />
+                  </IconButton>
+                </InputAdornment>
+                <InputAdornment position="end">
+                  <IconButton
+                    size="small"
+                    edge="end"
+                    sx={{...colorHover.greenIconBtn}}
+                    component="label"
+                  >
+                    <input hidden accept="image/*" type="file" />
+                    <PhotoRoundedIcon />
+                  </IconButton>
+                </InputAdornment>
+                <InputAdornment position="end">
+                  <IconButton
+                    size="small"
+                    edge="end"
+                    sx={{...colorHover.greenIconBtn}}
+                    component="label"
+                  >
+                    <input hidden accept="video/*" multiple type="file" />
+                    <SmartDisplayRoundedIcon />
+                  </IconButton>
+                </InputAdornment>
+              </>
+            ),
+          }}
+        ></TextField>
+      </Grid>{' '}
+      <Grid item xs={2}>
+        <Button
+          variant="contained"
+          sx={{width: '100%', height: '100%', ...colorHover.greenBtn}}
+          onClick={handleOnSubmit}
+          // endIcon={<SendRoundedIcon />}
+        >
+          Send
+        </Button>
       </Grid>
-    </>
+    </Grid>
   );
 }
 
