@@ -20,43 +20,13 @@ import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 // import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRightOutlined';
 import FolderOutlinedIcon from '@mui/icons-material/FolderOutlined';
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
+import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded'; 
 // import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import {DocContext} from 'src/Context/DocProvider';
 import {deleteDocument} from 'src/firebase/firestoreServices';
-
-const folders = [
-  {
-    name: 'Folder 1',
-    createBy: 'Lam Nguyen',
-    updateOn: '05/12/2022',
-    parent: '',
-    children: [],
-  },
-  {
-    name: 'Folder 2',
-    createBy: 'Lam Nguyen',
-    updateOn: '05/12/2022',
-    parent: '',
-    children: [],
-  },
-];
-
-const files = [
-  {
-    name: 'File 3',
-    createBy: 'Lam Nguyen',
-    updateOn: '05/12/2022',
-    parent: 'Folder 2',
-  },
-  {
-    name: 'File 4',
-    createBy: 'Lam Nguyen',
-    updateOn: '05/12/2022',
-    parent: '',
-  },
-];
+import {styled} from '@mui/system';
 
 function convertDate(d) {
   const date = new Date(d);
@@ -69,8 +39,13 @@ function convertDate(d) {
   );
 }
 
+const PlainButton = styled(Button)({
+  color: '#181818',
+  textTransform: 'none',
+  '& :hover': {backgroundColor: '#eee'},
+});
+
 function Document({projectId = '1OkWkDDY5XyJjJ16eP70', parentId}) {
-  // const projectId = '1OkWkDDY5XyJjJ16eP70';
   const {selectedParentId, selectedProjectId, setParent, rawDocuments} =
     useContext(DocContext);
 
@@ -163,46 +138,42 @@ function Document({projectId = '1OkWkDDY5XyJjJ16eP70', parentId}) {
             return (
               <Grid
                 container
-                sx={{marginTop: 1, marginBottom: 1}}
+                sx={{
+                  marginTop: 1,
+                  marginBottom: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
                 key={item.id}
               >
                 <Grid item xs={7}>
                   <Grid container>
                     {item.type === 'folder' ? (
-                      <FolderOutlinedIcon
-                        sx={{
-                          width: 32,
-                          height: 32,
-                          marginTop: 0.9,
-                          marginLeft: 3.5,
-                          cursor: 'pointer',
-                        }}
+                      <PlainButton
+                        startIcon={<FolderOutlinedIcon />}
                         onClick={() =>
                           item ? setParent(item.id, item.name) : null
                         }
-                      />
+                      >
+                        {item.name}
+                      </PlainButton>
                     ) : (
                       <a href={item.downloadURL} target="_blank" download>
-                        <DescriptionOutlinedIcon
-                          sx={{
-                            width: 32,
-                            height: 32,
-                            marginTop: 0.9,
-                            marginLeft: 3.5,
-                            cursor: 'pointer',
-                          }}
-                        />
+                        <PlainButton startIcon={<DescriptionOutlinedIcon />}>
+                          {/* <DescriptionOutlinedIcon
+                            sx={{
+                              width: 32,
+                              height: 32,
+                              marginTop: 0.9,
+                              marginLeft: 3.5,
+                              cursor: 'pointer',
+                            }}
+                          /> */}
+
+                          {item.name}
+                        </PlainButton>
                       </a>
                     )}
-                    <Typography
-                      sx={{
-                        marginTop: 1.5,
-                        marginLeft: 1,
-                        fontSize: 14,
-                      }}
-                    >
-                      {item.name}
-                    </Typography>
                   </Grid>
                 </Grid>
 
@@ -216,7 +187,7 @@ function Document({projectId = '1OkWkDDY5XyJjJ16eP70', parentId}) {
                 {/* <Grid item xs={4}></Grid> */}
 
                 <Grid item xs={3}>
-                  <Typography sx={{marginTop: 1.5, fontSize: 14}}>
+                  <Typography sx={{fontSize: 14}}>
                     <span className="font-bold">Updated on </span>
                     {item.updatedAt ? convertDate(item.updatedAt.toDate()) : ''}
                   </Typography>
@@ -240,7 +211,8 @@ function Document({projectId = '1OkWkDDY5XyJjJ16eP70', parentId}) {
                         setSelectedFile({id: item.id, name: item.name});
                       }}
                     >
-                      <MoreHorizOutlinedIcon sx={{color: '#181818'}} />
+                      <DeleteOutlineRoundedIcon sx={{color: '#e02828'}} />
+                      {/* <MoreHorizOutlinedIcon  /> */}
                     </IconButton>
                   </Grid>
                 </Grid>

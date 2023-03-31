@@ -1,6 +1,5 @@
 import {useMemo} from 'react';
 import CommentForm from './CommentForm';
-import Subcomment from './Subcomment';
 import moment from 'moment/moment';
 
 import {Avatar} from '@mui/material';
@@ -21,19 +20,6 @@ const Comment = ({
   currentUserId,
   subcomment = false,
 }) => {
-  const repliesConditions = useMemo(
-    () => ({
-      fieldName: 'parentId',
-      operator: '==',
-      compareValue: comment.id,
-      sort: 'desc',
-      sortAttr: 'createdAt',
-    }),
-    [parentId],
-  );
-  const repliesPath = 'issues/' + issueId + '/replies';
-  const replies = useFirestore(repliesPath, repliesConditions);
-  // console.log(replies);
   const isEditing =
     activeComment &&
     activeComment.id === comment.id &&
@@ -159,25 +145,6 @@ const Comment = ({
                     setActiveComment(null);
                   }}
                 />
-              </div>
-            )}
-            {replies && replies.length > 0 && (
-              <div className="mt-5">
-                {replies.map((reply, index) => (
-                  <Subcomment
-                    issueId={issueId}
-                    comment={{index, ...reply}}
-                    key={index}
-                    setActiveComment={setActiveComment}
-                    activeComment={activeComment}
-                    updateComment={updateComment}
-                    deleteComment={deleteComment}
-                    addComment={addComment}
-                    parentId={comment.id}
-                    currentUserId={currentUserId}
-                    subcomment
-                  />
-                ))}
               </div>
             )}
           </div>

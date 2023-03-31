@@ -50,28 +50,6 @@ export default function ChatProvider({children}) {
   console.log('membersCondition', membersCondition);
 
   const roomMembers = useFirestore('users', membersCondition);
-  // const roomMemberssas = useFirestore('users');
-
-  // const path = useMemo(
-  //   () =>
-  //     selectedRoom
-  //       ? `rooms/${selectedRoom.id}/messages`
-  //       : `rooms/trash/messages`,
-  //   [selectedRoom],
-  // );
-  const messagesCondition = useMemo(() => {}, []);
-  // const messages = useFirestore('rooms', messagesCondition);
-  // const messages = useFirestore('rooms/ltuDQNnSDBxw6LX3iJpw/messages');
-
-  // const messages = useFirestore(path);
-  // if (messages && roomMembers) {
-  //   var newMess = messages.map((message) => {
-  //     return {
-  //       author: roomMembers.find((member) => member.uid === message.authorId),
-  //       ...message,
-  //     };
-  //   });
-  // }
 
   return (
     <ChatContext.Provider

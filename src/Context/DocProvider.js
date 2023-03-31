@@ -11,8 +11,10 @@ export default function DocProvider({children}) {
   );
   const [selectedParentId, setSelectedParentId] = useState('');
   const [selectedParentName, setSelectedParentName] = useState('');
+  const [prevParent, setPrevParent] = useState();
 
   const setParent = (id, name) => {
+    setPrevParent(selectedParentId, selectedParentName);
     setSelectedParentId(id);
     setSelectedParentName(name);
   };
@@ -47,6 +49,7 @@ export default function DocProvider({children}) {
         setParent,
         selectedParentName,
         rawDocuments,
+        prevParent,
       }}
     >
       {children}

@@ -73,7 +73,6 @@ function AddItem({parentId, projectId}) {
               }
 
               console.log(downloadURL);
-              setSelectedFile();
             });
           },
         );
@@ -109,7 +108,7 @@ function AddItem({parentId, projectId}) {
         color="secondary"
         size="small"
         onClick={() => {
-          setOpenSnackbar(false);
+          setSnackbarContent(false);
         }}
       >
         UNDO
@@ -128,7 +127,7 @@ function AddItem({parentId, projectId}) {
   return (
     <>
       <ClickAwayListener onClickAway={() => setOpenMenu(false)}>
-        <Box sx={{position: 'relative'}}>
+        <Box sx={{position: 'relative', zIndex: 5, width: 'fit-content'}}>
           {' '}
           <Button
             variant="text"
@@ -196,7 +195,7 @@ function AddItem({parentId, projectId}) {
         action={action}
       >
         <Alert
-          onClose={() => setOpenSnackbar(false)}
+          onClose={() => setSnackbarContent(false)}
           severity="success"
           sx={{width: '100%'}}
         >
