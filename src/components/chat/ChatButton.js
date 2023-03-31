@@ -33,7 +33,7 @@ function ChatButton({currentUser}) {
           setOpenChat(false);
         }}
       >
-        {/* <ChatRoom currentUser={currentUser} /> */}
+        <ChatRoom currentUser={currentUser} />
       </Modal>
     </Badge>
   );

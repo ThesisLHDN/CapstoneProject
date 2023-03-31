@@ -27,9 +27,9 @@ function Layout(props) {
           </Grid>
         </Grid>
       </Box>{' '}
-      {/* <ChatProvider>
+      <ChatProvider>
         <ChatButton currentUser={user} />
-      </ChatProvider> */}
+      </ChatProvider>
     </div>
   );
 }

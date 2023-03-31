@@ -44,7 +44,7 @@ export default function ChatProvider({children}) {
       operator: 'in',
       compareValue: selectedRoom ? selectedRoom.members : [],
     }),
-    [selectedRoom ? selectedRoom.members : []],
+    [selectedRoom],
   );
 
   // console.log('membersCondition', membersCondition);

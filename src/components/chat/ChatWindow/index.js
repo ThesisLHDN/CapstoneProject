@@ -167,6 +167,7 @@ function ChatWindow({currentUser}) {
       };
     });
   }
+  console.log('check', currentUser, selectedRoom);
 
   // const [settingModal, setSettingModal] = useState(false);
 
@@ -215,16 +216,6 @@ function ChatWindow({currentUser}) {
           </AppBar>
           <Main open={openDrawer}>
             <DrawerHeader sx={{width: '100%'}} />{' '}
-            {/* Tạm thôi{' '}
-            {roomMembers.map((mem) => (
-              <Typography>
-                {mem.id} {mem.displayName}
-              </Typography>
-            ))}
-            <Divider
-              variant="middle"
-              sx={{borderBottom: 2, color: '#666'}}
-            ></Divider> */}
             <Box
               sx={{
                 height: 'calc(100% - 64px)',
@@ -312,8 +303,7 @@ function ChatWindow({currentUser}) {
                 // display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                height: 40,
-                columnGap: 1,
+                // height: 40,
               }}
             >
               <Typography>Members</Typography>
@@ -323,7 +313,7 @@ function ChatWindow({currentUser}) {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    mb: 1,
+                    mt: 1,
                   }}
                 >
                   <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>
@@ -340,13 +330,14 @@ function ChatWindow({currentUser}) {
             </StyledDiv>{' '}
             <StyledDiv
               style={{
-                display: 'flex',
+                display:
+                  selectedRoom.adminId === currentUser.uid ? 'flex' : 'none',
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 height: 40,
               }}
             >
-              <Typography>Delete room</Typography>
+              <Typography sx={{color: 'red'}}>Delete room</Typography>
             </StyledDiv>
           </Drawer>
           <TypingArea
@@ -355,14 +346,26 @@ function ChatWindow({currentUser}) {
           />
         </Box>
       ) : (
-        <CircularProgress
-          sx={{
-            position: 'absolute',
-            top: '50%',
-            right: '50%',
-            transform: 'translate(-50%,-50%)',
-          }}
-        />
+        // <CircularProgress
+        //   sx={{
+        //     position: 'absolute',
+        //     top: '50%',
+        //     right: '50%',
+        //     transform: 'translate(-50%,-50%)',
+        //   }}
+        // />
+        <Box sx={{position: 'relative', height: '100%'}}>
+          <Typography
+            sx={{
+              position: 'absolute',
+              left: '50%',
+              top: '50%',
+              transform: 'translate(-50%,-50%)',
+            }}
+          >
+            You are not in any chat room. Create or be invited to one.
+          </Typography>
+        </Box>
       )}
       <CreationPopup
         title="Add member"
