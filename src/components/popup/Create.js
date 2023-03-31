@@ -56,7 +56,7 @@ function CreationPopup({
               '& *': {fontSize: 18},
             }}
           >
-            {icon && <ReportRoundedIcon />}
+            {icon && ''}
             {title ? title : 'Untitled Warning'}
           </Typography>
         </Box>

@@ -1,13 +1,24 @@
-import { useState } from 'react';
+import {useState, useEffect} from 'react';
 import 'src/App.scss';
-import { Typography, Breadcrumbs, Link, Button, Box, Grid } from '@mui/material';
+import {
+  Typography,
+  Breadcrumbs,
+  Link,
+  Button,
+  Box,
+  Grid,
+  CircularProgress,
+} from '@mui/material';
 import Gantt from './Gantt';
 import Toolbar from './toolbar';
-// import Filter from 'src/components/Filter';
-import { styled } from '@mui/material/styles';
-import { color } from 'src/style';
-
+import {styled} from '@mui/material/styles';
+import {color} from 'src/style';
+import tasks from './tasks';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import {useLocation} from 'react-router-dom';
+import axios from 'axios';
+
+// import Filter from 'src/components/Filter';
 // import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
 // import PermIdentityRoundedIcon from '@mui/icons-material/PermIdentityRounded';
 // import FilterListRoundedIcon from '@mui/icons-material/FilterListRounded';
@@ -16,8 +27,6 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 // import {colorHover} from 'src/style';
 
 // import SearchBar from 'src/components/search';
-
-import data from './tasks';
 
 function handleClick(event) {
   event.preventDefault();
@@ -34,13 +43,43 @@ const GrayButton = styled(Button)({
 });
 
 function RoadMap() {
+  const location = useLocation();
+  const pId = location.pathname.split('/')[2];
   const [zoom, setZoom] = useState('Days');
   const [messagesState, setMessagesState] = useState([]);
-  // d
+  const [issues, setIssues] = useState({data: []});
+
+  console.log('roadmap', issues);
+  const fetchIssuesData = async () => {
+    try {
+      const res = await axios.get(`http://localhost:8800/issues/${pId}`);
+      const data = {
+        data: res.data.map((issue) => ({
+          text: issue.issuename,
+          id: issue.id,
+          start_date: new Date(issue.createTime),
+          duration: null,
+          parent: issue.parentId,
+          progress: 100,
+          status: issue.issuestatus,
+          open: true,
+        })),
+      };
+      setIssues(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    const unsubscribe = fetchIssuesData();
+  }, []);
+
+  console.log('formatted', issues, tasks);
 
   const addMessage = (message) => {
     const maxLogLength = 5;
-    const newMessage = { message };
+    const newMessage = {message};
     const messages = [newMessage, ...messagesState];
 
     if (messages.length > maxLogLength) {
@@ -63,10 +102,10 @@ function RoadMap() {
   };
 
   return (
-    <div style={{ textAlign: 'left' }}>
+    <div style={{textAlign: 'left'}}>
       <Grid container spacing={2}>
         <Grid item xs={5}>
-          <Breadcrumbs separator="›" aria-label="breadcrumb" sx={{ mb: 2 }}>
+          <Breadcrumbs separator="›" aria-label="breadcrumb" sx={{mb: 2}}>
             [
             <Link
               underline="hover"
@@ -88,7 +127,7 @@ function RoadMap() {
               First Scrum Project
             </Link>
             ,
-            <Typography key="3" color="text.primary" sx={{ fontSize: 'inherit' }}>
+            <Typography key="3" color="text.primary" sx={{fontSize: 'inherit'}}>
               Roadmap
             </Typography>
             , ]
@@ -113,7 +152,7 @@ function RoadMap() {
           </GrayButton> */}
         </Grid>
       </Grid>
-      <Typography variant="h5" sx={{ color: color.green03, fontWeight: 700 }}>
+      <Typography variant="h5" sx={{color: color.green03, fontWeight: 700}}>
         RoadMap
       </Typography>
       {/* <Typography variant="caption" sx={{ color: '#555' }}>
@@ -159,12 +198,21 @@ function RoadMap() {
       <Box>
         <Box
           className="zoom-bar"
-          sx={{ display: 'flex', justifyContent: 'flex-end' }}
+          sx={{display: 'flex', justifyContent: 'flex-end'}}
         >
           <Toolbar zoom={zoom} onZoomChange={handleZoomChange} />
         </Box>
         <Box className="gantt-container">
-          <Gantt tasks={data} zoom={zoom} onDataUpdated={logDataUpdate} />
+          {issues ? (
+            <Gantt
+              tasks={issues}
+              issues={issues}
+              zoom={zoom}
+              onDataUpdated={logDataUpdate}
+            />
+          ) : (
+            <CircularProgress />
+          )}
         </Box>
         {/* <MessageArea messages={messagesState} /> */}
       </Box>

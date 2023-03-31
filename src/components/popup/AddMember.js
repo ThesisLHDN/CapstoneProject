@@ -65,7 +65,6 @@ function AddMember(props) {
               '& *': {fontSize: 18},
             }}
           >
-            <ReportRoundedIcon />
             Add Member to {project.pname}
           </Typography>
         </Box>
