@@ -20,12 +20,11 @@ import {
 } from '@mui/material';
 import {colorHover} from 'src/style';
 
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+// import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import PersonAddAltRoundedIcon from '@mui/icons-material/PersonAddAltRounded';
+// import PersonAddAltRoundedIcon from '@mui/icons-material/PersonAddAltRounded';
 
 import SearchBar from 'src/components/search';
-import CreationPopup from 'src/components/popup/Create';
 import {addDocument} from 'src/firebase/firestoreServices';
 
 import {ChatContext} from 'src/Context/ChatProvider';
@@ -44,7 +43,8 @@ const CssTextField = styled(TextField)({
   },
 });
 function ChatSideBar({data, currentUser}) {
-  const {selectedRoomId, setSelectedRoomId} = useContext(ChatContext);
+  const {selectedRoomId, setSelectedRoomId, selectedRoom} =
+    useContext(ChatContext);
   const [open, setOpen] = useState(false);
   const [newRoom, setNewRoom] = useState('');
   const [description, setDescription] = useState('');
@@ -109,8 +109,12 @@ function ChatSideBar({data, currentUser}) {
                   textDecoration: 'none',
                   display: 'block',
                   width: '100%',
+
                   '&:hover': {backgroundColor: '#efefef'},
                   borderRadius: 3,
+                  ...(id === selectedRoom.id
+                    ? {backgroundColor: '#efefef'}
+                    : {}),
                 }}
                 onClick={() => {
                   setSelectedRoomId(id);

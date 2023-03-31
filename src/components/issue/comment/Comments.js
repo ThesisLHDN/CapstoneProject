@@ -12,15 +12,16 @@ import {
 import {Button} from '@mui/material';
 
 const Comments = ({currentUser, issueId}) => {
-  const refPath = 'issues/' + issueId + '/comments';
+  const refPath = 'issues/' + issueId;
   const currentUserId = currentUser.uid;
   const commentsCodition = useMemo(
     () => ({
       sort: 'desc',
+      sortAttr: 'createdAt',
     }),
     [],
   );
-  const comments = useFirestore(refPath);
+  const comments = useFirestore(refPath + '/comments', commentsCodition);
 
   const [activeComment, setActiveComment] = useState(null);
   const [activeAllBtn, setActiveAllBtn] = useState(false);
@@ -34,22 +35,20 @@ const Comments = ({currentUser, issueId}) => {
       authorId: currentUser.uid,
       authorAvatar: currentUser.photoURL,
       authorName: currentUser.displayName,
-      //todo check content la kieu gi
+      parentId: parentId,
+      //todo check type of comment
       ...content,
     };
-    let path = refPath;
-    if (parentId) path = path + '/' + parentId + '/replies';
-    // console.log(path);
+    const path = parentId ? `${refPath}/replies` : `${refPath}/comments`;
+    // if (parentId) path = `${path}/replies`;
 
     addDocument(path, commentContent);
     setActiveComment(null);
   };
 
   const updateComment = (text, commentId, parentId = false) => {
-    let path = refPath;
-    if (parentId) {
-      path = refPath + '/' + parentId + '/replies/';
-    }
+    const path = parentId ? `${refPath}/replies` : `${refPath}/comments`;
+
     console.log(path, text, commentId, parentId);
     updateDocument(path, commentId, {body: text});
     setActiveComment(null);
@@ -58,8 +57,7 @@ const Comments = ({currentUser, issueId}) => {
 
   const deleteComment = (thisId, parentId = null) => {
     // TODO
-    let path = refPath;
-    if (parentId) path = path + '/' + parentId + '/replies/';
+    const path = parentId ? `${refPath}/replies` : `${refPath}/comments`;
 
     if (window.confirm('Are you sure you want to remove comment?')) {
       deleteDocument(path, thisId);

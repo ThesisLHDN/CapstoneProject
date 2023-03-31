@@ -28,6 +28,8 @@ import AuthProvider from 'src/Context/AuthProvider';
 import CreateWorkspace from './components/popup/CreateWorkspace';
 import AppProvider from './Context/AppProvider';
 import CreateProject from './components/popup/CreateProject';
+// import ChatProvider from './Context/ChatProvider';
+// import DocProvider from './Context/DocProvider';
 
 function App() {
   const location = useLocation();

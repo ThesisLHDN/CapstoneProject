@@ -47,11 +47,14 @@ const updateDocument = async (collectionPath, id, data) => {
       updatedAt: serverTimestamp(),
     };
 
-    await updateDoc(doc(db, collectionPath, id), docData);
+    const docRef = await updateDoc(doc(db, collectionPath, id), docData);
 
-    // console.log('Document written with ID: ', docRef.id);
+    console.log(
+      'Document with ID updated: ',
+      docRef ? docRef.id : 'null docRef',
+    );
   } catch (e) {
-    console.error('Error adding document: ', e);
+    console.error('Error updating document: ', e);
   }
 };
 
@@ -61,7 +64,7 @@ const deleteDocument = async (collectionPath, id = null) => {
 
     console.log('Deleted document with id: ', id);
   } catch (e) {
-    console.error('Error adding document: ', e);
+    console.error('Error delete document: ', e);
   }
 };
 

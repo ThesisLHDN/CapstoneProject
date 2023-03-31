@@ -1,71 +1,59 @@
-import React, {useState, useMemo, useContext} from 'react';
-import {useNavigate, useLocation} from 'react-router-dom';
-import {useFirestore} from 'src/hooks/useFirestore';
-import {auth} from 'src/firebase/config';
-import CircularProgress from '@mui/material/CircularProgress';
 import {AuthContext} from './AuthProvider';
-export const AppContext = React.createContext();
+import React, {useState, useMemo, useContext} from 'react';
+import {useFirestore} from 'src/hooks/useFirestore';
+// TODO default value for project Id
 
-export default function AppProvider({children}) {
+export const DocContext = React.createContext();
+
+export default function DocProvider({children}) {
+  const [selectedProjectId, setSelectedProjectId] = useState(
+    '1OkWkDDY5XyJjJ16eP70',
+  );
+  const [selectedParentId, setSelectedParentId] = useState('');
+  const [selectedParentName, setSelectedParentName] = useState('');
+  const [prevParent, setPrevParent] = useState();
+
+  const setParent = (id, name) => {
+    setPrevParent(selectedParentId, selectedParentName);
+    setSelectedParentId(id);
+    setSelectedParentName(name);
+  };
+
   const {
     user: {uid},
   } = useContext(AuthContext);
-  console.log('app provider', uid);
-  const [selectedRoomId, setSelectedRoomId] = useState('');
-  // console.log('AppProvider', user);
 
-  const RoomsCondition = useMemo(
-    () => ({
-      fieldName: 'members',
-      operator: 'array-contains',
-      compareValue: uid,
-    }),
-    [uid],
-  );
-
-  const rooms = useFirestore('rooms', RoomsCondition);
-
-  const selectedRoom = useMemo(() => {
-    if (selectedRoomId) {
-      return rooms.find((room) => room.id === selectedRoomId);
-    } else {
-      return rooms[0];
-    }
-  }, [rooms, selectedRoomId]);
-
-  const membersCondition = useMemo(
-    () => ({
-      fieldName: 'uid',
-      operator: 'in',
-      compareValue: selectedRoom ? selectedRoom.members : [],
-    }),
-    [selectedRoom ? selectedRoom.members : []],
-  );
-
-  console.log('membersCondition', membersCondition);
-
-  const roomMembers = useFirestore('users', membersCondition);
-
-  const path = useMemo(
+  const docsCondition = useMemo(
     () =>
-      selectedRoom
-        ? `rooms/${selectedRoom.id}/messages`
-        : `rooms/trash/messages`,
-    [selectedRoom],
+      selectedParentId
+        ? {
+            fieldName: 'parentId',
+            operator: '==',
+            compareValue: selectedParentId ? selectedParentId : '',
+          }
+        : {},
+    [selectedParentId],
+  );
+
+  const rawDocuments = useFirestore(
+    `projects/${selectedProjectId}/documents`,
+    docsCondition,
   );
 
   return (
-    <AppContext.Provider
+    <DocContext.Provider
       value={{
-        rooms,
-        roomMembers,
-        selectedRoom,
-        selectedRoomId,
-        setSelectedRoomId,
+        selectedProjectId,
+        selectedParentId,
+        setSelectedParentId,
+        setParent,
+        selectedParentName,
+        rawDocuments,
+        prevParent,
       }}
     >
       {children}
-    </AppContext.Provider>
+    </DocContext.Provider>
   );
   // value is the thing that all children can access
 }

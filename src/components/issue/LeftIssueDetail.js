@@ -1,4 +1,4 @@
-import {useState, useContext} from 'react';
+import React, {useState, useContext, useMemo} from 'react';
 import DatePicker from 'react-datepicker';
 import {
   Grid,
@@ -6,10 +6,13 @@ import {
   Button,
   TextField,
   ClickAwayListener,
-  Box,
   MenuItem,
   MenuList,
+  IconButton,
   Popper,
+  Box,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
@@ -18,10 +21,15 @@ import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp
 import 'react-datepicker/dist/react-datepicker.css';
 import Comments from './comment/Comments';
 import ChildIssues from './ChildIssues';
+import {useFirestore} from 'src/hooks/useFirestore';
+import CloseIcon from '@mui/icons-material/Close';
+import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 
-// import {useFirestore, useFirestoreDoc} from 'src/hooks/useFirestore';
-
+import {storage} from 'src/firebase/config';
+import {getDownloadURL, ref, uploadBytesResumable} from 'firebase/storage';
+import {addDocument} from 'src/firebase/firestoreServices';
 import {AuthContext} from 'src/Context/AuthProvider';
+import Attachments from './Attachments';
 
 const tasks = [
   {
@@ -47,7 +55,14 @@ const tasks = [
 ];
 
 function LeftIssueDetail() {
-  const {user} = useContext(AuthContext);
+  const {
+    user: {uid},
+  } = useContext(AuthContext);
+
+  const [open, setOpen] = useState(false);
+  function handleClose() {
+    setOpen(false);
+  }
 
   // const sampleIssueId = 'xr51hoP9uZHlzUXqTpPH';
   // const issueDetail = useFirestoreDoc('issues', sampleIssueId);
@@ -60,6 +75,21 @@ function LeftIssueDetail() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [childIssue, setChildIssue] = useState(false);
   const [createChild, setCreateChild] = useState(false);
+  const [snackbarContent, setSnackbarContent] = useState();
+
+  const issueId = 'xr51hoP9uZHlzUXqTpPH';
+  const attachmentsCondition = useMemo(
+    () => ({
+      sort: 'desc',
+      sortAttr: 'createdAt',
+    }),
+    [],
+  );
+  const attachments = useFirestore(
+    `issues/${issueId}/documents`,
+    attachmentsCondition,
+  );
+  console.log(attachments);
 
   const handleChange = (event, element) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
@@ -70,6 +100,8 @@ function LeftIssueDetail() {
     setAnchorEl(anchorEl ? null : event.currentTarget);
   };
 
+  const id = open ? 'simple-popper' : undefined;
+
   const handleChildIssue = () => {
     if (tasks.length === 0) {
       setChildIssue(true);
@@ -77,8 +109,71 @@ function LeftIssueDetail() {
     setCreateChild(true);
   };
 
-  const open = Boolean(anchorEl);
-  const id = open ? 'simple-popper' : undefined;
+  const upLoadHandler = (files) => {
+    if (files) {
+      let file = files[0];
+      console.log('Updating');
+      if (file) {
+        console.log(file);
+        let refPath = `documents/${new Date().getTime() + file.name}`;
+        const fileRef = ref(storage, refPath);
+        const upLoadTask = uploadBytesResumable(fileRef, file);
+        upLoadTask.on(
+          'state_changed',
+          (snapshot) => {
+            const progress = Math.round(
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100,
+            );
+            setSnackbarContent('Upload is ' + progress + '% done');
+          },
+          (err) => {
+            console.log(err);
+          },
+          () => {
+            getDownloadURL(upLoadTask.snapshot.ref).then(async (url) => {
+              let downloadURL = url;
+              if (downloadURL) {
+                const newDocData = {
+                  authorId: uid,
+                  name: file.name,
+                  type: file.type,
+                  downloadURL: downloadURL,
+                  storagePath: refPath,
+                };
+                const path = `issues/${issueId}/documents`;
+                console.log('Add ', newDocData, ` to ${path}`);
+                addDocument(path, newDocData);
+              }
+            });
+          },
+        );
+      }
+    }
+    return;
+  };
+  const action = (
+    <React.Fragment>
+      <Button
+        color="secondary"
+        size="small"
+        onClick={() => {
+          setSnackbarContent(false);
+        }}
+      >
+        UNDO
+      </Button>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={() => {
+          setSnackbarContent(false);
+        }}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
 
   return (
     <div className="pr-10">
@@ -179,7 +274,16 @@ function LeftIssueDetail() {
         >
           <AttachFileIcon sx={{rotate: '45deg', marginRight: 1}} />
           Attach
-          <input hidden accept="*" multiple type="file" />
+          <input
+            hidden
+            accept="*"
+            multiple
+            type="file"
+            onClick={(e) => (e.target.value = null)}
+            onChange={(event) => {
+              upLoadHandler(event.target.files);
+            }}
+          />
         </Button>
 
         <Button
@@ -265,12 +369,40 @@ function LeftIssueDetail() {
         createChild={createChild}
         setCreateChild={setCreateChild}
         tasks={tasks}
-      /> */}
+      />
+      <Attachments attachments={attachments} issueId={issueId} />
+
+      {/* <Typography sx={{marginTop: 3, fontSize: 16, fontWeight: 700}}>
+        Attachments
+      </Typography>
+      {attachments &&
+        attachments.map((file) => (
+          <Box>
+            <DescriptionOutlinedIcon></DescriptionOutlinedIcon>
+            {file.name}
+          </Box>
+        ))} */}
 
       <Typography sx={{marginTop: 3, fontSize: 16, fontWeight: 700}}>
         Activity
       </Typography>
-      <Comments currentUser={user} issueId="xr51hoP9uZHlzUXqTpPH" />
+      <Snackbar
+        open={snackbarContent}
+        autoHideDuration={3000}
+        onClose={() => {
+          setSnackbarContent(false);
+        }}
+        action={action}
+      >
+        <Alert
+          onClose={() => setSnackbarContent(false)}
+          severity="success"
+          sx={{width: '100%'}}
+        >
+          {snackbarContent}
+        </Alert>
+      </Snackbar>
+      {/* <Comments currentUser={user} issueId="xr51hoP9uZHlzUXqTpPH" /> */}
     </div>
   );
 }

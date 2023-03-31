@@ -11,32 +11,32 @@ import {
 
 const useFirestore = (collectionName, condition = {}) => {
   const [documents, setDocuments] = useState([]);
-  console.log(
-    'pre query for',
-    collectionName,
-    'with',
-    condition.fieldName,
-    condition.operator,
-    condition.compareValue,
-    condition.compareValue ? condition.compareValue.length : 'Gì dãy trời',
-    'is',
-    documents,
-  );
+  // console.log(
+  //   'pre query for',
+  //   collectionName,
+  //   'with',
+  //   condition.fieldName,
+  //   condition.operator,
+  //   condition.compareValue,
+  //   condition.compareValue ? condition.compareValue.length : 'Gì dãy trời',
+  //   'is',
+  //   documents,
+  // );
   useEffect(() => {
     const collectionRef = collection(db, collectionName);
     let q = query(collectionRef);
     if (condition) {
-      console.log(
-        'in query for',
-        collectionName,
-        'with',
-        condition.fieldName,
-        condition.operator,
-        condition.compareValue,
-        condition.compareValue ? condition.compareValue.length : 'Gì dãy trời',
-        'is',
-        documents,
-      );
+      // console.log(
+      //   'in query for',
+      //   collectionName,
+      //   'with',
+      //   condition.fieldName,
+      //   condition.operator,
+      //   condition.compareValue,
+      //   condition.compareValue ? condition.compareValue.length : 'Gì dãy trời',
+      //   'is',
+      //   documents,
+      // );
       if (condition.compareValue && condition.compareValue.length) {
         q = query(
           collectionRef,
@@ -56,15 +56,12 @@ const useFirestore = (collectionName, condition = {}) => {
       },
     );
     return unsubscribe;
-  }, []);
+  }, [collectionName, condition]);
   console.log(
-    'post query for',
+    'useFireStore for',
     collectionName,
     'with',
-    condition.fieldName,
-    condition.operator,
-    condition.compareValue,
-    condition.compareValue ? condition.compareValue.length : 'Gì dãy trời',
+    condition,
     'is',
     documents,
   );

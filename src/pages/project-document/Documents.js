@@ -1,9 +1,10 @@
-import {useMemo, useState} from 'react';
+import {useContext, useMemo, useState} from 'react';
 
 import SearchBar from 'src/components/search';
 import Sort from 'src/components/Sort';
 import AddItem from './AddItem';
 import {useFirestore} from 'src/hooks/useFirestore';
+import WarningPopup from 'src/components/popup/Warning';
 
 import {
   Typography,
@@ -16,43 +17,16 @@ import {
   CircularProgress,
 } from '@mui/material';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRightOutlined';
+// import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRightOutlined';
 import FolderOutlinedIcon from '@mui/icons-material/FolderOutlined';
-import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
+import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
+import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
+// import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
-
-const folders = [
-  {
-    name: 'Folder 1',
-    createBy: 'Lam Nguyen',
-    updateOn: '05/12/2022',
-    parent: '',
-    children: [],
-  },
-  {
-    name: 'Folder 2',
-    createBy: 'Lam Nguyen',
-    updateOn: '05/12/2022',
-    parent: '',
-    children: [],
-  },
-];
-
-const files = [
-  {
-    name: 'File 3',
-    createBy: 'Lam Nguyen',
-    updateOn: '05/12/2022',
-    parent: 'Folder 2',
-  },
-  {
-    name: 'File 4',
-    createBy: 'Lam Nguyen',
-    updateOn: '05/12/2022',
-    parent: '',
-  },
-];
+import {DocContext} from 'src/Context/DocProvider';
+import {deleteDocument} from 'src/firebase/firestoreServices';
+import {styled} from '@mui/system';
 
 function convertDate(d) {
   const date = new Date(d);
@@ -65,36 +39,41 @@ function convertDate(d) {
   );
 }
 
+const PlainButton = styled(Button)({
+  color: '#181818',
+  textTransform: 'none',
+  '& :hover': {backgroundColor: '#eee'},
+});
+
 function Document({projectId = '1OkWkDDY5XyJjJ16eP70', parentId}) {
-  // const projectId = '1OkWkDDY5XyJjJ16eP70';
-  const [selectedParentId, setSelectedParentId] = useState(parentId);
-  console.log('selectedParentId', selectedParentId);
-  const [file, setFile] = useState();
+  const {selectedParentId, selectedProjectId, setParent, rawDocuments} =
+    useContext(DocContext);
 
-  const docsCondition = useMemo(
-    () =>
-      selectedParentId
-        ? {
-            fieldName: 'parentId',
-            operator: '==',
-            compareValue: selectedParentId,
-          }
-        : {},
-    [selectedParentId],
-  );
+  const [openDeletePopup, setOpenDeletePopup] = useState(false);
+  const [selectedFile, setSelectedFile] = useState();
 
-  const rawDocuments = useFirestore(
-    `projects/${projectId}/documents`,
-    docsCondition,
-  );
-  const documents = rawDocuments.filter((item) => !item.parentId);
-  console.log('documents', documents);
+  const documents = rawDocuments
+    ? rawDocuments.filter(
+        (item) => item.parentId === (selectedParentId ? selectedParentId : ''),
+      )
+    : [];
+  console.log('documents', rawDocuments, documents);
 
-  const rootDocument = folders
-    .concat(files)
-    .filter((item) => item.parent === '');
+  const deleteFileHandler = (confirmed) => {
+    const path = `projects/${selectedProjectId}/documents`;
+    console.log('delete', path, selectedFile);
 
-  console.log('root document', rootDocument);
+    deleteDocument(path, selectedFile.id);
+
+    setOpenDeletePopup(false);
+    setSelectedFile();
+  };
+
+  // const rootDocument = folders
+  //   .concat(files)
+  //   .filter((item) => item.parent === '');
+
+  // console.log('root document', rootDocument);
 
   return (
     <div>
@@ -154,126 +133,47 @@ function Document({projectId = '1OkWkDDY5XyJjJ16eP70', parentId}) {
               View
             </Button>
           </Box>
-          <AddItem />
-
-          {/* {rootDocument.map((item) => {
-            return (
-              <Grid container sx={{marginTop: 1, marginBottom: 1}}>
-                <Grid item xs={3}>
-                  <Grid container>
-                    {item.hasOwnProperty('children') ? (
-                      <div>
-                        <KeyboardArrowRightOutlinedIcon
-                          sx={{marginTop: 1.5, marginRight: 0.5}}
-                        />
-                        <FolderOutlinedIcon
-                          sx={{width: 32, height: 32, marginTop: 0.9}}
-                        />
-                      </div>
-                    ) : (
-                      <DescriptionOutlinedIcon
-                        sx={{
-                          width: 32,
-                          height: 32,
-                          marginTop: 0.9,
-                          marginLeft: 3.5,
-                        }}
-                      />
-                    )}
-                    <Typography
-                      sx={{
-                        marginTop: 1.5,
-                        marginLeft: 1,
-                        fontSize: 14,
-                        cursor: 'pointer',
-                        '&:hover': {textDecoration: 'underline'},
-                      }}
-                      onClick={() => {}}
-                    >
-                      {item.name}
-                    </Typography>
-                  </Grid>
-                </Grid>
-
-                <Grid item xs={4}>
-              <Typography sx={{marginTop: 1.5, fontSize: 14}}>
-                <span className="font-bold">Created by </span>
-                {item.createBy}
-              </Typography>
-            </Grid>
-
-                <Grid item xs={4}></Grid>
-
-                <Grid item xs={3}>
-                  <Typography sx={{marginTop: 1.5, fontSize: 14}}>
-                    <span className="font-bold">Updated on </span>
-                    {convertDate(item.updateOn)}
-                  </Typography>
-                </Grid>
-
-                <Grid item xs={2}>
-                  <Grid container sx={{justifyContent: 'flex-end'}}>
-                    <IconButton size="medium">
-                  <ShareOutlinedIcon sx={{color: '#181818'}} />
-                </IconButton>
-                    <IconButton size="medium">
-                      <MoreHorizOutlinedIcon sx={{color: '#181818'}} />
-                    </IconButton>
-                  </Grid>
-                </Grid>
-              </Grid>
-            );
-          })} */}
+          <AddItem parentId={selectedParentId} projectId={selectedProjectId} />
           {documents.map((item) => {
             return (
               <Grid
                 container
-                sx={{marginTop: 1, marginBottom: 1}}
+                sx={{
+                  marginTop: 1,
+                  marginBottom: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
                 key={item.id}
-                onClick={() => setSelectedParentId(item.id)}
               >
-                <Grid item xs={3}>
+                <Grid item xs={7}>
                   <Grid container>
-                    {item.hasOwnProperty('childrens') ? (
-                      <div>
-                        <KeyboardArrowRightOutlinedIcon
-                          sx={{marginTop: 1.5, marginRight: 0.5}}
-                        />
-                        <FolderOutlinedIcon
-                          sx={{width: 32, height: 32, marginTop: 0.9}}
-                        />
-                      </div>
-                    ) : item.type === 'folder' ? (
-                      <FolderOutlinedIcon
-                        sx={{
-                          width: 32,
-                          height: 32,
-                          marginTop: 0.9,
-                          marginLeft: 3.5,
-                        }}
-                      />
+                    {item.type === 'folder' ? (
+                      <PlainButton
+                        startIcon={<FolderOutlinedIcon />}
+                        onClick={() =>
+                          item ? setParent(item.id, item.name) : null
+                        }
+                      >
+                        {item.name}
+                      </PlainButton>
                     ) : (
-                      <DescriptionOutlinedIcon
-                        sx={{
-                          width: 32,
-                          height: 32,
-                          marginTop: 0.9,
-                          marginLeft: 3.5,
-                        }}
-                      />
+                      <a href={item.downloadURL} target="_blank" download>
+                        <PlainButton startIcon={<DescriptionOutlinedIcon />}>
+                          {/* <DescriptionOutlinedIcon
+                            sx={{
+                              width: 32,
+                              height: 32,
+                              marginTop: 0.9,
+                              marginLeft: 3.5,
+                              cursor: 'pointer',
+                            }}
+                          /> */}
+
+                          {item.name}
+                        </PlainButton>
+                      </a>
                     )}
-                    <Typography
-                      sx={{
-                        marginTop: 1.5,
-                        marginLeft: 1,
-                        fontSize: 14,
-                        cursor: 'pointer',
-                        '&:hover': {textDecoration: 'underline'},
-                      }}
-                      onClick={() => {}}
-                    >
-                      {item.name}
-                    </Typography>
                   </Grid>
                 </Grid>
 
@@ -284,25 +184,50 @@ function Document({projectId = '1OkWkDDY5XyJjJ16eP70', parentId}) {
                   </Typography>
                 </Grid> */}
 
-                <Grid item xs={4}></Grid>
+                {/* <Grid item xs={4}></Grid> */}
 
                 <Grid item xs={3}>
-                  <Typography sx={{marginTop: 1.5, fontSize: 14}}>
+                  <Typography sx={{fontSize: 14}}>
                     <span className="font-bold">Updated on </span>
-                    {convertDate(item.updatedAt.toDate())}
+                    {item.updatedAt ? convertDate(item.updatedAt.toDate()) : ''}
                   </Typography>
                 </Grid>
 
                 <Grid item xs={2}>
                   <Grid container sx={{justifyContent: 'flex-end'}}>
-                    <IconButton size="medium">
-                      <MoreHorizOutlinedIcon sx={{color: '#181818'}} />
+                    {item.type !== 'folder' && (
+                      <a href={item.downloadURL} download target="_blank">
+                        <IconButton>
+                          <DownloadRoundedIcon
+                            sx={{color: '#181818'}}
+                          ></DownloadRoundedIcon>
+                        </IconButton>
+                      </a>
+                    )}
+                    <IconButton
+                      size="medium"
+                      onClick={() => {
+                        setOpenDeletePopup(true);
+                        setSelectedFile({id: item.id, name: item.name});
+                      }}
+                    >
+                      <DeleteOutlineRoundedIcon sx={{color: '#e02828'}} />
+                      {/* <MoreHorizOutlinedIcon  /> */}
                     </IconButton>
                   </Grid>
                 </Grid>
               </Grid>
             );
           })}
+          <WarningPopup
+            title={`Do you really want to delete "${
+              selectedFile ? selectedFile.name : null
+            }"`}
+            open={openDeletePopup}
+            handleSubmit={deleteFileHandler}
+            onClose={setOpenDeletePopup(false)}
+            content="This file will be permanently deleted"
+          ></WarningPopup>
         </div>
       ) : (
         <CircularProgress
@@ -314,6 +239,7 @@ function Document({projectId = '1OkWkDDY5XyJjJ16eP70', parentId}) {
           }}
         />
       )}
+      {/* </DocProvider> */}
     </div>
   );
 }
