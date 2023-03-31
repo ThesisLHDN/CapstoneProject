@@ -1,14 +1,15 @@
 import {AuthContext} from './AuthProvider';
 import React, {useState, useMemo, useContext} from 'react';
 import {useFirestore} from 'src/hooks/useFirestore';
+import {AppContext} from './AppProvider';
 // TODO default value for project Id
 
 export const DocContext = React.createContext();
 
 export default function DocProvider({children}) {
-  const [selectedProjectId, setSelectedProjectId] = useState(
-    '1OkWkDDY5XyJjJ16eP70',
-  );
+  const {project} = useContext(AppContext);
+
+  const [selectedProjectId, setSelectedProjectId] = useState(project.id);
   const [selectedParentId, setSelectedParentId] = useState('');
   const [selectedParentName, setSelectedParentName] = useState('');
   const [prevParent, setPrevParent] = useState();
@@ -44,6 +45,7 @@ export default function DocProvider({children}) {
     <DocContext.Provider
       value={{
         selectedProjectId,
+        setSelectedProjectId,
         selectedParentId,
         setSelectedParentId,
         setParent,

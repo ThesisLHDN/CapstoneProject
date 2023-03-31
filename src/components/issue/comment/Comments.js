@@ -30,7 +30,6 @@ const Comments = ({currentUser, issueId}) => {
 
   const addComment = (content, parentId = null) => {
     // TODO
-    // console.log(issueId, content, parentId);
     const commentContent = {
       authorId: currentUser.uid,
       authorAvatar: currentUser.photoURL,
@@ -66,7 +65,7 @@ const Comments = ({currentUser, issueId}) => {
 
   return (
     <div className="mt-4">
-      {comments && (
+      {/* {comments && (
         <div className="flex mb-8">
           <Button
             style={{
@@ -123,7 +122,7 @@ const Comments = ({currentUser, issueId}) => {
             History
           </Button>
         </div>
-      )}
+      )} */}
 
       {activeCommentBtn ? (
         <div>

@@ -27,6 +27,8 @@ import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import {DocContext} from 'src/Context/DocProvider';
 import {deleteDocument} from 'src/firebase/firestoreServices';
 import {styled} from '@mui/system';
+import {useLocation} from 'react-router-dom';
+import {AppContext} from 'src/Context/AppProvider';
 
 function convertDate(d) {
   const date = new Date(d);
@@ -45,10 +47,19 @@ const PlainButton = styled(Button)({
   '& :hover': {backgroundColor: '#eee'},
 });
 
-function Document({projectId = '1OkWkDDY5XyJjJ16eP70', parentId}) {
-  const {selectedParentId, selectedProjectId, setParent, rawDocuments} =
-    useContext(DocContext);
+function Document({parentId}) {
+  const {
+    selectedParentId,
+    selectedProjectId,
+    setSelectedProjectId,
+    setParent,
+    rawDocuments,
+  } = useContext(DocContext);
 
+  const location = useLocation();
+  const projectId = location.pathname.split('/')[2];
+
+  setSelectedProjectId(projectId);
   const [openDeletePopup, setOpenDeletePopup] = useState(false);
   const [selectedFile, setSelectedFile] = useState();
 
@@ -225,7 +236,7 @@ function Document({projectId = '1OkWkDDY5XyJjJ16eP70', parentId}) {
             }"`}
             open={openDeletePopup}
             handleSubmit={deleteFileHandler}
-            onClose={setOpenDeletePopup(false)}
+            onClose={() => setOpenDeletePopup(false)}
             content="This file will be permanently deleted"
           ></WarningPopup>
         </div>

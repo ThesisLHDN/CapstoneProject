@@ -54,16 +54,16 @@ const tasks = [
   },
 ];
 
-function LeftIssueDetail() {
-  const {
-    user: {uid},
-  } = useContext(AuthContext);
+function LeftIssueDetail({issueId}) {
+  const {user} = useContext(AuthContext);
+  console.log('issue user', user);
 
   const [open, setOpen] = useState(false);
   function handleClose() {
     setOpen(false);
   }
 
+  // const issueId = 'xr51hoP9uZHlzUXqTpPH';
   // const sampleIssueId = 'xr51hoP9uZHlzUXqTpPH';
   // const issueDetail = useFirestoreDoc('issues', sampleIssueId);
   // const comments = useFirestore('issues/' + sampleIssueId + '/comments');
@@ -77,7 +77,6 @@ function LeftIssueDetail() {
   const [createChild, setCreateChild] = useState(false);
   const [snackbarContent, setSnackbarContent] = useState();
 
-  const issueId = 'xr51hoP9uZHlzUXqTpPH';
   const attachmentsCondition = useMemo(
     () => ({
       sort: 'desc',
@@ -89,7 +88,7 @@ function LeftIssueDetail() {
     `issues/${issueId}/documents`,
     attachmentsCondition,
   );
-  console.log(attachments);
+  // console.log(attachments);
 
   const handleChange = (event, element) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
@@ -134,7 +133,7 @@ function LeftIssueDetail() {
               let downloadURL = url;
               if (downloadURL) {
                 const newDocData = {
-                  authorId: uid,
+                  authorId: user.uid,
                   name: file.name,
                   type: file.type,
                   downloadURL: downloadURL,
@@ -208,7 +207,6 @@ function LeftIssueDetail() {
           }}
           onClick={handleClick}
         >
-          {/* {props.item.status} */}
           {status}
           <ExpandMoreIcon />
         </Button>
@@ -286,7 +284,7 @@ function LeftIssueDetail() {
           />
         </Button>
 
-        <Button
+        {/* <Button
           style={{
             display: 'flex',
             textTransform: 'none',
@@ -300,7 +298,7 @@ function LeftIssueDetail() {
         >
           <LibraryAddIcon sx={{marginRight: 1}} />
           Add Child Issue
-        </Button>
+        </Button> */}
       </Grid>
 
       <Typography sx={{marginTop: 3, fontSize: 16, fontWeight: 700}}>
@@ -370,8 +368,7 @@ function LeftIssueDetail() {
         setCreateChild={setCreateChild}
         tasks={tasks}
       />
-      <Attachments attachments={attachments} issueId={issueId} />
-
+     
       {/* <Typography sx={{marginTop: 3, fontSize: 16, fontWeight: 700}}>
         Attachments
       </Typography>
@@ -382,9 +379,10 @@ function LeftIssueDetail() {
             {file.name}
           </Box>
         ))} */}
+      <Attachments attachments={attachments} issueId={issueId} />
 
       <Typography sx={{marginTop: 3, fontSize: 16, fontWeight: 700}}>
-        Activity
+        Comments
       </Typography>
       <Snackbar
         open={snackbarContent}
@@ -402,7 +400,7 @@ function LeftIssueDetail() {
           {snackbarContent}
         </Alert>
       </Snackbar>
-      {/* <Comments currentUser={user} issueId="xr51hoP9uZHlzUXqTpPH" /> */}
+      <Comments currentUser={user} issueId={issueId} />
     </div>
   );
 }

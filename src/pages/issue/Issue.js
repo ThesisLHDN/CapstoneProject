@@ -4,8 +4,12 @@ import ElectricBoltIcon from '@mui/icons-material/ElectricBolt';
 import FiberManualRecordRoundedIcon from '@mui/icons-material/FiberManualRecordRounded';
 import LeftIssueDetail from 'src/components/issue/LeftIssueDetail';
 import RightIssueDetail from 'src/components/issue/RightIssueDetail';
+import {useLocation} from 'react-router-dom';
 
 function Issue() {
+  const location = useLocation();
+  const issueId = location.pathname.split('/')[3];
+
   return (
     <div>
       <Grid container spacing={2}>
@@ -86,11 +90,11 @@ function Issue() {
 
       <Grid container spacing={2}>
         <Grid item xs={7}>
-          <LeftIssueDetail />
+          <LeftIssueDetail issueId={issueId} />
         </Grid>
 
         <Grid item xs={5}>
-          <RightIssueDetail />
+          <RightIssueDetail issueId={issueId} />
         </Grid>
       </Grid>
     </div>

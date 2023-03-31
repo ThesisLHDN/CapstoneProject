@@ -28,6 +28,7 @@ import AuthProvider from 'src/Context/AuthProvider';
 import CreateWorkspace from './components/popup/CreateWorkspace';
 import AppProvider from './Context/AppProvider';
 import CreateProject from './components/popup/CreateProject';
+import DocProvider from './Context/DocProvider';
 // import ChatProvider from './Context/ChatProvider';
 // import DocProvider from './Context/DocProvider';
 
@@ -66,7 +67,14 @@ function App() {
                 <Route path="board/:id" element={<Board />}></Route>
                 <Route path="roadmap/:id" element={<RoadMap />}></Route>
                 <Route path="backlog/:id" element={<Backlog />} />
-                <Route path="document/:id" element={<Document />} />
+                <Route
+                  path="document/:id"
+                  element={
+                    <DocProvider>
+                      <Document />
+                    </DocProvider>
+                  }
+                />
                 <Route path="issue/:id/:id" element={<Issue />} />
               </Route>
               <Route element={<Layout pf />}>

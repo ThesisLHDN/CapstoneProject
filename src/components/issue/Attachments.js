@@ -56,6 +56,7 @@ function Attachments({issueId, uid, attachments}) {
       </Typography>
       <Box
         sx={{
+          paddingTop: '8px',
           fontSize: '12px !important',
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fill, 140px)',
@@ -163,7 +164,7 @@ function Attachments({issueId, uid, attachments}) {
       <WarningPopup
         open={openDeletePopup}
         handleSubmit={deleteFileHandler}
-        onClose={setOpenDeletePopup(false)}
+        onClose={() => setOpenDeletePopup(false)}
       />
     </Box>
   );
