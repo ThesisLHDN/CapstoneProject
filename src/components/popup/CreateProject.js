@@ -154,7 +154,7 @@ function CreateProject() {
               }}
             >
               Key
-              {/* <span style={{color: 'red'}}>&nbsp;*</span> */}
+              <span style={{color: 'red'}}>&nbsp;*</span>
             </Typography>
             <CssTextField
               size="small"

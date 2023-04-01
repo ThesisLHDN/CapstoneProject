@@ -35,7 +35,7 @@ const useFirestore = (collectionName, condition = {}) => {
       },
     );
     return unsubscribe;
-  }, [condition]);
+  }, [collectionName, condition]);
   console.log(
     'useFireStore for',
     collectionName,

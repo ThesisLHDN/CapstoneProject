@@ -58,6 +58,7 @@ function Document({parentId}) {
 
   const location = useLocation();
   const projectId = location.pathname.split('/')[2];
+  const {workspace, project} = useContext(AppContext);
 
   setSelectedProjectId(projectId);
   const [openDeletePopup, setOpenDeletePopup] = useState(false);
@@ -97,19 +98,21 @@ function Document({parentId}) {
                   underline="hover"
                   key="1"
                   color="inherit"
-                  href="/workspace-setting"
+                  href={`/workspace-setting/${workspace.id}`}
                   onClick={() => {}}
+                  sx={{fontFamily: 'Open Sans, sans-serif'}}
                 >
-                  Dang's Workspace
+                  {workspace.wsname}
                 </Link>
                 <Link
                   underline="hover"
                   key="2"
                   color="inherit"
-                  href="/roadmap"
+                  href={`/roadmap/${project.id}`}
                   onClick={() => {}}
+                  sx={{fontFamily: 'Open Sans, sans-serif'}}
                 >
-                  First Scrum Project
+                  {project.pname}
                 </Link>
                 <Typography
                   key="3"

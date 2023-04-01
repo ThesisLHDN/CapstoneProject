@@ -17,9 +17,10 @@ import Filter from 'src/components/Filter';
 import Sort from 'src/components/Sort';
 
 import {color, colorHover} from 'src/style';
-import {useEffect, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import axios from 'axios';
 import {useLocation} from 'react-router-dom';
+import { AppContext } from 'src/Context/AppProvider';
 
 function handleClick(event) {
   event.preventDefault();
@@ -38,6 +39,7 @@ function Board() {
   const location = useLocation();
   const pId = location.pathname.split('/')[2];
   const [lastestSprint, setLastestSprint] = useState({});
+  const {workspace, project} = useContext(AppContext);
 
   const fetchLastestSprint = async () => {
     try {
@@ -62,20 +64,22 @@ function Board() {
               underline="hover"
               key="1"
               color="inherit"
-              href="/workspace-setting"
-              onClick={handleClick}
+              href={`/workspace-setting/${workspace.id}`}
+              onClick={() => {}}
+              sx={{fontFamily: 'Open Sans, sans-serif'}}
             >
-              Dang&apos;s Workspace
+              {workspace.wsname}
             </Link>
             ,
             <Link
               underline="hover"
               key="2"
               color="inherit"
-              href="/roadmap"
-              onClick={handleClick}
+              href={`/roadmap/${project.id}`}
+              onClick={() => {}}
+              sx={{fontFamily: 'Open Sans, sans-serif'}}
             >
-              First Scrum Project
+              {project.pname}
             </Link>
             ,
             <Typography key="3" color="text.primary" sx={{fontSize: 'inherit'}}>

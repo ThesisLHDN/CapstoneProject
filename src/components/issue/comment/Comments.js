@@ -1,4 +1,4 @@
-import {useMemo, useState} from 'react';
+import {useMemo, useState, useEffect} from 'react';
 import CommentForm from './CommentForm';
 import Comment from './Comment';
 
@@ -12,7 +12,15 @@ import {
 import {Button} from '@mui/material';
 
 const Comments = ({currentUser, issueId}) => {
+  const [issuePath, setIssuePath] = useState(`issues/${issueId}`);
+
+  useEffect(() => {
+    const issuePath = `issues/${issueId}`;
+    setIssuePath(issuePath);
+  }, [issueId]);
+
   const refPath = 'issues/' + issueId;
+  console.log(issueId);
   const currentUserId = currentUser.uid;
   const commentsCodition = useMemo(
     () => ({
@@ -21,7 +29,8 @@ const Comments = ({currentUser, issueId}) => {
     }),
     [],
   );
-  const comments = useFirestore(refPath + '/comments', commentsCodition);
+  const comments = useFirestore(issuePath + '/comments', commentsCodition);
+  console.log(refPath + '/comments');
 
   const [activeComment, setActiveComment] = useState(null);
   const [activeAllBtn, setActiveAllBtn] = useState(false);

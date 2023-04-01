@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Grid, Breadcrumbs, Typography, Link} from '@mui/material';
 import ElectricBoltIcon from '@mui/icons-material/ElectricBolt';
 import FiberManualRecordRoundedIcon from '@mui/icons-material/FiberManualRecordRounded';
@@ -6,8 +6,10 @@ import LeftIssueDetail from 'src/components/issue/LeftIssueDetail';
 import RightIssueDetail from 'src/components/issue/RightIssueDetail';
 import {useLocation} from 'react-router-dom';
 import axios from 'axios';
+import { AppContext } from 'src/Context/AppProvider';
 
 function Issue() {
+  const {workspace, project} = useContext(AppContext);
   const location = useLocation();
   const issueId = location.pathname.split('/')[3];
   const [issue, setIssue] = useState({});
@@ -35,24 +37,24 @@ function Issue() {
               underline="hover"
               key="1"
               color="inherit"
-              href="/workspace-setting"
+              href={`/workspace-setting/${workspace.id}`}
               onClick={() => {}}
               sx={{fontFamily: 'Open Sans, sans-serif'}}
             >
-              Dang's Workspace
+              {workspace.wsname}
             </Link>
             <Link
               underline="hover"
               key="2"
               color="inherit"
-              href="/roadmap"
+              href={`/roadmap/${project.id}`}
               onClick={() => {}}
               sx={{fontFamily: 'Open Sans, sans-serif'}}
             >
-              First Scrum Project
+              {project.pname}
             </Link>
             <Typography key="3" color="text.primary" sx={{fontSize: 'inherit'}}>
-              DWP-11
+              {project.pkey + '-' + issueId}
             </Typography>
           </Breadcrumbs>
         </Grid>

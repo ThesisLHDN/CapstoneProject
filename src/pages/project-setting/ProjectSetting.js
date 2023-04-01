@@ -127,21 +127,21 @@ function ProjectSetting() {
               underline="hover"
               key="1"
               color="inherit"
-              href="/workspace-setting"
+              href={`/workspace-setting/${workspace.id}`}
               onClick={() => {}}
               sx={{fontFamily: 'Open Sans, sans-serif'}}
             >
-              Dang's Workspace
+              {workspace.wsname}
             </Link>
             <Link
               underline="hover"
               key="2"
               color="inherit"
-              href="/roadmap"
+              href={`/roadmap/${project.id}`}
               onClick={() => {}}
               sx={{fontFamily: 'Open Sans, sans-serif'}}
             >
-              First Scrum Project
+              {project.pname}
             </Link>
             <Typography key="3" color="text.primary" sx={{fontSize: 'inherit'}}>
               Project Settings

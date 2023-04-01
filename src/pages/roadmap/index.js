@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useContext} from 'react';
 import 'src/App.scss';
 import {
   Typography,
@@ -17,6 +17,7 @@ import tasks from './tasks';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import {useLocation} from 'react-router-dom';
 import axios from 'axios';
+import { AppContext } from 'src/Context/AppProvider';
 
 // import Filter from 'src/components/Filter';
 // import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
@@ -48,6 +49,7 @@ function RoadMap() {
   const [zoom, setZoom] = useState('Days');
   const [messagesState, setMessagesState] = useState([]);
   const [issues, setIssues] = useState({data: []});
+  const {workspace, project} = useContext(AppContext);
 
   const fetchIssuesData = async () => {
     try {
@@ -104,27 +106,29 @@ function RoadMap() {
   return (
     <div style={{textAlign: 'left'}}>
       <Grid container spacing={2}>
-        <Grid item xs={5}>
+        <Grid item xs={6}>
           <Breadcrumbs separator="›" aria-label="breadcrumb" sx={{mb: 2}}>
             [
             <Link
               underline="hover"
               key="1"
               color="inherit"
-              href="/workspace-setting"
-              onClick={handleClick}
+              href={`/workspace-setting/${workspace.id}`}
+              onClick={() => {}}
+              sx={{fontFamily: 'Open Sans, sans-serif'}}
             >
-              Dang&apos;s Workspace
+              {workspace.wsname}
             </Link>
             ,
             <Link
               underline="hover"
               key="2"
               color="inherit"
-              href="/roadmap"
-              onClick={handleClick}
+              href={`/roadmap/${project.id}`}
+              onClick={() => {}}
+              sx={{fontFamily: 'Open Sans, sans-serif'}}
             >
-              First Scrum Project
+              {project.pname}
             </Link>
             ,
             <Typography key="3" color="text.primary" sx={{fontSize: 'inherit'}}>
