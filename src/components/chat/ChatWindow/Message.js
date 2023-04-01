@@ -17,19 +17,29 @@ function Message({mine, children}) {
   return (
     <Box
       sx={{
+        my: 2,
         display: 'flex',
         // alignItems: mine ? 'flex-end' : 'flex-start',
         flexDirection: 'column',
       }}
     >
       {!mine && (
-        <div style={{display: 'flex', alignItems: 'center'}}>
+        <div
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            flexDirection: 'row',
+            marginBottom: '5px',
+          }}
+        >
           <Avatar
             src="#"
-            alt={author.displayName}
+            alt={author ? author.displayName : ''}
             sx={{width: 32, height: 32, mr: 1}}
           ></Avatar>
-          <Typography variant="body2">{author.displayName}</Typography>
+          <Typography variant="body2">
+            {author ? author.displayName : ''}
+          </Typography>
         </div>
       )}
       <Box
@@ -41,6 +51,7 @@ function Message({mine, children}) {
           flexDirection: mine ? 'row-reverse' : 'row',
         }}
       >
+        {' '}
         <Paper
           elevation={0}
           sx={{
@@ -49,7 +60,7 @@ function Message({mine, children}) {
               ? {backgroundColor: '#04BF00', color: 'white'}
               : {backgroundColor: '#DADADA'}),
             borderRadius: '25px',
-            my: 2,
+            // my: 2,
             py: 1,
             px: 2,
             right: '0px',

@@ -51,13 +51,13 @@ function ChatSideBar({data, currentUser}) {
   const handleClose = () => {
     setOpen(false);
   };
-
   const addRoomHandler = () => {
     const newRoomData = {
       name: newRoom,
       description: description,
       adminId: currentUser.uid,
       members: [currentUser.uid],
+      allmembers: [currentUser.uid],
       coverPicture: '',
     };
     if (newRoom) {

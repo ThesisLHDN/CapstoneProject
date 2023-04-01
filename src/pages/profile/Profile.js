@@ -157,7 +157,7 @@ function Profile() {
             justifyContent="center"
             sx={{mt: 2}}
           >
-            <Grid item xs={3}>
+            {/* <Grid item xs={3}>
               <Button
                 variant="text"
                 startIcon={
@@ -177,7 +177,7 @@ function Profile() {
               >
                 Change password
               </Button>
-            </Grid>
+            </Grid> */}
             <Grid item xs={2.75}></Grid>
           </Grid>
 

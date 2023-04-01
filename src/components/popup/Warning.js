@@ -62,7 +62,9 @@ function WarningPopup({
           </Typography>
         </Box>
 
-        <Typography sx={{fontSize: 14, textAlign: 'justify'}}>
+        <Typography
+          sx={{fontSize: 14, textAlign: 'justify', wordBreak: 'break-word'}}
+        >
           {content ? content : 'No content'}
         </Typography>
         <Box

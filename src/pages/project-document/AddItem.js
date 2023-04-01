@@ -155,6 +155,7 @@ function AddItem({parentId, projectId}) {
                 <MenuItem
                   onClick={() => {
                     setOpen(true);
+                    setOpenMenu(false);
                   }}
                 >
                   <CreateNewFolderRoundedIcon />

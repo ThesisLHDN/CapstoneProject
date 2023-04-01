@@ -42,7 +42,7 @@ export default function ChatProvider({children}) {
     () => ({
       fieldName: 'uid',
       operator: 'in',
-      compareValue: selectedRoom ? selectedRoom.members : [],
+      compareValue: selectedRoom ? selectedRoom.allmembers : [],
     }),
     [selectedRoom],
   );
@@ -50,6 +50,10 @@ export default function ChatProvider({children}) {
   // console.log('membersCondition', membersCondition);
 
   const roomMembers = useFirestore('users', membersCondition);
+  const currentRoomMembers =
+    roomMembers && selectedRoom
+      ? roomMembers.filter((mem) => selectedRoom.members.includes(mem.id))
+      : [];
 
   return (
     <ChatContext.Provider
@@ -59,6 +63,7 @@ export default function ChatProvider({children}) {
         selectedRoom,
         selectedRoomId,
         setSelectedRoomId,
+        currentRoomMembers,
       }}
     >
       {children}

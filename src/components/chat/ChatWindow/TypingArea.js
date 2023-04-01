@@ -67,45 +67,45 @@ function TypingArea({currentUser, roomId}) {
           placeholder="Aa"
           sx={{width: '100%'}}
           onKeyPress={handleKeyPress}
-          InputProps={{
-            endAdornment: (
-              <>
-                <InputAdornment position="end">
-                  <IconButton
-                    size="small"
-                    edge="end"
-                    sx={{...colorHover.greenIconBtn}}
-                    component="label"
-                  >
-                    <input hidden accept="*" multiple type="file" />
-                    <InsertDriveFileRoundedIcon />
-                  </IconButton>
-                </InputAdornment>
-                <InputAdornment position="end">
-                  <IconButton
-                    size="small"
-                    edge="end"
-                    sx={{...colorHover.greenIconBtn}}
-                    component="label"
-                  >
-                    <input hidden accept="image/*" type="file" />
-                    <PhotoRoundedIcon />
-                  </IconButton>
-                </InputAdornment>
-                <InputAdornment position="end">
-                  <IconButton
-                    size="small"
-                    edge="end"
-                    sx={{...colorHover.greenIconBtn}}
-                    component="label"
-                  >
-                    <input hidden accept="video/*" multiple type="file" />
-                    <SmartDisplayRoundedIcon />
-                  </IconButton>
-                </InputAdornment>
-              </>
-            ),
-          }}
+          // InputProps={{
+          //   endAdornment: (
+          //     <>
+          //       <InputAdornment position="end">
+          //         <IconButton
+          //           size="small"
+          //           edge="end"
+          //           sx={{...colorHover.greenIconBtn}}
+          //           component="label"
+          //         >
+          //           <input hidden accept="*" multiple type="file" />
+          //           <InsertDriveFileRoundedIcon />
+          //         </IconButton>
+          //       </InputAdornment>
+          //       <InputAdornment position="end">
+          //         <IconButton
+          //           size="small"
+          //           edge="end"
+          //           sx={{...colorHover.greenIconBtn}}
+          //           component="label"
+          //         >
+          //           <input hidden accept="image/*" type="file" />
+          //           <PhotoRoundedIcon />
+          //         </IconButton>
+          //       </InputAdornment>
+          //       <InputAdornment position="end">
+          //         <IconButton
+          //           size="small"
+          //           edge="end"
+          //           sx={{...colorHover.greenIconBtn}}
+          //           component="label"
+          //         >
+          //           <input hidden accept="video/*" multiple type="file" />
+          //           <SmartDisplayRoundedIcon />
+          //         </IconButton>
+          //       </InputAdornment>
+          //     </>
+          //   ),
+          // }}
         ></TextField>
       </Grid>{' '}
       <Grid item xs={2}>

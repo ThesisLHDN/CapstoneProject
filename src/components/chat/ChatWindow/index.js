@@ -41,7 +41,9 @@ import {useFirestore} from 'src/hooks/useFirestore';
 import {
   getDocumentWithCondition,
   updateDocument,
+  deleteDocument,
 } from 'src/firebase/firestoreServices';
+import WarningPopup from 'src/components/popup/Warning';
 
 const StyledDiv = styled(`div`)({
   padding: '12px',
@@ -88,7 +90,6 @@ const AppBar = styled(MuiAppBar, {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
-    // marginRight: drawerWidth,
   }),
 }));
 
@@ -105,16 +106,9 @@ function ChatWindow({currentUser}) {
   const theme = useTheme();
   const [openDrawer, setOpenDrawer] = useState(false);
 
-  const handleDrawerOpen = () => {
-    setOpenDrawer(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpenDrawer(false);
-  };
-
   const [open, setOpen] = useState(false);
-  const {selectedRoom, roomMembers} = useContext(ChatContext);
+  const {selectedRoom, roomMembers, currentRoomMembers} =
+    useContext(ChatContext);
 
   const messagesCondition = useMemo(
     () => ({
@@ -144,12 +138,12 @@ function ChatWindow({currentUser}) {
     }))[0];
     console.log(member);
     if (member) {
-      if (!(member.id in roomMembers)) {
+      if (!(member.id in currentRoomMembers)) {
         selectedRoom.members.push(member.id);
         console.log('start update', member);
-        // console.log('rooms', selectedRoom.id, selectedRoom.members);
         updateDocument('rooms', selectedRoom.id, {
           members: selectedRoom.members,
+          allmembers: selectedRoom.members,
         });
       }
     }
@@ -167,9 +161,35 @@ function ChatWindow({currentUser}) {
       };
     });
   }
-  console.log('check', currentUser, selectedRoom);
 
-  // const [settingModal, setSettingModal] = useState(false);
+  const [openDeleteRoom, setOpenDeleteRoom] = useState(false);
+  const [openRemoveMem, setOpenRemoveMem] = useState(false);
+  const [mem, setMem] = useState(false);
+  const deleteRoomHandler = () => {
+    console.log('deleteRoomHandler');
+    deleteDocument('rooms', selectedRoom.id);
+    // Todo delete all messages
+    setOpenDeleteRoom(false);
+  };
+  const removeMemHandler = () => {
+    console.log('removeMemHandler', mem);
+
+    const newCurrentList = currentRoomMembers
+      .filter((member) => member.uid !== mem.uid)
+      .map((member) => member.uid);
+    console.log('delete', mem.uid, 'from', currentRoomMembers, newCurrentList);
+
+    updateDocument('rooms', selectedRoom.id, {members: newCurrentList});
+
+    // Todo pop member id out of members array and update doc
+    // cần quan tâm nếu members đã bị xóa thì không có datanpm
+    setOpenRemoveMem(false);
+    setMem(false);
+  };
+
+  const adminRight = selectedRoom
+    ? currentUser.uid === selectedRoom.adminId
+    : false;
 
   return (
     <Box container sx={{height: '100%', position: 'relative'}}>
@@ -206,7 +226,7 @@ function ChatWindow({currentUser}) {
                   color="inherit"
                   aria-label="open drawer"
                   edge="end"
-                  onClick={handleDrawerOpen}
+                  onClick={() => setOpenDrawer(true)}
                   sx={{...(openDrawer && {display: 'none'})}}
                 >
                   <MenuIcon />
@@ -218,6 +238,7 @@ function ChatWindow({currentUser}) {
             <DrawerHeader sx={{width: '100%'}} />{' '}
             <Box
               sx={{
+                pl: 1,
                 height: 'calc(100% - 64px)',
                 overflowY: 'scroll',
                 // scrollSnapType: 'y proximity',
@@ -246,13 +267,16 @@ function ChatWindow({currentUser}) {
             open={openDrawer}
           >
             <DrawerHeader>
-              <Button onClick={handleDrawerClose} sx={{textTransform: 'none'}}>
+              <Button
+                onClick={() => setOpenDrawer(false)}
+                sx={{textTransform: 'none'}}
+              >
                 {theme.direction === 'rtl' ? (
                   <ChevronLeftIcon />
                 ) : (
                   <>
                     {' '}
-                    <ChevronRightIcon />
+                    <ChevronRightIcon sx={{color: '#181818'}} />
                     <Typography
                       variant="h6"
                       sx={{textAlign: 'center', color: color.green03}}
@@ -307,7 +331,9 @@ function ChatWindow({currentUser}) {
               }}
             >
               <Typography>Members</Typography>
-              {roomMembers.map((member) => (
+            </StyledDiv>{' '}
+            <Box sx={{pl: 1}}>
+              {currentRoomMembers.map((member) => (
                 <Box
                   sx={{
                     display: 'flex',
@@ -322,12 +348,19 @@ function ChatWindow({currentUser}) {
                     {member.displayName}
                   </Box>
 
-                  <IconButton>
-                    <PersonRemoveAlt1RoundedIcon />
-                  </IconButton>
+                  {adminRight && member.id !== currentUser.uid && (
+                    <IconButton
+                      onClick={() => {
+                        setMem(member);
+                        setOpenRemoveMem(true);
+                      }}
+                    >
+                      <PersonRemoveAlt1RoundedIcon />
+                    </IconButton>
+                  )}
                 </Box>
               ))}
-            </StyledDiv>{' '}
+            </Box>
             <StyledDiv
               style={{
                 display:
@@ -336,6 +369,7 @@ function ChatWindow({currentUser}) {
                 alignItems: 'center',
                 height: 40,
               }}
+              onClick={() => setOpenDeleteRoom(true)}
             >
               <Typography sx={{color: 'red'}}>Delete room</Typography>
             </StyledDiv>
@@ -354,12 +388,13 @@ function ChatWindow({currentUser}) {
         //     transform: 'translate(-50%,-50%)',
         //   }}
         // />
-        <Box sx={{position: 'relative', height: '100%'}}>
+        <Box sx={{position: 'relative', m: 0, height: '100%'}}>
           <Typography
             sx={{
               position: 'absolute',
               left: '50%',
               top: '50%',
+              width: '80%',
               transform: 'translate(-50%,-50%)',
             }}
           >
@@ -375,6 +410,28 @@ function ChatWindow({currentUser}) {
         onSubmit={addMemberHandler}
         confirmContent={'Add'}
       ></CreationPopup>
+      <WarningPopup
+        title={'Delete room'}
+        open={openDeleteRoom}
+        onClose={() => setOpenDeleteRoom(false)}
+        handleSubmit={deleteRoomHandler}
+        content={
+          'Do you really want to delete this room? This cannot be undone'
+        }
+      ></WarningPopup>
+      <WarningPopup
+        title={'Remove member'}
+        open={openRemoveMem}
+        onClose={() => setOpenRemoveMem(false)}
+        delContent={'Remove'}
+        handleSubmit={removeMemHandler}
+        content={
+          <Typography sx={{fontSize: 14}}>
+            Do you really want to remove <b>{mem.displayName}</b> (
+            <i>{mem.email}</i>)? This cannot be undone.
+          </Typography>
+        }
+      ></WarningPopup>
     </Box>
   );
 }
