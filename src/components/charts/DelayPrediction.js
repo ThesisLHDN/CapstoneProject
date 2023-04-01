@@ -7,7 +7,7 @@ function DelayPrediction({ chartData }) {
   return (
     <div style={{  border: "1px solid #787878", borderRadius: 16 }} >
       <div className="flex">
-        <p className="text-left text-tg-text-color font-bold text-base mt-6 mx-6">Delay Prediction</p>
+        <p className="text-left text-tg-text-color font-bold text-base mt-6 mx-6">Delay</p>
         <SettingsOutlinedIcon sx={{ marginTop: 3 }}/>
       </div>
       <p className="text-sm italic ml-6 mt-3">Short description</p>

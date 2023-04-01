@@ -304,7 +304,7 @@ function ProjectSetting() {
         Access
       </Typography> */}
 
-      <SearchBar sx={{width: '250px', marginLeft: 6, marginTop: 2}} />
+      {/* <SearchBar sx={{width: '250px', marginLeft: 6, marginTop: 2}} /> */}
       <MemberList />
 
       {/* <Grid container>

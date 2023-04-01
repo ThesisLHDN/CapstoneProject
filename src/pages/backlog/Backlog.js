@@ -67,7 +67,7 @@ function Backlog() {
           mt: 2,
         }}
       >
-        <SearchBar sx={{width: '210px'}} />
+        {/* <SearchBar sx={{width: '210px'}} /> */}
         <Filter />
         <Sort />
         {/* <Button

@@ -340,6 +340,7 @@ function ChatWindow({currentUser}) {
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     mt: 1,
+                    px: 1,
                   }}
                 >
                   <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>

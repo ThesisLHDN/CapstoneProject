@@ -137,15 +137,15 @@ function Document({parentId}) {
               mt: 2,
             }}
           >
-            <SearchBar sx={{width: '210px'}} />
-            <Sort />
+            {/* <SearchBar sx={{width: '210px'}} /> */}
+            {/* <Sort />
             <Button
               variant="text"
               startIcon={<VisibilityOutlinedIcon />}
               sx={{color: '#181818', textTransform: 'none'}}
             >
               View
-            </Button>
+            </Button> */}
           </Box>
           <AddItem parentId={selectedParentId} projectId={selectedProjectId} />
           {documents.map((item) => {

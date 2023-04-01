@@ -146,7 +146,7 @@ function Board() {
           mt: 2,
         }}
       >
-        <SearchBar sx={{width: '250px'}} />
+        {/* <SearchBar sx={{width: '250px'}} /> */}
         <Filter />
         {/* <Button
           variant="text"

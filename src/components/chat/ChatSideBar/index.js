@@ -73,7 +73,7 @@ function ChatSideBar({data, currentUser}) {
         container
         sx={{width: '100%', height: '100%', justifyContent: 'center', p: 2}}
       >
-        <SearchBar round sx={{borderRadius: '20px !important'}} />{' '}
+        {/* <SearchBar round sx={{borderRadius: '20px !important'}} />{' '} */}
         <Grid container sx={{width: '100%', my: 2}}>
           <Grid item xs={7}>
             <Typography variant="h5">Channels</Typography>
