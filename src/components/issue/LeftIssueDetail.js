@@ -24,41 +24,51 @@ import ChildIssues from './ChildIssues';
 import {useFirestore} from 'src/hooks/useFirestore';
 import CloseIcon from '@mui/icons-material/Close';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
+import {color, colorHover} from 'src/style';
 
 import {storage} from 'src/firebase/config';
 import {getDownloadURL, ref, uploadBytesResumable} from 'firebase/storage';
 import {addDocument} from 'src/firebase/firestoreServices';
 import {AuthContext} from 'src/Context/AuthProvider';
 import Attachments from './Attachments';
+import axios from 'axios';
 
-const tasks = [
-  {
-    id: 'SCR1',
-    name: 'First task',
-    status: 'To do',
-    type: 'task',
-    epic: 'Epic 1',
-    due: '2022-02-01',
-    point: 15,
-    assignee: 'Đăng Nguyễn',
-  },
-  {
-    id: 'SCR2',
-    name: 'Second task',
-    status: 'To do',
-    type: 'task',
-    epic: 'Epic 1',
-    due: '2022-02-01',
-    point: 10,
-    assignee: 'Lâm Nguyễn',
-  },
-];
+// const tasks = [
+//   {
+//     id: 'SCR1',
+//     name: 'First task',
+//     status: 'To do',
+//     type: 'task',
+//     epic: 'Epic 1',
+//     due: '2022-02-01',
+//     point: 15,
+//     assignee: 'Đăng Nguyễn',
+//   },
+//   {
+//     id: 'SCR2',
+//     name: 'Second task',
+//     status: 'To do',
+//     type: 'task',
+//     epic: 'Epic 1',
+//     due: '2022-02-01',
+//     point: 10,
+//     assignee: 'Lâm Nguyễn',
+//   },
+// ];
 
-function LeftIssueDetail({issueId}) {
+function handleCreateTime(time) {
+  const t = new Date(time);
+  const a = t.toString().split(' ');
+  a.splice(4, 4);
+  return a[0] + ', ' + a[1] + ' ' + a[2] + ', ' + a[3];
+}
+
+function LeftIssueDetail({issue, setIssue, trigger, setTrigger}) {
   const {user} = useContext(AuthContext);
   console.log('issue user', user);
 
   const [open, setOpen] = useState(false);
+  const [openPriority, setOpenPriority] = useState(false);
   function handleClose() {
     setOpen(false);
   }
@@ -71,11 +81,36 @@ function LeftIssueDetail({issueId}) {
   // console.log(issueDetail);
 
   const [startDate, setStartDate] = useState(new Date());
-  const [status, setStatus] = useState('In progress');
+  // const [status, setStatus] = useState(issue.issuestatus);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorElPriority, setAnchorElPriority] = useState(null);
   const [childIssue, setChildIssue] = useState(false);
   const [createChild, setCreateChild] = useState(false);
   const [snackbarContent, setSnackbarContent] = useState();
+  const [changeDescription, setChangeDescription] = useState(false);
+
+  const updateIssue = async ({status, due, priority, assignee, point} = {}) => {
+    try {
+      const res = await axios.put(`http://localhost:8800/issue/${issue.id}`, {
+        issuestatus: status ? status : issue.issuestatus,
+        descript: issue.descript,
+        dueDate: due
+          ? due
+          : new Date(issue.dueDate)
+              .toISOString()
+              .slice(0, 19)
+              .replace('T', ' '),
+        priority: priority ? priority : issue.priority,
+        assigneeId: issue.assigneeId,
+        estimatePoint: issue.estimatePoint,
+      });
+      setTrigger(true);
+      console.log('#############3', res);
+      // setIssues([...res.data]);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const attachmentsCondition = useMemo(
     () => ({
@@ -85,28 +120,67 @@ function LeftIssueDetail({issueId}) {
     [],
   );
   const attachments = useFirestore(
-    `issues/${issueId}/documents`,
+    `issues/${issue.id}/documents`,
     attachmentsCondition,
   );
   // console.log(attachments);
 
   const handleChange = (event, element) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
-    setStatus(element);
+    // setStatus(element);
+    setIssue({...issue, issuestatus: element});
+    setOpen(!open);
+    updateIssue({status: element});
+  };
+
+  const handleChangePriority = (event, element) => {
+    setAnchorElPriority(anchorElPriority ? null : event.currentTarget);
+    // setStatus(element);
+    setIssue({...issue, priority: element});
+    setOpenPriority(!openPriority);
+    updateIssue({priority: element});
+  };
+
+  const handleChangeDescription = (event) => {
+    setChangeDescription(true);
+    setIssue({...issue, [event.target.name]: event.target.value});
+    // console.log(issue.descript);
+  };
+
+  const onChangeDate = (date) => {
+    console.log('%%%%%%%%%%%%%55', date);
+    setIssue({
+      ...issue,
+      dueDate: date,
+    });
+    updateIssue({due: date});
+  };
+
+  const handleUpdate = (event) => {
+    updateIssue();
+    console.log('$$$$$$$$$$$$$$$$3', issue.descript);
+    setChangeDescription(false);
   };
 
   const handleClick = (event) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
+    setOpen(!open);
+  };
+
+  const handleClickPriority = (event) => {
+    setAnchorElPriority(anchorElPriority ? null : event.currentTarget);
+    setOpenPriority(!openPriority);
   };
 
   const id = open ? 'simple-popper' : undefined;
+  const idPriority = openPriority ? 'simple-popper-priority' : undefined;
 
-  const handleChildIssue = () => {
-    if (tasks.length === 0) {
-      setChildIssue(true);
-    }
-    setCreateChild(true);
-  };
+  // const handleChildIssue = () => {
+  //   if (tasks.length === 0) {
+  //     setChildIssue(true);
+  //   }
+  //   setCreateChild(true);
+  // };
 
   const upLoadHandler = (files) => {
     if (files) {
@@ -139,7 +213,7 @@ function LeftIssueDetail({issueId}) {
                   downloadURL: downloadURL,
                   storagePath: refPath,
                 };
-                const path = `issues/${issueId}/documents`;
+                const path = `issues/${issue.id}/documents`;
                 console.log('Add ', newDocData, ` to ${path}`);
                 addDocument(path, newDocData);
               }
@@ -180,7 +254,7 @@ function LeftIssueDetail({issueId}) {
         variant="h5"
         sx={{fontWeight: 700, fontFamily: 'Open Sans, sans-serif'}}
       >
-        Fix UI for Login Page
+        {issue.issuename}
       </Typography>
 
       <Grid container sx={{display: 'flex', marginTop: 3}}>
@@ -191,23 +265,23 @@ function LeftIssueDetail({issueId}) {
             height: 34,
             borderRadius: 3,
             backgroundColor: `${
-              status === 'Done'
+              issue.issuestatus === 'Done'
                 ? '#A4E7AB'
-                : status === 'In progress'
+                : issue.issuestatus === 'In progress'
                 ? '#9AD1EF'
                 : '#EDCBB9'
             }`,
             color: `${
-              status === 'Done'
+              issue.issuestatus === 'Done'
                 ? '#009606'
-                : status === 'In progress'
+                : issue.issuestatus === 'In progress'
                 ? '#006BA7'
                 : '#EC6F28'
             }`,
           }}
           onClick={handleClick}
         >
-          {status}
+          {issue.issuestatus}
           <ExpandMoreIcon />
         </Button>
 
@@ -217,7 +291,7 @@ function LeftIssueDetail({issueId}) {
               sx={{
                 backgroundColor: 'white',
                 borderRadius: 1,
-                right: status === 'In progress' ? -60 : -80,
+                right: issue.issuestatus === 'In progress' ? -60 : -80,
                 marginTop: '5px',
                 border: 'solid 1px #ECEDF0',
                 boxShadow: '2px 2px 5px #00000020',
@@ -230,7 +304,7 @@ function LeftIssueDetail({issueId}) {
               <MenuList sx={{px: 0, width: '100%'}}>
                 {['To do', 'In progress', 'Done']
                   .filter((element) => {
-                    return element !== status;
+                    return element !== issue.issuestatus;
                   })
                   .map((element) => {
                     return (
@@ -305,15 +379,35 @@ function LeftIssueDetail({issueId}) {
         Description
       </Typography>
 
-      <Typography sx={{marginTop: 1, fontSize: 14, textAlign: 'justify'}}>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
-        pellentesque justo quam, eget mattis nisl pellentesque sed. In odio
-        urna, laoreet mattis tempor quis, consectetur ut massa. Phasellus
-        pharetra finibus tortor, ut dapibus nunc pretium in. Pellentesque
-        pellentesque et tellus vel sollicitudin. Pellentesque fermentum mattis
-        nunc a condimentum. Suspendisse potenti. Nulla vitae diam nec turpis
-        pharetra fermentum sodales interdum dui.
-      </Typography>
+      <TextField
+        sx={{
+          width: '100%',
+          scrollbarGutter: 'stable',
+          textAlign: 'justify',
+          '& textarea': {
+            textAlign: 'justify',
+          },
+        }}
+        onChange={handleChangeDescription}
+        name="descript"
+        multiline
+        rows={2}
+        value={issue.descript ? issue.descript : ''}
+      ></TextField>
+      {changeDescription && (
+        <Button
+          variant="contained"
+          size="medium"
+          sx={{mt: 2, ...colorHover.greenGradBtn}}
+          onClick={handleUpdate}
+        >
+          Update description
+        </Button>
+      )}
+
+      {/* <Typography sx={{marginTop: 1, fontSize: 14, textAlign: 'justify'}}>
+        {issue.descript}
+      </Typography> */}
 
       <Grid container spacing={2} sx={{marginTop: 1}}>
         <Grid item xs={3}>
@@ -333,23 +427,91 @@ function LeftIssueDetail({issueId}) {
 
         <Grid item xs={5}>
           <Typography sx={{marginLeft: 3, fontSize: 14}}>
-            Fri, November 11, 2022
+            {handleCreateTime(issue.createTime)}
           </Typography>
           <div
             className="mt-4 mb-0 ml-6 text-sm"
             style={{fontFamily: 'Roboto, Helvetica, Arial,sans-serif'}}
           >
             <DatePicker
-              selected={startDate}
-              dateFormat="EEE, MMMM d, yyyy"
-              onChange={(date) => setStartDate(date)}
+              selected={issue.dueDate ? new Date(issue.dueDate) : new Date()}
+              dateFormat="EEE, MMM dd, yyyy"
+              onChange={(date) =>
+                onChangeDate(
+                  new Date(date).toISOString().slice(0, 19).replace('T', ' '),
+                )
+              }
             />
           </div>
           <div className="mt-4 mb-0 ml-4 text-sm">
-            <Button style={{textTransform: 'none', height: 20, color: 'red'}}>
-              High
-              <KeyboardDoubleArrowUpIcon />
+            <Button
+              style={{
+                textTransform: 'none',
+                height: 20,
+                color: `${
+                  issue.priority == 'High'
+                    ? 'red'
+                    : issue.priority == 'Medium'
+                    ? 'orange'
+                    : 'green'
+                }`,
+              }}
+              onClick={handleClickPriority}
+            >
+              {issue.priority}
+              {/* <KeyboardDoubleArrowUpIcon /> */}
             </Button>
+            <Popper
+              id={idPriority}
+              open={openPriority}
+              anchorEl={anchorElPriority}
+              sx={{zIndex: 5}}
+            >
+              <ClickAwayListener onClickAway={handleClickPriority}>
+                <Box
+                  sx={{
+                    backgroundColor: 'white',
+                    borderRadius: 1,
+                    right: issue.issuestatus === 'In progress' ? -60 : -80,
+                    marginTop: '5px',
+                    border: 'solid 1px #ECEDF0',
+                    boxShadow: '2px 2px 5px #00000020',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    position: 'absolute',
+                    width: 120,
+                  }}
+                >
+                  <MenuList sx={{px: 0, width: '100%'}}>
+                    {['High', 'Medium', 'Low']
+                      .filter((element) => {
+                        return element !== issue.priority;
+                      })
+                      .map((element) => {
+                        return (
+                          <MenuItem
+                            sx={{
+                              py: 1,
+                              fontSize: 14,
+                              fontWeight: 900,
+                              color: `${
+                                element === 'High'
+                                  ? 'red'
+                                  : element === 'Medium'
+                                  ? 'orange'
+                                  : 'green'
+                              }`,
+                            }}
+                            onClick={(e) => handleChangePriority(e, element)}
+                          >
+                            {element}
+                          </MenuItem>
+                        );
+                      })}
+                  </MenuList>
+                </Box>
+              </ClickAwayListener>
+            </Popper>
           </div>
           {/* <TextField
             variant="standard"
@@ -379,7 +541,7 @@ function LeftIssueDetail({issueId}) {
             {file.name}
           </Box>
         ))} */}
-      <Attachments attachments={attachments} issueId={issueId} />
+      <Attachments attachments={attachments} issueId={issue.id} />
 
       <Typography sx={{marginTop: 3, fontSize: 16, fontWeight: 700}}>
         Comments
@@ -400,7 +562,7 @@ function LeftIssueDetail({issueId}) {
           {snackbarContent}
         </Alert>
       </Snackbar>
-      <Comments currentUser={user} issueId={issueId} />
+      <Comments currentUser={user} issueId={issue.id} />
     </div>
   );
 }
