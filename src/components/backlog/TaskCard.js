@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   Button,
   Avatar,
@@ -99,6 +99,19 @@ function TaskCard({issue, setTrigger, isChild = false}) {
   const {project} = useContext(AppContext);
   const [status, setStatus] = useState(issue.issuestatus);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [assignee, setAssignee] = useState({});
+
+  const getAssignee = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:8800/user/${issue.assigneeId}`,
+      );
+      setAssignee(res.data);
+      // console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const handleChange = (event, element) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
@@ -126,6 +139,12 @@ function TaskCard({issue, setTrigger, isChild = false}) {
       console.log(err);
     }
   };
+
+  useEffect(() => {
+    if (issue.assigneeId) {
+      getAssignee();
+    }
+  }, [issue]);
 
   return (
     <div
@@ -165,7 +184,7 @@ function TaskCard({issue, setTrigger, isChild = false}) {
           <AccessTimeRoundedIcon
             sx={{height: 14, width: 14, marginRight: 0.5, marginTop: 0.1}}
           />
-          {issue.endDate ? <p>{convertDate(issue.endDate)}</p> : <p>-</p>}
+          {issue.dueDate ? <p>{convertDate(issue.dueDate)}</p> : <p>-</p>}
         </span>
 
         <span
@@ -266,7 +285,7 @@ function TaskCard({issue, setTrigger, isChild = false}) {
             backgroundColor: '#8993A4',
             marginRight: 1,
           }}
-          alt={issue.assigneeId}
+          alt={assignee ? assignee.username : ''}
         />
       </div>
     </div>

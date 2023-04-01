@@ -72,7 +72,7 @@ function RoadMap() {
   };
 
   useEffect(() => {
-    const unsubscribe = fetchIssuesData();
+    fetchIssuesData();
   }, []);
 
   console.log('formatted', issues, tasks);

@@ -130,13 +130,14 @@ function TaskList(props) {
   };
 
   const updateIssue = async (cId, id, status) => {
+    console.log('$$$$$$$$$$$$$$$', status);
     try {
       const res = await axios.put(`http://localhost:8800/issue/${id}`, {
         cId: cId,
         status: status,
       });
       // setIssues([...res.data]);
-      console.log(res);
+      console.log('###########', res);
     } catch (err) {
       console.log(err);
     }
@@ -291,7 +292,7 @@ function TaskList(props) {
                               <span className="px-1.5 py-1 rounded-xl text-white bg-to-do-color my-10 mr-1 text-xs">
                                 {issues
                                   .filter((x) => {
-                                    return x.issuestatus === 'To do';
+                                    return x.issuestatus == 'To do';
                                   })
                                   .reduce((sum, a) => sum + a.estimatePoint, 0)}
                               </span>
@@ -308,9 +309,9 @@ function TaskList(props) {
                               <span className="px-1.5 py-1 rounded-xl text-white bg-in-progress-color my-10 mr-1 text-xs">
                                 {issues
                                   .filter((x) => {
-                                    return x.status === 'In progress';
+                                    return x.issuestatus == 'In progress';
                                   })
-                                  .reduce((sum, a) => sum + a.point, 0)}
+                                  .reduce((sum, a) => sum + a.estimatePoint, 0)}
                               </span>
                             ) : (
                               <></>
@@ -325,9 +326,9 @@ function TaskList(props) {
                               <span className="px-1.5 py-1 rounded-xl text-white bg-done-color my-10 mr-1 text-xs">
                                 {issues
                                   .filter((x) => {
-                                    return x.status === 'Done';
+                                    return x.issuestatus == 'Done';
                                   })
-                                  .reduce((sum, a) => sum + a.point, 0)}
+                                  .reduce((sum, a) => sum + a.estimatePoint, 0)}
                               </span>
                             ) : (
                               <></>

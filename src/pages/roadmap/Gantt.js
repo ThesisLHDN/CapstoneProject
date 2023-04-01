@@ -39,7 +39,6 @@ import {Paper} from '@mui/material';
 // }
 
 export default class Gantt extends Component {
-
   // id: 1,
   //     text: 'Epic 01',
   //     start_date: null,
@@ -48,8 +47,6 @@ export default class Gantt extends Component {
   //     progress: 0,
   //     status: 'Done',
   //     open: true,
-
-  
 
   // instance of gantt.dataProcessor
   dataProcessor = null;

@@ -1,14 +1,30 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Grid, Breadcrumbs, Typography, Link} from '@mui/material';
 import ElectricBoltIcon from '@mui/icons-material/ElectricBolt';
 import FiberManualRecordRoundedIcon from '@mui/icons-material/FiberManualRecordRounded';
 import LeftIssueDetail from 'src/components/issue/LeftIssueDetail';
 import RightIssueDetail from 'src/components/issue/RightIssueDetail';
 import {useLocation} from 'react-router-dom';
+import axios from 'axios';
 
 function Issue() {
   const location = useLocation();
   const issueId = location.pathname.split('/')[3];
+  const [issue, setIssue] = useState({});
+  const [trigger, setTrigger] = useState(false);
+
+  const fetchIssueData = async () => {
+    try {
+      const res = await axios.get(`http://localhost:8800/issue/${issueId}`);
+      setIssue(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchIssueData();
+  }, [trigger]);
 
   return (
     <div>
@@ -42,7 +58,7 @@ function Issue() {
         </Grid>
       </Grid>
 
-      <Grid container spacing={2}>
+      {/* <Grid container spacing={2}>
         <Grid item xs={6}>
           <Breadcrumbs separator="›" aria-label="breadcrumb" sx={{mb: 4}}>
             <Link
@@ -86,15 +102,25 @@ function Issue() {
             </Typography>
           </Breadcrumbs>
         </Grid>
-      </Grid>
+      </Grid> */}
 
       <Grid container spacing={2}>
         <Grid item xs={7}>
-          <LeftIssueDetail issueId={issueId} />
+          <LeftIssueDetail
+            issue={issue}
+            setIssue={setIssue}
+            trigger={trigger}
+            setTrigger={setTrigger}
+          />
         </Grid>
 
         <Grid item xs={5}>
-          <RightIssueDetail issueId={issueId} />
+          <RightIssueDetail
+            issue={issue}
+            setIssue={setIssue}
+            trigger={trigger}
+            setTrigger={setTrigger}
+          />
         </Grid>
       </Grid>
     </div>
