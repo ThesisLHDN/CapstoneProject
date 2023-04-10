@@ -20,7 +20,7 @@ import {color, colorHover} from 'src/style';
 import {useContext, useEffect, useState} from 'react';
 import axios from 'axios';
 import {useLocation} from 'react-router-dom';
-import { AppContext } from 'src/Context/AppProvider';
+import {AppContext} from 'src/Context/AppProvider';
 
 function handleClick(event) {
   event.preventDefault();
@@ -146,7 +146,7 @@ function Board() {
           mt: 2,
         }}
       >
-        <SearchBar sx={{width: '250px'}} />
+        {/* <SearchBar sx={{width: '250px'}} /> */}
         <Filter />
         {/* <Button
           variant="text"

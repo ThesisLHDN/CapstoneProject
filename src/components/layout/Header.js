@@ -52,6 +52,7 @@ export default function Header() {
   const {
     user: {displayName, uid},
   } = useContext(AuthContext);
+  const {admin} = useContext(AppContext);
   const navigate = useNavigate();
 
   const getLastestWorkspace = async () => {
@@ -114,47 +115,49 @@ export default function Header() {
         zIndex: 5,
       }}
     >
-      <Link to="/">
-        <img src={logo} width="150" alt="Logo" />
-      </Link>
-      <Tabs
-        value={value}
-        onChange={handleChange}
-        aria-label="nav tabs example"
-        sx={{
-          mx: 2,
-          height: '100%',
-          '& .MuiTab-root.Mui-selected': {
-            color: color.green03,
-            fontWeight: 'bold',
-          },
-          '& .MuiTabs-indicator': {
-            display: 'none',
-            // backgroundColor: color.green03,
-            // height: '3px',
-          },
-        }}
-      >
-        {/* <Tab label="Home" to="/" component={Link} /> */}
-        {/* <Tab label="Roadmap" to="/roadmap" component={Link} /> */}
-        {/* <Tab label="Dashboard" to="/dashboard" component={Link} /> */}
-        {/* <Tab label="Board" to="/board" component={Link} /> */}
-        <Tab
-          sx={{textTransform: 'none'}}
-          label="Workspace Settings"
-          // to={`/workspace-setting/${lastWorkspace}?user=${uid}`}
-          // component={Link}
-          onClick={getLastestWorkspace}
-        />
-        {/* <Tab
+      <Box sx={{display: 'flex'}}>
+        <Link to="/">
+          <img src={logo} width="150" alt="Logo" />
+        </Link>
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          aria-label="nav tabs example"
+          sx={{
+            mx: 2,
+            height: '100%',
+            '& .MuiTab-root.Mui-selected': {
+              color: color.green03,
+              fontWeight: 'bold',
+            },
+            '& .MuiTabs-indicator': {
+              display: 'none',
+              // backgroundColor: color.green03,
+              // height: '3px',
+            },
+          }}
+        >
+          {/* <Tab label="Home" to="/" component={Link} /> */}
+          {/* <Tab label="Roadmap" to="/roadmap" component={Link} /> */}
+          {/* <Tab label="Dashboard" to="/dashboard" component={Link} /> */}
+          {/* <Tab label="Board" to="/board" component={Link} /> */}
+          <Tab
+            sx={{textTransform: 'none'}}
+            label="Workspace Settings"
+            // to={`/workspace-setting/${lastWorkspace}?user=${uid}`}
+            // component={Link}
+            onClick={getLastestWorkspace}
+          />
+          {/* <Tab
           sx={{textTransform: 'none'}}
           label="Projects"
           to="/project-setting"
           component={Link}
         /> */}
-      </Tabs>
+        </Tabs>
+      </Box>
 
-      <SearchBar value={value}></SearchBar>
+      {/* <SearchBar value={value}></SearchBar> */}
       <Box
         sx={{
           display: 'flex',
@@ -163,18 +166,20 @@ export default function Header() {
           position: 'relative',
         }}
       >
-        <Button
-          variant="contained"
-          sx={{
-            height: 36,
-            ...colorHover.greenGradBtn,
-          }}
-          startIcon={<PersonAddOutlinedIcon />}
-          // onClick={handleClickAdd}
-          onClick={() => setOpenAddMembers(true)}
-        >
-          Add member
-        </Button>
+        {uid == admin.id && (
+          <Button
+            variant="contained"
+            sx={{
+              height: 36,
+              ...colorHover.greenGradBtn,
+            }}
+            startIcon={<PersonAddOutlinedIcon />}
+            // onClick={handleClickAdd}
+            onClick={() => setOpenAddMembers(true)}
+          >
+            Add member
+          </Button>
+        )}
         {/* <Popper id={id} open={openAdd} anchorEl={anchorElAdd} sx={{zIndex: 5}}>
           <ClickAwayListener onClickAway={handleClickAdd}>
             <div style={{position: 'absolute'}}>

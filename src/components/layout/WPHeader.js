@@ -90,7 +90,7 @@ export default function Header() {
         <img src={logo} width="150" alt="Logo" />
       </Link>
 
-      <SearchBar value={value}></SearchBar>
+      {/* <SearchBar value={value}></SearchBar> */}
       <Box sx={{display: 'flex', gap: 1, alignItems: 'center'}}>
         <Button
           variant="contained"
