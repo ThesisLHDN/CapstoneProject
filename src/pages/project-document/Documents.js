@@ -3,12 +3,10 @@ import {useContext, useMemo, useState} from 'react';
 import SearchBar from 'src/components/search';
 import Sort from 'src/components/Sort';
 import AddItem from './AddItem';
-import {useFirestore} from 'src/hooks/useFirestore';
 import WarningPopup from 'src/components/popup/Warning';
 
 import {
   Typography,
-  Box,
   Button,
   Grid,
   Breadcrumbs,
@@ -16,12 +14,9 @@ import {
   IconButton,
   CircularProgress,
 } from '@mui/material';
-import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-// import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRightOutlined';
 import FolderOutlinedIcon from '@mui/icons-material/FolderOutlined';
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
-// import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import {DocContext} from 'src/Context/DocProvider';
@@ -29,6 +24,7 @@ import {deleteDocument} from 'src/firebase/firestoreServices';
 import {styled} from '@mui/system';
 import {useLocation} from 'react-router-dom';
 import {AppContext} from 'src/Context/AppProvider';
+import {colorHover} from 'src/style';
 
 function convertDate(d) {
   const date = new Date(d);
@@ -52,6 +48,7 @@ function Document({parentId}) {
     selectedParentId,
     selectedProjectId,
     setSelectedProjectId,
+    onBack,
     setParent,
     rawDocuments,
   } = useContext(DocContext);
@@ -80,12 +77,6 @@ function Document({parentId}) {
     setOpenDeletePopup(false);
     setSelectedFile();
   };
-
-  // const rootDocument = folders
-  //   .concat(files)
-  //   .filter((item) => item.parent === '');
-
-  // console.log('root document', rootDocument);
 
   return (
     <div>
@@ -128,6 +119,16 @@ function Document({parentId}) {
           <Typography variant="h5" sx={{color: 'green', fontWeight: 700}}>
             Documents
           </Typography>
+          {selectedParentId && (
+            <Button
+              color="success"
+              variant="contained"
+              sx={{mt: 1, ...colorHover.greenBtn}}
+              onClick={onBack}
+            >
+              Back
+            </Button>
+          )}
 
           {/* <Box
             sx={{

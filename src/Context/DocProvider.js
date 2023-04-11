@@ -13,11 +13,31 @@ export default function DocProvider({children}) {
   const [selectedParentId, setSelectedParentId] = useState('');
   const [selectedParentName, setSelectedParentName] = useState('');
   const [prevParent, setPrevParent] = useState();
+  const [folderTree, setFolderTree] = useState([]);
 
   const setParent = (id, name) => {
     setPrevParent(selectedParentId, selectedParentName);
     setSelectedParentId(id);
     setSelectedParentName(name);
+    const newFolderTree = folderTree.concat([{id: id, name: name}]);
+    setFolderTree(newFolderTree);
+    console.log('Folder tree selected', newFolderTree);
+  };
+
+  const setParentOnBreadcrumb = (id) => {
+    const idlist = folderTree.map((item) => item.id);
+    const newTree = folderTree.slice(0, idlist.indexOf(id));
+    console.log(newTree);
+  };
+
+  const onBack = () => {
+    const newTree = folderTree;
+    const newParent = newTree.at(-2);
+    console.log(newParent);
+    if (newParent) setParent(newParent.id, newParent.name);
+    else setParent('', '');
+    newTree.pop();
+    setFolderTree(newTree);
   };
 
   const {
@@ -30,7 +50,7 @@ export default function DocProvider({children}) {
         ? {
             fieldName: 'parentId',
             operator: '==',
-            compareValue: selectedParentId ? selectedParentId : '',
+            compareValue: selectedParentId,
           }
         : {},
     [selectedParentId],
@@ -52,6 +72,8 @@ export default function DocProvider({children}) {
         selectedParentName,
         rawDocuments,
         prevParent,
+        setParentOnBreadcrumb,
+        onBack,
       }}
     >
       {children}
