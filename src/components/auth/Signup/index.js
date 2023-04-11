@@ -26,10 +26,11 @@ import {
 import {
   FacebookAuthProvider,
   GoogleAuthProvider,
-  signInWithPopup,
+  // signInWithPopup,
   createUserWithEmailAndPassword,
   sendEmailVerification,
   getAdditionalUserInfo,
+  updateProfile,
 } from 'firebase/auth';
 
 import {auth} from 'src/firebase/config';
@@ -127,6 +128,11 @@ export default function SignInSide() {
         addNewUser(newUser, getAdditionalUserInfo(userCredential).providerId);
         setUserData(newUser);
       })
+      .then(() =>
+        updateProfile(auth.currentUser, {
+          displayName: `${fName} ${lName}`,
+        }),
+      )
       .then(() => {
         sendEmailVerification(auth.currentUser).then(() => {
           console.log('Email verification sent!');
