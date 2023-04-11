@@ -52,6 +52,7 @@ export default function Header() {
   const {
     user: {displayName, uid},
   } = useContext(AuthContext);
+  const {admin} = useContext(AppContext);
   const navigate = useNavigate();
 
   const getLastestWorkspace = async () => {
@@ -114,7 +115,7 @@ export default function Header() {
         zIndex: 5,
       }}
     >
-      <Box sx={{display: 'flex', }}>
+      <Box sx={{display: 'flex'}}>
         <Link to="/">
           <img src={logo} width="150" alt="Logo" />
         </Link>
@@ -165,18 +166,20 @@ export default function Header() {
           position: 'relative',
         }}
       >
-        <Button
-          variant="contained"
-          sx={{
-            height: 36,
-            ...colorHover.greenGradBtn,
-          }}
-          startIcon={<PersonAddOutlinedIcon />}
-          // onClick={handleClickAdd}
-          onClick={() => setOpenAddMembers(true)}
-        >
-          Add member
-        </Button>
+        {uid == admin.id && (
+          <Button
+            variant="contained"
+            sx={{
+              height: 36,
+              ...colorHover.greenGradBtn,
+            }}
+            startIcon={<PersonAddOutlinedIcon />}
+            // onClick={handleClickAdd}
+            onClick={() => setOpenAddMembers(true)}
+          >
+            Add member
+          </Button>
+        )}
         {/* <Popper id={id} open={openAdd} anchorEl={anchorElAdd} sx={{zIndex: 5}}>
           <ClickAwayListener onClickAway={handleClickAdd}>
             <div style={{position: 'absolute'}}>

@@ -10,7 +10,7 @@ import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined
 import TaskList from 'src/components/backlog/TaskList';
 import Filter from 'src/components/Filter';
 import Sort from 'src/components/Sort';
-import { AppContext } from 'src/Context/AppProvider';
+import {AppContext} from 'src/Context/AppProvider';
 
 function Backlog() {
   const [isHide, setIsHide] = useState(true);

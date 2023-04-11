@@ -20,7 +20,7 @@ import {color, colorHover} from 'src/style';
 import {useContext, useEffect, useState} from 'react';
 import axios from 'axios';
 import {useLocation} from 'react-router-dom';
-import { AppContext } from 'src/Context/AppProvider';
+import {AppContext} from 'src/Context/AppProvider';
 
 function handleClick(event) {
   event.preventDefault();

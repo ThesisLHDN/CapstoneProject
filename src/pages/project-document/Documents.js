@@ -129,7 +129,7 @@ function Document({parentId}) {
             Documents
           </Typography>
 
-          <Box
+          {/* <Box
             sx={{
               display: 'flex',
               gap: 1,
@@ -138,15 +138,15 @@ function Document({parentId}) {
             }}
           >
             {/* <SearchBar sx={{width: '210px'}} /> */}
-            {/* <Sort />
+          {/* <Sort />
             <Button
               variant="text"
               startIcon={<VisibilityOutlinedIcon />}
               sx={{color: '#181818', textTransform: 'none'}}
             >
               View
-            </Button> */}
-          </Box>
+            </Button>
+          </Box> */}
           <AddItem parentId={selectedParentId} projectId={selectedProjectId} />
           {documents.map((item) => {
             return (
