@@ -84,6 +84,8 @@ export default function ProjectTable() {
   //   setPage(0);
   // };
   const {workspace, projects, setProjects} = useContext(AppContext);
+  // console.log('reload')
+  // console.log('project list', projects)
   // console.log(workspace);
   const {
     user: {displayName, uid},
@@ -117,7 +119,7 @@ export default function ProjectTable() {
   // if (!data) return <h2>Loading...</h2>;
 
   return (
-    <Paper sx={{overflow: 'hidden', my: 2}}>
+    <Paper sx={{overflow: 'hidden', mt: 2}}>
       <TableContainer>
         <Table sx={{minWidth: 700}} aria-label="customized table">
           <TableHead
