@@ -6,14 +6,11 @@ import {
   TextField,
   Button,
   Paper,
-  Box,
   Grid,
-  Divider,
 } from '@mui/material';
 import PhotoRoundedIcon from '@mui/icons-material/PhotoRounded';
 import SmartDisplayRoundedIcon from '@mui/icons-material/SmartDisplayRounded';
 import InsertDriveFileRoundedIcon from '@mui/icons-material/InsertDriveFileRounded';
-// import SendRoundedIcon from '@mui/icons-material/Send';
 
 import {colorHover} from 'src/style';
 import {addDocument, updateDocument} from 'src/firebase/firestoreServices';
@@ -214,7 +211,6 @@ function TypingArea({currentUser, roomId}) {
           variant="contained"
           sx={{width: '100%', height: '100%', ...colorHover.greenBtn}}
           onClick={() => handleOnSubmit(message)}
-          // endIcon={<SendRoundedIcon />}
         >
           Send
         </Button>

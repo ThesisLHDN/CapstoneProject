@@ -15,6 +15,7 @@ import CreatePopup from 'src/components/popup/Create';
 import AddIcon from '@mui/icons-material/Add';
 import CreateNewFolderRoundedIcon from '@mui/icons-material/CreateNewFolderRounded';
 import NoteAddRoundedIcon from '@mui/icons-material/NoteAddRounded';
+import EditNoteRoundedIcon from '@mui/icons-material/EditNoteRounded';
 import CloseIcon from '@mui/icons-material/Close';
 import {useState} from 'react';
 import {storage} from 'src/firebase/config';
@@ -22,7 +23,7 @@ import {getDownloadURL, ref, uploadBytesResumable} from 'firebase/storage';
 import {addDocument} from 'src/firebase/firestoreServices';
 import {AuthContext} from 'src/Context/AuthProvider';
 
-function AddItem({parentId, projectId}) {
+function AddItem({parentId, projectId, onClose}) {
   const {
     user: {uid},
   } = useContext(AuthContext);
@@ -173,6 +174,10 @@ function AddItem({parentId, projectId}) {
                     onClick={(e) => (e.target.value = null)}
                   />
                   <label for="upload">Upload file</label>
+                </MenuItem>
+                <MenuItem sx={{fontSize: 14}} onClick={() => onClose(true)}>
+                  <EditNoteRoundedIcon />
+                  <label onClick={() => onClose(true)}>Create new file</label>
                 </MenuItem>
               </MenuList>
             </Paper>

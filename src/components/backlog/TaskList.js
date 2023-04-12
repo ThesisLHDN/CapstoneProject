@@ -24,7 +24,6 @@ import CompleteSprint from '../popup/CompleteSprint';
 import {useLocation} from 'react-router-dom';
 import axios from 'axios';
 import {AuthContext} from 'src/Context/AuthProvider';
-import {AppContext} from 'src/Context/AppProvider';
 
 const columnsFromBackend = [
   {

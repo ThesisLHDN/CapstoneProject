@@ -4,6 +4,8 @@ import SearchBar from 'src/components/search';
 import Sort from 'src/components/Sort';
 import AddItem from './AddItem';
 import WarningPopup from 'src/components/popup/Warning';
+import TextEditor from './QuillEditor/Editor';
+import {addDocument, updateDocument} from 'src/firebase/firestoreServices';
 
 import {
   Typography,
@@ -17,6 +19,7 @@ import {
 import FolderOutlinedIcon from '@mui/icons-material/FolderOutlined';
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
+import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import {DocContext} from 'src/Context/DocProvider';
@@ -24,6 +27,7 @@ import {deleteDocument} from 'src/firebase/firestoreServices';
 import {styled} from '@mui/system';
 import {useLocation} from 'react-router-dom';
 import {AppContext} from 'src/Context/AppProvider';
+import {AuthContext} from 'src/Context/AuthProvider';
 import {colorHover} from 'src/style';
 
 function convertDate(d) {
@@ -55,11 +59,14 @@ function Document({parentId}) {
 
   const location = useLocation();
   const projectId = location.pathname.split('/')[2];
+  const {
+    user: {uid},
+  } = useContext(AuthContext);
   const {workspace, project} = useContext(AppContext);
 
   setSelectedProjectId(projectId);
   const [openDeletePopup, setOpenDeletePopup] = useState(false);
-  const [selectedFile, setSelectedFile] = useState();
+  const [selectedFile, setSelectedFile] = useState({name: 'Untitled'});
 
   const documents = rawDocuments
     ? rawDocuments.filter(
@@ -76,6 +83,36 @@ function Document({parentId}) {
 
     setOpenDeletePopup(false);
     setSelectedFile();
+  };
+
+  const [openEditor, setOpenEditor] = useState(false);
+  const [enableEditText, setEnableEditText] = useState(true);
+
+  const onSubmitTextEditor = (file) => {
+    console.log('text editor', file);
+    if (file) {
+      if (!file.id) {
+        console.log('create');
+        const TextData = {
+          authorId: uid,
+          name: file.name,
+          parentId: selectedParentId,
+          type: file.type,
+          body: file.body,
+        };
+        console.log('new doc added', TextData);
+        addDocument(`projects/${projectId}/documents`, TextData);
+      } else {
+        updateDocument(`projects/${projectId}/documents`, file.id, {
+          name: file.name,
+          body: file.body,
+        });
+        console.log('edit', file.id, file.name, file.body);
+      }
+    }
+
+    setOpenEditor(false);
+    setEnableEditText(true);
   };
 
   return (
@@ -119,6 +156,7 @@ function Document({parentId}) {
           <Typography variant="h5" sx={{color: 'green', fontWeight: 700}}>
             Documents
           </Typography>
+
           {selectedParentId && (
             <Button
               color="success"
@@ -148,7 +186,14 @@ function Document({parentId}) {
               View
             </Button>
           </Box> */}
-          <AddItem parentId={selectedParentId} projectId={selectedProjectId} />
+          <AddItem
+            parentId={selectedParentId}
+            projectId={selectedProjectId}
+            onClose={() => {
+              setSelectedFile({name: 'Untitled'});
+              setOpenEditor(true);
+            }}
+          />
           {documents.map((item) => {
             return (
               <Grid
@@ -161,7 +206,7 @@ function Document({parentId}) {
                 }}
                 key={item.id}
               >
-                <Grid item xs={7}>
+                <Grid item xs={5}>
                   <Grid container>
                     {item.type === 'folder' ? (
                       <PlainButton
@@ -198,6 +243,12 @@ function Document({parentId}) {
                     {item.createBy}
                   </Typography>
                 </Grid> */}
+                <Grid item xs={2}>
+                  <Typography sx={{fontSize: 14}}>
+                    <span className="font-bold">Type: </span>
+                    {item.type.split('/').at(-1)}
+                  </Typography>
+                </Grid>
 
                 {/* <Grid item xs={4}></Grid> */}
 
@@ -210,7 +261,19 @@ function Document({parentId}) {
 
                 <Grid item xs={2}>
                   <Grid container sx={{justifyContent: 'flex-end'}}>
-                    {item.type !== 'folder' && (
+                    {item.type === 'editableHTML' && (
+                      <IconButton>
+                        <EditRoundedIcon
+                          sx={{color: '#181818'}}
+                          onClick={() => {
+                            setOpenEditor(true);
+                            setSelectedFile(item);
+                            setEnableEditText(false);
+                          }}
+                        ></EditRoundedIcon>
+                      </IconButton>
+                    )}
+                    {item.type !== 'folder' && item.type !== 'editableHTML' && (
                       <a href={item.downloadURL} download target="_blank">
                         <IconButton>
                           <DownloadRoundedIcon
@@ -223,7 +286,7 @@ function Document({parentId}) {
                       size="medium"
                       onClick={() => {
                         setOpenDeletePopup(true);
-                        setSelectedFile({id: item.id, name: item.name});
+                        setSelectedFile(item);
                       }}
                     >
                       <DeleteOutlineRoundedIcon sx={{color: '#e02828'}} />
@@ -240,7 +303,10 @@ function Document({parentId}) {
             }"`}
             open={openDeletePopup}
             handleSubmit={deleteFileHandler}
-            onClose={() => setOpenDeletePopup(false)}
+            onClose={() => {
+              setOpenDeletePopup(false);
+              setSelectedFile({name: 'Untitled'});
+            }}
             content="This file will be permanently deleted"
           ></WarningPopup>
         </div>
@@ -255,6 +321,15 @@ function Document({parentId}) {
         />
       )}
       {/* </DocProvider> */}
+      <TextEditor
+        sx={{zIndex: 5}}
+        open={openEditor}
+        onClose={onSubmitTextEditor}
+        projectId={projectId}
+        file={selectedFile}
+        fileName={selectedFile ? selectedFile.name : 'Untitled'}
+        fileText={selectedFile ? selectedFile.body : ''}
+      />
     </div>
   );
 }

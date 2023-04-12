@@ -23,11 +23,6 @@ function createData(name, email, role) {
   return {name, email, role};
 }
 
-// const members = [
-//   createData('Nguyễn Trường Hải Đăng', 'dangngngng@gmail.com', 'Administrator'),
-//   createData('Nguyễn Hoàng Lâm', 'lamngngng@gmail.com', 'Project Owner'),
-//   createData('Nguyễn Văn A', 'aaaaa@gmail.com', 'Team Member')
-// ]
 
 function MemberList() {
   const [anchorEl, setAnchorEl] = useState(null);

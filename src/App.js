@@ -35,8 +35,6 @@ import DocProvider from './Context/DocProvider';
 function App() {
   const location = useLocation();
   const background = location.state && location.state.background;
-  // console.log(params);
-  const [openChat, setOpenChat] = useState(false);
 
   return (
     <AuthProvider>

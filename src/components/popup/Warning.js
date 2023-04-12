@@ -20,9 +20,6 @@ function WarningPopup({
     onClose(selectedValue);
   };
 
-  const handleListItemClick = (value) => {
-    onClose(value);
-  };
   return (
     <Dialog onClose={handleClose} open={open}>
       <Paper
