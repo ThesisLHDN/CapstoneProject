@@ -15,6 +15,7 @@ import CreatePopup from 'src/components/popup/Create';
 import AddIcon from '@mui/icons-material/Add';
 import CreateNewFolderRoundedIcon from '@mui/icons-material/CreateNewFolderRounded';
 import NoteAddRoundedIcon from '@mui/icons-material/NoteAddRounded';
+import EditNoteRoundedIcon from '@mui/icons-material/EditNoteRounded';
 import CloseIcon from '@mui/icons-material/Close';
 import {useState} from 'react';
 import {storage} from 'src/firebase/config';
@@ -173,6 +174,19 @@ function AddItem({parentId, projectId}) {
                     onClick={(e) => (e.target.value = null)}
                   />
                   <label for="upload">Upload file</label>
+                </MenuItem>
+                <MenuItem sx={{fontSize: 14}}>
+                  <EditNoteRoundedIcon />
+                  <input
+                    // type="file"
+                    id="upload"
+                    hidden
+                    // onChange={(event) => {
+                    //   upLoadHandler(event.target.files);
+                    // }}
+                    // onClick={(e) => (e.target.value = null)}
+                  />
+                  <label for="upload">Create new file</label>
                 </MenuItem>
               </MenuList>
             </Paper>
