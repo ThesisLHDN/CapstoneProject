@@ -9,7 +9,7 @@ import {Grid, Paper} from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import {useFirestore} from 'src/hooks/useFirestore';
 
-function ChatRoom({currentUser}) {
+function ChatRoom({currentUser, projectId}) {
   const {rooms, selectedRoom} = useContext(ChatContext);
 
   return (
@@ -31,7 +31,7 @@ function ChatRoom({currentUser}) {
           container
           sx={{
             overflow: 'hidden',
-            height: 600,
+            height: '100%',
           }}
         >
           <Grid item xs={4} sx={{height: '100%'}}>
@@ -42,6 +42,7 @@ function ChatRoom({currentUser}) {
             <ChatSideBar
               data={rooms}
               currentUser={currentUser}
+              projectId={projectId}
               // onSelect={(e) => selectChannelHandler(e)}
             />
           </Grid>

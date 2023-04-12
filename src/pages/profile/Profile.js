@@ -14,7 +14,6 @@ function Profile() {
   const {
     user: {displayName, email, photoURL, uid},
   } = useContext(AuthContext);
-  console.log('uid', uid);
 
   // const users = useFirestore('users', {
   //   fieldName: 'uid',
@@ -50,7 +49,7 @@ function Profile() {
                 backgroundColor: '#8993A4',
                 fontSize: 120,
               }}
-              alt="Lam Nguyen"
+              alt={displayName}
             />
           </Grid>
 
@@ -119,37 +118,6 @@ function Profile() {
               ></TextField>
             </Grid>
           </Grid>
-
-          {/* <Grid
-            container
-            alignItems="center"
-            justifyContent="center"
-            sx={{mt: 3}}
-          >
-            <Grid item xs={2}>
-              <Typography
-                sx={{
-                  display: 'flex',
-                  color: color.green03,
-                  fontSize: 16,
-                  fontWeight: 700,
-                }}
-              >
-                <PhoneEnabledOutlinedIcon
-                  sx={{marginRight: 2, width: 24, height: 24}}
-                />
-                Phone number
-              </Typography>
-            </Grid>
-
-            <Grid item xs={3.5} alignItems="center" justifyContent="center">
-              <TextField
-                defaultValue={'0987654321'}
-                size="small"
-                sx={{width: '100%', backgroundColor: '#ECECEC'}}
-              ></TextField>
-            </Grid>
-          </Grid> */}
 
           <Grid
             container

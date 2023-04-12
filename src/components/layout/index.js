@@ -7,9 +7,11 @@ import SideBar from './SideBar';
 import ChatButton from 'src/components/chat/ChatButton';
 
 import {AuthContext} from 'src/Context/AuthProvider';
+import {AppContext} from 'src/Context/AppProvider';
 import ChatProvider from 'src/Context/ChatProvider';
 function Layout(props) {
   const {user} = useContext(AuthContext);
+  const {project} = useContext(AppContext);
 
   return (
     <div>
@@ -27,9 +29,11 @@ function Layout(props) {
           </Grid>
         </Grid>
       </Box>{' '}
-      <ChatProvider>
-        <ChatButton currentUser={user} />
-      </ChatProvider>
+      {!props.wp && (
+        <ChatProvider>
+          <ChatButton currentUser={user} projectId={project.id} />
+        </ChatProvider>
+      )}
     </div>
   );
 }

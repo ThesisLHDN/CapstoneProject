@@ -2,7 +2,6 @@ import {AuthContext} from './AuthProvider';
 import React, {useState, useMemo, useContext} from 'react';
 import {useFirestore} from 'src/hooks/useFirestore';
 import {AppContext} from './AppProvider';
-// TODO default value for project Id
 
 export const DocContext = React.createContext();
 
@@ -79,5 +78,4 @@ export default function DocProvider({children}) {
       {children}
     </DocContext.Provider>
   );
-  // value is the thing that all children can access
 }

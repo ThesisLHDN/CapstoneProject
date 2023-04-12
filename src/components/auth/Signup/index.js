@@ -1,4 +1,4 @@
-import {useMemo, useState} from 'react';
+import {useState} from 'react';
 import {color, colorHover} from 'src/style';
 import {errorCodeConverter} from 'src/firebase/authFunction';
 
@@ -6,8 +6,6 @@ import {
   Button,
   IconButton,
   TextField,
-  FormControlLabel,
-  Checkbox,
   Link,
   Box,
   Grid,
@@ -24,9 +22,6 @@ import {
 } from 'src/firebase/authServices';
 
 import {
-  FacebookAuthProvider,
-  GoogleAuthProvider,
-  // signInWithPopup,
   createUserWithEmailAndPassword,
   sendEmailVerification,
   getAdditionalUserInfo,
@@ -34,10 +29,6 @@ import {
 } from 'firebase/auth';
 
 import {auth} from 'src/firebase/config';
-import {addDocument, setDocument} from 'src/firebase/firestoreServices';
-
-const facebookProvider = new FacebookAuthProvider();
-const googleProvider = new GoogleAuthProvider();
 
 const theme = createTheme();
 
@@ -46,62 +37,12 @@ export default function SignInSide() {
   const [formData, setFormData] = useState({});
   const [userData, setUserData] = useState({});
 
-  // const addNewUser = (user, provider) => {
-  //   if (user) {
-  //     setDocument('users', user.uid, {
-  //       displayName: user.displayName,
-  //       email: user.email,
-  //       photoURL: user.photoURL,
-  //       uid: user.uid,
-  //       provider,
-  //     });
-  //   }
-  // };
-
-  // const facebookLoginHandler = async () => {
-  //   signInWithPopup(auth, facebookProvider)
-  //     .then(async (result) => {
-  //       const user = result.user;
-
-  //       if (getAdditionalUserInfo(result).isNewUser) {
-  //         try {
-  //           addNewUser(user, getAdditionalUserInfo(result).providerId);
-  //         } catch (e) {
-  //           console.error('Error adding document: ', e);
-  //         }
-  //       }
-  //       setUserData(user);
-  //     })
-  //     .catch((error) => {
-  //       setError(errorCodeConverter(error.code));
-  //     });
-  // };
-
-  // const googleLoginHandler = () => {
-  //   signInWithPopup(auth, googleProvider)
-  //     .then(async (result) => {
-  //       const user = result.user;
-  //       if (getAdditionalUserInfo(result).isNewUser) {
-  //         try {
-  //           addNewUser(user, getAdditionalUserInfo(result).providerId);
-  //         } catch (e) {
-  //           console.error('Error adding document: ', e);
-  //         }
-  //       }
-  //       setUserData(user);
-  //     })
-  //     .catch((error) => {
-  //       setError(errorCodeConverter(error.code));
-  //     });
-  // };
-
   const onChangeHandler = (e) => {
     e.preventDefault();
 
     setFormData({
       ...formData,
 
-      // Trimming any whitespace
       [e.target.name]: e.target.value.trim(),
     });
   };
@@ -237,21 +178,6 @@ export default function SignInSide() {
                   onChange={onChangeHandler}
                 />
               </Grid>
-              {/* <Grid item xs={12}>
-                <FormControlLabel
-                  sx={{
-                    mb: 2,
-                    '& span': {
-                      color: color.gray01,
-                      fontSize: 14,
-                    },
-                  }}
-                  control={
-                    <Checkbox value="allowExtraEmails" color="primary" />
-                  }
-                  label="I want to receive inspiration, marketing promotions and updates via email."
-                />
-              </Grid> */}
             </Grid>
             {error && (
               <Typography

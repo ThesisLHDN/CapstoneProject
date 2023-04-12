@@ -12,6 +12,7 @@ export default function ChatProvider({children}) {
   } = useContext(AuthContext);
   // console.log('Chat provider', uid);
   const [selectedRoomId, setSelectedRoomId] = useState('');
+  const [projectId, setProjectId] = useState();
   // console.log('ChatProvider', user);
 
   const RoomsCondition = useMemo(
@@ -23,20 +24,13 @@ export default function ChatProvider({children}) {
     [uid],
   );
 
-  const rooms = useFirestore('rooms', RoomsCondition);
+  const rawRooms = useFirestore('rooms', RoomsCondition);
+
+  const rooms = rawRooms.filter((room) => room.projectId === projectId);
 
   const selectedRoom = selectedRoomId
     ? rooms.find((room) => room.id === selectedRoomId)
     : rooms[0];
-
-  // const messages = useFirestore('messages');
-  // = useMemo(() => {
-  //   if (selectedRoomId) {
-  //     return rooms.find((room) => room.id === selectedRoomId);
-  //   } else {
-  //     return rooms[0];
-  //   }
-  // }, [rooms, selectedRoomId]));
 
   const membersCondition = useMemo(
     () => ({
@@ -64,6 +58,8 @@ export default function ChatProvider({children}) {
         selectedRoomId,
         setSelectedRoomId,
         currentRoomMembers,
+        projectId,
+        setProjectId,
       }}
     >
       {children}

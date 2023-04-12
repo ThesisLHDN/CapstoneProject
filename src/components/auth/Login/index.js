@@ -1,9 +1,6 @@
 import {useState} from 'react';
 import {errorCodeConverter} from 'src/firebase/authFunction';
-// import {useNavigate} from 'react-router-dom';
-// import AuthContext from 'src/Context/AuthProvider';
 
-// import Avatar from '@mui/material/Avatar';
 import {
   Button,
   IconButton,
@@ -23,14 +20,7 @@ import {ReactComponent as FacebookIcon} from '../logo/Facebook.svg';
 import {ReactComponent as GoogleIcon} from '../logo/Google.svg';
 import {color, colorHover} from 'src/style';
 
-// import app, {auth} from 'src/firebase/config.js';
-import {
-  FacebookAuthProvider,
-  GoogleAuthProvider,
-  signInWithPopup,
-  signInWithEmailAndPassword,
-  getAdditionalUserInfo,
-} from 'firebase/auth';
+import {signInWithEmailAndPassword} from 'firebase/auth';
 import {auth} from 'src/firebase/config';
 import {setDocument} from 'src/firebase/firestoreServices';
 import {
@@ -38,63 +28,12 @@ import {
   googleLoginHandler,
 } from 'src/firebase/authServices';
 
-const facebookProvider = new FacebookAuthProvider();
-const googleProvider = new GoogleAuthProvider();
-
 const theme = createTheme();
 
 export default function SignInSide() {
   const [error, setError] = useState('');
   const [formData, setFormData] = useState({});
-  const [userData, setUserData] = useState({});
-  const addNewUser = (user, provider) => {
-    if (user) {
-      setDocument('users', user.uid, {
-        displayName: user.displayName,
-        email: user.email,
-        photoURL: user.photoURL,
-        uid: user.uid,
-        provider,
-      });
-    }
-  };
 
-  // const facebookLoginHandler = async () => {
-  //   signInWithPopup(auth, facebookProvider)
-  //     .then(async (result) => {
-  //       const user = result.user;
-
-  //       if (getAdditionalUserInfo(result).isNewUser) {
-  //         try {
-  //           addNewUser(user, getAdditionalUserInfo(result).providerId);
-  //         } catch (e) {
-  //           console.error('Error adding document: ', e);
-  //         }
-  //       }
-  //       setUserData(user);
-  //     })
-  //     .catch((error) => {
-  //       setError(errorCodeConverter(error.code));
-  //     });
-  // };
-
-  // const googleLoginHandler = () => {
-  //   signInWithPopup(auth, googleProvider)
-  //     .then(async (result) => {
-  //       const user = result.user;
-  //       if (getAdditionalUserInfo(result).isNewUser) {
-  //         try {
-  //           addNewUser(user, getAdditionalUserInfo(result).providerId);
-  //         } catch (e) {
-  //           console.error('Error adding document: ', e);
-  //         }
-  //       }
-  //       setUserData(user);
-  //     })
-  //     .catch((error) => {
-  //       setError(errorCodeConverter(error.code));
-  //     });
-  // };
   const onChangeHandler = (e) => {
     e.preventDefault();
 

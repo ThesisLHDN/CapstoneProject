@@ -42,17 +42,20 @@ const CssTextField = styled(TextField)({
     },
   },
 });
-function ChatSideBar({data, currentUser}) {
-  const {selectedRoomId, setSelectedRoomId, selectedRoom} =
+function ChatSideBar({data, currentUser, projectId}) {
+  const {selectedRoomId, setSelectedRoomId, selectedRoom, setProjectId} =
     useContext(ChatContext);
   const [open, setOpen] = useState(false);
   const [newRoom, setNewRoom] = useState('');
   const [description, setDescription] = useState('');
+  setProjectId(projectId);
+  console.log('reload chat side bar');
   const handleClose = () => {
     setOpen(false);
   };
   const addRoomHandler = () => {
     const newRoomData = {
+      projectId: projectId,
       name: newRoom,
       description: description,
       adminId: currentUser.uid,

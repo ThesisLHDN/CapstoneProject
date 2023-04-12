@@ -5,7 +5,7 @@ import ChatRoundedIcon from '@mui/icons-material/ChatRounded';
 
 import ChatRoom from './index';
 
-function ChatButton({currentUser}) {
+function ChatButton({currentUser, projectId}) {
   const [openChat, setOpenChat] = useState(false);
   return (
     <Badge
@@ -33,7 +33,7 @@ function ChatButton({currentUser}) {
           setOpenChat(false);
         }}
       >
-        <ChatRoom currentUser={currentUser} />
+        <ChatRoom currentUser={currentUser} projectId={projectId} />
       </Modal>
     </Badge>
   );
