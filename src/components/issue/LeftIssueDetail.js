@@ -65,20 +65,24 @@ function handleCreateTime(time) {
 
 function LeftIssueDetail({issue, setIssue, trigger, setTrigger}) {
   const {user} = useContext(AuthContext);
-  console.log('issue user', user);
+  // console.log('issue user', user);
 
   const [open, setOpen] = useState(false);
   const [openPriority, setOpenPriority] = useState(false);
+
   function handleClose() {
     setOpen(false);
   }
 
-  // const issueId = 'xr51hoP9uZHlzUXqTpPH';
-  // const sampleIssueId = 'xr51hoP9uZHlzUXqTpPH';
-  // const issueDetail = useFirestoreDoc('issues', sampleIssueId);
-  // const comments = useFirestore('issues/' + sampleIssueId + '/comments');
-  // console.log('comments:', comments);
-  // console.log(issueDetail);
+  const CommentArea = useMemo(
+    () => <Comments currentUser={user} issueId={issue.id} />,
+    [issue.id],
+  );
+
+  const AttachmentArea = useMemo(
+    () => <Attachments issueId={issue.id} />,
+    [issue.id],
+  );
 
   const [startDate, setStartDate] = useState(new Date());
   // const [status, setStatus] = useState(issue.issuestatus);
@@ -111,19 +115,6 @@ function LeftIssueDetail({issue, setIssue, trigger, setTrigger}) {
       console.log(err);
     }
   };
-
-  const attachmentsCondition = useMemo(
-    () => ({
-      sort: 'desc',
-      sortAttr: 'createdAt',
-    }),
-    [],
-  );
-  const attachments = useFirestore(
-    `issues/${issue.id}/documents`,
-    attachmentsCondition,
-  );
-  // console.log(attachments);
 
   const handleChange = (event, element) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
@@ -182,7 +173,7 @@ function LeftIssueDetail({issue, setIssue, trigger, setTrigger}) {
   //   setCreateChild(true);
   // };
 
-  const upLoadHandler = (files) => {
+  const uploadHandler = (files) => {
     if (files) {
       let file = files[0];
       console.log('Updating');
@@ -353,7 +344,7 @@ function LeftIssueDetail({issue, setIssue, trigger, setTrigger}) {
             type="file"
             onClick={(e) => (e.target.value = null)}
             onChange={(event) => {
-              upLoadHandler(event.target.files);
+              uploadHandler(event.target.files);
             }}
           />
         </Button>
@@ -375,7 +366,7 @@ function LeftIssueDetail({issue, setIssue, trigger, setTrigger}) {
         </Button> */}
       </Grid>
 
-      <Typography sx={{marginTop: 3, fontSize: 16, fontWeight: 700}}>
+      <Typography sx={{mt: 3, mb: 1, fontSize: 16, fontWeight: 700}}>
         Description
       </Typography>
 
@@ -530,18 +521,8 @@ function LeftIssueDetail({issue, setIssue, trigger, setTrigger}) {
         setCreateChild={setCreateChild}
         tasks={tasks}
       />
-     
-      {/* <Typography sx={{marginTop: 3, fontSize: 16, fontWeight: 700}}>
-        Attachments
-      </Typography>
-      {attachments &&
-        attachments.map((file) => (
-          <Box>
-            <DescriptionOutlinedIcon></DescriptionOutlinedIcon>
-            {file.name}
-          </Box>
-        ))} */}
-      <Attachments attachments={attachments} issueId={issue.id} />
+       */}
+      {AttachmentArea}
 
       <Typography sx={{marginTop: 3, fontSize: 16, fontWeight: 700}}>
         Comments
@@ -562,7 +543,7 @@ function LeftIssueDetail({issue, setIssue, trigger, setTrigger}) {
           {snackbarContent}
         </Alert>
       </Snackbar>
-      <Comments currentUser={user} issueId={issue.id} />
+      {CommentArea}
     </div>
   );
 }

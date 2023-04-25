@@ -365,7 +365,7 @@ function Document({parentId}) {
       <TextEditor
         open={openEditor}
         onClose={onSubmitTextEditor}
-        // projectId={projectId}
+        editing={false}
         file={selectedFile}
       />
     </div>

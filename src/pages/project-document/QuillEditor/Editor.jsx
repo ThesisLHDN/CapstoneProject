@@ -12,11 +12,10 @@ import './quill.css';
 import {color} from 'src/style';
 
 // Quill.register('modules/ImageResize',ImageResize);
-const Editor = ({file, onClose, open}) => {
+const Editor = ({file, onClose, open, editing}) => {
   const [text, setText] = useState(file ? file.body : '');
   const [name, setName] = useState(file ? file.name : 'Untitled');
   const [error, setError] = useState('');
-  // console.log(file);
 
   React.useEffect(() => {
     if (file) {
@@ -74,6 +73,7 @@ const Editor = ({file, onClose, open}) => {
       setError(false);
     } else setError('File name cannot be empty');
   };
+
   return (
     <Dialog onClose={() => onClose(false)} open={open}>
       {file.name && (

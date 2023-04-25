@@ -37,7 +37,7 @@ function AddItem({parentId, projectId, onClose}) {
   const [snackbarContent, setSnackbarContent] = useState('');
   const [selectedFile, setSelectedFile] = useState();
 
-  const upLoadHandler = async (files) => {
+  const uploadHandler = async (files) => {
     if (files) {
       let file = files[0];
       console.log('Updating');
@@ -103,27 +103,27 @@ function AddItem({parentId, projectId, onClose}) {
     setOpenMenu((prev) => !prev);
   };
 
-  const action = (
-    <React.Fragment>
-      <Button
-        color="secondary"
-        size="small"
-        onClick={() => {
-          setSnackbarContent(false);
-        }}
-      >
-        UNDO
-      </Button>
-      <IconButton
-        size="small"
-        aria-label="close"
-        color="inherit"
-        onClick={handleClose}
-      >
-        <CloseIcon fontSize="small" />
-      </IconButton>
-    </React.Fragment>
-  );
+  // const action = (
+  //   <React.Fragment>
+  //     <Button
+  //       color="secondary"
+  //       size="small"
+  //       onClick={() => {
+  //         setSnackbarContent(false);
+  //       }}
+  //     >
+  //       UNDO
+  //     </Button>
+  //     <IconButton
+  //       size="small"
+  //       aria-label="close"
+  //       color="inherit"
+  //       onClick={handleClose}
+  //     >
+  //       <CloseIcon fontSize="small" />
+  //     </IconButton>
+  //   </React.Fragment>
+  // );
 
   return (
     <>
@@ -169,7 +169,7 @@ function AddItem({parentId, projectId, onClose}) {
                     id="upload"
                     hidden
                     onChange={(event) => {
-                      upLoadHandler(event.target.files);
+                      uploadHandler(event.target.files);
                     }}
                     onClick={(e) => (e.target.value = null)}
                   />
@@ -199,7 +199,16 @@ function AddItem({parentId, projectId, onClose}) {
         onClose={() => {
           setSnackbarContent(false);
         }}
-        action={action}
+        action={
+          <IconButton
+            size="small"
+            aria-label="close"
+            color="inherit"
+            onClick={() => setSnackbarContent()}
+          >
+            <CloseIcon fontSize="small" />
+          </IconButton>
+        }
       >
         <Alert
           onClose={() => setSnackbarContent(false)}

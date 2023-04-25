@@ -34,7 +34,19 @@ import {getDownloadURL, ref, uploadBytesResumable} from 'firebase/storage';
 import {addDocument, deleteDocument} from 'src/firebase/firestoreServices';
 import {AuthContext} from 'src/Context/AuthProvider';
 
-function Attachments({issueId, uid, attachments}) {
+function Attachments({issueId, uid}) {
+  const attachmentsCondition = useMemo(
+    () => ({
+      sort: 'desc',
+      sortAttr: 'createdAt',
+    }),
+    [issueId],
+  );
+
+  const attachments = useFirestore(
+    `issues/${issueId}/documents`,
+    attachmentsCondition,
+  );
   const [openDeletePopup, setOpenDeletePopup] = useState(false);
   const [selectedFile, setSelectedFile] = useState();
 
@@ -51,9 +63,13 @@ function Attachments({issueId, uid, attachments}) {
   return (
     <Box>
       {' '}
-      <Typography sx={{marginTop: 3, fontSize: 16, fontWeight: 700}}>
-        Attachments
-      </Typography>
+      {attachments.length ? (
+        <Typography sx={{marginTop: 3, fontSize: 16, fontWeight: 700}}>
+          Attachments
+        </Typography>
+      ) : (
+        ''
+      )}
       <Box
         sx={{
           paddingTop: '8px',
@@ -165,6 +181,8 @@ function Attachments({issueId, uid, attachments}) {
         open={openDeletePopup}
         handleSubmit={deleteFileHandler}
         onClose={() => setOpenDeletePopup(false)}
+        title={'Do you really want to delete this file?'}
+        content={'This file will be permanently deleted'}
       />
     </Box>
   );

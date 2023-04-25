@@ -29,7 +29,7 @@ function TypingArea({currentUser, roomId}) {
   const [snackbarContent, setSnackbarContent] = useState('');
   const [selectedFile, setSelectedFile] = useState();
 
-  const upLoadHandler = async (files) => {
+  const uploadHandler = async (files) => {
     if (files) {
       let file = files[0];
       console.log('Updating');
@@ -155,7 +155,7 @@ function TypingArea({currentUser, roomId}) {
                       multiple
                       type="file"
                       onChange={(event) => {
-                        upLoadHandler(event.target.files);
+                        uploadHandler(event.target.files);
                       }}
                       onClick={(e) => (e.target.value = null)}
                     />
@@ -174,7 +174,7 @@ function TypingArea({currentUser, roomId}) {
                       accept="image/*"
                       type="file"
                       onChange={(event) => {
-                        upLoadHandler(event.target.files);
+                        uploadHandler(event.target.files);
                       }}
                       onClick={(e) => (e.target.value = null)}
                     />
@@ -194,7 +194,7 @@ function TypingArea({currentUser, roomId}) {
                       multiple
                       type="file"
                       onChange={(event) => {
-                        upLoadHandler(event.target.files);
+                        uploadHandler(event.target.files);
                       }}
                       onClick={(e) => (e.target.value = null)}
                     />

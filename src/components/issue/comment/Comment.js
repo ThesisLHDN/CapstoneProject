@@ -3,7 +3,7 @@ import CommentForm from './CommentForm';
 import Subcomment from './Subcomment';
 import moment from 'moment/moment';
 
-import {Avatar} from '@mui/material';
+import {Avatar, Typography} from '@mui/material';
 import {useFirestore} from 'src/hooks/useFirestore';
 
 // import {addDocument, setDocument} from 'src/firebase/services';
@@ -42,7 +42,7 @@ const Comment = ({
     activeComment &&
     activeComment.id === comment.id &&
     activeComment.type === 'replying';
-  const canEdit = currentUserId === comment.authorId && comment.type === 'text';
+  const canEdit = currentUserId === comment.authorId;
   const canDelete = currentUserId === comment.authorId;
   const canReply = Boolean(currentUserId) && !subcomment;
 
@@ -52,10 +52,9 @@ const Comment = ({
     timepassed = moment(start, 'MM/DD/YYYY').fromNow();
   }
 
-  const addCommentHandler = (text) => {
+  const addCommentHandler = (newComment) => {
     const commentData = {
-      body: text,
-      type: 'text',
+      ...newComment,
     };
     addComment(commentData, comment.id);
   };
@@ -79,27 +78,36 @@ const Comment = ({
               <div className="mr-3 text-sm font-bold">{comment.authorName}</div>
               <div className="mr-3 text-sm">{timepassed}</div>
             </div>
-            {!isEditing && comment.type === 'text' && (
+            {!isEditing && (
               <div className="text-sm mt-2 text-ellipsis overflow-hidden text-justify">
-                {comment.body}
+                <Typography sx={{mb: 1}}>{comment.body}</Typography>
+
+                {comment.file &&
+                  ((comment.file.type.split('/')[0] === 'image' && (
+                    <img
+                      src={comment.file.downloadURL}
+                      alt={'Error displaying image from: ' + comment.body}
+                    />
+                  )) ||
+                    (comment.file.type.split('/')[0] === 'video' && (
+                      <video controls>
+                        <source
+                          type={comment.file.type}
+                          src={comment.file.downloadURL}
+                        ></source>
+                      </video>
+                    )))}
               </div>
             )}
-            {!isEditing && comment.type === 'image' && (
-              <div className="text-sm mt-2 text-ellipsis overflow-hidden text-justify">
-                <img
-                  src={comment.body}
-                  alt={'Error displaying image from: ' + comment.body}
-                />
-              </div>
-            )}
+
             {isEditing && (
               <CommentForm
                 currentUser={currentUser}
                 isAvatar={false}
                 initialText={comment.body}
-                handleSubmit={(text) =>
+                handleSubmit={(newComment) =>
                   updateComment(
-                    text,
+                    newComment,
                     comment.id,
                     subcomment ? parentId : null, // TODO replace with firestore doc id
                   )
@@ -164,7 +172,7 @@ const Comment = ({
             {replies && replies.length > 0 && (
               <div className="mt-5">
                 {replies.map((reply, index) => (
-                  <Subcomment
+                  <Comment
                     issueId={issueId}
                     comment={{index, ...reply}}
                     key={index}
