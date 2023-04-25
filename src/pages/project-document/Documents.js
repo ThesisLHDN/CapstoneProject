@@ -66,7 +66,10 @@ function Document({parentId}) {
 
   setSelectedProjectId(projectId);
   const [openDeletePopup, setOpenDeletePopup] = useState(false);
-  const [selectedFile, setSelectedFile] = useState({name: 'Untitled'});
+  const [selectedFile, setSelectedFile] = useState({
+    name: 'Untitled',
+    body: '',
+  });
 
   const documents = rawDocuments
     ? rawDocuments.filter(
@@ -82,7 +85,7 @@ function Document({parentId}) {
     deleteDocument(path, selectedFile.id);
 
     setOpenDeletePopup(false);
-    setSelectedFile();
+    setSelectedFile({name: 'Untitled', body: ''});
   };
 
   const [openEditor, setOpenEditor] = useState(false);
@@ -112,7 +115,50 @@ function Document({parentId}) {
     }
 
     setOpenEditor(false);
+    // setOpenEditPopup(false);
+    setSelectedFile({name: 'Untitled', body: ''});
     setEnableEditText(true);
+  };
+
+  const docButton = (doc) => {
+    switch (doc.type) {
+      case 'folder':
+        return (
+          <PlainButton
+            startIcon={<FolderOutlinedIcon />}
+            onClick={() => (doc ? setParent(doc.id, doc.name) : null)}
+          >
+            {doc.name}
+          </PlainButton>
+        );
+      case 'editableHTML':
+        return (
+          <PlainButton
+            startIcon={<DescriptionOutlinedIcon />}
+            onClick={(doc) => {
+              setOpenEditor(true);
+              setSelectedFile(doc);
+            }}
+          >
+            {doc.name}
+          </PlainButton>
+        );
+      default:
+        return (
+          <a href={doc.downloadURL} target="_blank" download>
+            <PlainButton
+              startIcon={<DescriptionOutlinedIcon />}
+              onClick={() => {
+                setOpenEditor(true);
+                setSelectedFile(doc);
+                // setEnableEditText(false);
+              }}
+            >
+              {doc.name}
+            </PlainButton>
+          </a>
+        );
+    }
   };
 
   return (
@@ -190,7 +236,7 @@ function Document({parentId}) {
             parentId={selectedParentId}
             projectId={selectedProjectId}
             onClose={() => {
-              setSelectedFile({name: 'Untitled'});
+              setSelectedFile({name: 'Untitled', body: ''});
               setOpenEditor(true);
             }}
           />
@@ -219,24 +265,21 @@ function Document({parentId}) {
                       </PlainButton>
                     ) : (
                       <a href={item.downloadURL} target="_blank" download>
-                        <PlainButton startIcon={<DescriptionOutlinedIcon />}>
-                          {/* <DescriptionOutlinedIcon
-                            sx={{
-                              width: 32,
-                              height: 32,
-                              marginTop: 0.9,
-                              marginLeft: 3.5,
-                              cursor: 'pointer',
-                            }}
-                          /> */}
-
+                        <PlainButton
+                          startIcon={<DescriptionOutlinedIcon />}
+                          onClick={() => {
+                            if (item.type === 'editableHTML') {
+                              setOpenEditor(true);
+                              setSelectedFile(item);
+                            }
+                          }}
+                        >
                           {item.name}
                         </PlainButton>
                       </a>
                     )}
                   </Grid>
                 </Grid>
-
                 {/* <Grid item xs={4}>
                   <Typography sx={{marginTop: 1.5, fontSize: 14}}>
                     <span className="font-bold">Created by </span>
@@ -249,16 +292,13 @@ function Document({parentId}) {
                     {item.type.split('/').at(-1)}
                   </Typography>
                 </Grid>
-
                 {/* <Grid item xs={4}></Grid> */}
-
                 <Grid item xs={3}>
                   <Typography sx={{fontSize: 14}}>
                     <span className="font-bold">Updated on </span>
                     {item.updatedAt ? convertDate(item.updatedAt.toDate()) : ''}
                   </Typography>
                 </Grid>
-
                 <Grid item xs={2}>
                   <Grid container sx={{justifyContent: 'flex-end'}}>
                     {item.type === 'editableHTML' && (
@@ -268,11 +308,12 @@ function Document({parentId}) {
                           onClick={() => {
                             setOpenEditor(true);
                             setSelectedFile(item);
-                            setEnableEditText(false);
+                            // setEnableEditText(false);
                           }}
                         ></EditRoundedIcon>
                       </IconButton>
                     )}
+
                     {item.type !== 'folder' && item.type !== 'editableHTML' && (
                       <a href={item.downloadURL} download target="_blank">
                         <IconButton>
@@ -282,6 +323,7 @@ function Document({parentId}) {
                         </IconButton>
                       </a>
                     )}
+                    {/* {item.name} */}
                     <IconButton
                       size="medium"
                       onClick={() => {
@@ -305,7 +347,7 @@ function Document({parentId}) {
             handleSubmit={deleteFileHandler}
             onClose={() => {
               setOpenDeletePopup(false);
-              setSelectedFile({name: 'Untitled'});
+              setSelectedFile({name: 'Untitled', body: ''});
             }}
             content="This file will be permanently deleted"
           ></WarningPopup>
@@ -320,15 +362,11 @@ function Document({parentId}) {
           }}
         />
       )}
-      {/* </DocProvider> */}
       <TextEditor
-        sx={{zIndex: 5}}
         open={openEditor}
         onClose={onSubmitTextEditor}
-        projectId={projectId}
+        // projectId={projectId}
         file={selectedFile}
-        fileName={selectedFile ? selectedFile.name : 'Untitled'}
-        fileText={selectedFile ? selectedFile.body : ''}
       />
     </div>
   );
