@@ -126,17 +126,17 @@ function Document({parentId}) {
                   underline="hover"
                   key="1"
                   color="inherit"
-                  href={`/workspace-setting/${workspace.id}`}
+                  href={`/workspace-setting/${project.workspaceId}?user=${uid}`}
                   onClick={() => {}}
                   sx={{fontFamily: 'Open Sans, sans-serif'}}
                 >
-                  {workspace.wsname}
+                  {project.wsname}
                 </Link>
                 <Link
                   underline="hover"
                   key="2"
                   color="inherit"
-                  href={`/roadmap/${project.id}`}
+                  href={`/roadmap/${project.pid}`}
                   onClick={() => {}}
                   sx={{fontFamily: 'Open Sans, sans-serif'}}
                 >

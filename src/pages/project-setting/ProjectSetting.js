@@ -84,7 +84,7 @@ function ProjectSetting() {
     e.preventDefault();
     try {
       const res = await axios.put(
-        `http://localhost:8800/project/${project.id}`,
+        `http://localhost:8800/project/${project.pid}`,
         project,
       );
       // console.log(workspace);
@@ -109,7 +109,7 @@ function ProjectSetting() {
     e.preventDefault();
     try {
       const res = await axios.delete(
-        `http://localhost:8800/project/${project.id}`,
+        `http://localhost:8800/project/${project.pid}`,
       );
       console.log(res);
       getLastestWorkspace();
@@ -127,17 +127,17 @@ function ProjectSetting() {
               underline="hover"
               key="1"
               color="inherit"
-              href={`/workspace-setting/${workspace.id}`}
+              href={`/workspace-setting/${project.workspaceId}?user=${uid}`}
               onClick={() => {}}
               sx={{fontFamily: 'Open Sans, sans-serif'}}
             >
-              {workspace.wsname}
+              {project.wsname}
             </Link>
             <Link
               underline="hover"
               key="2"
               color="inherit"
-              href={`/roadmap/${project.id}`}
+              href={`/roadmap/${project.pid}`}
               onClick={() => {}}
               sx={{fontFamily: 'Open Sans, sans-serif'}}
             >
@@ -188,10 +188,10 @@ function ProjectSetting() {
             }}
             name="pname"
             onChange={handleRename}
-            disabled={uid == workspace.adminId ? false : true}
+            disabled={uid == project.id ? false : true}
           ></TextField>
         </Grid>
-        {uid == workspace.adminId && (
+        {uid == project.id && (
           <Grid item xs={3} sx={{marginTop: 1}}>
             {rename && (
               <GradButton
@@ -231,10 +231,10 @@ function ProjectSetting() {
             }}
             name="pkey"
             onChange={handleKey}
-            disabled={uid == workspace.adminId ? false : true}
+            disabled={uid == project.id ? false : true}
           ></TextField>
         </Grid>
-        {uid == workspace.adminId && (
+        {uid == project.id && (
           <Grid item xs={3} sx={{marginTop: 1}}>
             {key && (
               <GradButton
@@ -263,97 +263,8 @@ function ProjectSetting() {
         Sharing & Permission
       </Typography>
 
-      {/* <Typography
-        sx={{
-          marginTop: 2,
-          marginLeft: 6,
-          fontSize: 16,
-          fontWeight: 700,
-          display: 'inline-block',
-        }}
-      >
-        Privacy
-      </Typography>
-
-      <Typography
-        sx={{
-          marginTop: 2,
-          marginLeft: 3,
-          fontSize: 16,
-          display: 'inline-block',
-        }}
-      >
-        This project is public to workspace
-      </Typography>
-
-      <PrivacyButton
-        endIcon={<LockOpenIcon sx={{width: 24, height: 24}} />}
-        sx={{marginLeft: 3, padding: 1}}
-      >
-        Make Public
-      </PrivacyButton>
-
-      <Typography
-        sx={{
-          marginTop: 2,
-          marginLeft: 6,
-          fontSize: 16,
-          fontWeight: 700,
-        }}
-      >
-        Access
-      </Typography> */}
-
       {/* <SearchBar sx={{width: '250px', marginLeft: 6, marginTop: 2}} /> */}
       <MemberList />
-
-      {/* <Grid container>
-        <Grid item xs={3}>
-          <Button
-            onClick={() => setOpenLeave(true)}
-            variant="text"
-            startIcon={
-              <LogoutIcon sx={{marginRight: 1, width: 24, height: 24}} />
-            }
-            sx={{
-              color: 'green',
-              textTransform: 'none',
-              fontSize: 16,
-              fontWeight: 700,
-              paddingX: 2,
-              marginTop: 1,
-            }}
-          >
-            Leave Project
-          </Button>
-
-          <LeavePopup
-            open={openLeave}
-            onClose={handleCloseLeave}
-            projectInfo={{
-              projectName: 'First Scrum Project',
-              owner: 'dangnguyen@gmail.com',
-              members: [
-                {
-                  id: uuid(),
-                  name: 'Lâm Nguyễn',
-                  email: 'lamnguyen@gmail.com',
-                },
-                {
-                  id: uuid(),
-                  name: 'Đăng Nguyễn',
-                  email: 'dangnguyen@gmail.com',
-                },
-                {
-                  id: uuid(),
-                  name: 'Hải Nguyễn',
-                  email: 'hainguyen@gmail.com',
-                },
-              ],
-            }}
-          ></LeavePopup>
-        </Grid>
-      </Grid> */}
 
       {uid == workspace.adminId && (
         <Grid container>

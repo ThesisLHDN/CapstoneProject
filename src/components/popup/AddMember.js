@@ -1,7 +1,6 @@
 import React, {useContext, useState} from 'react';
 import {Box, Paper, Typography, Button, TextField, Dialog} from '@mui/material';
 import {color} from 'src/style';
-import ReportRoundedIcon from '@mui/icons-material/ReportRounded';
 import {AppContext} from 'src/Context/AppProvider';
 import axios from 'axios';
 import {useLocation} from 'react-router-dom';
@@ -19,14 +18,12 @@ function AddMember(props) {
   const handleChange = (e) => {
     e.preventDefault();
     setData({...data, [e.target.name]: e.target.value});
-    // console.log(data);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const res = await axios.post('http://localhost:8800/pmember', data);
-      console.log(res);
       onClose();
     } catch (err) {
       console.log(err);
@@ -53,7 +50,6 @@ function AddMember(props) {
             borderBottom: 'solid black 1px',
           }}
         >
-          {/* {icon && icon} */}
           <Typography
             sx={{
               display: 'flex',

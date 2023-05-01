@@ -15,39 +15,6 @@ import axios from 'axios';
 import {AppContext} from 'src/Context/AppProvider';
 import {AuthContext} from 'src/Context/AuthProvider';
 
-// const members = [
-//   'Menaal Bloom',
-//   'Sam Donald',
-//   'Celyn Nash',
-//   'Cecelia Patterson',
-//   'Weronika Horne',
-//   'Johnathan Erickson',
-//   'Mia Freeman',
-//   'Yu Plant',
-//   'Dixie Tillman',
-//   'Hetty Cunningham',
-//   'Abida Grant',
-//   'Emelie Sharp',
-//   'Aysha Delarosa',
-//   'Lilith Mclean',
-//   'Christie Bentley',
-//   'Maverick Foley',
-//   'Nana Mcintosh',
-//   'Jamila Lam',
-//   'Missy Schwartz',
-//   // 'Susanna Gross',
-//   // 'Everett Burks',
-//   // 'Sade Neal',
-//   // 'Oliver Williamson',
-//   // 'Marius Marquez',
-//   // 'Janelle Silva',
-//   // 'Habib Devine',
-//   // 'Cain Arnold',
-//   // 'Lewys Swan',
-//   // 'Cade Ferry',
-//   // 'Rory Watt',
-// ];
-
 function stringToColor(string) {
   let hash = 0;
   let i;
@@ -89,7 +56,7 @@ function ImageIndividual({member, workspace, uid}) {
     e.preventDefault();
     try {
       const res = await axios.delete(
-        `http://localhost:8800/wsmember/${member.id}?wsId=${workspace.id}`,
+        `http://localhost:8800/wsmember/${member.id}?wsId=${workspace.wid}`,
       );
       window.location.reload();
     } catch (err) {
@@ -114,7 +81,6 @@ function ImageIndividual({member, workspace, uid}) {
           src="/static/images/avatar/1.jpg"
           // {...stringAvatar(member.username ? member.username : member.email)}
         />
-        {/* <Avatar alt={member} className="avatarPic" src="#" /> */}
       </ImageListItem>
       {uid == workspace.adminId && (
         <Paper
@@ -188,7 +154,6 @@ function AvatarList() {
   const fetchWorkspaceMember = async () => {
     try {
       const res = await axios.get(`http://localhost:8800/wsmember/${wsId}`);
-      // console.log(res.data);
       setMembers(res.data);
     } catch (err) {
       console.log(err);
@@ -210,15 +175,17 @@ function AvatarList() {
       }}
       cols={12}
       rowHeight={50}
-      // sx={{}}
     >
-      {members.map((member) => (
-        <ImageIndividual
-          member={member}
-          workspace={workspace}
-          uid={uid}
-        ></ImageIndividual>
-      ))}
+      {members
+        .filter((member) => member.id != workspace.adminId)
+        .map((member) => (
+          <ImageIndividual
+            key={member.id}
+            member={member}
+            workspace={workspace}
+            uid={uid}
+          ></ImageIndividual>
+        ))}
     </ImageList>
   );
 }

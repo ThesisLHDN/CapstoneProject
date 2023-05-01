@@ -48,7 +48,7 @@ function CreateProject() {
     pkey: '',
     createTime: null,
     ownerId: uid,
-    workspaceId: workspace.id,
+    workspaceId: workspace.wid,
   });
 
   const navigate = useNavigate();
@@ -79,7 +79,7 @@ function CreateProject() {
     try {
       await axios.post('http://localhost:8800/project', project);
       setProjects([project, ...projects]);
-      navigate(`/workspace-setting/${workspace.id}?user=${uid}`);
+      navigate(`/workspace-setting/${workspace.wid}?user=${uid}`);
     } catch (err) {
       console.log(err);
     }
@@ -87,18 +87,6 @@ function CreateProject() {
 
   return (
     <div>
-      {/* <Button
-        sx={{
-          width: '155px',
-          height: '38px',
-          ...colorHover.greenGradBtn,
-        }}
-        variant="contained"
-        startIcon={<AddRoundedIcon />}
-        onClick={() => {setOpen(true)}}
-      >
-        Create project
-      </Button>  */}
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle
           sx={{color: '#00980F', fontWeight: '900', textAlign: 'center', mt: 1}}

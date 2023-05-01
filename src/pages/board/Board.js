@@ -21,6 +21,7 @@ import {useContext, useEffect, useState} from 'react';
 import axios from 'axios';
 import {useLocation} from 'react-router-dom';
 import {AppContext} from 'src/Context/AppProvider';
+import {AuthContext} from 'src/Context/AuthProvider';
 
 function handleClick(event) {
   event.preventDefault();
@@ -39,7 +40,10 @@ function Board() {
   const location = useLocation();
   const pId = location.pathname.split('/')[2];
   const [lastestSprint, setLastestSprint] = useState({});
-  const {workspace, project} = useContext(AppContext);
+  const {project} = useContext(AppContext);
+  const {
+    user: {uid},
+  } = useContext(AuthContext);
 
   const fetchLastestSprint = async () => {
     try {
@@ -64,18 +68,18 @@ function Board() {
               underline="hover"
               key="1"
               color="inherit"
-              href={`/workspace-setting/${workspace.id}`}
+              href={`/workspace-setting/${project.workspaceId}?user=${uid}`}
               onClick={() => {}}
               sx={{fontFamily: 'Open Sans, sans-serif'}}
             >
-              {workspace.wsname}
+              {project.wsname}
             </Link>
             ,
             <Link
               underline="hover"
               key="2"
               color="inherit"
-              href={`/roadmap/${project.id}`}
+              href={`/roadmap/${project.pid}`}
               onClick={() => {}}
               sx={{fontFamily: 'Open Sans, sans-serif'}}
             >

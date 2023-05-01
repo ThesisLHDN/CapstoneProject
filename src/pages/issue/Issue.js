@@ -6,10 +6,14 @@ import LeftIssueDetail from 'src/components/issue/LeftIssueDetail';
 import RightIssueDetail from 'src/components/issue/RightIssueDetail';
 import {useLocation} from 'react-router-dom';
 import axios from 'axios';
-import { AppContext } from 'src/Context/AppProvider';
+import {AppContext} from 'src/Context/AppProvider';
+import {AuthContext} from 'src/Context/AuthProvider';
 
 function Issue() {
-  const {workspace, project} = useContext(AppContext);
+  const {
+    user: {uid},
+  } = useContext(AuthContext);
+  const {project} = useContext(AppContext);
   const location = useLocation();
   const issueId = location.pathname.split('/')[3];
   const [issue, setIssue] = useState({});
@@ -37,17 +41,17 @@ function Issue() {
               underline="hover"
               key="1"
               color="inherit"
-              href={`/workspace-setting/${workspace.id}`}
+              href={`/workspace-setting/${project.workspaceId}?user=${uid}`}
               onClick={() => {}}
               sx={{fontFamily: 'Open Sans, sans-serif'}}
             >
-              {workspace.wsname}
+              {project.wsname}
             </Link>
             <Link
               underline="hover"
               key="2"
               color="inherit"
-              href={`/roadmap/${project.id}`}
+              href={`/roadmap/${project.pid}`}
               onClick={() => {}}
               sx={{fontFamily: 'Open Sans, sans-serif'}}
             >
@@ -59,52 +63,6 @@ function Issue() {
           </Breadcrumbs>
         </Grid>
       </Grid>
-
-      {/* <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <Breadcrumbs separator="›" aria-label="breadcrumb" sx={{mb: 4}}>
-            <Link
-              underline="hover"
-              key="1"
-              color="inherit"
-              href="/workspace-setting"
-              onClick={() => {}}
-              sx={{fontFamily: 'Open Sans, sans-serif'}}
-            >
-              <ElectricBoltIcon
-                sx={{
-                  backgroundColor: 'purple',
-                  color: 'white',
-                  borderRadius: 1,
-                  width: 24,
-                  height: 24,
-                  padding: 0.25,
-                  marginRight: 1,
-                }}
-              />
-              Dang's Workspace
-            </Link>
-            <Typography
-              key="3"
-              color="text.primary"
-              sx={{fontFamily: 'Open Sans, sans-serif'}}
-            >
-              <FiberManualRecordRoundedIcon
-                sx={{
-                  backgroundColor: 'red',
-                  color: 'white',
-                  borderRadius: 1,
-                  width: 24,
-                  height: 24,
-                  padding: 0.25,
-                  marginRight: 1,
-                }}
-              />
-              DWP-11
-            </Typography>
-          </Breadcrumbs>
-        </Grid>
-      </Grid> */}
 
       <Grid container spacing={2}>
         <Grid item xs={7}>

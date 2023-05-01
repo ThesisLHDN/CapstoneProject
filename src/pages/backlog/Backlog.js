@@ -2,19 +2,20 @@ import React, {useContext, useState} from 'react';
 import {color} from 'src/style';
 import {Typography, Box, Button, Grid, Breadcrumbs, Link} from '@mui/material';
 import SearchBar from 'src/components/search';
-// import FilterAltRoundedIcon from '@mui/icons-material/FilterAltRounded';
-// import SortRoundedIcon from '@mui/icons-material/SortRounded';
-import PermIdentityRoundedIcon from '@mui/icons-material/PermIdentityRounded';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import TaskList from 'src/components/backlog/TaskList';
 import Filter from 'src/components/Filter';
 import Sort from 'src/components/Sort';
 import {AppContext} from 'src/Context/AppProvider';
+import {AuthContext} from 'src/Context/AuthProvider';
 
 function Backlog() {
   const [isHide, setIsHide] = useState(true);
-  const {workspace, project} = useContext(AppContext);
+  const {project} = useContext(AppContext);
+  const {
+    user: {uid},
+  } = useContext(AuthContext);
 
   return (
     <div>
@@ -25,17 +26,17 @@ function Backlog() {
               underline="hover"
               key="1"
               color="inherit"
-              href={`/workspace-setting/${workspace.id}`}
+              href={`/workspace-setting/${project.workspaceId}?user=${uid}`}
               onClick={() => {}}
               sx={{fontFamily: 'Open Sans, sans-serif'}}
             >
-              {workspace.wsname}
+              {project.wsname}
             </Link>
             <Link
               underline="hover"
               key="2"
               color="inherit"
-              href={`/roadmap/${project.id}`}
+              href={`/roadmap/${project.pid}`}
               onClick={() => {}}
               sx={{fontFamily: 'Open Sans, sans-serif'}}
             >

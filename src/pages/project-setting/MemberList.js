@@ -23,12 +23,11 @@ function createData(name, email, role) {
   return {name, email, role};
 }
 
-
 function MemberList() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [role, setRole] = useState('');
-  const {admin, project} = useContext(AppContext);
-  const [members, setMembers] = useState([admin]);
+  const {project} = useContext(AppContext);
+  const [members, setMembers] = useState([]);
   const location = useLocation();
   const pId = location.pathname.split('/')[2];
   // console.log(workspace);
@@ -51,7 +50,6 @@ function MemberList() {
 
   useEffect(() => {
     fetchProjectMember();
-    // fetchProjectMember();
   }, []);
 
   const open = Boolean(anchorEl);
@@ -92,10 +90,10 @@ function MemberList() {
                     }}
                     onClick={handleClick}
                   >
-                    {member.id == admin.id ? (
+                    {member.id == project.id ? (
                       <span className="pl-5">Administrator</span>
                     ) : member.id == project.ownerId &&
-                      member.id !== admin.id ? (
+                      member.id !== project.id ? (
                       <span className="pl-5">Project Owner</span>
                     ) : (
                       <span className="pl-5">Project Member</span>
