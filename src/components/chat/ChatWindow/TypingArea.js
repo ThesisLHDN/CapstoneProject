@@ -5,12 +5,18 @@ import {
   IconButton,
   TextField,
   Button,
+  Alert,
+  Snackbar,
   Paper,
+  Box,
   Grid,
 } from '@mui/material';
 import PhotoRoundedIcon from '@mui/icons-material/PhotoRounded';
 import SmartDisplayRoundedIcon from '@mui/icons-material/SmartDisplayRounded';
 import InsertDriveFileRoundedIcon from '@mui/icons-material/InsertDriveFileRounded';
+import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
+import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
+import CloseIcon from '@mui/icons-material/Close';
 
 import {colorHover} from 'src/style';
 import {addDocument, updateDocument} from 'src/firebase/firestoreServices';
@@ -18,6 +24,7 @@ import {getDownloadURL, ref, uploadBytesResumable} from 'firebase/storage';
 import {storage} from 'src/firebase/config';
 
 function TypingArea({currentUser, roomId}) {
+  const [reparedFiles, setReparedFiles] = useState([]);
   // console.log(currentUser)
 
   const [open, setOpen] = useState(false);
@@ -29,52 +36,49 @@ function TypingArea({currentUser, roomId}) {
   const [snackbarContent, setSnackbarContent] = useState('');
   const [selectedFile, setSelectedFile] = useState();
 
-  const uploadHandler = async (files) => {
-    if (files) {
-      let file = files[0];
-      console.log('Updating');
-      if (file) {
-        console.log(file);
-        const path = `documents/${new Date().getTime() + file.name}`;
-        const fileRef = ref(storage, path);
-        const upLoadTask = uploadBytesResumable(fileRef, file);
-        upLoadTask.on(
-          'state_changed',
-          (snapshot) => {
-            const progress = Math.round(
-              (snapshot.bytesTransferred / snapshot.totalBytes) * 100,
-            );
-            setSnackbarContent('Upload is ' + progress + '% done');
-          },
-          (err) => {
-            console.log(err);
-          },
-          () => {
-            getDownloadURL(upLoadTask.snapshot.ref).then(async (url) => {
-              let downloadURL = url;
-              if (downloadURL) {
-                // const newDocData = {
-                //   authorId: uid,
-                //   name: file.name,
-                //   parentId: parentId,
-                //   type: file.type,
-                //   downloadURL: downloadURL,
-                //   storagePath: path,
-                // };
-                setMessage({
-                  body: downloadURL,
-                  type: file.type,
-                  name: file.name,
-                });
-                // console.log('new doc added', newDocData);
-                // addDocument(`projects/${projectId}/documents`, newDocData);
-              }
+  const uploadHandler = async (file) => {
+    // event.preventDefault();
 
-              console.log(downloadURL);
-            });
-          },
-        );
-      }
+    // todo upload
+    if (file) {
+      const path = `comments/${new Date().getTime() + file.name}`;
+      const fileRef = ref(storage, path);
+      const upLoadTask = uploadBytesResumable(fileRef, file);
+
+      upLoadTask.on(
+        'state_changed',
+        (snapshot) => {
+          const progress = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100,
+          );
+          setSnackbarContent('Upload is ' + progress + '% done');
+        },
+        (err) => {
+          console.log(err);
+        },
+        () => {
+          getDownloadURL(upLoadTask.snapshot.ref).then(async (url) => {
+            let downloadURL = url;
+            if (downloadURL) {
+              const messageData = {
+                authorId: currentUser.uid,
+                body: 'File: ' + file.name,
+                file: {
+                  name: file.name,
+                  type: file.type,
+                  downloadURL: downloadURL,
+                  storagePath: path,
+                },
+                roomId: roomId,
+              };
+              console.log('new message', messageData);
+              addDocument('messages', messageData);
+              updateDocument('rooms', roomId, {lastMessage: messageData});
+            }
+            console.log(downloadURL);
+          });
+        },
+      );
     }
     return;
   };
@@ -82,14 +86,18 @@ function TypingArea({currentUser, roomId}) {
   const [message, setMessage] = useState({body: '', type: 'text'});
 
   const handleChange = (e) => {
-    setMessage({type: 'text', body: e.target.value});
+    setMessage({body: e.target.value});
   };
 
   const handleKeyPress = (e) => {
-    //it triggers by pressing the enter key
     if (e.key === 'Enter') {
       handleOnSubmit(message);
     }
+  };
+
+  const handleSelectFile = (event) => {
+    setReparedFiles([...event.target.files]);
+    setMessage({body: ''});
   };
 
   const handleOnSubmit = (message = message) => {
@@ -98,16 +106,22 @@ function TypingArea({currentUser, roomId}) {
         const messageData = {
           authorId: currentUser.uid,
           body: message.body,
-          type: message.type,
           roomId: roomId,
         };
         console.log('new message', messageData);
         addDocument('messages', messageData);
         updateDocument('rooms', roomId, {lastMessage: messageData});
-        setMessage({body: '', type: 'text'});
+        setMessage({body: ''});
       }
+      if (reparedFiles.length) {
+        reparedFiles.map((file) => {
+          uploadHandler(file);
+        });
+      }
+      setReparedFiles([]);
     }
   };
+
   return (
     <Grid
       container
@@ -124,20 +138,101 @@ function TypingArea({currentUser, roomId}) {
     >
       <Grid item xs={10}>
         <TextField
-          value={message.type === 'text' ? message.body : ''}
+          value={message.body}
           onChange={handleChange}
           size="small"
           placeholder="Aa"
           sx={{width: '100%'}}
           onKeyPress={handleKeyPress}
+          disabled={reparedFiles.length}
           InputProps={{
             startAdornment: (
               <>
-                {message.type !== 'text' && (
-                  <Paper sx={{width: 120, height: 120, wordBreak: 'break-all'}}>
-                    {message.name}
+                {reparedFiles.map((file) => (
+                  <Paper
+                    sx={{
+                      width: 120,
+                      height: 120,
+                      backgroundColor: '#efefef',
+                      position: 'relative',
+                      mr: 2,
+                      my: 2,
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        height: 80,
+                        position: 'relative',
+                        '&:hover': {
+                          backgroundColor: '#adadad',
+                          '& .buttons': {display: 'block'},
+                        },
+                        '&:hover .buttons': {
+                          display: 'block',
+                        },
+                      }}
+                    >
+                      <DescriptionOutlinedIcon
+                        sx={{
+                          position: 'absolute',
+                          top: '50%',
+                          left: '50%',
+                          transform: 'translate(-50%,-50%)',
+                        }}
+                      ></DescriptionOutlinedIcon>{' '}
+                      <Box className={'buttons'} sx={{display: 'none'}}>
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            justifyContent: 'flex-end',
+                            position: 'absolute',
+                            top: 8,
+                            right: 8,
+                            gap: 1,
+                          }}
+                        >
+                          <IconButton
+                            sx={{
+                              width: 28,
+                              height: 28,
+                              borderRadius: '4px',
+                              backgroundColor: '#efefef',
+                            }}
+                          >
+                            <DeleteOutlineRoundedIcon
+                              sx={{color: '#181818'}}
+                              onClick={() => {
+                                setReparedFiles([]);
+                              }}
+                            />
+                          </IconButton>
+                        </Box>
+                      </Box>
+                    </Box>
+
+                    <Box
+                      sx={{
+                        p: 1,
+                        backgroundColor: 'white',
+                        width: '100%',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      <p
+                        style={{
+                          overflow: 'hidden',
+                          width: '100%',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        {' '}
+                        {file.name}
+                      </p>
+                    </Box>
                   </Paper>
-                )}
+                ))}
               </>
             ),
             endAdornment: (
@@ -154,15 +249,13 @@ function TypingArea({currentUser, roomId}) {
                       accept="*"
                       multiple
                       type="file"
-                      onChange={(event) => {
-                        uploadHandler(event.target.files);
-                      }}
+                      onChange={handleSelectFile}
                       onClick={(e) => (e.target.value = null)}
                     />
                     <InsertDriveFileRoundedIcon />
                   </IconButton>
                 </InputAdornment>
-                <InputAdornment position="end">
+                {/* <InputAdornment position="end">
                   <IconButton
                     size="small"
                     edge="end"
@@ -170,11 +263,12 @@ function TypingArea({currentUser, roomId}) {
                     component="label"
                   >
                     <input
+                      multiple
                       hidden
                       accept="image/*"
                       type="file"
                       onChange={(event) => {
-                        uploadHandler(event.target.files);
+                        setReparedFiles(event.target.files);
                       }}
                       onClick={(e) => (e.target.value = null)}
                     />
@@ -194,13 +288,13 @@ function TypingArea({currentUser, roomId}) {
                       multiple
                       type="file"
                       onChange={(event) => {
-                        uploadHandler(event.target.files);
+                        setReparedFiles(event.target.files);
                       }}
                       onClick={(e) => (e.target.value = null)}
                     />
                     <SmartDisplayRoundedIcon />
                   </IconButton>
-                </InputAdornment>
+                </InputAdornment> */}
               </>
             ),
           }}
@@ -215,6 +309,31 @@ function TypingArea({currentUser, roomId}) {
           Send
         </Button>
       </Grid>
+      <Snackbar
+        open={snackbarContent}
+        autoHideDuration={3000}
+        onClose={() => {
+          setSnackbarContent(false);
+        }}
+        action={
+          <IconButton
+            size="small"
+            aria-label="close"
+            color="inherit"
+            onClick={() => setSnackbarContent()}
+          >
+            <CloseIcon fontSize="small" />
+          </IconButton>
+        }
+      >
+        <Alert
+          onClose={() => setSnackbarContent(false)}
+          severity="success"
+          sx={{width: '100%'}}
+        >
+          {snackbarContent}
+        </Alert>
+      </Snackbar>
     </Grid>
   );
 }

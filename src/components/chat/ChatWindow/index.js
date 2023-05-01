@@ -1,4 +1,4 @@
-import React, {useContext, useMemo, useState} from 'react';
+import React, {useContext, useMemo, useState, useRef, useEffect} from 'react';
 import {styled} from '@mui/material/styles';
 import {color, colorHover} from 'src/style';
 import {
@@ -103,6 +103,10 @@ const DrawerHeader = styled('div')(({theme}) => ({
 }));
 
 function ChatWindow({currentUser}) {
+  const messagesEndRef = useRef(
+    document.getElementById('chat-window-messages'),
+  );
+
   const theme = useTheme();
   const [openDrawer, setOpenDrawer] = useState(false);
 
@@ -120,11 +124,33 @@ function ChatWindow({currentUser}) {
     [selectedRoom],
   );
 
+  const messagesRef = React.useRef(null);
+
+  const scrollToBottom = () => {
+    messagesRef.current.scrollIntoView({
+      // behavior: 'smooth',
+    });
+  };
+
   const messages = useFirestore('messages', messagesCondition);
+  if (messages && roomMembers) {
+    var newMess = messages.map((message) => {
+      return {
+        author: roomMembers.find((member) => member.uid === message.authorId),
+        ...message,
+      };
+    });
+  }
+
+  React.useEffect(() => {
+    if (messagesRef.current) {
+      scrollToBottom();
+    }
+  }, [messages]);
 
   const addMemberHandler = async (email) => {
     console.log(email);
-    // todo validate
+    // TODO validate
     const newMemberList = await getDocumentWithCondition('users', {
       fieldName: 'email',
       operator: '==',
@@ -153,14 +179,6 @@ function ChatWindow({currentUser}) {
 
   // const path = useMemo(() => `rooms/${selectedRoom.id}/messages`, []);
   // const messages = useFirestore(path);
-  if (messages && roomMembers) {
-    var newMess = messages.map((message) => {
-      return {
-        author: roomMembers.find((member) => member.uid === message.authorId),
-        ...message,
-      };
-    });
-  }
 
   const [openDeleteRoom, setOpenDeleteRoom] = useState(false);
   const [openRemoveMem, setOpenRemoveMem] = useState(false);
@@ -182,7 +200,7 @@ function ChatWindow({currentUser}) {
     updateDocument('rooms', selectedRoom.id, {members: newCurrentList});
 
     // Todo pop member id out of members array and update doc
-    // cần quan tâm nếu members đã bị xóa thì không có datanpm
+    // cần quan tâm nếu members đã bị xóa thì không có data
     setOpenRemoveMem(false);
     setMem(false);
   };
@@ -246,11 +264,12 @@ function ChatWindow({currentUser}) {
             >
               {newMess
                 .reverse()
-                .map(({author, authorId, body, type, createdAt}) => (
+                .map(({author, authorId, body, type, createdAt, file}) => (
                   <Message mine={authorId === currentUser.uid}>
-                    {{author, authorId, body, type, createdAt}}
+                    {{author, authorId, body, type, createdAt, file}}
                   </Message>
                 ))}{' '}
+              <div ref={messagesRef} />
             </Box>
             {/* <DrawerFooter sx={{backgroundColor: 'green', width: '100%'}} />{' '} */}
           </Main>{' '}

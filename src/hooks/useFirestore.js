@@ -30,8 +30,13 @@ const useFirestore = (collectionName, condition = {}) => {
     const unsubscribe = onSnapshot(
       condition.sort ? query(q, orderBy('createdAt', condition.sort)) : q,
       (snapshot) => {
-        const data = snapshot.docs.map((doc) => ({...doc.data(), id: doc.id}));
-        setDocuments(data);
+        if (!snapshot.metadata.hasPendingWrites) {
+          const data = snapshot.docs.map((doc) => ({
+            ...doc.data(),
+            id: doc.id,
+          }));
+          setDocuments(data);
+        }
       },
     );
     return unsubscribe;

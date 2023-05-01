@@ -2,12 +2,12 @@ import React from 'react';
 import format from 'date-fns/format';
 import moment from 'moment/moment';
 
-import {Box, Paper, Typography, Avatar} from '@mui/material';
-
-import {differenceInDays} from 'date-fns';
+import {Box, Paper, Typography, Avatar, IconButton} from '@mui/material';
+import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
+import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 
 function Message({mine, children}) {
-  const {author, authorId, body, type, createdAt} = children;
+  const {author, authorId, body, type, createdAt, file} = children;
   var timepassed = '';
   if (createdAt) {
     const start = moment(createdAt.toDate());
@@ -55,21 +55,129 @@ function Message({mine, children}) {
         <Paper
           elevation={0}
           sx={{
+            overflow: 'hidden',
             maxWidth: '75%',
             ...(mine
               ? {backgroundColor: '#04BF00', color: 'white'}
               : {backgroundColor: '#DADADA'}),
-            borderRadius: '25px',
-            // my: 2,
-            py: 1,
-            px: 2,
+
             right: '0px',
             '&:hover + .sendDate': {
               display: 'inline-block',
             },
+            ...(!file
+              ? {py: 1, px: 2, borderRadius: '20px'}
+              : {border: 'solid 1px green'}),
           }}
         >
-          <Typography variant="body2">{body}</Typography>
+          {file ? (
+            (file.type.split('/')[0] === 'image' && (
+              <img
+                src={file.downloadURL}
+                alt={'Error displaying image from: ' + body}
+              />
+            )) ||
+            (file.type.split('/')[0] === 'video' && (
+              <video controls>
+                <source type={file.type} src={file.downloadURL}></source>
+              </video>
+            )) || (
+              <a href={file.downloadURL} target="_blank">
+                {' '}
+                <Paper
+                  sx={{
+                    width: '120px',
+                    height: '120px',
+
+                    backgroundColor: '#efefef',
+                    position: 'relative',
+                  }}
+                >
+                  <Box
+                    sx={{
+                      height: 80,
+                      position: 'relative',
+                      '&:hover': {
+                        backgroundColor: '#adadad',
+                        '& .buttons': {display: 'block'},
+                      },
+                      '&:hover .buttons': {
+                        display: 'block',
+                      },
+                    }}
+                  >
+                    <DescriptionOutlinedIcon
+                      sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%,-50%)',
+                      }}
+                    ></DescriptionOutlinedIcon>{' '}
+                    <Box className={'buttons'} sx={{display: 'none'}}>
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          justifyContent: 'flex-end',
+                          position: 'absolute',
+                          top: 8,
+                          right: 8,
+                          gap: 1,
+                        }}
+                      >
+                        <a href={file.downloadURL} target="_blank">
+                          <IconButton
+                            sx={{
+                              width: 28,
+                              height: 28,
+                              borderRadius: '4px',
+                              backgroundColor: '#efefef',
+                            }}
+                          >
+                            <DownloadRoundedIcon sx={{color: '#181818'}} />
+                          </IconButton>
+                        </a>
+                      </Box>
+                    </Box>
+                  </Box>
+
+                  <Box
+                    sx={{
+                      p: 1,
+                      backgroundColor: 'white',
+                      width: '100%',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                      position: 'absolute',
+                      bottom: 0,
+                    }}
+                  >
+                    <p
+                      style={{
+                        overflow: 'hidden',
+                        width: '100%',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      {' '}
+                      {file.name}
+                    </p>
+                  </Box>
+                </Paper>
+              </a>
+            )
+          ) : (
+            <Typography
+              variant="body2"
+              sx={{
+                wordBreak: 'break-word',
+                whiteSpace: 'pre-wrap',
+              }}
+            >
+              {body}
+            </Typography>
+          )}
         </Paper>
         <Typography
           className="sendDate"

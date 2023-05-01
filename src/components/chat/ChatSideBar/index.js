@@ -106,7 +106,7 @@ function ChatSideBar({data, currentUser, projectId}) {
           }}
         >
           {data &&
-            data.map(({name, id, coverPicture, messages}) => (
+            data.map(({name, id, coverPicture, lastMessage}) => (
               <Box
                 sx={{
                   textDecoration: 'none',
@@ -142,7 +142,7 @@ function ChatSideBar({data, currentUser, projectId}) {
                           whiteSpace: 'nowrap',
                         }}
                       >
-                        {/* {messages[0].message} */}
+                        {lastMessage.body}
                       </Typography>
                     </Grid>
                     <Grid item xs={3}>

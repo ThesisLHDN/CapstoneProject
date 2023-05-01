@@ -82,12 +82,14 @@ const CommentForm = ({
 
   const onCancel = (event) => {
     setText('');
+    setReparedFile();
     setDisplayBtns(false);
     handleCancel();
   };
 
   const uploadHandler = (file) => {
     setReparedFile(file);
+    setDisplayBtns(true);
   };
 
   return (
