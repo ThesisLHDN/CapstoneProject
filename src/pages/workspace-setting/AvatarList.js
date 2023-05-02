@@ -78,7 +78,7 @@ function ImageIndividual({member, workspace, uid}) {
       <ImageListItem key={member.id} sx={{overflowX: 'visible !important'}}>
         <Avatar
           alt={member.username ? member.username : member.email}
-          src="/static/images/avatar/1.jpg"
+          src={member.photoURL}
           // {...stringAvatar(member.username ? member.username : member.email)}
         />
       </ImageListItem>

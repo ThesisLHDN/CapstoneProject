@@ -240,12 +240,14 @@ function WorkspaceSetting() {
                   }}
                 >
                   <Avatar
-                    alt={admin.username ? admin.username : admin.email}
-                    src="#"
+                    alt={
+                      workspace.username ? workspace.username : workspace.email
+                    }
+                    src={workspace.photoURL}
                   />
                   <Typography sx={{mx: 2}}>
                     {' '}
-                    {admin.username ? admin.username : admin.email}
+                    {workspace.username ? workspace.username : workspace.email}
                   </Typography>{' '}
                 </Box>
               </Grid>

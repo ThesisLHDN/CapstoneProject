@@ -50,7 +50,7 @@ export default function Header() {
   const [value, setValue] = useState(0);
   const [openAddMembers, setOpenAddMembers] = useState(false);
   const {
-    user: {displayName, uid},
+    user: {displayName, photoURL, uid},
   } = useContext(AuthContext);
   const {project} = useContext(AppContext);
   const navigate = useNavigate();
@@ -203,7 +203,7 @@ export default function Header() {
           <IconButton onClick={handleClick}>
             <Avatar
               alt={displayName ? displayName : ''}
-              src="/static/images/avatar/1.jpg"
+              src={photoURL}
               sx={{height: 32, width: 32}}
             />
           </IconButton>

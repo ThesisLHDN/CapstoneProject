@@ -277,7 +277,7 @@ function TaskCard({issue, setTrigger, isChild = false}) {
         </Popper>
 
         <Avatar
-          src="X"
+          src={assignee.photoURL}
           sx={{
             width: 24,
             height: 24,
