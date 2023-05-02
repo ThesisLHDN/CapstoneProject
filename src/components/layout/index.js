@@ -31,7 +31,7 @@ function Layout(props) {
       </Box>{' '}
       {!props.wp && (
         <ChatProvider>
-          <ChatButton currentUser={user} projectId={project.pid} />
+          <ChatButton currentUser={user} projectId={project.id} />
         </ChatProvider>
       )}
     </div>

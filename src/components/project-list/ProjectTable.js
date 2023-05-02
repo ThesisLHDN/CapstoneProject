@@ -72,11 +72,11 @@ export default function ProjectTable() {
           <TableBody>
             {projects.map((project) => (
               <TableRow
-                key={project.pid}
+                key={project.id}
                 component={Link}
-                to={`/roadmap/${project.pid}`}
+                to={`/roadmap/${project.id}`}
                 hover
-                onClick={handleClick(project.pid)}
+                onClick={handleClick(project.id)}
               >
                 <TableCell align="left">{project.pname}</TableCell>
                 <TableCell align="center">Scrum Project</TableCell>

@@ -27,7 +27,7 @@ function AuthProvider({children}) {
   const getLastestWorkspace = async (uid) => {
     try {
       const res = await axios.get(`http://localhost:8800/lastworkspace/${uid}`);
-      history(`/workspace-setting/${res.data.wid}?user=${uid}`);
+      history(`/workspace-setting/${res.data.id}?user=${uid}`);
     } catch (err) {
       console.log(err);
     }

@@ -25,8 +25,8 @@ function RightIssueDetail({issue, setIssue, trigger, setTrigger}) {
   const [assignee, setAssignee] = useState({});
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-  const {admin, project} = useContext(AppContext);
-  const [members, setMembers] = useState([admin]);
+  const {project} = useContext(AppContext);
+  const [members, setMembers] = useState([]);
 
   const id = open ? 'simple-popper' : undefined;
 
@@ -68,8 +68,7 @@ function RightIssueDetail({issue, setIssue, trigger, setTrigger}) {
     try {
       const res = await axios.get(`http://localhost:8800/pmembers/${pId}`);
       // console.log(res.data);
-      setMembers([...members, ...res.data]);
-      console.log('!!!!!!!!!!!!!!!!', admin);
+      setMembers([...res.data]);
     } catch (err) {
       console.log(err);
     }
@@ -97,7 +96,7 @@ function RightIssueDetail({issue, setIssue, trigger, setTrigger}) {
         estimatePoint: point ? point : issue.estimatePoint,
       });
       setTrigger(true);
-      console.log('#############3', res);
+      // console.log('#############3', res);
       // setIssues([...res.data]);
     } catch (err) {
       console.log(err);
@@ -212,14 +211,15 @@ function RightIssueDetail({issue, setIssue, trigger, setTrigger}) {
                   sx={{
                     backgroundColor: 'white',
                     borderRadius: 1,
-                    right: issue.issuestatus === 'In progress' ? -60 : -80,
+                    right: -180,
                     marginTop: '5px',
                     border: 'solid 1px #ECEDF0',
                     boxShadow: '2px 2px 5px #00000020',
                     display: 'flex',
                     flexDirection: 'column',
                     position: 'absolute',
-                    width: 120,
+                    width: 240,
+                    overflow: 'hidden',
                   }}
                 >
                   <MenuList sx={{px: 0, width: '100%'}}>

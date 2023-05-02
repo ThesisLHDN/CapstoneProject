@@ -96,10 +96,9 @@ function LeftIssueDetail({issue, setIssue, trigger, setTrigger}) {
         descript: issue.descript,
         dueDate: due
           ? due
-          : new Date(issue.dueDate)
-              .toISOString()
-              .slice(0, 19)
-              .replace('T', ' '),
+          : issue.dueDate
+          ? new Date(issue.dueDate).toISOString().slice(0, 19).replace('T', ' ')
+          : new Date().toISOString().slice(0, 19).replace('T', ' '),
         priority: priority ? priority : issue.priority,
         assigneeId: issue.assigneeId,
         estimatePoint: issue.estimatePoint,

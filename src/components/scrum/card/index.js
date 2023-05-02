@@ -98,7 +98,7 @@ const issueIcon = (type) => {
 function Card({issue}) {
   const {project} = useContext(AppContext);
   return (
-    <Link to={`/issue/${project.pid}/${issue.id}`}>
+    <Link to={`/issue/${project.id}/${issue.id}`}>
       {' '}
       <Paper elevation={1} className="card">
         <Typography>{issue.issuename}</Typography>

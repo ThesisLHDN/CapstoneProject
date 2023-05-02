@@ -84,7 +84,7 @@ function ProjectSetting() {
     e.preventDefault();
     try {
       const res = await axios.put(
-        `http://localhost:8800/project/${project.pid}`,
+        `http://localhost:8800/project/${project.id}`,
         project,
       );
       // console.log(workspace);
@@ -109,7 +109,7 @@ function ProjectSetting() {
     e.preventDefault();
     try {
       const res = await axios.delete(
-        `http://localhost:8800/project/${project.pid}`,
+        `http://localhost:8800/project/${project.id}`,
       );
       console.log(res);
       getLastestWorkspace();
@@ -137,7 +137,7 @@ function ProjectSetting() {
               underline="hover"
               key="2"
               color="inherit"
-              href={`/roadmap/${project.pid}`}
+              href={`/roadmap/${project.id}`}
               onClick={() => {}}
               sx={{fontFamily: 'Open Sans, sans-serif'}}
             >
@@ -188,10 +188,10 @@ function ProjectSetting() {
             }}
             name="pname"
             onChange={handleRename}
-            disabled={uid == project.id ? false : true}
+            disabled={uid == project.adminId ? false : true}
           ></TextField>
         </Grid>
-        {uid == project.id && (
+        {uid == project.adminId && (
           <Grid item xs={3} sx={{marginTop: 1}}>
             {rename && (
               <GradButton
@@ -231,10 +231,10 @@ function ProjectSetting() {
             }}
             name="pkey"
             onChange={handleKey}
-            disabled={uid == project.id ? false : true}
+            disabled={uid == project.adminId ? false : true}
           ></TextField>
         </Grid>
-        {uid == project.id && (
+        {uid == project.adminId && (
           <Grid item xs={3} sx={{marginTop: 1}}>
             {key && (
               <GradButton

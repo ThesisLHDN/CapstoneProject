@@ -52,13 +52,13 @@ export default function Header() {
   const {
     user: {displayName, uid},
   } = useContext(AuthContext);
-  const {admin} = useContext(AppContext);
+  const {project} = useContext(AppContext);
   const navigate = useNavigate();
 
   const getLastestWorkspace = async () => {
     try {
       const res = await axios.get(`http://localhost:8800/lastworkspace/${uid}`);
-      navigate(`/workspace-setting/${res.data.wid}?user=${uid}`);
+      navigate(`/workspace-setting/${res.data.id}?user=${uid}`);
     } catch (err) {
       console.log(err);
     }
@@ -166,7 +166,7 @@ export default function Header() {
           position: 'relative',
         }}
       >
-        {uid == admin.id && (
+        {uid == project.adminId && (
           <Button
             variant="contained"
             sx={{

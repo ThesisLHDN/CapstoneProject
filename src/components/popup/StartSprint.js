@@ -54,7 +54,7 @@ function StartSprint({setTriggerSprint}) {
     cstatus: 1,
     goal: '',
     ownerId: project.ownerId,
-    projectId: project.pid,
+    projectId: project.id,
   });
 
   const handleChange = (e) => {

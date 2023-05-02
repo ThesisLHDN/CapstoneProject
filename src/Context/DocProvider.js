@@ -8,7 +8,7 @@ export const DocContext = React.createContext();
 export default function DocProvider({children}) {
   const {project} = useContext(AppContext);
 
-  const [selectedProjectId, setSelectedProjectId] = useState(project.pid);
+  const [selectedProjectId, setSelectedProjectId] = useState(project.id);
   const [selectedParentId, setSelectedParentId] = useState('');
   const [selectedParentName, setSelectedParentName] = useState('');
   const [prevParent, setPrevParent] = useState();

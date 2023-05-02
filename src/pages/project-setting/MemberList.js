@@ -90,10 +90,10 @@ function MemberList() {
                     }}
                     onClick={handleClick}
                   >
-                    {member.id == project.id ? (
+                    {member.id == project.adminId ? (
                       <span className="pl-5">Administrator</span>
                     ) : member.id == project.ownerId &&
-                      member.id !== project.id ? (
+                      member.id !== project.adminId ? (
                       <span className="pl-5">Project Owner</span>
                     ) : (
                       <span className="pl-5">Project Member</span>

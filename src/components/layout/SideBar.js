@@ -98,8 +98,8 @@ function SideBar(props) {
           <div className="mt-3">
             {workspaces.map((wp) => (
               <NavLink
-                key={wp.wid}
-                to={`/workspace-setting/${wp.wid}?user=${uid}`}
+                key={wp.id}
+                to={`/workspace-setting/${wp.id}?user=${uid}`}
                 onClick={() => handleClick()}
                 className={({isActive}) => (isActive ? 'text-green-tx' : '')}
               >

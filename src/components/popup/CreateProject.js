@@ -48,7 +48,7 @@ function CreateProject() {
     pkey: '',
     createTime: null,
     ownerId: uid,
-    workspaceId: workspace.wid,
+    workspaceId: workspace.id,
   });
 
   const navigate = useNavigate();
@@ -79,7 +79,7 @@ function CreateProject() {
     try {
       await axios.post('http://localhost:8800/project', project);
       setProjects([project, ...projects]);
-      navigate(`/workspace-setting/${workspace.wid}?user=${uid}`);
+      navigate(`/workspace-setting/${workspace.id}?user=${uid}`);
     } catch (err) {
       console.log(err);
     }
