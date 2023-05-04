@@ -1,9 +1,9 @@
-import {useMemo} from 'react';
+import {useMemo, useState} from 'react';
 import CommentForm from './CommentForm';
 import Subcomment from './Subcomment';
 import moment from 'moment/moment';
 
-import {Avatar, Typography} from '@mui/material';
+import {Avatar, Box, Typography} from '@mui/material';
 import {useFirestore} from 'src/hooks/useFirestore';
 
 // import {addDocument, setDocument} from 'src/firebase/services';
@@ -21,6 +21,7 @@ const Comment = ({
   currentUserId,
   subcomment = false,
 }) => {
+  const [expand, setExpand] = useState(false);
   const repliesConditions = useMemo(
     () => ({
       fieldName: 'parentId',
@@ -81,13 +82,54 @@ const Comment = ({
             {!isEditing && (
               <div className="text-sm mt-2 text-ellipsis overflow-hidden text-justify">
                 <Typography sx={{mb: 1}}>{comment.body}</Typography>
-
                 {comment.file &&
                   ((comment.file.type.split('/')[0] === 'image' && (
-                    <img
-                      src={comment.file.downloadURL}
-                      alt={'Error displaying image from: ' + comment.body}
-                    />
+                    <Box
+                      sx={{
+                        border: 'solid black 1px',
+                        borderRadius: 5,
+                        overflow: 'hidden',
+                        cursor: 'pointer',
+                        position: 'relative',
+                        '&:hover': {
+                          '& .imgContainer': {display: 'block'},
+                        },
+                        '&:hover .imgContainer': {
+                          display: 'block',
+                        },
+                        ...(!expand && {maxHeight: 400}),
+                      }}
+                      onClick={() => setExpand(!expand)}
+                    >
+                      {' '}
+                      <Box
+                        className={'imgContainer'}
+                        sx={{
+                          position: 'absolute',
+                          width: '100%',
+                          height: '100%',
+                          backgroundColor: '#00000080',
+                          display: 'none',
+                        }}
+                      >
+                        <Typography
+                          sx={{
+                            width: '100%',
+                            height: '100%',
+                            textAlign: 'center',
+                            paddingTop: '200px',
+                            fontWeight: 'bold',
+                            color: 'white',
+                          }}
+                        >
+                          {expand ? 'Click to hide' : 'Click to expand'}
+                        </Typography>
+                      </Box>{' '}
+                      <img
+                        src={comment.file.downloadURL}
+                        alt={'Error displaying image from: ' + comment.body}
+                      ></img>
+                    </Box>
                   )) ||
                     (comment.file.type.split('/')[0] === 'video' && (
                       <video controls>

@@ -37,7 +37,6 @@ const CommentForm = ({
   const onSubmit = (event) => {
     event.preventDefault();
 
-    // todo upload
     if (reparedFile) {
       const path = `comments/${new Date().getTime() + reparedFile.name}`;
       const fileRef = ref(storage, path);
@@ -74,7 +73,6 @@ const CommentForm = ({
         },
       );
     }
-    // todo upload
     else handleSubmit({body: text});
     setText('');
     setReparedFile();
