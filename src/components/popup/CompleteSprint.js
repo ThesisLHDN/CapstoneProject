@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   Button,
   Dialog,
@@ -17,6 +17,7 @@ import {
 import {styled} from '@mui/material/styles';
 import {colorHover} from 'src/style';
 import axios from 'axios';
+import {AppContext} from 'src/Context/AppProvider';
 
 const GrayButton = styled(Button)({
   textTransform: 'none',
@@ -34,6 +35,7 @@ function CompleteSprint({setTriggerIssue, sprintId}) {
   const [open, setOpen] = useState(false);
   const [sprint, setSprint] = useState('DFP Sprint 4');
   const [display, setDisplay] = useState(true);
+  const {project} = useContext(AppContext);
 
   const handleClose = () => {
     setOpen(false);
@@ -47,7 +49,9 @@ function CompleteSprint({setTriggerIssue, sprintId}) {
     e.preventDefault();
     setDisplay(false);
     try {
-      const res = await axios.put(`http://localhost:8800/sprint/${sprintId}`);
+      const res = await axios.put(`http://localhost:8800/sprint/${sprintId}`, {
+        pId: project.id,
+      });
       // console.log(res);
       // setTriggerSprint(true);
       setTriggerIssue(true);

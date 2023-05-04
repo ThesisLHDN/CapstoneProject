@@ -9,8 +9,9 @@ import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
 import FiberManualRecordRoundedIcon from '@mui/icons-material/FiberManualRecordRounded';
 import FlagRoundedIcon from '@mui/icons-material/FlagRounded';
 import QuestionMarkRoundedIcon from '@mui/icons-material/QuestionMarkRounded';
-import {useContext} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import {AppContext} from 'src/Context/AppProvider';
+import axios from 'axios';
 
 const Epic = (props) => {
   const colors = (epic) => {
@@ -96,7 +97,27 @@ const issueIcon = (type) => {
 };
 
 function Card({issue}) {
+  const [assignee, setAssignee] = useState({});
   const {project} = useContext(AppContext);
+
+  const getAssignee = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:8800/user/${issue.assigneeId}`,
+      );
+      setAssignee(res.data);
+      // console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    if (issue.assigneeId) {
+      getAssignee();
+    }
+  }, [issue]);
+
   return (
     <Link to={`/issue/${project.id}/${issue.id}`}>
       {' '}
@@ -134,7 +155,7 @@ function Card({issue}) {
               <Chip size="small" label={issue.estimatePoint} />
             )}
             <Avatar
-              src="X"
+              src={assignee.photoURL}
               sx={{width: 32, height: 32, ml: 1}}
               alt={issue.assigneeId}
             />
