@@ -17,7 +17,7 @@ import tasks from './tasks';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import {useLocation} from 'react-router-dom';
 import axios from 'axios';
-import { AppContext } from 'src/Context/AppProvider';
+import {AppContext} from 'src/Context/AppProvider';
 
 // import Filter from 'src/components/Filter';
 // import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
@@ -54,6 +54,7 @@ function RoadMap() {
   const fetchIssuesData = async () => {
     try {
       const res = await axios.get(`http://localhost:8800/issues/${pId}`);
+      console.log('raw data', res);
       const data = {
         data: res.data.map((issue) => ({
           text: issue.issuename,
@@ -64,6 +65,7 @@ function RoadMap() {
           progress: 100,
           status: issue.issuestatus,
           open: true,
+          projectId: issue.projectId,
         })),
       };
 
@@ -76,8 +78,6 @@ function RoadMap() {
   useEffect(() => {
     fetchIssuesData();
   }, []);
-
-  // console.log('formatted issues', issues, tasks);
 
   const addMessage = (message) => {
     const maxLogLength = 5;
@@ -145,60 +145,11 @@ function RoadMap() {
             justifyContent: 'flex-end',
             alignItems: 'center',
           }}
-        >
-          {/* <Typography sx={{mx: 1, display: 'flex', justifyItems: 'center'}}>
-            <AccessTimeRoundedIcon sx={{mr: 1}} />
-            10 days remaining
-          </Typography> */}
-          {/* <GrayButton variant="contained">Complete sprint</GrayButton> */}
-          {/* <GrayButton sx={{ mx: 1, width: '32px !important', minWidth: 32 }}>
-            <MoreHorizIcon />
-          </GrayButton> */}
-        </Grid>
+        ></Grid>
       </Grid>
       <Typography variant="h5" sx={{color: color.green03, fontWeight: 700}}>
         RoadMap
       </Typography>
-      {/* <Typography variant="caption" sx={{ color: '#555' }}>
-        Lorem Ipsum is simply dummy text of the printing and typesetting
-        industry. Lorem Ipsum has been the industry&apos; s standard dummy text
-        ever since the 1500s, when an unknown printer took a galley of type and
-        scrambled it to make a type specimen book.
-      </Typography> */}
-
-      {/* <Box
-        sx={{
-          display: 'flex',
-          gap: 1,
-          gridTemplateColumns: 'repeat(4, 1fr)',
-          mt: 1,
-        }}
-      > */}
-      {/* <SearchBar sx={{width: '250px'}} />
-        <Filter/> */}
-      {/* <Button
-          variant="text"
-          startIcon={<FilterAltRoundedIcon />}
-          sx={{color: '#181818', textTransform: 'none'}}
-        >
-          Filter
-        </Button> */}
-      {/* <Button
-          variant="text"
-          startIcon={<SortRoundedIcon />}
-          sx={{color: '#181818'}}
-        >
-          Sort
-        </Button>*/}
-      {/* <Button
-          variant="text"
-          startIcon={<PermIdentityRoundedIcon />}
-          sx={{color: '#181818', textTransform: 'none'}}
-        >
-          Me
-        </Button> */}
-      {/* </Box> */}
-
       <Box>
         <Box
           className="zoom-bar"
@@ -209,8 +160,8 @@ function RoadMap() {
         <Box className="gantt-container">
           {issues && issues.data.length ? (
             <Gantt
+              projectId={pId}
               tasks={issues}
-              // tasks={tasks}
               zoom={zoom}
               onDataUpdated={logDataUpdate}
             />
@@ -222,7 +173,6 @@ function RoadMap() {
                 zoom={zoom}
                 onDataUpdated={logDataUpdate}
               />
-              {/* <CircularProgress /> */}
             </>
           )}
         </Box>

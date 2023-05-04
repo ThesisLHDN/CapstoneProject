@@ -151,7 +151,13 @@ export default class Gantt extends Component {
     gantt.locale.labels.section_parent = 'Parent';
 
     gantt.config.columns = [
-      {name: 'text', label: 'Task name', width: '*', tree: true},
+      {
+        name: 'text',
+        label: 'Task name',
+        width: '*',
+        tree: true,
+        template: issueCard,
+      },
       // { name: "start_date", label: "Start time", align: "center" },
       // { name: "end_date", label: "End time", align: "center" },
       // { name: "duration", label: "Duration", align: "center" },
@@ -181,6 +187,10 @@ export default class Gantt extends Component {
       // if (task.priority == 1)
       return "<div class='statusChip " + color + "'>" + task.status + ' </div>';
       // return task.text + " (" + task.users + ")";
+    }
+
+    function issueCard(task) {
+      return `<a href = "/issue/${task.projectId}/${task.id}">${task.text}</a>`;
     }
 
     // const {tasks} = this.props;
