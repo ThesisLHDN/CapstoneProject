@@ -22,6 +22,7 @@ import axios from 'axios';
 import {Link, useLocation} from 'react-router-dom';
 import {AppContext} from 'src/Context/AppProvider';
 import {AuthContext} from 'src/Context/AuthProvider';
+import WarningPopup from 'src/components/popup/Warning';
 
 const StyledTypo = styled(Typography)({
   display: 'block',
@@ -66,11 +67,8 @@ const StyledAccordionDetails = styled(AccordionDetails)(({theme}) => ({
 }));
 
 function WorkspaceSetting() {
-  const [expanded, setExpanded] = useState('panel1');
 
-  const handleChange = (panel) => (event, newExpanded) => {
-    setExpanded(newExpanded ? panel : false);
-  };
+  const [delWpPopup, setDelWpPopup] = useState(false)
 
   const [rename, setRename] = useState(false);
   const [changeDescription, setChangeDescription] = useState(false);
@@ -121,6 +119,12 @@ function WorkspaceSetting() {
     fetchWorkspace();
   }, [wsId]);
 
+  const deleteWorkspaceHandler=(confirm)=>{
+    if (confirm){
+      console.log('Workspace deleted')
+    }
+    setDelWpPopup(false)
+  }
   return (
     <Box sx={{textAlign: 'left'}}>
       <Typography
@@ -261,9 +265,19 @@ function WorkspaceSetting() {
         variant="contained"
         color="error"
         sx={{mx: 2, mt: 1, textTransform: 'none', fontWeight: 'bold'}}
+        onClick={()=>setDelWpPopup(true)}
       >
         Delete Workspace
       </Button>
+      <WarningPopup
+        title={'Delete Workspace'}
+        open={delWpPopup}
+        onClose={() => setDelWpPopup(false)}
+        handleSubmit={deleteWorkspaceHandler}
+        content={
+          'Do you really want to delete this workspace? This cannot be undone'
+        }
+      ></WarningPopup>
     </Box>
   );
 }

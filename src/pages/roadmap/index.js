@@ -71,10 +71,26 @@ function RoadMap() {
           status: issue.issuestatus,
           open: true,
           projectId: issue.projectId,
+          cId: issue.cycleId,
         })),
       };
 
       setIssues(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const updateIssue = async (cId, id, status, startDate, dueDate) => {
+    try {
+      const res = await axios.put(`http://localhost:8800/issue/${id}`, {
+        cId: cId,
+        status: status,
+        startDate: startDate,
+        dueDate: dueDate ? dueDate : null,
+      });
+      // setIssues([...res.data]);
+      console.log(res);
     } catch (err) {
       console.log(err);
     }
@@ -101,8 +117,35 @@ function RoadMap() {
     if (type === 'link' && action !== 'delete') {
       message += ` ( source: ${item.source}, target: ${item.target} )`;
     }
-    addMessage(`Change ${item.id} ${item.text} time to [${item.start_date} - ${item.end_date}]`);
+    addMessage(
+      `Change ${item.id} ${item.text} time to [${item.start_date} - ${item.end_date}]`,
+    );
     console.log(type, action, item, id);
+  };
+
+  const updateItem = (type, action, item, id) => {
+    console.log(
+      'update',
+      item.cId,
+      item.id,
+      item.status,
+      item.start_date,
+      item.end_date,
+    );
+    convertTime(item.start_date, item.end_date);
+    updateIssue(
+      item.cId,
+      item.id,
+      item.status,
+      convertTime(item.start_date),
+      convertTime(item.end_date),
+    );
+  };
+
+  const convertTime = (time) => {
+    const tSplit = time.split(' ');
+    const dateSplit = tSplit[0].split('-');
+    return `${dateSplit[2]}-${dateSplit[1]}-${dateSplit[0]} ${tSplit[1]}:00`;
   };
 
   const handleZoomChange = (zoom) => {
@@ -169,7 +212,7 @@ function RoadMap() {
               projectId={pId}
               tasks={issues}
               zoom={zoom}
-              onDataUpdated={logDataUpdate}
+              onDataUpdated={updateItem}
             />
           ) : (
             <>
@@ -177,7 +220,7 @@ function RoadMap() {
               <Gantt
                 tasks={{data: []}}
                 zoom={zoom}
-                onDataUpdated={logDataUpdate}
+                onDataUpdated={updateItem}
               />
             </>
           )}

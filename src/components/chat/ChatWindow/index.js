@@ -328,19 +328,7 @@ function ChatWindow({currentUser}) {
             >
               <Typography>Notifications</Typography>
               <Switch defaultChecked />
-            </StyledDiv>
-            <StyledDiv
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                height: 40,
-                gap: 2,
-              }}
-            >
-              <Typography>Public</Typography>
-              <Switch defaultChecked />
-            </StyledDiv> */}
+            </StyledDiv>*/}
             <StyledDiv
               style={{
                 // display: 'flex',
