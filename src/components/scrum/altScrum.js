@@ -59,10 +59,10 @@ function Scrum({sprint, pathname}) {
 
     if (source.droppableId !== destination.droppableId) {
       const sourceColumn = columns.filter((column) => {
-        return column.id == source.droppableId;
+        return column.title == source.droppableId;
       });
       const destColumn = columns.filter((column) => {
-        return column.id == destination.droppableId;
+        return column.title == destination.droppableId;
       });
       const sourceIssues = issues.filter((issue) => {
         return issue.issuestatus == sourceColumn[0].title;
@@ -71,38 +71,23 @@ function Scrum({sprint, pathname}) {
         return issue.issuestatus == destColumn[0].title;
       });
       const [removed] = sourceIssues.splice(source.index, 1);
+      console.log('AAAAAAAAAAAAA', removed);
+      console.log('AAAAAAAAAAAAA', source);
+      console.log('AAAAAAAAAAAAA', destination);
       destIssues.splice(destination.index, 0, removed);
       updateIssue(removed.cycleId, removed.id, destColumn[0].title);
       setTriggerBoard(true);
-      // setColumns({
-      //   ...columns,
-      //   [source.droppableId]: {
-      //     ...sourceColumn,
-      //     items: sourceItems,
-      //   },
-      //   [destination.droppableId]: {
-      //     ...destColumn,
-      //     items: destItems,
-      //   },
-      // });
     } else {
       const column = columns.filter((column) => {
-        return column.id == source.droppableId;
+        return column.title == source.droppableId;
       });
       const copiedItems = issues.filter((issue) => {
-        return issue.cycleId == column[0].id;
+        return issue.issuestatus == column[0].title;
       });
       const [removed] = copiedItems.splice(source.index, 1);
       copiedItems.splice(destination.index, 0, removed);
       updateIssue(removed.cycleId, removed.id, column[0].title);
       setTriggerBoard(true);
-      // setColumns({
-      //   ...columns,
-      //   [source.droppableId]: {
-      //     ...column,
-      //     items: copiedItems,
-      //   },
-      // });
     }
   };
 
@@ -131,7 +116,7 @@ function Scrum({sprint, pathname}) {
               key={column.id}
             >
               <Box style={{marginRight: 8}}>
-                <Droppable droppableId={column.id} key={column.id}>
+                <Droppable droppableId={column.title} key={column.id}>
                   {(provided, snapshot) => {
                     return (
                       <Box>
@@ -165,6 +150,13 @@ function Scrum({sprint, pathname}) {
                           {issues
                             .filter((issue) => {
                               return issue.issuestatus == column.title;
+                            })
+                            .sort((a, b) => {
+                              return a.issueorder < b.issueorder
+                                ? -1
+                                : a.issueorder > b.issueorder
+                                ? 1
+                                : 0;
                             })
                             .map((issue, index) => {
                               return (

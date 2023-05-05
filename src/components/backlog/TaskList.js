@@ -128,7 +128,7 @@ function TaskList(props) {
     }
   };
 
-  const updateIssue = async (cId, id, status, destination, source) => {
+  const updateIssue = async (cId, id, status, destination, source, pId) => {
     // console.log('$$$$$$$$$$$$$$$', status);
     try {
       const res = await axios.put(`http://localhost:8800/issue/${id}`, {
@@ -136,6 +136,7 @@ function TaskList(props) {
         status: status,
         destination: destination,
         source: source,
+        pId: pId,
       });
       // setIssues([...res.data]);
       setTriggerIssue(true);
@@ -176,7 +177,7 @@ function TaskList(props) {
     }
   };
 
-  const onDragEnd = (result, columns, setColumns, issues, setIssues) => {
+  const onDragEnd = (result, columns, issues) => {
     console.log('AAAAAAAAAAAAAAA');
     if (!result.destination) return;
     const {source, destination} = result;
@@ -211,6 +212,7 @@ function TaskList(props) {
         removed.issuestatus,
         destination,
         source,
+        pId,
       );
       setTriggerIssue(true);
     } else {
@@ -219,23 +221,27 @@ function TaskList(props) {
         return column.id == source.droppableId;
       });
       // Get the issues of sprint
-      const copiedIssues = issues.filter((issue) => {
-        return issue.cycleId == column[0].id;
-      });
+      const copiedIssues = issues
+        .filter((issue) => {
+          return issue.cycleId == column[0].id;
+        })
+        .sort((a, b) => {
+          return a.issueorder < b.issueorder
+            ? -1
+            : a.issueorder > b.issueorder
+            ? 1
+            : 0;
+        });
       // Get issue being drag
       const [removed] = copiedIssues.splice(source.index, 1);
-      // copiedIssues.splice(destination.index, 0, removed);
-      // updateIssue(column[0].id, removed.id, removed.issuestatus);
       updateIssue(
         column[0].id,
         removed.id,
         removed.issuestatus,
         destination,
         source,
+        pId,
       );
-      console.log('AAAAAAAAAAAAAAAA', removed);
-      console.log('AAAAAAAAAAAAAAAA', source);
-      console.log('AAAAAAAAAAAAAAAA', destination);
       setTriggerIssue(true);
     }
   };
@@ -252,9 +258,7 @@ function TaskList(props) {
   return (
     <div>
       <DragDropContext
-        onDragEnd={(result) =>
-          onDragEnd(result, columns, setColumns, issues, setIssues)
-        }
+        onDragEnd={(result) => onDragEnd(result, columns, issues)}
       >
         {columns.map((column) => {
           return (

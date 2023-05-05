@@ -147,7 +147,7 @@ function Card({issue}) {
           >
             {issueIcon(issue.issueType)}
             <Typography variant="subtitle" sx={{ml: '5px'}}>
-              {project.pkey + '-' + issue.id}
+              {project.pkey + '-' + issue.issueindex}
             </Typography>
           </div>
           <div style={{display: 'inline-flex', alignItems: 'flex-end'}}>
