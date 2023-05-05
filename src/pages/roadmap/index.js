@@ -19,6 +19,7 @@ import {useLocation} from 'react-router-dom';
 import axios from 'axios';
 import {AppContext} from 'src/Context/AppProvider';
 import {AuthContext} from 'src/Context/AuthProvider';
+import MessageArea from './messageArea';
 
 // import Filter from 'src/components/Filter';
 // import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
@@ -100,7 +101,8 @@ function RoadMap() {
     if (type === 'link' && action !== 'delete') {
       message += ` ( source: ${item.source}, target: ${item.target} )`;
     }
-    addMessage(message);
+    addMessage(`Change ${item.id} ${item.text} time to [${item.start_date} - ${item.end_date}]`);
+    console.log(type, action, item, id);
   };
 
   const handleZoomChange = (zoom) => {
@@ -180,7 +182,7 @@ function RoadMap() {
             </>
           )}
         </Box>
-        {/* <MessageArea messages={messagesState} /> */}
+        <MessageArea messages={messagesState} />
       </Box>
     </div>
   );

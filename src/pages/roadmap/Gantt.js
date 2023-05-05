@@ -95,7 +95,6 @@ export default class Gantt extends Component {
         if (onDataUpdated) {
           onDataUpdated(type, action, item, id);
         }
-
         // if onDataUpdated changes returns a permanent id of the created item, you can return it from here so dhtmlxGantt could apply it
         // resolve({id: databaseId});
         return resolve();
@@ -190,7 +189,7 @@ export default class Gantt extends Component {
     }
 
     function issueCard(task) {
-      return `<a href = "/issue/${task.projectId}/${task.id}">${task.text}</a>`;
+      return `<a style="overflow: hidden; text-overflow: ellipsis" href = "/issue/${task.projectId}/${task.id}">${task.text}</a>`;
     }
 
     // const {tasks} = this.props;
