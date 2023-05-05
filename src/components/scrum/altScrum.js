@@ -64,16 +64,21 @@ function Scrum({sprint, pathname}) {
       const destColumn = columns.filter((column) => {
         return column.title == destination.droppableId;
       });
-      const sourceIssues = issues.filter((issue) => {
-        return issue.issuestatus == sourceColumn[0].title;
-      });
+      const sourceIssues = issues
+        .filter((issue) => {
+          return issue.issuestatus == sourceColumn[0].title;
+        })
+        .sort((a, b) => {
+          return a.issueorder < b.issueorder
+            ? -1
+            : a.issueorder > b.issueorder
+            ? 1
+            : 0;
+        });
       const destIssues = issues.filter((issue) => {
         return issue.issuestatus == destColumn[0].title;
       });
       const [removed] = sourceIssues.splice(source.index, 1);
-      console.log('AAAAAAAAAAAAA', removed);
-      console.log('AAAAAAAAAAAAA', source);
-      console.log('AAAAAAAAAAAAA', destination);
       destIssues.splice(destination.index, 0, removed);
       updateIssue(removed.cycleId, removed.id, destColumn[0].title);
       setTriggerBoard(true);
