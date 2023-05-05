@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import {useEffect, useState, useRef} from 'react';
 import {
   Paper,
   Typography,
@@ -14,18 +14,16 @@ import {
 } from '@mui/material';
 import FilterAltRoundedIcon from '@mui/icons-material/FilterAltRounded';
 
-import { Box } from '@mui/system';
-import { color, colorHover } from 'src/style';
+import {Box} from '@mui/system';
+import {color, colorHover} from 'src/style';
 
 const data = {
   status: ['To do', 'In progress', 'Done'],
-  assignee: ['Lam Hoang', 'Dang Nguyen'],
   type: ['Task', 'Bug', 'Story'],
-  epic: ['UI/UX', 'Business', 'Research'],
-  priority: ['Critical', 'High', 'Medium', 'Low'],
+  priority: ['High', 'Medium', 'Low'],
 };
 
-function FilterRow({ property, values }) {
+function FilterRow({property, values}) {
   return (
     <Box
       sx={{
@@ -38,15 +36,15 @@ function FilterRow({ property, values }) {
       <Typography variant="body1">
         {property[0].toUpperCase() + property.substring(1)}
       </Typography>
-      <FormControl sx={{ m: 1, width: 120, mx: 0, ml: 1 }} margin="none">
+      <FormControl sx={{m: 1, width: 120, mx: 0, ml: 1}} margin="none">
         <select
           displayEmpty
-          inputProps={{ 'aria-label': 'Without label' }}
+          inputProps={{'aria-label': 'Without label'}}
           size="small"
           defaultValue={''}
           style={{
             border: '1px solid #EFEDF0',
-            outline: "none",
+            outline: 'none',
             width: '100%',
             height: 30,
             borderRadius: 4,
@@ -108,7 +106,7 @@ function Filter() {
         aria-expanded={open ? 'true' : undefined}
         aria-haspopup="true"
         onClick={handleToggle}
-        sx={{ textTransform: 'none', color: '#181818' }}
+        sx={{textTransform: 'none', color: '#181818'}}
         startIcon={<FilterAltRoundedIcon />}
       >
         Filter
@@ -120,9 +118,9 @@ function Filter() {
         placement="bottom-start"
         transition
         disablePortal
-        sx={{ zIndex: 5 }}
+        sx={{zIndex: 5}}
       >
-        {({ TransitionProps, placement }) => (
+        {({TransitionProps, placement}) => (
           <ClickAwayListener onClickAway={handleClose}>
             <Grow
               {...TransitionProps}
@@ -142,7 +140,7 @@ function Filter() {
                   gap: 1,
                 }}
               >
-                <Typography sx={{ fontWeight: 700, color: color.green03 }}>
+                <Typography sx={{fontWeight: 700, color: color.green03}}>
                   Filter
                 </Typography>
                 <MenuList
@@ -150,21 +148,25 @@ function Filter() {
                   id="composition-menu"
                   aria-labelledby="composition-button"
                   onKeyDown={handleListKeyDown}
-                  sx={{ px: 2, py: 0 }}
+                  sx={{px: 2, py: 0}}
                 >
                   {Object.entries(data).map(([key, value]) => (
                     <FilterRow property={key} values={value} />
                   ))}
                 </MenuList>
-                <div className='flex'>
+                <div className="flex">
                   <Button
-                    sx={{ mr: 1, width: 80, ...colorHover.greenGradBtn }}
+                    sx={{mr: 1, width: 80, ...colorHover.greenGradBtn}}
                     variant="contained"
                     onClick={handleToggle}
                   >
                     Confirm
                   </Button>
-                  <Button variant="outlined" color="error" sx={{ width: 80, textTransform: 'none' }}>
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    sx={{width: 80, textTransform: 'none'}}
+                  >
                     Clear
                   </Button>
                 </div>

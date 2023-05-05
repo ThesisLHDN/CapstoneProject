@@ -131,10 +131,9 @@ function TaskCard({issue, setTrigger, isChild = false}) {
       const res = await axios.put(`http://localhost:8800/issue/${issue.id}`, {
         cId: issue.cycleId,
         status: element,
-        order: issue.issueorder,
       });
       setTrigger(true);
-      // console.log(res);
+      console.log(res);
       // setIssues([...res.data]);
     } catch (err) {
       console.log(err);
