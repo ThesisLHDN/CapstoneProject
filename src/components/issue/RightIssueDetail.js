@@ -25,8 +25,8 @@ function RightIssueDetail({issue, setIssue, trigger, setTrigger}) {
   const [assignee, setAssignee] = useState({});
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-  const {admin, project} = useContext(AppContext);
-  const [members, setMembers] = useState([admin]);
+  const {project} = useContext(AppContext);
+  const [members, setMembers] = useState([]);
 
   const id = open ? 'simple-popper' : undefined;
 
@@ -68,8 +68,7 @@ function RightIssueDetail({issue, setIssue, trigger, setTrigger}) {
     try {
       const res = await axios.get(`http://localhost:8800/pmembers/${pId}`);
       // console.log(res.data);
-      setMembers([...members, ...res.data]);
-      console.log('!!!!!!!!!!!!!!!!', admin);
+      setMembers([...res.data]);
     } catch (err) {
       console.log(err);
     }
@@ -88,16 +87,15 @@ function RightIssueDetail({issue, setIssue, trigger, setTrigger}) {
         descript: issue.descript,
         dueDate: due
           ? due
-          : new Date(issue.dueDate)
-              .toISOString()
-              .slice(0, 19)
-              .replace('T', ' '),
+          : issue.dueDate
+          ? new Date(issue.dueDate).toISOString().slice(0, 19).replace('T', ' ')
+          : new Date().toISOString().slice(0, 19).replace('T', ' '),
         priority: priority ? priority : issue.priority,
         assigneeId: assignee ? assignee : issue.assigneeId,
         estimatePoint: point ? point : issue.estimatePoint,
       });
       setTrigger(true);
-      console.log('#############3', res);
+      // console.log('#############3', res);
       // setIssues([...res.data]);
     } catch (err) {
       console.log(err);
@@ -178,33 +176,44 @@ function RightIssueDetail({issue, setIssue, trigger, setTrigger}) {
         <Grid container sx={{marginTop: 1}}>
           <Grid item xs={5}>
             <Typography
-              sx={{marginTop: 1, marginLeft: 2, fontSize: 14, fontWeight: 700}}
+              sx={{
+                marginTop: 0.5,
+                marginBottom: 1,
+                marginLeft: 2,
+                fontSize: 14,
+                fontWeight: 700,
+              }}
             >
               Assignee
             </Typography>
           </Grid>
           <Grid item xs={6.5}>
-            <div className="flex mt-1">
-              {assignee.username ? (
-                <Avatar
-                  src="X"
-                  sx={{width: 32, height: 32, backgroundColor: '#8993A4'}}
-                  alt={assignee.username}
-                />
-              ) : (
-                <Button
-                  style={{
-                    textTransform: 'none',
-                    height: 20,
-                    width: 120,
-                    backgroundColor: '#F5F5F5',
-                  }}
-                  onClick={handleClick}
-                ></Button>
-              )}
-              <span className="mt-1 ml-2 text-sm">
-                {assignee.username ? assignee.username : ''}
-              </span>
+            <div className="flex">
+              <Button
+                style={{
+                  textTransform: 'none',
+                  height: assignee.username ? '' : 20,
+                  width: 'fit-content',
+                  backgroundColor: assignee.username ? '#fff' : '#F5F5F5',
+                  marginTop: assignee.username ? -10 : 5,
+                }}
+                onClick={handleClick}
+              >
+                {assignee.username ? (
+                  <div className="flex">
+                    <Avatar
+                      src={assignee.photoURL}
+                      sx={{width: 32, height: 32, backgroundColor: '#8993A4'}}
+                      alt={assignee.username}
+                    />
+                    <span className="mt-1 ml-2 text-sm text-black">
+                      {assignee.username ? assignee.username : ''}
+                    </span>
+                  </div>
+                ) : (
+                  <></>
+                )}
+              </Button>
             </div>
             <Popper id={id} open={open} anchorEl={anchorEl} sx={{zIndex: 5}}>
               <ClickAwayListener onClickAway={handleClick}>
@@ -212,14 +221,15 @@ function RightIssueDetail({issue, setIssue, trigger, setTrigger}) {
                   sx={{
                     backgroundColor: 'white',
                     borderRadius: 1,
-                    right: issue.issuestatus === 'In progress' ? -60 : -80,
+                    right: -120,
                     marginTop: '5px',
                     border: 'solid 1px #ECEDF0',
                     boxShadow: '2px 2px 5px #00000020',
                     display: 'flex',
                     flexDirection: 'column',
                     position: 'absolute',
-                    width: 120,
+                    width: 240,
+                    overflow: 'hidden',
                   }}
                 >
                   <MenuList sx={{px: 0, width: '100%'}}>
@@ -273,7 +283,7 @@ function RightIssueDetail({issue, setIssue, trigger, setTrigger}) {
             </Typography>
           </Grid>
           <Grid item xs={6.5}>
-            <div className="flex">
+            <div className="flex ml-1">
               {issue.estimatePoint && (
                 <span className="mt-5 mr-5">{issue.estimatePoint}</span>
               )}
@@ -307,7 +317,7 @@ function RightIssueDetail({issue, setIssue, trigger, setTrigger}) {
           <Grid item xs={6.5}>
             <div className="flex mt-3">
               <Avatar
-                src="X"
+                src={reporter.photoURL}
                 sx={{width: 32, height: 32, backgroundColor: '#8993A4'}}
                 alt={reporter.username}
               />
@@ -315,108 +325,6 @@ function RightIssueDetail({issue, setIssue, trigger, setTrigger}) {
             </div>
           </Grid>
         </Grid>
-
-        {/* <Grid item xs={5}>
-          
-          <div className='flex mt-3'>
-            <Avatar
-              src="X"
-              sx={{ width: 32, height: 32, backgroundColor: "#8993A4" }}
-              alt="Lâm Nguyễn"
-            />
-            <span className='mt-2 ml-2 text-sm'>Lâm Nguyễn</span>
-          </div>
-        </Grid>
-        
-        <Grid item xs={5}>
-          <Typography sx={{ marginTop: 3, fontSize: 14, fontWeight: 700 }}>
-            Tags
-          </Typography>
-          <div className='mt-4'>
-            <TagsInput tags={['Nodejs', 'UI/UX']} />
-          </div>
-        </Grid>
-
-        <Grid item xs={5}>
-          <Typography sx={{ marginTop: 3, fontSize: 14, fontWeight: 700 }}>
-            Story Point Estimate
-          </Typography>
-          <TextField
-            variant="standard"
-            placeholder='None'
-            size="small"
-            sx={{ marginTop: 2, width: "100%", paddingTop: 0.25 }}
-            InputProps={{ disableUnderline: true, style: { fontSize: 14 }}}
-          ></TextField>
-        </Grid>
-
-
-        <Grid item xs={5}>
-          <Typography sx={{ marginY: 3, fontSize: 14, fontWeight: 700 }}>
-            Reporter
-          </Typography>
-          <div className='flex mt-3'>
-            <Avatar
-              src="X"
-              sx={{ width: 32, height: 32, backgroundColor: "#8993A4" }}
-              alt="Lâm Nguyễn"
-            />
-            <span className='mt-2 ml-2 text-sm'>Lâm Nguyễn</span>
-          </div>
-        </Grid> */}
-
-        {/* <Grid item xs={5}>
-          <Typography sx={{ marginTop: 1, fontSize: 14, fontWeight: 700 }}>
-            Time Tracking
-          </Typography>
-          <Typography sx={{ marginTop: 3, fontSize: 14, fontWeight: 700 }}>
-            Assignee
-          </Typography>
-          <Typography sx={{ marginTop: 3, fontSize: 14, fontWeight: 700 }}>
-            Tags
-          </Typography>
-          <Typography sx={{ marginTop: 3, fontSize: 14, fontWeight: 700 }}>
-            Story Point Estimate
-          </Typography>
-          <Typography sx={{ marginY: 3, fontSize: 14, fontWeight: 700 }}>
-            Reporter
-          </Typography>
-        </Grid>
-
-        <Grid item xs={6.5}>
-          <LinearProgress 
-            variant="determinate" 
-            value={80}
-            color="success"
-            sx={{ marginTop: 2, marginBottom: 3, fontSize: 14, fontWeight: 700, width: "100%" }}
-          />
-          <div className='flex mt-3'>
-            <Avatar
-              src="X"
-              sx={{ width: 32, height: 32, backgroundColor: "#8993A4" }}
-              alt="Lâm Nguyễn"
-            />
-            <span className='mt-2 ml-2 text-sm'>Lâm Nguyễn</span>
-          </div>
-          <div className='mt-4'>
-            <TagsInput tags={['Nodejs', 'UI/UX']} />
-          </div>
-          <TextField
-            variant="standard"
-            placeholder='None'
-            size="small"
-            sx={{ marginTop: 2, width: "100%", paddingTop: 0.25 }}
-            InputProps={{ disableUnderline: true, style: { fontSize: 14 }}}
-          ></TextField>
-          <div className='flex mt-3'>
-            <Avatar
-              src="X"
-              sx={{ width: 32, height: 32, backgroundColor: "#8993A4" }}
-              alt="Lâm Nguyễn"
-            />
-            <span className='mt-2 ml-2 text-sm'>Lâm Nguyễn</span>
-          </div>
-        </Grid> */}
       </Grid>
     </div>
   );

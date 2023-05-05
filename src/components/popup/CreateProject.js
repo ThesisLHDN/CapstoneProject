@@ -87,18 +87,6 @@ function CreateProject() {
 
   return (
     <div>
-      {/* <Button
-        sx={{
-          width: '155px',
-          height: '38px',
-          ...colorHover.greenGradBtn,
-        }}
-        variant="contained"
-        startIcon={<AddRoundedIcon />}
-        onClick={() => {setOpen(true)}}
-      >
-        Create project
-      </Button>  */}
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle
           sx={{color: '#00980F', fontWeight: '900', textAlign: 'center', mt: 1}}

@@ -42,7 +42,6 @@ function AuthProvider({children}) {
         addUser();
         if (pathName === '/login' || pathName === '/signup') {
           getLastestWorkspace(uid);
-          // history(`/workspace-setting/${lastWorkspace}?user=${uid}`);
         }
         setIsLoading(false);
       } else {

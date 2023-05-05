@@ -95,7 +95,7 @@ function convertDate(d) {
 }
 
 function TaskCard({issue, setTrigger, isChild = false}) {
-  console.log(issue);
+  // console.log(issue);
   const {project} = useContext(AppContext);
   const [status, setStatus] = useState(issue.issuestatus);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -131,6 +131,7 @@ function TaskCard({issue, setTrigger, isChild = false}) {
       const res = await axios.put(`http://localhost:8800/issue/${issue.id}`, {
         cId: issue.cycleId,
         status: element,
+        order: issue.issueorder,
       });
       setTrigger(true);
       // console.log(res);
@@ -155,27 +156,16 @@ function TaskCard({issue, setTrigger, isChild = false}) {
       <Link to={`/issue/${project.id}/${issue.id}`}>
         <div
           className={`${
-            isChild ? 'ml-1 md:pr-20 2xl:pr-24' : 'ml-3 md:pr-40 2xl:pr-60'
+            isChild ? 'ml-1 md:pr-20 2xl:pr-24' : 'ml-3 md:pr-80 2xl:pr-96'
           } flex`}
         >
           <div>{IssueIcon(issue.issueType)}</div>
           <div className="ml-3 font-bold text-sm pt-0.5">
-            {project.pkey + '-' + issue.id}
+            {project.pkey + '-' + issue.issueindex}
           </div>
           <div className="ml-3 font-medium text-sm pt-0.5">
             {issue.issuename}
           </div>
-          {/* {issue.epicId && !isChild && (
-            <div
-              className="ml-3 text-sm h-6 pt-0.5 px-4 rounded-sm"
-              style={{
-                backgroundColor: `${epicColor(item.epic)[0]}`,
-                color: `${epicColor(item.epic)[1]}`,
-              }}
-            >
-              {issue.epicId}
-            </div>
-          )} */}
         </div>
       </Link>
 
@@ -253,6 +243,7 @@ function TaskCard({issue, setTrigger, isChild = false}) {
                   .map((element) => {
                     return (
                       <MenuItem
+                        key={element}
                         sx={{
                           py: 1,
                           fontSize: 14,
@@ -277,7 +268,7 @@ function TaskCard({issue, setTrigger, isChild = false}) {
         </Popper>
 
         <Avatar
-          src="X"
+          src={assignee.photoURL}
           sx={{
             width: 24,
             height: 24,

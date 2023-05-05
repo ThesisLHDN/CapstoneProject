@@ -60,7 +60,6 @@ function StartSprint({setTriggerSprint}) {
   const handleChange = (e) => {
     e.preventDefault();
     setSprint({...sprint, [e.target.name]: e.target.value});
-    // console.log(sprint);
   };
 
   const handleClick = async (e) => {
@@ -102,9 +101,6 @@ function StartSprint({setTriggerSprint}) {
           Start A New Sprint
         </DialogTitle>
         <DialogContent sx={{pb: 0.5}}>
-          {/* <DialogContentText sx={{ color: 'black', fontSize: '12px' }}>
-            2 issues will be included in this sprint.
-          </DialogContentText> */}
           <FormControl fullWidth>
             <Typography
               sx={{

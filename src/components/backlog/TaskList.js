@@ -128,14 +128,18 @@ function TaskList(props) {
     }
   };
 
-  const updateIssue = async (cId, id, status) => {
-    console.log('$$$$$$$$$$$$$$$', status);
+  const updateIssue = async (cId, id, status, destination, source, pId) => {
+    // console.log('$$$$$$$$$$$$$$$', status);
     try {
       const res = await axios.put(`http://localhost:8800/issue/${id}`, {
         cId: cId,
         status: status,
+        destination: destination,
+        source: source,
+        pId: pId,
       });
       // setIssues([...res.data]);
+      setTriggerIssue(true);
       console.log('###########', res);
     } catch (err) {
       console.log(err);
@@ -162,18 +166,9 @@ function TaskList(props) {
           cycleId: columnId,
         });
         setTriggerIssue(true);
-        // console.log(res);
-        // setIssues([
-        //   ...issues,
-        //   {
-        //     ...issue,
-        //     createTime: new Date().toISOString().slice(0, 19).replace('T', ' '),
-        //     cycleId: columnId,
-        //   },
-        // ]);
+        console.log(res);
         event.target.value = '';
       }
-      // console.log(issues);
       setCreateIssueCurSprint(false);
       setCreateIssueBacklog(false);
       setIssueType('story');
@@ -182,65 +177,72 @@ function TaskList(props) {
     }
   };
 
-  const onDragEnd = (result, columns, setColumns, issues, setIssues) => {
+  const onDragEnd = (result, columns, issues) => {
     console.log('AAAAAAAAAAAAAAA');
     if (!result.destination) return;
     const {source, destination} = result;
 
     if (source.droppableId != destination.droppableId) {
+      // Get data of source sprint
       const sourceColumn = columns.filter((column) => {
         return column.id == source.droppableId;
       });
+      // Get data of destination sprint
       const destColumn = columns.filter((column) => {
         return column.id == destination.droppableId;
       });
-      const sourceIssues = issues.filter((issue) => {
-        return issue.cycleId == sourceColumn[0].id;
-      });
-      const destIssues = issues.filter((issue) => {
-        return issue.cycleId == destColumn[0].id;
-      });
-      // const sourceItems = [...sourceColumn.items];
-      // const destItems = [...destColumn.items];
-      // console.log(source.index, destination.index);
+      // Get issues in source sprint
+      const sourceIssues = issues
+        .filter((issue) => {
+          return issue.cycleId == sourceColumn[0].id;
+        })
+        .sort((a, b) => {
+          return a.issueorder < b.issueorder
+            ? -1
+            : a.issueorder > b.issueorder
+            ? 1
+            : 0;
+        });
+      // Get issue being drag
       const [removed] = sourceIssues.splice(source.index, 1);
-      destIssues.splice(destination.index, 0, removed);
-      updateIssue(destColumn[0].id, removed.id, removed.issuestatus);
+      // Update issue with destination
+      updateIssue(
+        destColumn[0].id,
+        removed.id,
+        removed.issuestatus,
+        destination,
+        source,
+        pId,
+      );
       setTriggerIssue(true);
-      // setIssues([...issues, {...removed, cycleId: destColumn[0].id}]);
-      // console.log('BBBBBBBBBB', {...removed, cycleId: destColumn[0].id});
-      // setColumns({
-      //   ...columns,
-      //   [source.droppableId]: {
-      //     ...sourceColumn,
-      //     items: sourceItems,
-      //   },
-      //   [destination.droppableId]: {
-      //     ...destColumn,
-      //     items: destItems,
-      //   },
-      // });
     } else {
+      // Get the sprint
       const column = columns.filter((column) => {
         return column.id == source.droppableId;
       });
-      // const column = columns[source.droppableId];
-      // const copiedItems = [...column.items];
-      const copiedIssues = issues.filter((issue) => {
-        return issue.cycleId == column[0].id;
-      });
+      // Get the issues of sprint
+      const copiedIssues = issues
+        .filter((issue) => {
+          return issue.cycleId == column[0].id;
+        })
+        .sort((a, b) => {
+          return a.issueorder < b.issueorder
+            ? -1
+            : a.issueorder > b.issueorder
+            ? 1
+            : 0;
+        });
+      // Get issue being drag
       const [removed] = copiedIssues.splice(source.index, 1);
-      copiedIssues.splice(destination.index, 0, removed);
-      updateIssue(column[0].id, removed.id, removed.issuestatus);
+      updateIssue(
+        column[0].id,
+        removed.id,
+        removed.issuestatus,
+        destination,
+        source,
+        pId,
+      );
       setTriggerIssue(true);
-      // setIssues([...issues, {...removed, cycleId: source.droppableId}]);
-      // setColumns({
-      //   ...columns,
-      //   [source.droppableId]: {
-      //     ...column,
-      //     items: copiedItems,
-      //   },
-      // });
     }
   };
 
@@ -256,9 +258,7 @@ function TaskList(props) {
   return (
     <div>
       <DragDropContext
-        onDragEnd={(result) =>
-          onDragEnd(result, columns, setColumns, issues, setIssues)
-        }
+        onDragEnd={(result) => onDragEnd(result, columns, issues)}
       >
         {columns.map((column) => {
           return (
@@ -350,32 +350,6 @@ function TaskList(props) {
                           ) : (
                             <></>
                           )}
-
-                          {/* {column.cyclename != 'Backlog' ? (
-                            column.cstatus == '1' ? (
-                              <StartSprint
-                                temp={triggerSprint}
-                                setTemp={setTriggerSprint}
-                                isSprint={isSprint}
-                                setIsSprint={setIsSprint}
-                                status={column.cstatus}
-                              />
-                            ) : (
-                              <></>
-                            )
-                          ) : column.cstatus == '1' ? (
-                            <CompleteSprint
-                              temp={triggerIssue}
-                              setTemp={setTriggerIssue}
-                              isSprint={isSprint}
-                              setIsSprint={setIsSprint}
-                              sprintId={column.id}
-                              status={column.cstatus}
-                            />
-                          ) : (
-                            <></>
-                          )} */}
-
                           <GrayButton
                             sx={{mx: 1, width: '24px !important', minWidth: 24}}
                           >
@@ -402,6 +376,13 @@ function TaskList(props) {
                                 {issues
                                   .filter((issue) => {
                                     return issue.cycleId == column.id;
+                                  })
+                                  .sort((a, b) => {
+                                    return a.issueorder < b.issueorder
+                                      ? -1
+                                      : a.issueorder > b.issueorder
+                                      ? 1
+                                      : 0;
                                   })
                                   .map((issue, index) => {
                                     return (
@@ -435,7 +416,6 @@ function TaskList(props) {
                                                   backgroundColor: '#ddd',
                                                 },
                                               }}
-                                              onMouseOver
                                             >
                                               <TaskCard
                                                 issue={issue}

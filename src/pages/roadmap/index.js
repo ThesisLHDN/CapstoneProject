@@ -18,6 +18,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import {useLocation} from 'react-router-dom';
 import axios from 'axios';
 import {AppContext} from 'src/Context/AppProvider';
+import {AuthContext} from 'src/Context/AuthProvider';
 
 // import Filter from 'src/components/Filter';
 // import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
@@ -49,6 +50,9 @@ function RoadMap() {
   const [zoom, setZoom] = useState('Days');
   const [messagesState, setMessagesState] = useState([]);
   const [issues, setIssues] = useState({data: []});
+  const {
+    user: {uid},
+  } = useContext(AuthContext);
   const {workspace, project} = useContext(AppContext);
 
   const fetchIssuesData = async () => {
@@ -113,11 +117,11 @@ function RoadMap() {
               underline="hover"
               key="1"
               color="inherit"
-              href={`/workspace-setting/${workspace.id}`}
+              href={`/workspace-setting/${project.workspaceId}?user=${uid}`}
               onClick={() => {}}
               sx={{fontFamily: 'Open Sans, sans-serif'}}
             >
-              {workspace.wsname}
+              {project.wsname}
             </Link>
             ,
             <Link

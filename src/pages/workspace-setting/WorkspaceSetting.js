@@ -11,19 +11,11 @@ import {
   Grid,
   Accordion,
   AccordionSummary,
-  IconButton,
   AccordionDetails,
-  Dialog,
 } from '@mui/material';
-// import MuiAccordion from '@mui/material/Accordion';
-// import MuiAccordionSummary from '@mui/material/AccordionSummary';
-// import MuiAccordionDetails from '@mui/material/AccordionDetails';
 
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
-import EditRoundedIcon from '@mui/icons-material/EditRounded';
-import PersonAddAltRoundedIcon from '@mui/icons-material/PersonAddAltRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
-
 import ProjectTable from 'src/components/project-list/ProjectTable';
 import AvatarList from './AvatarList';
 import axios from 'axios';
@@ -32,9 +24,7 @@ import {AppContext} from 'src/Context/AppProvider';
 import {AuthContext} from 'src/Context/AuthProvider';
 
 const StyledTypo = styled(Typography)({
-  // backgroundColor: color.green03,
   display: 'block',
-  // padding: '8px 16px',
   color: color.green03,
   fontWeight: 'bold',
   mb: 2,
@@ -43,7 +33,6 @@ const StyledTypo = styled(Typography)({
 const StyledAccordion = styled((props) => (
   <Accordion disableGutters elevation={0} square {...props} />
 ))(({theme}) => ({
-  //   border: `1px solid ${theme.palette.divider}`,
   '&:not(:last-child)': {
     borderBottom: 0,
   },
@@ -63,9 +52,6 @@ const StyledAccordionSummary = styled((props) => (
   />
 ))(({theme}) => ({
   backgroundColor: 'rgba(0, 0, 0, 0)',
-  // theme.palette.mode === "dark"
-  //   ? "rgba(255, 255, 255, .05)"
-  //   : "rgba(0, 0, 0, .03)",
   flexDirection: 'row-reverse',
   '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
     transform: 'rotate(90deg)',
@@ -77,7 +63,6 @@ const StyledAccordionSummary = styled((props) => (
 
 const StyledAccordionDetails = styled(AccordionDetails)(({theme}) => ({
   padding: theme.spacing(2),
-  //   borderTop: "1px solid rgba(0, 0, 0, .125)",
 }));
 
 function WorkspaceSetting() {
@@ -89,7 +74,6 @@ function WorkspaceSetting() {
 
   const [rename, setRename] = useState(false);
   const [changeDescription, setChangeDescription] = useState(false);
-  // const [admin, setAdmin] = useState({});
   const {
     user: {uid},
   } = useContext(AuthContext);
@@ -102,17 +86,6 @@ function WorkspaceSetting() {
     try {
       const res = await axios.get(`http://localhost:8800/workspace/${wsId}`);
       setWorkspace(res.data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const fetchAdmin = async () => {
-    try {
-      const res = await axios.get(`http://localhost:8800/admin/${wsId}`);
-      console.log(res.data);
-      setAdmin(res.data);
-      // console.log('AAAAAAAA', res.data);
     } catch (err) {
       console.log(err);
     }
@@ -137,8 +110,6 @@ function WorkspaceSetting() {
         `http://localhost:8800/workspace/${wsId}`,
         workspace,
       );
-      // console.log(workspace);
-      // console.log(res);
       setRename(false);
       setChangeDescription(false);
     } catch (err) {
@@ -148,7 +119,6 @@ function WorkspaceSetting() {
 
   useEffect(() => {
     fetchWorkspace();
-    fetchAdmin();
   }, [wsId]);
 
   return (
@@ -213,14 +183,6 @@ function WorkspaceSetting() {
             value={workspace.descript ? workspace.descript : ''}
             disabled={uid === workspace.adminId ? false : true}
           ></TextField>
-        </StyledAccordionDetails>
-      </StyledAccordion>
-      <StyledAccordion>
-        <StyledAccordionSummary>
-          <StyledTypo>Projects</StyledTypo>
-        </StyledAccordionSummary>
-        <StyledAccordionDetails sx={{p: 2}}>
-          {' '}
           {uid === workspace.adminId && changeDescription && (
             <Button
               variant="contained"
@@ -231,6 +193,14 @@ function WorkspaceSetting() {
               Update description
             </Button>
           )}
+        </StyledAccordionDetails>
+      </StyledAccordion>
+      <StyledAccordion>
+        <StyledAccordionSummary>
+          <StyledTypo>Projects</StyledTypo>
+        </StyledAccordionSummary>
+        <StyledAccordionDetails sx={{p: 2}}>
+          {' '}
           {uid === workspace.adminId && (
             <Button
               sx={{
@@ -270,16 +240,15 @@ function WorkspaceSetting() {
                   }}
                 >
                   <Avatar
-                    alt={admin.username ? admin.username : admin.email}
-                    src="#"
+                    alt={
+                      workspace.username ? workspace.username : workspace.email
+                    }
+                    src={workspace.photoURL}
                   />
                   <Typography sx={{mx: 2}}>
                     {' '}
-                    {admin.username ? admin.username : admin.email}
+                    {workspace.username ? workspace.username : workspace.email}
                   </Typography>{' '}
-                  {/* <IconButton>
-                      <EditRoundedIcon />
-                    </IconButton> */}
                 </Box>
               </Grid>
             </Grid>

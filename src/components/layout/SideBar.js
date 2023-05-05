@@ -1,6 +1,6 @@
 import React, {useState, useContext, useEffect} from 'react';
 import {AuthContext} from 'src/Context/AuthProvider';
-import {NavLink, useLocation, useNavigate} from 'react-router-dom';
+import {NavLink, useLocation} from 'react-router-dom';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import ViewWeekOutlinedIcon from '@mui/icons-material/ViewWeekOutlined';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
@@ -8,7 +8,6 @@ import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 import ViewTimelineOutlinedIcon from '@mui/icons-material/ViewTimelineOutlined';
 import ViewListOutlinedIcon from '@mui/icons-material/ViewListOutlined';
 import axios from 'axios';
-import useSWR from 'swr';
 import {AppContext} from 'src/Context/AppProvider';
 
 function SideBar(props) {
@@ -49,19 +48,17 @@ function SideBar(props) {
   ];
   const [isActive, setIsActive] = useState(false);
   const [workspaces, setWorkspaces] = useState([]);
-  const {workspace, setWorkspace, project, setProject} = useContext(AppContext);
+  const {project, setProject} = useContext(AppContext);
   const [char, setChar] = useState('');
 
   const {
     user: {uid},
   } = useContext(AuthContext);
 
-  const fetchWorkspaceData = async () => {
+  const fetchWorkspacesData = async () => {
     try {
       const res = await axios.get(`http://localhost:8800/workspaces${user}`);
       setWorkspaces(res.data);
-      // console.log(res.data);
-      // return res.data;
     } catch (err) {
       console.log(err);
     }
@@ -79,24 +76,11 @@ function SideBar(props) {
 
   useEffect(() => {
     fetchProjectData();
-    fetchWorkspaceData();
+    fetchWorkspacesData();
   }, [location.pathname]);
 
-  // const {data, error} = useSWR('workspaces', fetchWorkspaceData);
-  // if (!data) return <h2>Loading...</h2>;
-
-  const handleClick = (id) => {
+  const handleClick = () => {
     setIsActive(!isActive);
-    const fetchWorkspace = async () => {
-      try {
-        const res = await axios.get(`http://localhost:8800/workspace/${id}`);
-        setWorkspace(res.data);
-        //return res.data;
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchWorkspace();
   };
 
   return (
@@ -114,8 +98,9 @@ function SideBar(props) {
           <div className="mt-3">
             {workspaces.map((wp) => (
               <NavLink
+                key={wp.id}
                 to={`/workspace-setting/${wp.id}?user=${uid}`}
-                onClick={() => handleClick(wp.id)}
+                onClick={() => handleClick()}
                 className={({isActive}) => (isActive ? 'text-green-tx' : '')}
               >
                 <div className="hover:bg-gray-300">
@@ -146,7 +131,6 @@ function SideBar(props) {
             </p>
             <p className="ml-3 2xl:text-base xl:text-sm py-3 font-semibold text-green-tx overflow-hidden truncate">
               {project.pname}
-              {/* {console.log(project.pname)} */}
             </p>
           </div>
 
@@ -170,7 +154,6 @@ function SideBar(props) {
               </div>
             ))}
           </div>
-          {/* <WPQuickSetting /> */}
         </div>
       )}
     </div>

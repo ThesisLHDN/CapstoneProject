@@ -4,11 +4,10 @@ import Dialog from '@mui/material/Dialog';
 import Typography from '@mui/material/Typography';
 import Slide from '@mui/material/Slide';
 import {color, colorHover} from 'src/style';
-import AddIcon from '@mui/icons-material/Add';
 import {Grid, Paper, TextField} from '@mui/material';
 import {AuthContext} from 'src/Context/AuthProvider';
 import axios from 'axios';
-import {useLocation, useNavigate} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -24,22 +23,12 @@ export default function CreateWorkspace() {
     createTime: null,
     adminId: uid,
   });
+
   const [lastWorkspace, setLastWorkspace] = React.useState('');
-
   const date = new Date();
-  // date.setUTCHours(17);
-
-  const location = useLocation();
-  const user = location.search;
-
   const navigate = useNavigate();
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
   const handleClose = () => {
-    // setOpen(false);
     navigate(`/workspace-setting/${lastWorkspace}?user=${uid}`);
   };
 
@@ -55,8 +44,12 @@ export default function CreateWorkspace() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:8800/workspace', workspace);
-      navigate(`/workspace-setting/${lastWorkspace}?user=${uid}`);
+      const res = await axios.post(
+        'http://localhost:8800/workspace',
+        workspace,
+      );
+      console.log('AAAAAAAAAAAAAAAAAAAAA', res.data.id);
+      navigate(`/workspace-setting/${res.data.id}?user=${uid}`);
     } catch (err) {
       console.log(err);
     }
@@ -77,54 +70,12 @@ export default function CreateWorkspace() {
 
   return (
     <div>
-      {/* <Button
-        onClick={handleClickOpen}
-        variant="contained"
-        sx={{
-          height: 36,
-          ...colorHover.greenGradBtn,
-        }}
-        startIcon={<AddIcon />}
-      >
-        Create workspace
-      </Button> */}
       <Dialog
         fullScreen
         open={open}
         onClose={handleClose}
         TransitionComponent={Transition}
-        // sx={{backgroundColor: 'red'}}
       >
-        {/* <AppBar sx={{position: 'relative', backgroundColor: color.green03}}>
-          <Toolbar>
-            <IconButton
-              edge="start"
-              color="inherit"
-              onClick={handleClose}
-              aria-label="close"
-            >
-              <CloseIcon />
-            </IconButton>
-            <Typography sx={{ml: 2, flex: 1}} variant="h6" component="div">
-              Create a new workspace
-            </Typography>
-            <Button autoFocus color="inherit" onClick={handleClose}>
-              save
-            </Button>
-          </Toolbar>
-        </AppBar> */}
-        {/* <List>
-          <ListItem button>
-            <ListItemText primary="Phone ringtone" secondary="Titania" />
-          </ListItem>
-          <Divider />
-          <ListItem button>
-            <ListItemText
-              primary="Default notification ringtone"
-              secondary="Tethys"
-            />
-          </ListItem>
-        </List> */}
         <Box
           sx={{
             width: '100%',
