@@ -40,19 +40,6 @@ function Scrum({sprint, pathname}) {
     }
   };
 
-  // const updateIssue = async (cId, id, status) => {
-  //   try {
-  //     const res = await axios.put(`http://localhost:8800/issue/${id}`, {
-  //       cId: cId,
-  //       status: status,
-  //     });
-  //     // setIssues([...res.data]);
-  //     console.log(res);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
-
   const updateIssue = async (cId, id, status, startDate, dueDate) => {
     try {
       const res = await axios.put(`http://localhost:8800/issue/${id}`, {
@@ -100,7 +87,17 @@ function Scrum({sprint, pathname}) {
       });
       const [removed] = sourceIssues.splice(source.index, 1);
       destIssues.splice(destination.index, 0, removed);
+<<<<<<< HEAD
       updateIssue(removed.cycleId, removed.id, destColumn[0].title, removed.createTime, removed.dueDate);
+=======
+      updateIssue(
+        removed.cycleId,
+        removed.id,
+        destColumn[0].title,
+        removed.createTime,
+        removed.dueDate,
+      );
+>>>>>>> 94f404a3e9b812a235ab50531f79849c652d2fec
       setTriggerBoard(true);
     } else {
       const column = columns.filter((column) => {
