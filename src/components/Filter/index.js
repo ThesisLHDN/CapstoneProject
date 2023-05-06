@@ -15,6 +15,7 @@ import {
 import FilterAltRoundedIcon from '@mui/icons-material/FilterAltRounded';
 import {Box} from '@mui/system';
 import {color, colorHover} from 'src/style';
+import {useLocation} from 'react-router-dom';
 
 const data = {
   status: ['To do', 'In progress', 'Done'],
@@ -68,12 +69,22 @@ function FilterRow({property, values, state, setState}) {
   );
 }
 
-function Filter({vals, setVals, fil, setFil}) {
+function Filter({vals, setVals, setFil}) {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
+  const location = useLocation();
+  const position = location.pathname.split('/')[1];
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
+  };
+
+  const handleClear = () => {
+    setVals({
+      status: '',
+      type: '',
+      priority: '',
+    });
   };
 
   const handleSubmit = () => {
@@ -161,14 +172,20 @@ function Filter({vals, setVals, fil, setFil}) {
                   onKeyDown={handleListKeyDown}
                   sx={{px: 2, py: 0}}
                 >
-                  {Object.entries(data).map(([key, value]) => (
-                    <FilterRow
-                      property={key}
-                      values={value}
-                      state={vals}
-                      setState={setVals}
-                    />
-                  ))}
+                  {Object.entries(data).map(([key, value]) => {
+                    if (
+                      position != 'board' ||
+                      (position == 'board' && key != 'status')
+                    )
+                      return (
+                        <FilterRow
+                          property={key}
+                          values={value}
+                          state={vals}
+                          setState={setVals}
+                        />
+                      );
+                  })}
                 </MenuList>
                 <div className="flex">
                   <Button
@@ -182,6 +199,7 @@ function Filter({vals, setVals, fil, setFil}) {
                     variant="outlined"
                     color="error"
                     sx={{width: 80, textTransform: 'none'}}
+                    onClick={handleClear}
                   >
                     Clear
                   </Button>

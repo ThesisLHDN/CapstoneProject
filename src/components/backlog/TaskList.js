@@ -79,7 +79,7 @@ const AccordionDetails = styled(MuiAccordionDetails)(({theme}) => ({
   padding: theme.spacing(2),
 }));
 
-function TaskList({hide, vals, setVals, fil, setFil}) {
+function TaskList({hide, vals, fil, setFil, srtVal, srt, setSrt}) {
   const location = useLocation();
   const pId = location.pathname.split('/')[2];
   const {
@@ -189,6 +189,20 @@ function TaskList({hide, vals, setVals, fil, setFil}) {
     }
   };
 
+  const sortIssue = async () => {
+    setSrt(false);
+    try {
+      const res = await axios.post(`http://localhost:8800/sort/${pId}`, {
+        sort: srtVal,
+      });
+      setIssues([...res.data]);
+      setTriggerIssue(false);
+      console.log('AAAAAAAAAA', res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const onDragEnd = (result, columns, issues) => {
     // console.log('AAAAAAAAAAAAAAA');
     if (!result.destination) return;
@@ -268,8 +282,10 @@ function TaskList({hide, vals, setVals, fil, setFil}) {
     if (fil) {
       filterIssue();
     }
-  }, [triggerIssue, triggerSprint, fil]);
-  console.log(fil);
+    if (srt) {
+      sortIssue();
+    }
+  }, [triggerIssue, triggerSprint, fil, srt]);
 
   return (
     <div>
@@ -394,11 +410,13 @@ function TaskList({hide, vals, setVals, fil, setFil}) {
                                     return issue.cycleId == column.id;
                                   })
                                   .sort((a, b) => {
-                                    return a.issueorder < b.issueorder
-                                      ? -1
-                                      : a.issueorder > b.issueorder
-                                      ? 1
-                                      : 0;
+                                    if (srtVal == 'None') {
+                                      return a.issueorder < b.issueorder
+                                        ? -1
+                                        : a.issueorder > b.issueorder
+                                        ? 1
+                                        : 0;
+                                    }
                                   })
                                   .map((issue, index) => {
                                     return (

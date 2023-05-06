@@ -44,6 +44,14 @@ function Board() {
   const {
     user: {uid},
   } = useContext(AuthContext);
+  const [fil, setFil] = useState(false);
+  const [vals, setVals] = useState({
+    status: '',
+    type: '',
+    priority: '',
+  });
+  const [srt, setSrt] = useState(false);
+  const [srtVal, setSrtVal] = useState('None');
 
   const fetchLastestSprint = async () => {
     try {
@@ -58,6 +66,7 @@ function Board() {
   useEffect(() => {
     fetchLastestSprint();
   }, []);
+  console.log(srtVal);
   return (
     <Box style={{textAlign: 'left'}}>
       <Grid container spacing={2}>
@@ -151,26 +160,18 @@ function Board() {
         }}
       >
         {/* <SearchBar sx={{width: '250px'}} /> */}
-        <Filter />
-        {/* <Button
-          variant="text"
-          startIcon={<SortRoundedIcon />}
-          sx={{color: '#181818'}}
-        >
-          Sort
-        </Button> */}
-        <Sort />
-        {/* <Button
-          variant="text"
-          startIcon={<PermIdentityRoundedIcon />}
-          sx={{color: '#181818', textTransform: 'none'}}
-        >
-          Me
-        </Button> */}
+        <Filter vals={vals} setVals={setVals} setFil={setFil} />
+        <Sort setSrtVal={setSrtVal} setSrt={setSrt} />
       </Box>
-
-      {/* <Scrum /> */}
-      <AltScrum sprint={lastestSprint} pathname={location.pathname} />
+      <AltScrum
+        sprint={lastestSprint}
+        vals={vals}
+        fil={fil}
+        setFil={setFil}
+        srtVal={srtVal}
+        srt={srt}
+        setSrt={setSrt}
+      />
     </Box>
   );
 }

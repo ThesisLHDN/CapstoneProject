@@ -19,6 +19,8 @@ function Backlog() {
     type: '',
     priority: '',
   });
+  const [srt, setSrt] = useState(false);
+  const [srtVal, setSrtVal] = useState('None');
   const {
     user: {uid},
   } = useContext(AuthContext);
@@ -75,8 +77,8 @@ function Backlog() {
         }}
       >
         {/* <SearchBar sx={{width: '210px'}} /> */}
-        <Filter vals={vals} setVals={setVals} fil={fil} setFil={setFil} />
-        <Sort />
+        <Filter vals={vals} setVals={setVals} setFil={setFil} />
+        <Sort setSrtVal={setSrtVal} setSrt={setSrt} />
         {isHide ? (
           <Button
             variant="text"
@@ -110,9 +112,11 @@ function Backlog() {
         <TaskList
           hide={isHide}
           vals={vals}
-          setVals={setVals}
           fil={fil}
           setFil={setFil}
+          srtVal={srtVal}
+          srt={srt}
+          setSrt={setSrt}
         />
       </div>
     </div>

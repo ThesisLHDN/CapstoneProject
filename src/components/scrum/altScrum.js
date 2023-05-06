@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
 import {v4 as uuid} from 'uuid';
 import Card from './card/index.js';
@@ -8,6 +8,7 @@ import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import {colorHover} from 'src/style';
 import axios from 'axios';
 import {useLocation} from 'react-router-dom';
+import {AppContext} from 'src/Context/AppProvider.js';
 
 const columns = [
   {
@@ -24,9 +25,10 @@ const columns = [
   },
 ];
 
-function Scrum({sprint, pathname}) {
+function Scrum({sprint, vals, fil, setFil, srtVal, srt, setSrt}) {
   const [issues, setIssues] = useState([]);
   const [triggerBoard, setTriggerBoard] = useState(false);
+  const {project} = useContext(AppContext);
 
   const fetchIssuesData = async () => {
     try {
@@ -115,9 +117,47 @@ function Scrum({sprint, pathname}) {
     }
   };
 
+  const filterIssue = async () => {
+    setFil(false);
+    try {
+      const res = await axios.post(
+        `http://localhost:8800/filter/${project.id}?sprint=${sprint.id}`,
+        vals,
+      );
+      setIssues([...res.data]);
+      setTriggerBoard(false);
+      console.log('AAAAAAAAAA', res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const sortIssue = async () => {
+    setSrt(false);
+    try {
+      const res = await axios.post(
+        `http://localhost:8800/sort/${project.id}?sprint=${sprint.id}`,
+        {
+          sort: srtVal,
+        },
+      );
+      setIssues([...res.data]);
+      setTriggerBoard(false);
+      console.log('AAAAAAAAAA', res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
     fetchIssuesData();
-  }, [sprint, triggerBoard]);
+    if (fil) {
+      filterIssue();
+    }
+    if (srt) {
+      sortIssue();
+    }
+  }, [sprint, triggerBoard, fil, srt]);
 
   return (
     <Box
@@ -157,30 +197,21 @@ function Scrum({sprint, pathname}) {
                             borderRadius: 5,
                           }}
                         >
-                          {/* {console.log('###########', issues)} */}
                           <Typography sx={{fontWeight: 700, mb: 1}}>
                             {column.title}{' '}
-                            {/* <Typography
-                              variant="subtitle2"
-                              sx={{display: 'inline'}}
-                              className="scrum__section__title__num"
-                            >
-                              {column.items.length +
-                                (column.items.length > 1
-                                  ? ' issues'
-                                  : ' issue')}
-                            </Typography> */}
                           </Typography>
                           {issues
                             .filter((issue) => {
                               return issue.issuestatus == column.title;
                             })
                             .sort((a, b) => {
-                              return a.issueorder < b.issueorder
-                                ? -1
-                                : a.issueorder > b.issueorder
-                                ? 1
-                                : 0;
+                              if (srtVal == 'None') {
+                                return a.issueorder < b.issueorder
+                                  ? -1
+                                  : a.issueorder > b.issueorder
+                                  ? 1
+                                  : 0;
+                              }
                             })
                             .map((issue, index) => {
                               return (
@@ -223,16 +254,6 @@ function Scrum({sprint, pathname}) {
           );
         })}
       </DragDropContext>
-      {/* <Button
-        sx={{
-          height: 40,
-          width: 40,
-          minWidth: 40,
-          ...colorHover.grayBtn,
-        }}
-      >
-        <AddRoundedIcon />
-      </Button> */}
     </Box>
   );
 }
