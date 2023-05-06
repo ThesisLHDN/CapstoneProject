@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/static/css/main.8acb21ac.css",
-    "main.js": "/static/js/main.f66e6ac0.js",
-    "static/media/logo.png": "/static/media/logo.f9374c702b9c606c5b08.png",
-    "static/media/Google.svg": "/static/media/Google.7fd1e02cd2592184c1c430ed449bb3e2.svg",
-    "index.html": "/index.html",
-    "static/media/Facebook.svg": "/static/media/Facebook.8e454c75d0f77c8c09a1dbf64b1d0bea.svg",
-    "main.8acb21ac.css.map": "/static/css/main.8acb21ac.css.map",
-    "main.f66e6ac0.js.map": "/static/js/main.f66e6ac0.js.map"
+    "main.css": "/CapstoneProject/static/css/main.8acb21ac.css",
+    "main.js": "/CapstoneProject/static/js/main.fdff186e.js",
+    "static/media/logo.png": "/CapstoneProject/static/media/logo.f9374c702b9c606c5b08.png",
+    "static/media/Google.svg": "/CapstoneProject/static/media/Google.7fd1e02cd2592184c1c430ed449bb3e2.svg",
+    "index.html": "/CapstoneProject/index.html",
+    "static/media/Facebook.svg": "/CapstoneProject/static/media/Facebook.8e454c75d0f77c8c09a1dbf64b1d0bea.svg",
+    "main.8acb21ac.css.map": "/CapstoneProject/static/css/main.8acb21ac.css.map",
+    "main.fdff186e.js.map": "/CapstoneProject/static/js/main.fdff186e.js.map"
   },
   "entrypoints": [
     "static/css/main.8acb21ac.css",
-    "static/js/main.f66e6ac0.js"
+    "static/js/main.fdff186e.js"
   ]
 }
