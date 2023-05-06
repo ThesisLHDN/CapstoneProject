@@ -13,6 +13,12 @@ import {AuthContext} from 'src/Context/AuthProvider';
 function Backlog() {
   const [isHide, setIsHide] = useState(true);
   const {project} = useContext(AppContext);
+  const [fil, setFil] = useState(false);
+  const [vals, setVals] = useState({
+    status: '',
+    type: '',
+    priority: '',
+  });
   const {
     user: {uid},
   } = useContext(AuthContext);
@@ -69,19 +75,8 @@ function Backlog() {
         }}
       >
         {/* <SearchBar sx={{width: '210px'}} /> */}
-        <Filter />
+        <Filter vals={vals} setVals={setVals} fil={fil} setFil={setFil} />
         <Sort />
-        {/* <Button
-          variant="text"
-          startIcon={<PermIdentityRoundedIcon />}
-          sx={{
-            color: '#181818',
-            textTransform: 'none',
-            fontFamily: 'Open Sans, sans-serif',
-          }}
-        >
-          Me
-        </Button> */}
         {isHide ? (
           <Button
             variant="text"
@@ -112,7 +107,13 @@ function Backlog() {
       </Box>
 
       <div className="mt-5">
-        <TaskList hide={isHide} />
+        <TaskList
+          hide={isHide}
+          vals={vals}
+          setVals={setVals}
+          fil={fil}
+          setFil={setFil}
+        />
       </div>
     </div>
   );

@@ -13,7 +13,6 @@ import {
   ClickAwayListener,
 } from '@mui/material';
 import FilterAltRoundedIcon from '@mui/icons-material/FilterAltRounded';
-
 import {Box} from '@mui/system';
 import {color, colorHover} from 'src/style';
 
@@ -23,7 +22,11 @@ const data = {
   priority: ['High', 'Medium', 'Low'],
 };
 
-function FilterRow({property, values}) {
+function FilterRow({property, values, state, setState}) {
+  const handleChange = (e) => {
+    setState({...state, [property]: e.target.value});
+  };
+
   return (
     <Box
       sx={{
@@ -42,6 +45,8 @@ function FilterRow({property, values}) {
           inputProps={{'aria-label': 'Without label'}}
           size="small"
           defaultValue={''}
+          value={state[property]}
+          onChange={handleChange}
           style={{
             border: '1px solid #EFEDF0',
             outline: 'none',
@@ -63,12 +68,17 @@ function FilterRow({property, values}) {
   );
 }
 
-function Filter() {
+function Filter({vals, setVals, fil, setFil}) {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
+  };
+
+  const handleSubmit = () => {
+    setOpen((prevOpen) => !prevOpen);
+    setFil(true);
   };
 
   const handleClose = (event) => {
@@ -97,6 +107,7 @@ function Filter() {
 
     prevOpen.current = open;
   }, [open]);
+
   return (
     <>
       <Button
@@ -151,14 +162,19 @@ function Filter() {
                   sx={{px: 2, py: 0}}
                 >
                   {Object.entries(data).map(([key, value]) => (
-                    <FilterRow property={key} values={value} />
+                    <FilterRow
+                      property={key}
+                      values={value}
+                      state={vals}
+                      setState={setVals}
+                    />
                   ))}
                 </MenuList>
                 <div className="flex">
                   <Button
                     sx={{mr: 1, width: 80, ...colorHover.greenGradBtn}}
                     variant="contained"
-                    onClick={handleToggle}
+                    onClick={handleSubmit}
                   >
                     Confirm
                   </Button>

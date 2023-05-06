@@ -79,7 +79,7 @@ const AccordionDetails = styled(MuiAccordionDetails)(({theme}) => ({
   padding: theme.spacing(2),
 }));
 
-function TaskList(props) {
+function TaskList({hide, vals, setVals, fil, setFil}) {
   const location = useLocation();
   const pId = location.pathname.split('/')[2];
   const {
@@ -140,7 +140,7 @@ function TaskList(props) {
       });
       // setIssues([...res.data]);
       setTriggerIssue(true);
-      console.log('###########', res);
+      // console.log('###########', res);
     } catch (err) {
       console.log(err);
     }
@@ -166,7 +166,7 @@ function TaskList(props) {
           cycleId: columnId,
         });
         setTriggerIssue(true);
-        console.log(res);
+        // console.log(res);
         event.target.value = '';
       }
       setCreateIssueCurSprint(false);
@@ -177,8 +177,20 @@ function TaskList(props) {
     }
   };
 
+  const filterIssue = async () => {
+    setFil(false);
+    try {
+      const res = await axios.post(`http://localhost:8800/filter/${pId}`, vals);
+      setIssues([...res.data]);
+      setTriggerIssue(false);
+      console.log('AAAAAAAAAA', res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const onDragEnd = (result, columns, issues) => {
-    console.log('AAAAAAAAAAAAAAA');
+    // console.log('AAAAAAAAAAAAAAA');
     if (!result.destination) return;
     const {source, destination} = result;
 
@@ -253,7 +265,11 @@ function TaskList(props) {
     if (triggerSprint) {
       fetchSprintsData();
     }
-  }, [triggerIssue, triggerSprint]);
+    if (fil) {
+      filterIssue();
+    }
+  }, [triggerIssue, triggerSprint, fil]);
+  console.log(fil);
 
   return (
     <div>
@@ -264,7 +280,7 @@ function TaskList(props) {
           return (
             <div key={column.id}>
               {/* hide if id of column is backlog's id or lastest sprint's id  */}
-              {!props.hide || ['1', columns[0].id].includes(column.id) ? (
+              {!hide || ['1', columns[0].id].includes(column.id) ? (
                 <div className="align-center mb-4" key={column.id}>
                   <Accordion
                     defaultExpanded={
