@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useContext, useState} from 'react';
 import logo from 'src/assets/images/logo.png';
 import {
   Box,
@@ -26,7 +26,8 @@ import {signOut} from 'firebase/auth';
 import {colorHover} from 'src/style';
 import Notification from '../notification/Notification';
 import CreateWorkspace from 'src/components/popup/CreateWorkspace';
-import {auth} from 'src/firebase/config'
+import {auth} from 'src/firebase/config';
+import {AuthContext} from 'src/Context/AuthProvider';
 
 // function LinkTab(props) {
 //   return (
@@ -42,6 +43,9 @@ import {auth} from 'src/firebase/config'
 
 export default function Header() {
   const [value, setValue] = useState(0);
+  const {
+    user: {displayName, photoURL},
+  } = useContext(AuthContext);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -86,9 +90,9 @@ export default function Header() {
         <img src={logo} width="150" alt="Logo" />
       </Link>
 
-      <SearchBar value={value}></SearchBar>
+      {/* <SearchBar value={value}></SearchBar> */}
       <Box sx={{display: 'flex', gap: 1, alignItems: 'center'}}>
-        {/* <Button
+        <Button
           variant="contained"
           sx={{
             height: 36,
@@ -96,15 +100,15 @@ export default function Header() {
           }}
           startIcon={<AddIcon />}
         >
-          Create workspace
-        </Button> */}
-        <CreateWorkspace  />
+          <Link to="/create-workspace">Create workspace</Link>
+        </Button>
+        {/* <CreateWorkspace /> */}
         <Notification />
         <div style={{position: 'relative'}}>
           <IconButton onClick={handleClick}>
             <Avatar
-              alt="Remy Sharp"
-              src="/static/images/avatar/1.jpg"
+              alt={displayName ? displayName : ''}
+              src={photoURL}
               sx={{height: 32, width: 32}}
             />
           </IconButton>

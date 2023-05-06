@@ -1,96 +1,42 @@
-import  {useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
+import ClickAwayListener from '@mui/base/ClickAwayListener';
 import {styled} from '@mui/material/styles';
 import MuiAccordion from '@mui/material/Accordion';
 import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
-import {Button, Box, TextField, FormControl, Select, MenuItem} from '@mui/material';
+import {
+  Button,
+  Box,
+  TextField,
+  FormControl,
+  Select,
+  MenuItem,
+} from '@mui/material';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import SprintHeader from './SprintHeader';
 import TaskCard from './TaskCard';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import AddIcon from '@mui/icons-material/Add'
-import { IssueIcon } from './TaskCard';
+import AddIcon from '@mui/icons-material/Add';
+import {IssueIcon} from './TaskCard';
+import StartSprint from '../popup/StartSprint';
+import CompleteSprint from '../popup/CompleteSprint';
+import {useLocation} from 'react-router-dom';
+import axios from 'axios';
+import {AuthContext} from 'src/Context/AuthProvider';
 
-const tasks = [
+const columnsFromBackend = [
   {
-    id: 'SCR1',
-    name: 'First task',
-    status: 'To do',
-    type: 'story',
-    epic: 'Epic 1',
-    due: '2022-02-01',
-    point: 15,
-    assignee: 'Đăng Nguyễn',
-  },
-  {
-    id: 'SCR2',
-    name: 'Second task',
-    status: 'To do',
-    type: 'task',
-    epic: 'Epic 1',
-    due: '2022-02-01',
-    point: 10,
-    assignee: 'Lâm Nguyễn',
-  },
-  {
-    id: 'SCR3',
-    name: 'Third task',
-    status: 'Done',
-    type: 'bug',
-    epic: 'Epic 2',
-    due: '2022-02-01',
-    point: 5,
-    assignee: 'Đăng Nguyễn',
-  },
-  {
-    id: 'SCR4',
-    name: 'Fourth task',
-    status: 'Done',
-    type: 'bug',
-    epic: 'Epic 2',
-    due: '2022-02-01',
-    point: 15,
-    assignee: 'Lâm Nguyễn',
-  },
-  {
-    id: 'SCR5',
-    name: 'Fix UI/UX main page',
-    status: 'In progress',
-    type: 'bug',
-    epic: 'UI/UX',
-    due: '2022-02-01',
-    point: 7,
-    assignee: 'Đăng Nguyễn',
+    id: '1',
+    cyclename: 'Backlog',
+    startDate: '',
+    endDate: '',
+    cstatus: '-1',
+    goal: '',
+    ownerId: '',
+    projectId: '',
   },
 ];
-
-const columnsFromBackend = {
-  1: {
-    name: 'Sprint 03',
-    startDate: '2022-11-26',
-    endDate: '2022-12-03',
-    items: [tasks[4]],
-  },
-  2: {
-    name: 'Sprint 02',
-    startDate: '2022-11-26',
-    endDate: '2022-12-03',
-    items: [tasks[3]],
-  },
-  3: {
-    name: 'Sprint 01',
-    startDate: '2022-11-26',
-    endDate: '2022-12-03',
-    items: [tasks[2]],
-  },
-  4: {
-    name: 'Backlog',
-    startDate: '2022-11-26',
-    endDate: '2022-12-03',
-    items: [tasks[0], tasks[1]],
-  },
-};
 
 const GrayButton = styled(Button)({
   textTransform: 'none',
@@ -103,43 +49,6 @@ const GrayButton = styled(Button)({
     backgroundColor: '#ddd',
   },
 });
-
-const onDragEnd = (result, columns, setColumns) => {
-  if (!result.destination) return;
-  const {source, destination} = result;
-
-  if (source.droppableId !== destination.droppableId) {
-    const sourceColumn = columns[source.droppableId];
-    const destColumn = columns[destination.droppableId];
-    const sourceItems = [...sourceColumn.items];
-    const destItems = [...destColumn.items];
-    const [removed] = sourceItems.splice(source.index, 1);
-    destItems.splice(destination.index, 0, removed);
-    setColumns({
-      ...columns,
-      [source.droppableId]: {
-        ...sourceColumn,
-        items: sourceItems,
-      },
-      [destination.droppableId]: {
-        ...destColumn,
-        items: destItems,
-      },
-    });
-  } else {
-    const column = columns[source.droppableId];
-    const copiedItems = [...column.items];
-    const [removed] = copiedItems.splice(source.index, 1);
-    copiedItems.splice(destination.index, 0, removed);
-    setColumns({
-      ...columns,
-      [source.droppableId]: {
-        ...column,
-        items: copiedItems,
-      },
-    });
-  }
-};
 
 const Accordion = styled((props) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -171,55 +80,197 @@ const AccordionDetails = styled(MuiAccordionDetails)(({theme}) => ({
 }));
 
 function TaskList(props) {
+  const location = useLocation();
+  const pId = location.pathname.split('/')[2];
+  const {
+    user: {uid},
+  } = useContext(AuthContext);
+  const [triggerSprint, setTriggerSprint] = useState(true);
+  const [triggerIssue, setTriggerIssue] = useState(true);
   const [columns, setColumns] = useState(columnsFromBackend);
   const [createIssueCurSprint, setCreateIssueCurSprint] = useState(false);
   const [createIssueBacklog, setCreateIssueBacklog] = useState(false);
   const [issueType, setIssueType] = useState('story');
+  const [issues, setIssues] = useState([]);
+  const [issue, setIssue] = useState({
+    issuename: '',
+    createTime: '',
+    reporterId: uid,
+    projectId: pId,
+    issuestatus: 'To do',
+    cycleId: '',
+    issueType: issueType,
+    epicId: 1,
+    estimatePoint: '',
+    assigneeId: '',
+  });
   // const [isCreate, setIsCreate] = useState(false);
+
+  const fetchSprintsData = async () => {
+    try {
+      const res = await axios.get(`http://localhost:8800/sprints/${pId}`);
+      setColumns([...res.data, ...columns]);
+      setTriggerSprint(false);
+      // console.log(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const fetchIssuesData = async () => {
+    try {
+      const res = await axios.get(`http://localhost:8800/issues/${pId}`);
+      setIssues([...res.data]);
+      setTriggerIssue(false);
+      // console.log(issues);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const updateIssue = async (cId, id, status, destination, source, pId) => {
+    // console.log('$$$$$$$$$$$$$$$', status);
+    try {
+      const res = await axios.put(`http://localhost:8800/issue/${id}`, {
+        cId: cId,
+        status: status,
+        destination: destination,
+        source: source,
+        pId: pId,
+      });
+      // setIssues([...res.data]);
+      setTriggerIssue(true);
+      console.log('###########', res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const handleIssueType = (event) => {
     setIssueType(event.target.value);
+    setIssue({...issue, issueType: event.target.value});
+    // console.log(issue);
   };
 
-  const addIssue = (event, columnId) => {
-		if (event.target.value !== "") {
-			setColumns({
-        ...columns,
-        [columnId]: {
-          ...columns[columnId],
-          items: [...columns[columnId].items, {
-            id: 'SCR' + (Math.floor(Math.random() * 10)).toString(),
-            name: event.target.value,
-            status: 'To do',
-            type: issueType,
-            epic: '',
-            due: '',
-            point: 0,
-            assignee: '',
-          },]
-        }
-      })
-			event.target.value = "";
-		}
-    // setIsCreate(false)
-    setCreateIssueCurSprint(false);
-    setCreateIssueBacklog(false);
-    setIssueType('story');
-	};
+  const handleChangeName = (event) => {
+    setIssue({...issue, issuename: event.target.value});
+    // console.log(issue);
+  };
+
+  const addIssue = async (event, columnId) => {
+    try {
+      if (event.target.value !== '') {
+        const res = await axios.post('http://localhost:8800/issue', {
+          ...issue,
+          createTime: new Date().toISOString().slice(0, 19).replace('T', ' '),
+          cycleId: columnId,
+        });
+        setTriggerIssue(true);
+        console.log(res);
+        event.target.value = '';
+      }
+      setCreateIssueCurSprint(false);
+      setCreateIssueBacklog(false);
+      setIssueType('story');
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const onDragEnd = (result, columns, issues) => {
+    console.log('AAAAAAAAAAAAAAA');
+    if (!result.destination) return;
+    const {source, destination} = result;
+
+    if (source.droppableId != destination.droppableId) {
+      // Get data of source sprint
+      const sourceColumn = columns.filter((column) => {
+        return column.id == source.droppableId;
+      });
+      // Get data of destination sprint
+      const destColumn = columns.filter((column) => {
+        return column.id == destination.droppableId;
+      });
+      // Get issues in source sprint
+      const sourceIssues = issues
+        .filter((issue) => {
+          return issue.cycleId == sourceColumn[0].id;
+        })
+        .sort((a, b) => {
+          return a.issueorder < b.issueorder
+            ? -1
+            : a.issueorder > b.issueorder
+            ? 1
+            : 0;
+        });
+      // Get issue being drag
+      const [removed] = sourceIssues.splice(source.index, 1);
+      // Update issue with destination
+      updateIssue(
+        destColumn[0].id,
+        removed.id,
+        removed.issuestatus,
+        destination,
+        source,
+        pId,
+      );
+      setTriggerIssue(true);
+    } else {
+      // Get the sprint
+      const column = columns.filter((column) => {
+        return column.id == source.droppableId;
+      });
+      // Get the issues of sprint
+      const copiedIssues = issues
+        .filter((issue) => {
+          return issue.cycleId == column[0].id;
+        })
+        .sort((a, b) => {
+          return a.issueorder < b.issueorder
+            ? -1
+            : a.issueorder > b.issueorder
+            ? 1
+            : 0;
+        });
+      // Get issue being drag
+      const [removed] = copiedIssues.splice(source.index, 1);
+      updateIssue(
+        column[0].id,
+        removed.id,
+        removed.issuestatus,
+        destination,
+        source,
+        pId,
+      );
+      setTriggerIssue(true);
+    }
+  };
+
+  useEffect(() => {
+    if (triggerIssue) {
+      fetchIssuesData();
+    }
+    if (triggerSprint) {
+      fetchSprintsData();
+    }
+  }, [triggerIssue, triggerSprint]);
 
   return (
     <div>
       <DragDropContext
-        onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
+        onDragEnd={(result) => onDragEnd(result, columns, issues)}
       >
-        {Object.entries(columns).map(([columnId, column], index) => {
+        {columns.map((column) => {
           return (
-            <div key={columnId}>
-              {!props.hide || ['1', '4'].includes(columnId) ? (
-                <div className="align-center mb-4" key={columnId}>
+            <div key={column.id}>
+              {/* hide if id of column is backlog's id or lastest sprint's id  */}
+              {!props.hide || ['1', columns[0].id].includes(column.id) ? (
+                <div className="align-center mb-4" key={column.id}>
                   <Accordion
                     defaultExpanded={
-                      ['1', '4'].includes(columnId) ? true : false
+                      column.cstatus == '1' || column.cstatus == '-1'
+                        ? true
+                        : false
                     }
                     sx={{backgroundColor: '#f2f2f2'}}
                   >
@@ -228,58 +279,77 @@ function TaskList(props) {
                         <SprintHeader col={column} />
                       </AccordionSummary>
 
-                      {['1', '4'].includes(columnId) ? (
+                      {['1', columns[0].id].includes(column.id) ? (
                         <div className="flex absolute right-2 my-2">
                           <div className="my-0 mr-2">
-                            {column.items.filter((x) => {
-                              return x.status === 'To do';
+                            {issues.filter((x) => {
+                              return (
+                                x.issuestatus === 'To do' &&
+                                x.cycleId === column.id
+                              );
                             }).length > 0 ? (
                               <span className="px-1.5 py-1 rounded-xl text-white bg-to-do-color my-10 mr-1 text-xs">
-                                {column.items
+                                {issues
                                   .filter((x) => {
-                                    return x.status === 'To do';
+                                    return x.issuestatus == 'To do';
                                   })
-                                  .reduce((sum, a) => sum + a.point, 0)}
+                                  .reduce((sum, a) => sum + a.estimatePoint, 0)}
                               </span>
                             ) : (
                               <></>
                             )}
 
-                            {column.items.filter((x) => {
-                              return x.status === 'In progress';
+                            {issues.filter((x) => {
+                              return (
+                                x.issuestatus === 'In progress' &&
+                                x.cycleId === column.id
+                              );
                             }).length > 0 ? (
                               <span className="px-1.5 py-1 rounded-xl text-white bg-in-progress-color my-10 mr-1 text-xs">
-                                {column.items
+                                {issues
                                   .filter((x) => {
-                                    return x.status === 'In progress';
+                                    return x.issuestatus == 'In progress';
                                   })
-                                  .reduce((sum, a) => sum + a.point, 0)}
+                                  .reduce((sum, a) => sum + a.estimatePoint, 0)}
                               </span>
                             ) : (
                               <></>
                             )}
 
-                            {column.items.filter((x) => {
-                              return x.status === 'Done';
+                            {issues.filter((x) => {
+                              return (
+                                x.issuestatus === 'Done' &&
+                                x.cycleId === column.id
+                              );
                             }).length > 0 ? (
                               <span className="px-1.5 py-1 rounded-xl text-white bg-done-color my-10 mr-1 text-xs">
-                                {column.items
+                                {issues
                                   .filter((x) => {
-                                    return x.status === 'Done';
+                                    return x.issuestatus == 'Done';
                                   })
-                                  .reduce((sum, a) => sum + a.point, 0)}
+                                  .reduce((sum, a) => sum + a.estimatePoint, 0)}
                               </span>
                             ) : (
                               <></>
                             )}
                           </div>
 
-                          <GrayButton>
-                            {column.name === 'Backlog'
-                              ? 'Start Sprint'
-                              : 'Complete sprint'}
-                          </GrayButton>
-
+                          {column.cyclename == 'Backlog' ? (
+                            columns.length == 1 || columns[0].cstatus == '0' ? (
+                              <StartSprint
+                                setTriggerSprint={setTriggerSprint}
+                              />
+                            ) : (
+                              <></>
+                            )
+                          ) : column.cstatus == '1' ? (
+                            <CompleteSprint
+                              setTriggerIssue={setTriggerIssue}
+                              sprintId={column.id}
+                            />
+                          ) : (
+                            <></>
+                          )}
                           <GrayButton
                             sx={{mx: 1, width: '24px !important', minWidth: 24}}
                           >
@@ -293,53 +363,70 @@ function TaskList(props) {
 
                     <AccordionDetails>
                       <div className="-mt-2 mb-2">
-                        <Droppable droppableId={columnId} key={columnId}>
+                        <Droppable
+                          droppableId={column.id?.toString()}
+                          key={column.id}
+                        >
                           {(provided, snapshot) => {
                             return (
                               <div
                                 {...provided.droppableProps}
                                 ref={provided.innerRef}
                               >
-                                {column.items.map((item, index) => {
-                                  return (
-                                    <Draggable
-                                      key={item.id}
-                                      draggableId={item.id}
-                                      index={index}
-                                    >
-                                      {(provided, snapshot) => {
-                                        return (
-                                          <Box
-                                            ref={provided.innerRef}
-                                            {...provided.draggableProps}
-                                            {...provided.dragHandleProps}
-                                            className="select-none h-10 mb-0.5 text-sm"
-                                            sx={{
-                                              borderRadius: 1,
-                                              backgroundColor:
-                                                snapshot.isDragging
-                                                  ? '#D6D6D6'
-                                                  : '#00000000',
-                                              color: 'black',
-                                              ...provided.draggableProps.style,
-                                              paddingTop: '8px',
-                                              paddingBottom: '8px',
-                                              opacity: snapshot.isDragging
-                                                ? 0.8
-                                                : 1,
-                                              '&:hover': {
-                                                backgroundColor: '#ddd',
-                                              },
-                                            }}
-                                            onMouseOver
-                                          >
-                                            <TaskCard item={item} />
-                                          </Box>
-                                        );
-                                      }}
-                                    </Draggable>
-                                  );
-                                })}
+                                {issues
+                                  .filter((issue) => {
+                                    return issue.cycleId == column.id;
+                                  })
+                                  .sort((a, b) => {
+                                    return a.issueorder < b.issueorder
+                                      ? -1
+                                      : a.issueorder > b.issueorder
+                                      ? 1
+                                      : 0;
+                                  })
+                                  .map((issue, index) => {
+                                    return (
+                                      <Draggable
+                                        key={issue.id}
+                                        draggableId={issue.id?.toString()}
+                                        index={index}
+                                      >
+                                        {(provided, snapshot) => {
+                                          return (
+                                            <Box
+                                              ref={provided.innerRef}
+                                              {...provided.draggableProps}
+                                              {...provided.dragHandleProps}
+                                              className="select-none h-10 mb-0.5 text-sm"
+                                              sx={{
+                                                borderRadius: 1,
+                                                backgroundColor:
+                                                  snapshot.isDragging
+                                                    ? '#D6D6D6'
+                                                    : '#00000000',
+                                                color: 'black',
+                                                ...provided.draggableProps
+                                                  .style,
+                                                paddingTop: '8px',
+                                                paddingBottom: '8px',
+                                                opacity: snapshot.isDragging
+                                                  ? 0.8
+                                                  : 1,
+                                                '&:hover': {
+                                                  backgroundColor: '#ddd',
+                                                },
+                                              }}
+                                            >
+                                              <TaskCard
+                                                issue={issue}
+                                                setTrigger={setTriggerIssue}
+                                              />
+                                            </Box>
+                                          );
+                                        }}
+                                      </Draggable>
+                                    );
+                                  })}
                                 {provided.placeholder}
                               </div>
                             );
@@ -347,9 +434,9 @@ function TaskList(props) {
                         </Droppable>
                       </div>
 
-                      {columnId === '4' ? (
+                      {column.id == columns[0].id ? (
                         <div>
-                          {!createIssueBacklog && (
+                          {!createIssueBacklog ? (
                             <Button
                               variant="text"
                               startIcon={<AddIcon />}
@@ -358,99 +445,153 @@ function TaskList(props) {
                                 fontSize: '14px',
                                 textTransform: 'none',
                               }}
-                              onClick={() => {setCreateIssueBacklog(true)}}
+                              onClick={() => {
+                                setCreateIssueBacklog(true);
+                              }}
                             >
                               Create new issue
                             </Button>
-                          )}
-                          {createIssueBacklog && (
-                            <div style={{ border: '1px solid gray', backgroundColor: 'white'}}>
-                              <Select
-                                variant="standard"
-                                value={issueType}
-                                onChange={handleIssueType}
-                                sx={{ backgroundColor: 'white', border: 'none', p: 0.75, pl: 1.5}}
-                                disableUnderline
-                              >
-                                <MenuItem value='story'>{IssueIcon('story')}</MenuItem>
-                                <MenuItem value='bug'>{IssueIcon('bug')}</MenuItem>
-                                <MenuItem value='task'>{IssueIcon('task')}</MenuItem>
-                              </Select>
-                              <TextField
-                                variant="standard"
-                                size="medium"
-                                sx={{ width: '85%', height: "45px", fontSize: 14, background: 'white', p: 1, pl: 2 }}
-                                InputProps={{ disableUnderline: true, style: { fontSize: 14 }}}
-                                onKeyUp={event => event.key === "Enter" ? addIssue(event, columnId) : null}
-                              ></TextField>
-                              <Button
-                                variant="text"
-                                sx={{
-                                  color: 'black',
-                                  borderRadius: '0',
-                                  fontSize: '14px',
-                                  height: '45px',
-                                  textTransform: 'none',
+                          ) : (
+                            <ClickAwayListener
+                              mouseEvent="onMouseUp"
+                              onClickAway={() => {
+                                setCreateIssueBacklog(false);
+                              }}
+                            >
+                              <Box
+                                style={{
+                                  border: '1px solid gray',
+                                  backgroundColor: 'white',
                                 }}
-                                onClick={() => {setCreateIssueBacklog(false)}}
                               >
-                                Cancel
-                              </Button>
-                            </div>
+                                <Select
+                                  variant="standard"
+                                  value={issueType}
+                                  onChange={handleIssueType}
+                                  sx={{
+                                    backgroundColor: 'white',
+                                    border: 'none',
+                                    p: 0.75,
+                                    pl: 1.5,
+                                  }}
+                                  disableUnderline
+                                >
+                                  <MenuItem value="story">
+                                    {IssueIcon('story')}
+                                  </MenuItem>
+                                  <MenuItem value="bug">
+                                    {IssueIcon('bug')}
+                                  </MenuItem>
+                                  <MenuItem value="task">
+                                    {IssueIcon('task')}
+                                  </MenuItem>
+                                </Select>
+                                <TextField
+                                  variant="standard"
+                                  size="medium"
+                                  sx={{
+                                    width: '85%',
+                                    height: '45px',
+                                    fontSize: 14,
+                                    background: 'white',
+                                    p: 1,
+                                    pl: 2,
+                                  }}
+                                  onChange={handleChangeName}
+                                  InputProps={{
+                                    disableUnderline: true,
+                                    style: {fontSize: 14},
+                                  }}
+                                  onKeyUp={(event) =>
+                                    event.key === 'Enter'
+                                      ? addIssue(event, column.id)
+                                      : null
+                                  }
+                                ></TextField>
+                              </Box>
+                            </ClickAwayListener>
+                          )}
+                        </div>
+                      ) : column.cyclename == 'Backlog' ? (
+                        <div>
+                          {!createIssueCurSprint ? (
+                            <Button
+                              variant="text"
+                              startIcon={<AddIcon />}
+                              sx={{
+                                color: 'black',
+                                fontSize: '14px',
+                                textTransform: 'none',
+                              }}
+                              onClick={() => {
+                                setCreateIssueCurSprint(true);
+                              }}
+                            >
+                              Create new issue
+                            </Button>
+                          ) : (
+                            <ClickAwayListener
+                              mouseEvent="onMouseUp"
+                              onClickAway={() => {
+                                setCreateIssueCurSprint(false);
+                              }}
+                            >
+                              <Box
+                                style={{
+                                  border: '1px solid gray',
+                                  backgroundColor: 'white',
+                                }}
+                              >
+                                <Select
+                                  variant="standard"
+                                  value={issueType}
+                                  onChange={handleIssueType}
+                                  sx={{
+                                    backgroundColor: 'white',
+                                    border: 'none',
+                                    p: 0.75,
+                                    pl: 1.5,
+                                  }}
+                                  disableUnderline
+                                >
+                                  <MenuItem value="story">
+                                    {IssueIcon('story')}
+                                  </MenuItem>
+                                  <MenuItem value="bug">
+                                    {IssueIcon('bug')}
+                                  </MenuItem>
+                                  <MenuItem value="task">
+                                    {IssueIcon('task')}
+                                  </MenuItem>
+                                </Select>
+                                <TextField
+                                  variant="standard"
+                                  size="medium"
+                                  sx={{
+                                    width: '85%',
+                                    height: '45px',
+                                    fontSize: 14,
+                                    background: 'white',
+                                    p: 1,
+                                    pl: 2,
+                                  }}
+                                  onChange={handleChangeName}
+                                  InputProps={{
+                                    disableUnderline: true,
+                                    style: {fontSize: 14},
+                                  }}
+                                  onKeyUp={(event) =>
+                                    event.key === 'Enter'
+                                      ? addIssue(event, column.id)
+                                      : null
+                                  }
+                                ></TextField>
+                              </Box>
+                            </ClickAwayListener>
                           )}
                         </div>
                       ) : (
-                        <div>
-                          {!createIssueCurSprint && (
-                            <Button
-                              variant="text"
-                              startIcon={<AddIcon />}
-                              sx={{
-                                color: 'black',
-                                fontSize: '14px',
-                                textTransform: 'none',
-                              }}
-                              onClick={() => {setCreateIssueCurSprint(true)}}
-                            >
-                              Create new issue
-                            </Button>
-                          )}
-                          {createIssueCurSprint && (
-                            <div style={{ border: '1px solid gray', backgroundColor: 'white'}}>
-                              <Select
-                                variant="standard"
-                                value={issueType}
-                                onChange={handleIssueType}
-                                sx={{ backgroundColor: 'white', border: 'none', p: 0.75, pl: 1.5}}
-                                disableUnderline
-                              >
-                                <MenuItem value='story'>{IssueIcon('story')}</MenuItem>
-                                <MenuItem value='bug'>{IssueIcon('bug')}</MenuItem>
-                                <MenuItem value='task'>{IssueIcon('task')}</MenuItem>
-                              </Select>
-                              <TextField
-                                variant="standard"
-                                size="medium"
-                                sx={{ width: '85%', height: "45px", fontSize: 14, background: 'white', p: 1, pl: 2 }}
-                                InputProps={{ disableUnderline: true, style: { fontSize: 14 }}}
-                                onKeyUp={event => event.key === "Enter" ? addIssue(event, columnId) : null}
-                              ></TextField>
-                              <Button
-                                variant="text"
-                                sx={{
-                                  color: 'black',
-                                  borderRadius: '0',
-                                  fontSize: '14px',
-                                  height: '45px',
-                                  textTransform: 'none',
-                                }}
-                                onClick={() => {setCreateIssueCurSprint(false)}}
-                              >
-                                Cancel
-                              </Button>
-                            </div>
-                          )}
-                        </div>
+                        <></>
                       )}
                     </AccordionDetails>
                   </Accordion>

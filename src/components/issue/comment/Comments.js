@@ -1,162 +1,92 @@
-import { useState } from "react"
-import { Button } from "@mui/material"
-import CommentForm from "./CommentForm"
-import Comment from "./Comment"
+import {useMemo, useState, useEffect} from 'react';
+import CommentForm from './CommentForm';
+import Comment from './Comment';
 
-const comments = [
-  {
-    id: "1",
-    body: "Ad dolore elit reprehenderit do id excepteur officia qui officia aute cillum nulla laborum ipsum. Exercitation velit elit do mollit. Velit mollit cupidatat qui aute ea laborum proident non ad sit exercitation et. Exercitation proident minim sint do excepteur. Proident ex duis elit et commodo nulla.",
-    username: "Lam Nguyen",
-    userId: "1",
-    parentId: null,
-    createdAt: "2021-08-16T23:00:33.010+02:00",
-  },
-  {
-    id: "2",
-    body: "Second comment",
-    username: "Dang Nguyen",
-    userId: "2",
-    parentId: null,
-    createdAt: "2021-08-16T23:00:33.010+02:00",
-  },
-  {
-    id: "3",
-    body: "First comment first child",
-    username: "Lam Nguyen",
-    userId: "1",
-    parentId: "1",
-    createdAt: "2022-08-16T23:00:33.010+02:00",
-  },
-  {
-    id: "4",
-    body: "Second comment second child",
-    username: "Dang Nguyen",
-    userId: "2",
-    parentId: "2",
-    createdAt: "2022-12-11T23:00:33.010+02:00",
-  },
-];
+import {useFirestore} from 'src/hooks/useFirestore';
+import {
+  addDocument,
+  deleteDocument,
+  updateDocument,
+} from 'src/firebase/firestoreServices';
 
-const Comments = ({ currentUserId }) => {
-  const [backendComments, setBackendComments] = useState(comments);
+const Comments = ({currentUser, issueId}) => {
+  const [issuePath, setIssuePath] = useState(`issues/${issueId}`);
+
+  useEffect(() => {
+    const issuePath = `issues/${issueId}`;
+    setIssuePath(issuePath);
+  }, [issueId]);
+
+  const refPath = 'issues/' + issueId;
+  const currentUserId = currentUser.uid;
+  const commentsCodition = useMemo(
+    () => ({
+      sort: 'desc',
+      sortAttr: 'createdAt',
+    }),
+    [issueId],
+  );
+  const comments = useFirestore(issuePath + '/comments', commentsCodition);
+  console.log(refPath + '/comments');
+
   const [activeComment, setActiveComment] = useState(null);
   const [activeAllBtn, setActiveAllBtn] = useState(false);
   const [activeCommentBtn, setActiveCommentBtn] = useState(true);
-  const [activeHistoryBtn, setActiveHistoryBtn] = useState(false);
 
-  const rootComments = backendComments.filter((backendComment) => backendComment.parentId === null);
+  const addComment = (content, parentId = null) => {
+    // TODO
+    const commentContent = {
+      authorId: currentUser.uid,
+      authorAvatar: currentUser.photoURL,
+      authorName: currentUser.displayName,
+      parentId: parentId,
+      ...content,
+    };
+    const path = parentId ? `${refPath}/replies` : `${refPath}/comments`;
+    // if (parentId) path = `${path}/replies`;
 
-  const getReplies = (commentId) =>
-    backendComments
-      .filter((backendComment) => backendComment.parentId === commentId)
-      .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-
-  const addComment = (text, parentId) => {
-    const createComment = async (text, parentId = null) => {
-      return {
-        id: Math.random().toString(36).slice(2, 9),
-        body: text,
-        parentId,
-        userId: "1",
-        username: "John",
-        createdAt: new Date().toISOString(),
-      };
-    }
-    createComment(text, parentId).then((comment) => {
-      setBackendComments([comment, ...backendComments]);
-      setActiveComment(null);
-    });
+    addDocument(path, commentContent);
+    setActiveComment(null);
   };
 
-  const updateComment = (text, commentId) => {
-    const updateComment = async (text) => { return { text } };
-    updateComment(text).then(() => {
-      const updatedBackendComments = backendComments.map((backendComment) => {
-        if (backendComment.id === commentId) {
-          return { ...backendComment, body: text };
-        }
-        return backendComment;
-      });
-      setBackendComments(updatedBackendComments);
-      setActiveComment(null);
-    });
+  const updateComment = (newComment, commentId, parentId = false) => {
+    const path = parentId ? `${refPath}/replies` : `${refPath}/comments`;
+
+    console.log(path, newComment, commentId, parentId);
+    updateDocument(path, commentId, newComment);
+    setActiveComment(null);
+    // });
   };
 
-  const deleteComment = (commentId) => {
-    const deleteComment = async () => { return {}; };
-    // if (window.confirm("Are you sure you want to remove comment?")) 
-    {
-      deleteComment().then(() => {
-        const updatedBackendComments = backendComments.filter(
-          (backendComment) => backendComment.id !== commentId
-        );
-        setBackendComments(updatedBackendComments);
-      });
+  const deleteComment = (thisId, parentId = null) => {
+    // TODO
+    const path = parentId ? `${refPath}/replies` : `${refPath}/comments`;
+
+    if (window.confirm('Are you sure you want to remove comment?')) {
+      deleteDocument(path, thisId);
     }
   };
 
   return (
     <div className="mt-4">
-      <div className="flex mb-8">
-        <Button 
-          style={{
-            display: "flex",
-            textTransform: "none",
-            height: 32,
-            borderRadius: 4,
-            marginRight: 10,
-            color: !activeAllBtn ? "black" : "white",
-            backgroundColor: !activeAllBtn ? "#EFEFEF" : "#686868",
-          }} 
-          onClick={() => {
-            setActiveAllBtn(true);
-            setActiveCommentBtn(false);
-            setActiveHistoryBtn(false);
-          }}
-        >All</Button>
-        <Button 
-          style={{
-            display: "flex",
-            textTransform: "none",
-            height: 32,
-            borderRadius: 4,
-            marginRight: 10,
-            color: !activeCommentBtn ? "black" : "white",
-            backgroundColor: !activeCommentBtn ? "#EFEFEF" : "#686868",
-          }} 
-          onClick={() => {
-            setActiveAllBtn(false);
-            setActiveCommentBtn(true);
-            setActiveHistoryBtn(false);
-          }}
-        >Comment</Button>
-        <Button 
-          style={{
-            display: "flex",
-            textTransform: "none",
-            height: 32,
-            borderRadius: 4,
-            marginRight: 10,
-            color: !activeHistoryBtn ? "black" : "white",
-            backgroundColor: !activeHistoryBtn ? "#EFEFEF" : "#686868",
-          }} 
-          onClick={() => {
-            setActiveAllBtn(false);
-            setActiveCommentBtn(false);
-            setActiveHistoryBtn(true);
-          }}
-        >History</Button>
-      </div>
-      {activeCommentBtn ? 
+      {activeCommentBtn ? (
         <div>
-          <CommentForm handleSubmit={addComment}/>
+          <CommentForm
+            currentUser={currentUser}
+            handleSubmit={(newComment) => addComment(newComment)}
+            handleCancel={() => {
+              setActiveComment(false);
+            }}
+          />
           <div className="mt-8">
-            {rootComments.map((rootComment) => (
+            {comments.map((comment) => (
               <Comment
-                key={rootComment.id}
-                comment={rootComment}
-                replies={getReplies(rootComment.id)}
+                issueId={issueId}
+                currentUser={currentUser}
+                id={comment.id}
+                key={comment.id}
+                comment={comment}
+                // replies={getReplies(comment.id)}
                 activeComment={activeComment}
                 setActiveComment={setActiveComment}
                 addComment={addComment}
@@ -166,8 +96,12 @@ const Comments = ({ currentUserId }) => {
               />
             ))}
           </div>
-        </div> 
-      : (activeAllBtn ? <div></div> : <div></div>)}
+        </div>
+      ) : activeAllBtn ? (
+        <div></div>
+      ) : (
+        <div></div>
+      )}
     </div>
   );
 };

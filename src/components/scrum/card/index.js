@@ -9,6 +9,9 @@ import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
 import FiberManualRecordRoundedIcon from '@mui/icons-material/FiberManualRecordRounded';
 import FlagRoundedIcon from '@mui/icons-material/FlagRounded';
 import QuestionMarkRoundedIcon from '@mui/icons-material/QuestionMarkRounded';
+import {useContext, useEffect, useState} from 'react';
+import {AppContext} from 'src/Context/AppProvider';
+import axios from 'axios';
 
 const Epic = (props) => {
   const colors = (epic) => {
@@ -93,21 +96,45 @@ const issueIcon = (type) => {
   }
 };
 
-const Card = (props) => {
-  const task = props.children;
-  console.log(task);
+function Card({issue}) {
+  const [assignee, setAssignee] = useState({});
+  const {project} = useContext(AppContext);
+
+  const getAssignee = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:8800/user/${issue.assigneeId}`,
+      );
+      setAssignee(res.data);
+      // console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    if (issue.assigneeId) {
+      getAssignee();
+    }
+  }, [issue]);
+
   return (
-    <Link to="/issue">
+    <Link to={`/issue/${project.id}/${issue.id}`}>
       {' '}
       <Paper elevation={1} className="card">
-        <Typography>{task.title}</Typography>
+        <Typography>{issue.issuename}</Typography>
         <div style={{margin: '10px 0px'}}>
-          <Epic>{task.epic}</Epic>
-          <Chip
-            size="small"
-            icon={<AccessTimeRoundedIcon />}
-            label={format(new Date(task.due), 'dd-MM')}
-          />
+          {/* <Epic>{'Some epic'}</Epic> */}
+          {issue.dueDate && (
+            <Chip
+              size="small"
+              icon={<AccessTimeRoundedIcon />}
+              label={format(
+                new Date(issue.dueDate ? issue.dueDate : ''),
+                'dd-MM',
+              )}
+            />
+          )}
         </div>
         <div style={{display: 'flex', justifyContent: 'space-between'}}>
           <div
@@ -118,23 +145,25 @@ const Card = (props) => {
               gap: 1,
             }}
           >
-            {issueIcon(task.type)}
+            {issueIcon(issue.issueType)}
             <Typography variant="subtitle" sx={{ml: '5px'}}>
-              {task.code}
+              {project.pkey + '-' + issue.issueindex}
             </Typography>
           </div>
           <div style={{display: 'inline-flex', alignItems: 'flex-end'}}>
-            <Chip size="small" label={task.point} />
+            {issue.estimatePoint && (
+              <Chip size="small" label={issue.estimatePoint} />
+            )}
             <Avatar
-              src="X"
+              src={assignee.photoURL}
               sx={{width: 32, height: 32, ml: 1}}
-              alt={task.assignee}
+              alt={issue.assigneeId}
             />
           </div>
         </div>
       </Paper>
     </Link>
   );
-};
+}
 
 export default Card;

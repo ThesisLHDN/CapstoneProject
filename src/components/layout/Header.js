@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import logo from 'src/assets/images/logo.png';
 import {
   Box,
@@ -20,12 +20,15 @@ import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
 import Avatar from '@mui/material/Avatar';
 
 import SearchBar from 'src/components/search';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import {signOut} from 'firebase/auth';
 import {auth} from 'src/firebase/config';
 import {color, colorHover} from 'src/style';
 import Notification from '../notification/Notification';
-import AddMember from 'src/components/popup/Create';
+import AddMember from 'src/components/popup/AddMember';
+import {AuthContext} from 'src/Context/AuthProvider';
+import {AppContext} from 'src/Context/AppProvider';
+import axios from 'axios';
 
 // function LinkTab(props) {
 //   return (
@@ -39,35 +42,6 @@ import AddMember from 'src/components/popup/Create';
 //   );
 // }
 
-function AddMembers(props) {
-  const {onClose, selectedValue, open} = props;
-
-  const handleClose = () => {
-    onClose(selectedValue);
-  };
-
-  const handleListItemClick = (value) => {
-    onClose(value);
-  };
-
-  return (
-    <Box>
-      <AddMember
-        onClose={handleClose}
-        open={open}
-        confirmContent="Add"
-        title={
-          <p>
-            Add Member to <i>First Scrum Project</i>
-          </p>
-        }
-        placeholder="eg. dangnguyen@gmail.com"
-        fieldLabel="Enter emails"
-      />
-    </Box>
-  );
-}
-
 export default function Header() {
   // const [open, setOpen] = useState(false);
   // const handleOpen = () => setOpen(true);
@@ -75,6 +49,20 @@ export default function Header() {
 
   const [value, setValue] = useState(0);
   const [openAddMembers, setOpenAddMembers] = useState(false);
+  const {
+    user: {displayName, photoURL, uid},
+  } = useContext(AuthContext);
+  const {project} = useContext(AppContext);
+  const navigate = useNavigate();
+
+  const getLastestWorkspace = async () => {
+    try {
+      const res = await axios.get(`http://localhost:8800/lastworkspace/${uid}`);
+      navigate(`/workspace-setting/${res.data.id}?user=${uid}`);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -127,46 +115,49 @@ export default function Header() {
         zIndex: 5,
       }}
     >
-      <Link to="/">
-        <img src={logo} width="150" alt="Logo" />
-      </Link>
-      <Tabs
-        value={value}
-        onChange={handleChange}
-        aria-label="nav tabs example"
-        sx={{
-          mx: 2,
-          height: '100%',
-          '& .MuiTab-root.Mui-selected': {
-            color: color.green03,
-            fontWeight: 'bold',
-          },
-          '& .MuiTabs-indicator': {
-            display: 'none',
-            // backgroundColor: color.green03,
-            // height: '3px',
-          },
-        }}
-      >
-        {/* <Tab label="Home" to="/" component={Link} /> */}
-        {/* <Tab label="Roadmap" to="/roadmap" component={Link} /> */}
-        {/* <Tab label="Dashboard" to="/dashboard" component={Link} /> */}
-        {/* <Tab label="Board" to="/board" component={Link} /> */}
-        <Tab
-          sx={{textTransform: 'none'}}
-          label="Workspace Settings"
-          to="/workspace-setting"
-          component={Link}
-        />
-        {/* <Tab
+      <Box sx={{display: 'flex'}}>
+        <Link to="/">
+          <img src={logo} width="150" alt="Logo" />
+        </Link>
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          aria-label="nav tabs example"
+          sx={{
+            mx: 2,
+            height: '100%',
+            '& .MuiTab-root.Mui-selected': {
+              color: color.green03,
+              fontWeight: 'bold',
+            },
+            '& .MuiTabs-indicator': {
+              display: 'none',
+              // backgroundColor: color.green03,
+              // height: '3px',
+            },
+          }}
+        >
+          {/* <Tab label="Home" to="/" component={Link} /> */}
+          {/* <Tab label="Roadmap" to="/roadmap" component={Link} /> */}
+          {/* <Tab label="Dashboard" to="/dashboard" component={Link} /> */}
+          {/* <Tab label="Board" to="/board" component={Link} /> */}
+          <Tab
+            sx={{textTransform: 'none'}}
+            label="Workspace Settings"
+            // to={`/workspace-setting/${lastWorkspace}?user=${uid}`}
+            // component={Link}
+            onClick={getLastestWorkspace}
+          />
+          {/* <Tab
           sx={{textTransform: 'none'}}
           label="Projects"
           to="/project-setting"
           component={Link}
         /> */}
-      </Tabs>
+        </Tabs>
+      </Box>
 
-      <SearchBar value={value}></SearchBar>
+      {/* <SearchBar value={value}></SearchBar> */}
       <Box
         sx={{
           display: 'flex',
@@ -175,18 +166,20 @@ export default function Header() {
           position: 'relative',
         }}
       >
-        <Button
-          variant="contained"
-          sx={{
-            height: 36,
-            ...colorHover.greenGradBtn,
-          }}
-          startIcon={<PersonAddOutlinedIcon />}
-          // onClick={handleClickAdd}
-          onClick={() => setOpenAddMembers(true)}
-        >
-          Add member
-        </Button>
+        {uid == project.adminId && (
+          <Button
+            variant="contained"
+            sx={{
+              height: 36,
+              ...colorHover.greenGradBtn,
+            }}
+            startIcon={<PersonAddOutlinedIcon />}
+            // onClick={handleClickAdd}
+            onClick={() => setOpenAddMembers(true)}
+          >
+            Add member
+          </Button>
+        )}
         {/* <Popper id={id} open={openAdd} anchorEl={anchorElAdd} sx={{zIndex: 5}}>
           <ClickAwayListener onClickAway={handleClickAdd}>
             <div style={{position: 'absolute'}}>
@@ -209,8 +202,8 @@ export default function Header() {
         <div style={{position: 'relative'}}>
           <IconButton onClick={handleClick}>
             <Avatar
-              alt="Remy Sharp"
-              src="/static/images/avatar/1.jpg"
+              alt={displayName ? displayName : ''}
+              src={photoURL}
               sx={{height: 32, width: 32}}
             />
           </IconButton>
@@ -280,11 +273,11 @@ export default function Header() {
             </ClickAwayListener>
           </Popper>
         </div>
-        <AddMembers
+        <AddMember
           open={openAddMembers}
           // onClose={(value) => handleClose(value)}
-          onClose={(value) => setOpenAddMembers(false)}
-        ></AddMembers>
+          onClose={() => setOpenAddMembers(false)}
+        ></AddMember>
       </Box>
     </Paper>
   );

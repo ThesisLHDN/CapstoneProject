@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {color} from 'src/style';
 import {Typography, Grid, Breadcrumbs, Link} from '@mui/material';
 import Workload from 'src/components/charts/Workload';
@@ -15,6 +15,8 @@ import {
   DelayData,
   PerformceData,
 } from '../../components/charts/Data';
+import {AppContext} from 'src/Context/AppProvider';
+import {AuthContext} from 'src/Context/AuthProvider';
 
 function convertDate(d) {
   const date = new Date(d);
@@ -22,6 +24,10 @@ function convertDate(d) {
 }
 
 function Dashboard() {
+  const {
+    user: {uid},
+  } = useContext(AuthContext);
+  const {project} = useContext(AppContext);
   const [workloadData, setWorkloadData] = useState({
     labels: WorkloadData.map((data) => data.label),
     datasets: [
@@ -102,21 +108,21 @@ function Dashboard() {
               underline="hover"
               key="1"
               color="inherit"
-              href="/workspace-setting"
+              href={`/workspace-setting/${project.workspaceId}?user=${uid}`}
               onClick={() => {}}
               sx={{fontFamily: 'Open Sans, sans-serif'}}
             >
-              Dang's Workspace
+              {project.wsname}
             </Link>
             <Link
               underline="hover"
               key="2"
               color="inherit"
-              href="/roadmap"
+              href={`/roadmap/${project.id}`}
               onClick={() => {}}
               sx={{fontFamily: 'Open Sans, sans-serif'}}
             >
-              First Scrum Project
+              {project.pname}
             </Link>
             <Typography key="3" color="text.primary" sx={{fontSize: 'inherit'}}>
               Dashboard

@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
+  IconButton,
   Button,
   Avatar,
   Popper,
@@ -15,7 +16,11 @@ import FlagRoundedIcon from '@mui/icons-material/FlagRounded';
 import QuestionMarkRoundedIcon from '@mui/icons-material/QuestionMarkRounded';
 import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {NavLink} from 'react-router-dom';
+import {NavLink, Link} from 'react-router-dom';
+import {AppContext} from 'src/Context/AppProvider';
+import axios from 'axios';
+import ClearRoundedIcon from '@mui/icons-material/ClearRounded';
+import WarningPopup from 'src/components/popup/Warning';
 
 export const IssueIcon = (type) => {
   switch (type) {
@@ -92,13 +97,30 @@ function convertDate(d) {
   return date.getDate() + ' ' + date.toLocaleString('en-us', {month: 'short'});
 }
 
-function TaskCard(props) {
-  const [status, setStatus] = useState(props.item.status);
+function TaskCard({issue, setTrigger, isChild = false}) {
+  // console.log(issue);
+  const {project} = useContext(AppContext);
+  const [status, setStatus] = useState(issue.issuestatus);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [assignee, setAssignee] = useState({});
+  const [openDelPopup, setOpenDelPopup] = useState(false);
+
+  const getAssignee = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:8800/user/${issue.assigneeId}`,
+      );
+      setAssignee(res.data);
+      // console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const handleChange = (event, element) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
     setStatus(element);
+    updateIssue(element);
   };
 
   const handleClick = (event) => {
@@ -108,35 +130,66 @@ function TaskCard(props) {
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popper' : undefined;
 
+  const updateIssue = async (element) => {
+    try {
+      const res = await axios.put(`http://localhost:8800/issue/${issue.id}`, {
+        cId: issue.cycleId,
+        status: element,
+      });
+      setTrigger(true);
+      console.log(res);
+      // setIssues([...res.data]);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const deleteIssueHandler = (confirm) => {
+    if (confirm) {
+      console.log('Issue deleted', issue);
+    }
+    setOpenDelPopup(false);
+  };
+
+  useEffect(() => {
+    if (issue.assigneeId) {
+      getAssignee();
+    }
+  }, [issue]);
+
   return (
-    <div className="flex justify-between hover:cursor-pointer">
-      <NavLink to="/issue">
-        <div className="flex ml-3 md:pr-md 2xl:pr-lg">
-          <div>{IssueIcon(props.item.type)}</div>
-          <div className="ml-3 font-bold text-sm pt-0.5">{props.item.id}</div>
-          <div className="ml-3 font-medium text-sm pt-0.5">
-            {props.item.name}
+    <Box
+      className={`flex justify-between hover:cursor-pointer ${
+        isChild ? 'my-2' : ''
+      }`}
+      sx={{
+        '&:hover .deleteBtn': {
+          visibility: 'visible',
+        },
+      }}
+    >
+      <Link to={`/issue/${project.id}/${issue.id}`}>
+        <div
+          className={`${
+            isChild ? 'ml-1 md:pr-20 2xl:pr-24' : 'ml-3 md:pr-80 2xl:pr-96'
+          } flex`}
+        >
+          <div>{IssueIcon(issue.issueType)}</div>
+          <div className="ml-3 font-bold text-sm pt-0.5">
+            {project.pkey + '-' + issue.issueindex}
           </div>
-          {props.item.epic && (
-            <div
-              className="ml-3 text-sm h-6 pt-0.5 px-4 rounded-sm"
-              style={{
-                backgroundColor: `${epicColor(props.item.epic)[0]}`,
-                color: `${epicColor(props.item.epic)[1]}`,
-              }}
-            >
-              {props.item.epic}
-            </div>
-          )}
+          <div className="ml-3 font-medium text-sm pt-0.5">
+            {issue.issuename}
+          </div>
         </div>
-      </NavLink>
+      </Link>
 
       <div className="inline-flex align-baseline">
         <span className="flex px-1.5 py-1 rounded-xl bg-gray-400 text-xs mr-2">
           <AccessTimeRoundedIcon
             sx={{height: 14, width: 14, marginRight: 0.5, marginTop: 0.1}}
           />
-          {props.item.due ? <p>{convertDate(props.item.due)}</p> : <p>-</p>}
+          {issue.dueDate ? <p>{convertDate(issue.dueDate)}</p> : <p>-</p>}
         </span>
 
         <span
@@ -149,7 +202,7 @@ function TaskCard(props) {
             : 'bg-to-do-color'
         }`}
         >
-          {props.item.due ? <>{props.item.point}</> : <p>-</p>}
+          {issue.estimatePoint ? <>{issue.estimatePoint}</> : <p>-</p>}
         </span>
 
         <Button
@@ -159,7 +212,7 @@ function TaskCard(props) {
             height: 24,
             borderRadius: 3,
             marginRight: 2,
-            zIndex: 5,
+            zIndex: 1,
             backgroundColor: `${
               status === 'Done'
                 ? '#A4E7AB'
@@ -205,6 +258,7 @@ function TaskCard(props) {
                   .map((element) => {
                     return (
                       <MenuItem
+                        key={element}
                         sx={{
                           py: 1,
                           fontSize: 14,
@@ -229,7 +283,7 @@ function TaskCard(props) {
         </Popper>
 
         <Avatar
-          src="X"
+          src={assignee.photoURL}
           sx={{
             width: 24,
             height: 24,
@@ -237,10 +291,26 @@ function TaskCard(props) {
             backgroundColor: '#8993A4',
             marginRight: 1,
           }}
-          alt={props.item.assignee}
+          alt={assignee ? assignee.username : ''}
         />
+        <IconButton
+          className={'deleteBtn'}
+          sx={{width: 24, height: 24, visibility: 'hidden'}}
+          onClick={() => setOpenDelPopup(true)}
+        >
+          <ClearRoundedIcon />{' '}
+        </IconButton>
       </div>
-    </div>
+      <WarningPopup
+        title={'Delete Issue'}
+        open={openDelPopup}
+        onClose={() => setOpenDelPopup(false)}
+        handleSubmit={deleteIssueHandler}
+        content={
+          `Do you really want to delete this Issue? This cannot be undone`
+        }
+      />
+    </Box>
   );
 }
 

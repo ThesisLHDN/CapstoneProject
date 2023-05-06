@@ -16,9 +16,7 @@ const data = {
   status: 'Status',
   assignee: 'Assignee',
   type: 'Type',
-  epci: 'Epic',
   priority: 'Priority',
-  due: 'Due Date',
   none: 'None',
 };
 

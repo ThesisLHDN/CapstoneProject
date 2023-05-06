@@ -14,14 +14,12 @@ function WarningPopup({
   onClose,
   selectedValue,
   open,
+  handleSubmit,
 }) {
   const handleClose = () => {
     onClose(selectedValue);
   };
 
-  const handleListItemClick = (value) => {
-    onClose(value);
-  };
   return (
     <Dialog onClose={handleClose} open={open}>
       <Paper
@@ -32,6 +30,7 @@ function WarningPopup({
           flexDirection: 'column',
           gap: '10px',
           paddingTop: '5px',
+          backgroundColor: '#00000000',
           ...sx,
         }}
       >
@@ -60,7 +59,9 @@ function WarningPopup({
           </Typography>
         </Box>
 
-        <Typography sx={{fontSize: 14, textAlign: 'justify'}}>
+        <Typography
+          sx={{fontSize: 14, textAlign: 'justify', wordBreak: 'break-word'}}
+        >
           {content ? content : 'No content'}
         </Typography>
         <Box
@@ -83,11 +84,12 @@ function WarningPopup({
               color: 'white',
               '&:hover': {backgroundColor: '#FF2424'},
             }}
+            onClick={handleSubmit}
           >
             {delContent ? delContent : 'Delete'}
           </Button>
           <Button
-            onClick={onClose}
+            onClick={() => onClose(false)}
             sx={{
               color: '#818181',
             }}

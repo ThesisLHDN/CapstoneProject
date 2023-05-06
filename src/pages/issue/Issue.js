@@ -1,11 +1,37 @@
-import React from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Grid, Breadcrumbs, Typography, Link} from '@mui/material';
 import ElectricBoltIcon from '@mui/icons-material/ElectricBolt';
 import FiberManualRecordRoundedIcon from '@mui/icons-material/FiberManualRecordRounded';
 import LeftIssueDetail from 'src/components/issue/LeftIssueDetail';
 import RightIssueDetail from 'src/components/issue/RightIssueDetail';
+import {useLocation} from 'react-router-dom';
+import axios from 'axios';
+import {AppContext} from 'src/Context/AppProvider';
+import {AuthContext} from 'src/Context/AuthProvider';
 
 function Issue() {
+  const {
+    user: {uid},
+  } = useContext(AuthContext);
+  const {project} = useContext(AppContext);
+  const location = useLocation();
+  const issueId = location.pathname.split('/')[3];
+  const [issue, setIssue] = useState({});
+  const [trigger, setTrigger] = useState(false);
+
+  const fetchIssueData = async () => {
+    try {
+      const res = await axios.get(`http://localhost:8800/issue/${issueId}`);
+      setIssue(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchIssueData();
+  }, [trigger]);
+
   return (
     <div>
       <Grid container spacing={2}>
@@ -15,70 +41,24 @@ function Issue() {
               underline="hover"
               key="1"
               color="inherit"
-              href="/workspace-setting"
+              href={`/workspace-setting/${project.workspaceId}?user=${uid}`}
               onClick={() => {}}
               sx={{fontFamily: 'Open Sans, sans-serif'}}
             >
-              Dang's Workspace
+              {project.wsname}
             </Link>
             <Link
               underline="hover"
               key="2"
               color="inherit"
-              href="/roadmap"
+              href={`/roadmap/${project.id}`}
               onClick={() => {}}
               sx={{fontFamily: 'Open Sans, sans-serif'}}
             >
-              First Scrum Project
+              {project.pname}
             </Link>
             <Typography key="3" color="text.primary" sx={{fontSize: 'inherit'}}>
-              DWP-11
-            </Typography>
-          </Breadcrumbs>
-        </Grid>
-      </Grid>
-
-      <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <Breadcrumbs separator="›" aria-label="breadcrumb" sx={{mb: 4}}>
-            <Link
-              underline="hover"
-              key="1"
-              color="inherit"
-              href="/workspace-setting"
-              onClick={() => {}}
-              sx={{fontFamily: 'Open Sans, sans-serif'}}
-            >
-              <ElectricBoltIcon
-                sx={{
-                  backgroundColor: 'purple',
-                  color: 'white',
-                  borderRadius: 1,
-                  width: 24,
-                  height: 24,
-                  padding: 0.25,
-                  marginRight: 1,
-                }}
-              />
-              Dang's Workspace
-            </Link>
-            <Typography
-              key="3"
-              color="text.primary"
-              sx={{fontFamily: 'Open Sans, sans-serif'}}
-            >
-              <FiberManualRecordRoundedIcon
-                sx={{
-                  backgroundColor: 'red',
-                  color: 'white',
-                  borderRadius: 1,
-                  width: 24,
-                  height: 24,
-                  padding: 0.25,
-                  marginRight: 1,
-                }}
-              />
-              DWP-11
+              {project.pkey + '-' + issueId}
             </Typography>
           </Breadcrumbs>
         </Grid>
@@ -86,11 +66,21 @@ function Issue() {
 
       <Grid container spacing={2}>
         <Grid item xs={7}>
-          <LeftIssueDetail />
+          <LeftIssueDetail
+            issue={issue}
+            setIssue={setIssue}
+            trigger={trigger}
+            setTrigger={setTrigger}
+          />
         </Grid>
 
         <Grid item xs={5}>
-          <RightIssueDetail />
+          <RightIssueDetail
+            issue={issue}
+            setIssue={setIssue}
+            trigger={trigger}
+            setTrigger={setTrigger}
+          />
         </Grid>
       </Grid>
     </div>

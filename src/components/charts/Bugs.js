@@ -1,30 +1,39 @@
-import React, { useState } from "react";
-import { Button, Radio, RadioGroup, FormControl, FormControlLabel, Typography } from "@mui/material";
-import { Bar } from "react-chartjs-2";
-import { Chart as ChartJS } from "chart.js/auto";
+import {useState} from 'react';
+import {
+  Button,
+  Radio,
+  RadioGroup,
+  FormControl,
+  FormControlLabel,
+  Typography,
+} from '@mui/material';
+import {Bar} from 'react-chartjs-2';
+import {Chart as ChartJS} from 'chart.js/auto';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 
-function Bugs({ chartData }) {
+function Bugs({chartData}) {
   const [activeAllBtn, setActiveAllBtn] = useState(false);
   const [activeCommentBtn, setActiveCommentBtn] = useState(true);
   const [activeHistoryBtn, setActiveHistoryBtn] = useState(false);
   const [activeAllCategories, setActiveAllCategories] = useState(false);
 
   return (
-    <div style={{  border: "1px solid #787878", borderRadius: 16 }} >
+    <div style={{border: '1px solid #787878', borderRadius: 16}}>
       <div className="flex">
-        <p className="text-left text-tg-text-color font-bold text-base mt-6 mx-6">Bugs</p>
-        <SettingsOutlinedIcon sx={{ marginTop: 3 }}/>
+        <p className="text-left text-tg-text-color font-bold text-base mt-6 mx-6">
+          Bugs
+        </p>
+        <SettingsOutlinedIcon sx={{marginTop: 3}} />
       </div>
 
       <div className="flex justify-between">
         <p className="text-sm italic ml-6 mt-3">Short description</p>
         <div className="flex mr-4">
-          <Button 
+          <Button
             style={{
-              textTransform: "none",
+              textTransform: 'none',
               fontSize: 12,
               height: 32,
               minWidth: 30,
@@ -32,19 +41,21 @@ function Bugs({ chartData }) {
               paddingRight: 30,
               borderRadius: 20,
               marginRight: -25,
-              border: "1px solid white",
-              color: !activeAllBtn ? "black" : "white",
-              backgroundColor: !activeAllBtn ? "#EFEFEF" : "green",
-            }} 
+              border: '1px solid white',
+              color: !activeAllBtn ? 'black' : 'white',
+              backgroundColor: !activeAllBtn ? '#EFEFEF' : 'green',
+            }}
             onClick={() => {
               setActiveAllBtn(true);
               setActiveCommentBtn(false);
               setActiveHistoryBtn(false);
             }}
-          >Daily</Button>
-          <Button 
+          >
+            Daily
+          </Button>
+          <Button
             style={{
-              textTransform: "none",
+              textTransform: 'none',
               fontSize: 12,
               height: 32,
               minWidth: 30,
@@ -53,19 +64,21 @@ function Bugs({ chartData }) {
               borderRadius: 20,
               marginRight: -25,
               zIndex: 2,
-              border: "1px solid white",
-              color: !activeCommentBtn ? "black" : "white",
-              backgroundColor: !activeCommentBtn ? "#EFEFEF" : "green",
-            }} 
+              border: '1px solid white',
+              color: !activeCommentBtn ? 'black' : 'white',
+              backgroundColor: !activeCommentBtn ? '#EFEFEF' : 'green',
+            }}
             onClick={() => {
               setActiveAllBtn(false);
               setActiveCommentBtn(true);
               setActiveHistoryBtn(false);
             }}
-          >Weekly</Button>
-          <Button 
+          >
+            Weekly
+          </Button>
+          <Button
             style={{
-              textTransform: "none",
+              textTransform: 'none',
               fontSize: 12,
               height: 32,
               minWidth: 30,
@@ -74,29 +87,46 @@ function Bugs({ chartData }) {
               borderRadius: 20,
               marginRight: 10,
               zIndex: 1,
-              border: "1px solid white",
-              color: !activeHistoryBtn ? "black" : "white",
-              backgroundColor: !activeHistoryBtn ? "#EFEFEF" : "green",
-            }} 
+              border: '1px solid white',
+              color: !activeHistoryBtn ? 'black' : 'white',
+              backgroundColor: !activeHistoryBtn ? '#EFEFEF' : 'green',
+            }}
             onClick={() => {
               setActiveAllBtn(false);
               setActiveCommentBtn(false);
               setActiveHistoryBtn(true);
             }}
-          >Month</Button>
+          >
+            Month
+          </Button>
         </div>
       </div>
-      
-      <div className="chart-container" style={{ width: "90%", height: "90%", marginLeft: "5%", marginTop: 20, marginBottom: 20}}>
+
+      <div
+        className="chart-container"
+        style={{
+          width: '90%',
+          height: '90%',
+          marginLeft: '5%',
+          marginTop: 20,
+          marginBottom: 20,
+        }}
+      >
         <Bar data={chartData} />
       </div>
 
       <div className="flex mb-4">
-        <div className="my-10 mx-10">
-          <Button 
-            startIcon={activeAllCategories ? <RadioButtonCheckedIcon /> : <CircleOutlinedIcon />}
+        {/* <div className="my-10 mx-10">
+          <Button
+            startIcon={
+              activeAllCategories ? (
+                <RadioButtonCheckedIcon />
+              ) : (
+                <CircleOutlinedIcon />
+              )
+            }
             style={{
-              textTransform: "none",
+              textTransform: 'none',
               fontSize: 12,
               height: 32,
               minWidth: 30,
@@ -105,15 +135,17 @@ function Bugs({ chartData }) {
               borderRadius: 20,
               marginRight: -25,
               zIndex: 2,
-              border: "1px solid green",
-              color: "green",
-              backgroundColor: "#EFEFEF",
+              border: '1px solid green',
+              color: 'green',
+              backgroundColor: '#EFEFEF',
             }}
             onClick={() => setActiveAllCategories(!activeAllCategories)}
-          >All Categories</Button>
-        </div>
+          >
+            All Categories
+          </Button>
+        </div> */}
 
-        <div>
+        {/* <div>
           <FormControl>
             <RadioGroup
               aria-labelledby="demo-radio-buttons-group-label"
@@ -134,10 +166,10 @@ function Bugs({ chartData }) {
               })}
             </RadioGroup>
           </FormControl>
-        </div>
+        </div> */}
       </div>
     </div>
-  )
+  );
 }
 
-export default Bugs
+export default Bugs;

@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React, {useContext, useMemo, useState, useRef, useEffect} from 'react';
 import {styled} from '@mui/material/styles';
-import {color} from 'src/style';
+import {color, colorHover} from 'src/style';
 import {
   Box,
   Modal,
@@ -11,250 +11,435 @@ import {
   Typography,
   Avatar,
   Switch,
+  Drawer,
 } from '@mui/material';
+import {useTheme} from '@mui/material/styles';
+import MuiAppBar from '@mui/material/AppBar';
+import PersonRemoveAlt1RoundedIcon from '@mui/icons-material/PersonRemoveAlt1Rounded';
+import Toolbar from '@mui/material/Toolbar';
+import CssBaseline from '@mui/material/CssBaseline';
+import List from '@mui/material/List';
+import MenuIcon from '@mui/icons-material/Menu';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import MailIcon from '@mui/icons-material/Mail';
 
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import PersonAddAltRoundedIcon from '@mui/icons-material/PersonAddAltRounded';
+import CircularProgress from '@mui/material/CircularProgress';
+import CreationPopup from 'src/components/popup/Create';
 
 import Message from './Message';
 import TypingArea from './TypingArea';
+import {ChatContext} from 'src/Context/ChatProvider';
+import {useFirestore} from 'src/hooks/useFirestore';
+import {
+  getDocumentWithCondition,
+  updateDocument,
+  deleteDocument,
+} from 'src/firebase/firestoreServices';
+import WarningPopup from 'src/components/popup/Warning';
 
-// const dummyMessage = {
-//   name: 'Kenh chat 1',
-//   id: 1,
-//   members: [],
-//   messages: [
-//     {
-//       senderId: 1911044,
-//       senderName: 'Dang Nguyen',
-//       message: 'How are you today?',
-//       time: new Date(2022, 11, 1),
-//     },
-//     {
-//       senderId: 1910298,
-//       senderName: 'Lam Nguyen',
-//       message: "I'm good",
-//       time: new Date(2022, 11, 2),
-//     },
-//     {
-//       senderId: 1910298,
-//       senderName: 'Lam Nguyen',
-//       message:
-//         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-//       time: new Date(2022, 11, 3),
-//     },
-//     {
-//       senderId: 1911044,
-//       senderName: 'Dang Nguyen',
-//       message: 'Not good',
-//       time: new Date(),
-//     },
-//     {
-//       senderId: 1910298,
-//       senderName: 'Lam Nguyen',
-//       message:
-//         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-//       time: new Date(2022, 11, 3),
-//     },
-//     {
-//       senderId: 1911044,
-//       senderName: 'Dang Nguyen',
-//       message: 'Not good',
-//       time: new Date(),
-//     },
-//     {
-//       senderId: 1910298,
-//       senderName: 'Lam Nguyen',
-//       message:
-//         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-//       time: new Date(2022, 11, 3),
-//     },
-//     {
-//       senderId: 1911044,
-//       senderName: 'Dang Nguyen',
-//       message: 'Not good',
-//       time: new Date(),
-//     },
-//   ],
-// };
+const StyledDiv = styled(`div`)({
+  padding: '12px',
+  '&:hover': {backgroundColor: '#00000010', cursor: 'pointer'},
+});
+const drawerWidth = 260;
 
-const IOSSwitch = styled((props) => (
-  <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
-))(({theme}) => ({
-  width: 40,
-  height: 22,
-  padding: 0,
-  '& .MuiSwitch-switchBase': {
-    padding: 0,
-    margin: 2,
-    transitionDuration: '300ms',
-    '&.Mui-checked': {
-      transform: 'translateX(18px)',
-      color: '#fff',
-      '& + .MuiSwitch-track': {
-        backgroundColor: theme.palette.mode === 'dark' ? '#2ECA45' : '#65C466',
-        opacity: 1,
-        border: 0,
-      },
-      '&.Mui-disabled + .MuiSwitch-track': {
-        opacity: 0.5,
-      },
-    },
-    '&.Mui-focusVisible .MuiSwitch-thumb': {
-      color: '#33cf4d',
-      border: '6px solid #fff',
-    },
-    '&.Mui-disabled .MuiSwitch-thumb': {
-      color:
-        theme.palette.mode === 'light'
-          ? theme.palette.grey[100]
-          : theme.palette.grey[600],
-    },
-    '&.Mui-disabled + .MuiSwitch-track': {
-      opacity: theme.palette.mode === 'light' ? 0.7 : 0.3,
-    },
-  },
-  '& .MuiSwitch-thumb': {
-    boxSizing: 'border-box',
-    width: 18,
-    height: 18,
-  },
-  '& .MuiSwitch-track': {
-    borderRadius: 24 / 2,
-    backgroundColor: theme.palette.mode === 'light' ? '#E9E9EA' : '#39393D',
-    opacity: 1,
-    transition: theme.transitions.create(['background-color'], {
-      duration: 500,
+const Main = styled('main', {shouldForwardProp: (prop) => prop !== 'open'})(
+  ({theme, open}) => ({
+    height: 'calc(100% - 70px)',
+    flexGrow: 1,
+    // width: '100%',
+    transition: theme.transitions.create(['margin', 'width'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
     }),
-  },
+    marginRight: 0,
+    ...(open && {
+      transition: theme.transitions.create(['margin', 'width'], {
+        easing: theme.transitions.easing.easeOut,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+      marginRight: drawerWidth,
+    }),
+  }),
+);
+
+const AppBar = styled(MuiAppBar, {
+  shouldForwardProp: (prop) => prop !== 'open',
+})(({theme, open}) => ({
+  backgroundColor: 'white',
+  color: '#181818',
+  shadow: 'none',
+  left: 0,
+  position: 'absolute',
+  width: '100%',
+  transition: theme.transitions.create(['margin', 'width'], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  ...(open && {
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(['margin', 'width'], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  }),
 }));
 
-function ChatWindow({messages}) {
-  const [open, setOpen] = useState(false);
+const DrawerHeader = styled('div')(({theme}) => ({
+  display: 'flex',
+  alignItems: 'center',
+  padding: theme.spacing(0, 1),
+  // necessary for content to be below app bar
+  ...theme.mixins.toolbar,
+  justifyContent: 'flex-start',
+}));
 
-  const handleClose = () => {
+function ChatWindow({currentUser}) {
+  const messagesEndRef = useRef(
+    document.getElementById('chat-window-messages'),
+  );
+
+  const theme = useTheme();
+  const [openDrawer, setOpenDrawer] = useState(false);
+
+  const [open, setOpen] = useState(false);
+  const {selectedRoom, roomMembers, currentRoomMembers} =
+    useContext(ChatContext);
+
+  const messagesCondition = useMemo(
+    () => ({
+      fieldName: 'roomId',
+      operator: '==',
+      compareValue: selectedRoom ? selectedRoom.id : '',
+      sort: 'desc',
+    }),
+    [selectedRoom],
+  );
+
+  const messagesRef = React.useRef(null);
+
+  const scrollToBottom = () => {
+    messagesRef.current.scrollIntoView({
+      // behavior: 'smooth',
+    });
+  };
+
+  const messages = useFirestore('messages', messagesCondition);
+  if (messages && roomMembers) {
+    var newMess = messages.map((message) => {
+      return {
+        author: roomMembers.find((member) => member.uid === message.authorId),
+        ...message,
+      };
+    });
+  }
+
+  React.useEffect(() => {
+    if (messagesRef.current) {
+      scrollToBottom();
+    }
+  }, [messages]);
+
+  const addMemberHandler = async (email) => {
+    console.log(email);
+    // TODO validate
+    const newMemberList = await getDocumentWithCondition('users', {
+      fieldName: 'email',
+      operator: '==',
+      compareValue: email,
+    });
+
+    console.log(newMemberList);
+    const member = newMemberList.docs.map((member) => ({
+      id: member.id,
+      ...member.data(),
+    }))[0];
+    console.log(member);
+    if (member) {
+      if (!(member.id in currentRoomMembers)) {
+        selectedRoom.members.push(member.id);
+        console.log('start update', member);
+        updateDocument('rooms', selectedRoom.id, {
+          members: selectedRoom.members,
+          allmembers: selectedRoom.members,
+        });
+      }
+    }
+
     setOpen(false);
   };
 
-  const [settingModal, setSettingModal] = useState(false);
+  // const path = useMemo(() => `rooms/${selectedRoom.id}/messages`, []);
+  // const messages = useFirestore(path);
+
+  const [openDeleteRoom, setOpenDeleteRoom] = useState(false);
+  const [openRemoveMem, setOpenRemoveMem] = useState(false);
+  const [mem, setMem] = useState(false);
+  const deleteRoomHandler = () => {
+    console.log('deleteRoomHandler');
+    deleteDocument('rooms', selectedRoom.id);
+    // Todo delete all messages
+    setOpenDeleteRoom(false);
+  };
+  const removeMemHandler = () => {
+    console.log('removeMemHandler', mem);
+
+    const newCurrentList = currentRoomMembers
+      .filter((member) => member.uid !== mem.uid)
+      .map((member) => member.uid);
+    console.log('delete', mem.uid, 'from', currentRoomMembers, newCurrentList);
+
+    updateDocument('rooms', selectedRoom.id, {members: newCurrentList});
+
+    // Todo pop member id out of members array and update doc
+    // cần quan tâm nếu members đã bị xóa thì không có data
+    setOpenRemoveMem(false);
+    setMem(false);
+  };
+
+  const adminRight = selectedRoom
+    ? currentUser.uid === selectedRoom.adminId
+    : false;
 
   return (
-    <Box container sx={{p: 2, height: '100%'}}>
-      <Box sx={{display: 'flex', justifyContent: 'space-between', mb: 2}}>
-        <Box sx={{display: 'flex', gap: 2, alignItems: 'center'}}>
-          <Avatar src={messages.picture} alt={messages.name}></Avatar>
-          <Typography variant="h5">{messages.name}</Typography>
-        </Box>
-        <Box sx={{display: 'flex', gap: 1}}>
-          {/* <Button variant="contained" startIcon={<PersonAddAltRoundedIcon />}>
-            Add Member
-          </Button> */}
-          <Box sx={{position: 'relative'}}>
-            <IconButton
-              sx={{color: color.green03}}
-              onClick={() => setSettingModal(true)}
-            >
-              <MoreVertIcon />
-            </IconButton>
-            {settingModal && (
-              <Box>
-                <Box
-                  sx={{
-                    width: '100vw',
-                    height: '100vh',
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    backgroundColor: '#00000020',
-                  }}
-                  onClick={() => setSettingModal(false)}
-                ></Box>{' '}
-                <Paper
-                  elevation={3}
-                  sx={{
-                    position: 'absolute',
-                    top: 0,
-                    right: 0,
-                    p: 2,
-                  }}
-                >
-                  <Typography variant="h6" sx={{color: color.green03}}>
-                    Setting
+    <Box container sx={{height: '100%', position: 'relative'}}>
+      {selectedRoom ? (
+        <Box sx={{backgroundColor: '#efefef', height: '100%'}}>
+          <AppBar open={openDrawer}>
+            <Toolbar sx={{display: 'flex', justifyContent: 'space-between'}}>
+              <Box sx={{display: 'flex', gap: 2, alignItems: 'center'}}>
+                <Avatar
+                  src={selectedRoom.coverPicture}
+                  alt={selectedRoom.name}
+                ></Avatar>
+
+                <Box>
+                  {' '}
+                  <Typography variant="h6">{selectedRoom.name}</Typography>
+                  <Typography variant="subtitle2">
+                    {selectedRoom.description}
                   </Typography>
-                  <Divider sx={{my: 1}}></Divider>
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      height: 40,
-                    }}
-                  >
-                    <Typography>Rename</Typography>
-                  </div>
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      height: 40,
-                      gap: 2,
-                    }}
-                  >
-                    <Typography>Notifications</Typography>
-                    <IOSSwitch defaultChecked />
-                  </div>
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      height: 40,
-                      gap: 2,
-                    }}
-                  >
-                    <Typography>Public</Typography>
-                    <IOSSwitch defaultChecked />
-                  </div>
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      height: 40,
-                    }}
-                  >
-                    <Typography>Members</Typography>
-                  </div>
-                </Paper>
+                </Box>
               </Box>
-            )}
-            <Modal open={open} onClose={handleClose}>
-              <Paper
-                elevation={3}
-                sx={{position: 'absolute', right: 0, top: 0}}
-              >
-                <Button variant="text">Rename</Button>
+              <Box>
                 <Button
                   variant="contained"
+                  sx={{...colorHover.greenBtn}}
                   startIcon={<PersonAddAltRoundedIcon />}
+                  onClick={() => {
+                    setOpen(true);
+                  }}
                 >
                   Add Member
                 </Button>
-              </Paper>
-            </Modal>
-          </Box>
+                <IconButton
+                  color="inherit"
+                  aria-label="open drawer"
+                  edge="end"
+                  onClick={() => setOpenDrawer(true)}
+                  sx={{...(openDrawer && {display: 'none'})}}
+                >
+                  <MenuIcon />
+                </IconButton>
+              </Box>
+            </Toolbar>
+          </AppBar>
+          <Main open={openDrawer}>
+            <DrawerHeader sx={{width: '100%'}} />{' '}
+            <Box
+              sx={{
+                pl: 1,
+                height: 'calc(100% - 64px)',
+                overflowY: 'scroll',
+                // scrollSnapType: 'y proximity',
+              }}
+            >
+              {newMess
+                .reverse()
+                .map(({author, authorId, body, type, createdAt, file}) => (
+                  <Message mine={authorId === currentUser.uid}>
+                    {{author, authorId, body, type, createdAt, file}}
+                  </Message>
+                ))}{' '}
+              <div ref={messagesRef} />
+            </Box>
+            {/* <DrawerFooter sx={{backgroundColor: 'green', width: '100%'}} />{' '} */}
+          </Main>{' '}
+          <Drawer
+            sx={{
+              width: drawerWidth,
+              flexShrink: 0,
+              '& .MuiDrawer-paper': {
+                width: drawerWidth,
+              },
+            }}
+            variant="persistent"
+            anchor="right"
+            open={openDrawer}
+          >
+            <DrawerHeader>
+              <Button
+                onClick={() => setOpenDrawer(false)}
+                sx={{textTransform: 'none'}}
+              >
+                {theme.direction === 'rtl' ? (
+                  <ChevronLeftIcon />
+                ) : (
+                  <>
+                    {' '}
+                    <ChevronRightIcon sx={{color: '#181818'}} />
+                    <Typography
+                      variant="h6"
+                      sx={{textAlign: 'center', color: color.green03}}
+                    >
+                      Setting
+                    </Typography>
+                  </>
+                )}
+              </Button>
+            </DrawerHeader>
+            <Divider />
+            <StyledDiv
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                height: 40,
+              }}
+            >
+              <Typography>Rename</Typography>
+            </StyledDiv>
+            {/* <StyledDiv
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                height: 40,
+                gap: 2,
+              }}
+            >
+              <Typography>Notifications</Typography>
+              <Switch defaultChecked />
+            </StyledDiv>*/}
+            <StyledDiv
+              style={{
+                // display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                // height: 40,
+              }}
+            >
+              <Typography>Members</Typography>
+            </StyledDiv>{' '}
+            <Box sx={{pl: 1}}>
+              {currentRoomMembers.map((member) => (
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    mt: 1,
+                    px: 1,
+                  }}
+                >
+                  <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>
+                    {' '}
+                    <Avatar src={member.photoURL} alt={member.name}></Avatar>
+                    {member.displayName}
+                  </Box>
+
+                  {adminRight && member.id !== currentUser.uid && (
+                    <IconButton
+                      onClick={() => {
+                        setMem(member);
+                        setOpenRemoveMem(true);
+                      }}
+                    >
+                      <PersonRemoveAlt1RoundedIcon />
+                    </IconButton>
+                  )}
+                </Box>
+              ))}
+            </Box>
+            <StyledDiv
+              style={{
+                display:
+                  selectedRoom.adminId === currentUser.uid ? 'flex' : 'none',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                height: 40,
+              }}
+              onClick={() => setOpenDeleteRoom(true)}
+            >
+              <Typography sx={{color: 'red'}}>Delete room</Typography>
+            </StyledDiv>
+          </Drawer>
+          <TypingArea
+            currentUser={currentUser}
+            roomId={selectedRoom ? selectedRoom.id : ''}
+          />
         </Box>
-      </Box>
-      <Divider variant="middle" sx={{borderBottom: 2, color: '#666'}}></Divider>
-      <Box sx={{py: 2, height: 'calc(100% - 116px)', overflowY: 'scroll'}}>
-        {messages.messages.reverse().map(({senderName, senderId, message, time}) => (
-          <Message mine={senderId === 1911044}>
-            {{senderName, senderId, message, time}}
-          </Message>
-        ))}
-      </Box>
-      <TypingArea />
+      ) : (
+        // <CircularProgress
+        //   sx={{
+        //     position: 'absolute',
+        //     top: '50%',
+        //     right: '50%',
+        //     transform: 'translate(-50%,-50%)',
+        //   }}
+        // />
+        <Box sx={{position: 'relative', m: 0, height: '100%'}}>
+          <Typography
+            sx={{
+              position: 'absolute',
+              left: '50%',
+              top: '50%',
+              width: '80%',
+              transform: 'translate(-50%,-50%)',
+            }}
+          >
+            You are not in any chat room. Create or be invited to one.
+          </Typography>
+        </Box>
+      )}
+      <CreationPopup
+        title="Add member"
+        fieldLabel={'Please enter an email'}
+        open={open}
+        onClose={() => setOpen(false)}
+        onSubmit={addMemberHandler}
+        confirmContent={'Add'}
+      ></CreationPopup>
+      <WarningPopup
+        title={'Delete room'}
+        open={openDeleteRoom}
+        onClose={() => setOpenDeleteRoom(false)}
+        handleSubmit={deleteRoomHandler}
+        content={
+          'Do you really want to delete this room? This cannot be undone'
+        }
+      ></WarningPopup>
+      <WarningPopup
+        title={'Remove member'}
+        open={openRemoveMem}
+        onClose={() => setOpenRemoveMem(false)}
+        delContent={'Remove'}
+        handleSubmit={removeMemHandler}
+        content={
+          <Typography sx={{fontSize: 14}}>
+            Do you really want to remove <b>{mem.displayName}</b> (
+            <i>{mem.email}</i>)? This cannot be undone.
+          </Typography>
+        }
+      ></WarningPopup>
     </Box>
   );
 }

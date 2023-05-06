@@ -1,5 +1,6 @@
-import {useEffect, useState, useContext} from 'react';
+import {useContext} from 'react';
 import {AuthContext} from 'src/Context/AuthProvider';
+import {useFirestoreDoc} from 'src/hooks/useFirestore';
 import {color} from 'src/style';
 import {Typography, Grid, TextField, Button, Avatar} from '@mui/material';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
@@ -7,30 +8,33 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import PhoneEnabledOutlinedIcon from '@mui/icons-material/PhoneEnabledOutlined';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
-
-import {doc, collection, onSnapshot} from 'firebase/firestore';
-import {db} from 'src/firebase/config';
+import {useNavigate} from 'react-router-dom';
 
 function Profile() {
-  const [userData, setUserData] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
-
   const {
-    user: {displayName, email, photoURL},
+    user: {displayName, email, photoURL, uid},
   } = useContext(AuthContext);
 
-  useEffect(() => {
-    onSnapshot(collection(db, 'users'), (snapshot) => {
-      const data = snapshot.docs.map((doc) => ({...doc.data(), id: doc.id}));
-      // console.log(data);
-      setUserData(data[0]);
-    });
-    setIsLoading(false);
-  }, []);
-  console.log('user data', userData);
+  // const users = useFirestore('users', {
+  //   fieldName: 'uid',
+  //   operator: '==',
+  //   compareValue: uid,
+  // });
+  // const user = users[0];
+  const user = useFirestoreDoc('users', uid);
+  console.log(user);
+
+  console.log('usedoc', user);
+
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate('/forget');
+  };
+
   return (
-    <div>
-      {!isLoading ? (
+    <div style={{marginLeft: '-15vw'}}>
+      {user ? (
         <div>
           <Typography variant="h5" sx={{color: color.green03, fontWeight: 700}}>
             Account Settings
@@ -38,14 +42,14 @@ function Profile() {
 
           <Grid container alignItems="center" justifyContent="center">
             <Avatar
-              src={userData.photoURL}
+              src={photoURL}
               sx={{
                 width: '15vw',
                 height: '15vw',
                 backgroundColor: '#8993A4',
                 fontSize: 120,
               }}
-              alt="Lam Nguyen"
+              alt={displayName}
             />
           </Grid>
 
@@ -73,7 +77,7 @@ function Profile() {
 
             <Grid item xs={3.5}>
               <TextField
-                value={userData.displayName}
+                value={displayName}
                 size="small"
                 sx={{width: '100%', backgroundColor: '#ECECEC'}}
               ></TextField>
@@ -104,7 +108,7 @@ function Profile() {
 
             <Grid item xs={3.5}>
               <TextField
-                value={userData.email}
+                value={email}
                 size="small"
                 disabled
                 sx={{
@@ -119,40 +123,9 @@ function Profile() {
             container
             alignItems="center"
             justifyContent="center"
-            sx={{mt: 3}}
-          >
-            <Grid item xs={2}>
-              <Typography
-                sx={{
-                  display: 'flex',
-                  color: color.green03,
-                  fontSize: 16,
-                  fontWeight: 700,
-                }}
-              >
-                <PhoneEnabledOutlinedIcon
-                  sx={{marginRight: 2, width: 24, height: 24}}
-                />
-                Phone number
-              </Typography>
-            </Grid>
-
-            <Grid item xs={3.5} alignItems="center" justifyContent="center">
-              <TextField
-                defaultValue={userData.phone}
-                size="small"
-                sx={{width: '100%', backgroundColor: '#ECECEC'}}
-              ></TextField>
-            </Grid>
-          </Grid>
-
-          <Grid
-            container
-            alignItems="center"
-            justifyContent="center"
             sx={{mt: 2}}
           >
-            <Grid item xs={3}>
+            {/* <Grid item xs={3}>
               <Button
                 variant="text"
                 startIcon={
@@ -168,14 +141,15 @@ function Profile() {
                   paddingX: 2,
                   marginTop: 1,
                 }}
+                onClick={handleClick}
               >
                 Change password
               </Button>
-            </Grid>
+            </Grid> */}
             <Grid item xs={2.75}></Grid>
           </Grid>
 
-          <Grid
+          {/* <Grid
             container
             alignItems="center"
             justifyContent="center"
@@ -202,7 +176,7 @@ function Profile() {
               </Button>
             </Grid>
             <Grid item xs={2.75}></Grid>
-          </Grid>
+          </Grid> */}
         </div>
       ) : (
         <div>'Loading'</div>

@@ -1,59 +1,34 @@
-import React from 'react';
+import {useContext, useMemo, useState} from 'react';
+
+import SearchBar from 'src/components/search';
+import Sort from 'src/components/Sort';
+import AddItem from './AddItem';
+import WarningPopup from 'src/components/popup/Warning';
+import TextEditor from './QuillEditor/Editor';
+import {addDocument, updateDocument} from 'src/firebase/firestoreServices';
+
 import {
   Typography,
-  Box,
   Button,
   Grid,
   Breadcrumbs,
   Link,
   IconButton,
-  Paper,
-  MenuList,
-  MenuItem,
+  CircularProgress,
 } from '@mui/material';
-import SearchBar from 'src/components/search';
-import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-// import SortRoundedIcon from "@mui/icons-material/SortRounded"
-import AddIcon from '@mui/icons-material/Add';
-import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRightOutlined';
 import FolderOutlinedIcon from '@mui/icons-material/FolderOutlined';
-import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
+import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
+import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
+import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
-import Sort from 'src/components/Sort';
-import AddItem from './AddItem';
-
-const folders = [
-  {
-    name: 'Folder 1',
-    createBy: 'Lam Nguyen',
-    updateOn: '05/12/2022',
-    parent: '',
-    children: [],
-  },
-  {
-    name: 'Folder 2',
-    createBy: 'Lam Nguyen',
-    updateOn: '05/12/2022',
-    parent: '',
-    children: [],
-  },
-];
-
-const files = [
-  {
-    name: 'File 3',
-    createBy: 'Lam Nguyen',
-    updateOn: '05/12/2022',
-    parent: 'Folder 2',
-  },
-  {
-    name: 'File 4',
-    createBy: 'Lam Nguyen',
-    updateOn: '05/12/2022',
-    parent: '',
-  },
-];
+import {DocContext} from 'src/Context/DocProvider';
+import {deleteDocument} from 'src/firebase/firestoreServices';
+import {styled} from '@mui/system';
+import {useLocation} from 'react-router-dom';
+import {AppContext} from 'src/Context/AppProvider';
+import {AuthContext} from 'src/Context/AuthProvider';
+import {colorHover} from 'src/style';
 
 function convertDate(d) {
   const date = new Date(d);
@@ -66,146 +41,333 @@ function convertDate(d) {
   );
 }
 
-function Document() {
-  const rootDocument = folders
-    .concat(files)
-    .filter((item) => item.parent === '');
+const PlainButton = styled(Button)({
+  color: '#181818',
+  textTransform: 'none',
+  '& :hover': {backgroundColor: '#eee'},
+});
+
+function Document({parentId}) {
+  const {
+    selectedParentId,
+    selectedProjectId,
+    setSelectedProjectId,
+    onBack,
+    setParent,
+    rawDocuments,
+  } = useContext(DocContext);
+
+  const location = useLocation();
+  const projectId = location.pathname.split('/')[2];
+  const {
+    user: {uid},
+  } = useContext(AuthContext);
+  const {workspace, project} = useContext(AppContext);
+
+  setSelectedProjectId(projectId);
+  const [openDeletePopup, setOpenDeletePopup] = useState(false);
+  const [selectedFile, setSelectedFile] = useState({
+    name: 'Untitled',
+    body: '',
+  });
+
+  const documents = rawDocuments
+    ? rawDocuments.filter(
+        (item) => item.parentId === (selectedParentId ? selectedParentId : ''),
+      )
+    : [];
+  console.log('documents', rawDocuments, documents);
+
+  const deleteFileHandler = (confirmed) => {
+    const path = `projects/${selectedProjectId}/documents`;
+    console.log('delete', path, selectedFile);
+
+    deleteDocument(path, selectedFile.id);
+
+    setOpenDeletePopup(false);
+    setSelectedFile({name: 'Untitled', body: ''});
+  };
+
+  const [openEditor, setOpenEditor] = useState(false);
+  const [enableEditText, setEnableEditText] = useState(true);
+
+  const onSubmitTextEditor = (file) => {
+    console.log('text editor', file);
+    if (file) {
+      if (!file.id) {
+        console.log('create');
+        const TextData = {
+          authorId: uid,
+          name: file.name,
+          parentId: selectedParentId,
+          type: file.type,
+          body: file.body,
+        };
+        console.log('new doc added', TextData);
+        addDocument(`projects/${projectId}/documents`, TextData);
+      } else {
+        updateDocument(`projects/${projectId}/documents`, file.id, {
+          name: file.name,
+          body: file.body,
+        });
+        console.log('edit', file.id, file.name, file.body);
+      }
+    }
+
+    setOpenEditor(false);
+    // setOpenEditPopup(false);
+    setSelectedFile({name: 'Untitled', body: ''});
+    setEnableEditText(true);
+  };
+
+  const docButton = (doc) => {
+    switch (doc.type) {
+      case 'folder':
+        return (
+          <PlainButton
+            startIcon={<FolderOutlinedIcon />}
+            onClick={() => (doc ? setParent(doc.id, doc.name) : null)}
+          >
+            {doc.name}
+          </PlainButton>
+        );
+      case 'editableHTML':
+        return (
+          <PlainButton
+            startIcon={<DescriptionOutlinedIcon />}
+            onClick={(doc) => {
+              setOpenEditor(true);
+              setSelectedFile(doc);
+            }}
+          >
+            {doc.name}
+          </PlainButton>
+        );
+      default:
+        return (
+          <a href={doc.downloadURL} target="_blank" download>
+            <PlainButton
+              startIcon={<DescriptionOutlinedIcon />}
+              onClick={() => {
+                setOpenEditor(true);
+                setSelectedFile(doc);
+                // setEnableEditText(false);
+              }}
+            >
+              {doc.name}
+            </PlainButton>
+          </a>
+        );
+    }
+  };
 
   return (
     <div>
-      <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <Breadcrumbs separator="›" aria-label="breadcrumb" sx={{mb: 2}}>
-            <Link
-              underline="hover"
-              key="1"
-              color="inherit"
-              href="/workspace-setting"
-              onClick={() => {}}
-            >
-              Dang's Workspace
-            </Link>
-            <Link
-              underline="hover"
-              key="2"
-              color="inherit"
-              href="/roadmap"
-              onClick={() => {}}
-            >
-              First Scrum Project
-            </Link>
-            <Typography key="3" color="text.primary" sx={{fontSize: 'inherit'}}>
-              Documents
-            </Typography>
-          </Breadcrumbs>
-        </Grid>
-      </Grid>
-
-      <Typography variant="h5" sx={{color: 'green', fontWeight: 700}}>
-        Documents
-      </Typography>
-
-      <Box
-        sx={{
-          display: 'flex',
-          gap: 1,
-          gridTemplateColumns: 'repeat(4, 1fr)',
-          mt: 2,
-        }}
-      >
-        <SearchBar sx={{width: '210px'}} />
-        {/* <Button
-          variant="text"
-          startIcon={<SortRoundedIcon />}
-          sx={{ color: "#181818", textTransform: "none" }}
-        >
-          Sort
-        </Button> */}
-        <Sort />
-        <Button
-          variant="text"
-          startIcon={<VisibilityOutlinedIcon />}
-          sx={{color: '#181818', textTransform: 'none'}}
-        >
-          View
-        </Button>
-      </Box>
-
-      {/* <Button
-        variant="text"
-        startIcon={<AddIcon />}
-        sx={{color: 'black', fontSize: '14px', textTransform: 'none', mt: 2}}
-      >
-        Add new item
-      </Button> */}
-      <AddItem />
-
-      {rootDocument.map((item) => {
-        return (
-          <Grid container sx={{marginTop: 1, marginBottom: 1}}>
-            <Grid item xs={3}>
-              <Grid container>
-                {item.hasOwnProperty('children') ? (
-                  <div>
-                    <KeyboardArrowRightOutlinedIcon
-                      sx={{marginTop: 1.5, marginRight: 0.5}}
-                    />
-                    <FolderOutlinedIcon
-                      sx={{width: 32, height: 32, marginTop: 0.9}}
-                    />
-                  </div>
-                ) : (
-                  <DescriptionOutlinedIcon
-                    sx={{
-                      width: 32,
-                      height: 32,
-                      marginTop: 0.9,
-                      marginLeft: 3.5,
-                    }}
-                  />
-                )}
-                <Typography
-                  sx={{
-                    marginTop: 1.5,
-                    marginLeft: 1,
-                    fontSize: 14,
-                    cursor: 'pointer',
-                    '&:hover': {textDecoration: 'underline'},
-                  }}
+      {documents ? (
+        <div>
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <Breadcrumbs separator="›" aria-label="breadcrumb" sx={{mb: 2}}>
+                <Link
+                  underline="hover"
+                  key="1"
+                  color="inherit"
+                  href={`/workspace-setting/${project.workspaceId}?user=${uid}`}
                   onClick={() => {}}
+                  sx={{fontFamily: 'Open Sans, sans-serif'}}
                 >
-                  {item.name}
+                  {project.wsname}
+                </Link>
+                <Link
+                  underline="hover"
+                  key="2"
+                  color="inherit"
+                  href={`/roadmap/${project.id}`}
+                  onClick={() => {}}
+                  sx={{fontFamily: 'Open Sans, sans-serif'}}
+                >
+                  {project.pname}
+                </Link>
+                <Typography
+                  key="3"
+                  color="text.primary"
+                  sx={{fontSize: 'inherit'}}
+                >
+                  Documents
                 </Typography>
-              </Grid>
-            </Grid>
-
-            <Grid item xs={4}>
-              <Typography sx={{marginTop: 1.5, fontSize: 14}}>
-                <span className="font-bold">Created by </span>
-                {item.createBy}
-              </Typography>
-            </Grid>
-
-            <Grid item xs={4}>
-              <Typography sx={{marginTop: 1.5, fontSize: 14}}>
-                <span className="font-bold">Updated on </span>
-                {convertDate(item.updateOn)}
-              </Typography>
-            </Grid>
-
-            <Grid item xs={1}>
-              <Grid container>
-                <IconButton size="medium">
-                  <ShareOutlinedIcon sx={{color: '#181818'}} />
-                </IconButton>
-                <IconButton size="medium">
-                  <MoreHorizOutlinedIcon sx={{color: '#181818'}} />
-                </IconButton>
-              </Grid>
+              </Breadcrumbs>
             </Grid>
           </Grid>
-        );
-      })}
+
+          <Typography variant="h5" sx={{color: 'green', fontWeight: 700}}>
+            Documents
+          </Typography>
+
+          {selectedParentId && (
+            <Button
+              color="success"
+              variant="contained"
+              sx={{mt: 1, ...colorHover.greenBtn}}
+              onClick={onBack}
+            >
+              Back
+            </Button>
+          )}
+
+          {/* <Box
+            sx={{
+              display: 'flex',
+              gap: 1,
+              gridTemplateColumns: 'repeat(4, 1fr)',
+              mt: 2,
+            }}
+          >
+            {/* <SearchBar sx={{width: '210px'}} /> */}
+          {/* <Sort />
+            <Button
+              variant="text"
+              startIcon={<VisibilityOutlinedIcon />}
+              sx={{color: '#181818', textTransform: 'none'}}
+            >
+              View
+            </Button>
+          </Box> */}
+          <AddItem
+            parentId={selectedParentId}
+            projectId={selectedProjectId}
+            onClose={() => {
+              setSelectedFile({name: 'Untitled', body: ''});
+              setOpenEditor(true);
+            }}
+          />
+          {documents.map((item) => {
+            return (
+              <Grid
+                container
+                sx={{
+                  marginTop: 1,
+                  marginBottom: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+                key={item.id}
+              >
+                <Grid item xs={5}>
+                  <Grid container>
+                    {item.type === 'folder' ? (
+                      <PlainButton
+                        startIcon={<FolderOutlinedIcon />}
+                        onClick={() =>
+                          item ? setParent(item.id, item.name) : null
+                        }
+                      >
+                        {item.name}
+                      </PlainButton>
+                    ) : (
+                      <a href={item.downloadURL} target="_blank" download>
+                        <PlainButton
+                          startIcon={<DescriptionOutlinedIcon />}
+                          onClick={() => {
+                            if (item.type === 'editableHTML') {
+                              setOpenEditor(true);
+                              setSelectedFile(item);
+                            }
+                          }}
+                        >
+                          {item.name}
+                        </PlainButton>
+                      </a>
+                    )}
+                  </Grid>
+                </Grid>
+                {/* <Grid item xs={4}>
+                  <Typography sx={{marginTop: 1.5, fontSize: 14}}>
+                    <span className="font-bold">Created by </span>
+                    {item.createBy}
+                  </Typography>
+                </Grid> */}
+                <Grid item xs={2}>
+                  <Typography sx={{fontSize: 14}}>
+                    <span className="font-bold">Type: </span>
+                    {item.type.split('/').at(-1)}
+                  </Typography>
+                </Grid>
+                {/* <Grid item xs={4}></Grid> */}
+                <Grid item xs={3}>
+                  <Typography sx={{fontSize: 14}}>
+                    <span className="font-bold">Updated on </span>
+                    {item.updatedAt ? convertDate(item.updatedAt.toDate()) : ''}
+                  </Typography>
+                </Grid>
+                <Grid item xs={2}>
+                  <Grid container sx={{justifyContent: 'flex-end'}}>
+                    {item.type === 'editableHTML' && (
+                      <IconButton>
+                        <EditRoundedIcon
+                          sx={{color: '#181818'}}
+                          onClick={() => {
+                            setOpenEditor(true);
+                            setSelectedFile(item);
+                            // setEnableEditText(false);
+                          }}
+                        ></EditRoundedIcon>
+                      </IconButton>
+                    )}
+
+                    {item.type !== 'folder' && item.type !== 'editableHTML' && (
+                      <a href={item.downloadURL} download target="_blank">
+                        <IconButton>
+                          <DownloadRoundedIcon
+                            sx={{color: '#181818'}}
+                          ></DownloadRoundedIcon>
+                        </IconButton>
+                      </a>
+                    )}
+                    {/* {item.name} */}
+                    <IconButton
+                      size="medium"
+                      onClick={() => {
+                        setOpenDeletePopup(true);
+                        setSelectedFile(item);
+                      }}
+                    >
+                      <DeleteOutlineRoundedIcon sx={{color: '#e02828'}} />
+                      {/* <MoreHorizOutlinedIcon  /> */}
+                    </IconButton>
+                  </Grid>
+                </Grid>
+              </Grid>
+            );
+          })}
+          <WarningPopup
+            title={`Do you really want to delete "${
+              selectedFile ? selectedFile.name : null
+            }"`}
+            open={openDeletePopup}
+            handleSubmit={deleteFileHandler}
+            onClose={() => {
+              setOpenDeletePopup(false);
+              setSelectedFile({name: 'Untitled', body: ''});
+            }}
+            content="This file will be permanently deleted"
+          ></WarningPopup>
+        </div>
+      ) : (
+        <CircularProgress
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(50%,-50%)',
+          }}
+        />
+      )}
+      <TextEditor
+        open={openEditor}
+        onClose={onSubmitTextEditor}
+        editing={false}
+        file={selectedFile}
+      />
     </div>
   );
 }

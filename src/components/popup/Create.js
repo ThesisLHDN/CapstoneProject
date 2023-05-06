@@ -1,10 +1,11 @@
-import React from 'react';
+import {useState} from 'react';
 import {Box, Paper, Typography, Button, TextField, Dialog} from '@mui/material';
 import {color} from 'src/style';
 import ReportRoundedIcon from '@mui/icons-material/ReportRounded';
 
 function CreationPopup({
   title,
+  onSubmit,
   content,
   confirmContent,
   cancelContent,
@@ -15,6 +16,14 @@ function CreationPopup({
   onClose,
   open,
 }) {
+  const [input, setInput] = useState('');
+  const handleKeyPress = (e) => {
+    //it triggers by pressing the enter key
+    if (e.key === 'Enter') {
+      onSubmit(input);
+    }
+  };
+
   return (
     <Dialog open={open} onClose={onClose}>
       <Paper
@@ -36,7 +45,6 @@ function CreationPopup({
             borderBottom: 'solid black 1px',
           }}
         >
-          {/* {icon && icon} */}
           <Typography
             sx={{
               display: 'flex',
@@ -48,13 +56,12 @@ function CreationPopup({
               '& *': {fontSize: 18},
             }}
           >
-            {icon && <ReportRoundedIcon />}
+            {icon && ''}
             {title ? title : 'Untitled Warning'}
           </Typography>
         </Box>
 
         <Typography sx={{fontSize: 14, textAlign: 'justify'}}>
-          {/* {content ? content : 'No content'} */}
           {fieldLabel ? fieldLabel : 'Untitled field'}
         </Typography>
         <TextField
@@ -64,6 +71,8 @@ function CreationPopup({
             width: '100%',
             '& *': {fontSize: 14},
           }}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyPress={handleKeyPress}
         ></TextField>
         <Box
           sx={{
@@ -93,6 +102,10 @@ function CreationPopup({
               backgroundColor: color.green03,
               color: 'white',
               '&:hover': {backgroundColor: '#1BB738'},
+            }}
+            onClick={() => {
+              onSubmit(input);
+              setInput(false);
             }}
           >
             {confirmContent ? confirmContent : 'Delete'}

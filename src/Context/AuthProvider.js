@@ -2,26 +2,46 @@ import React, {useState} from 'react';
 import {useNavigate, useLocation} from 'react-router-dom';
 import {auth} from 'src/firebase/config';
 import CircularProgress from '@mui/material/CircularProgress';
+import axios from 'axios';
 
 export const AuthContext = React.createContext();
 
 function AuthProvider({children}) {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const paths = useLocation();
   // console.log(paths.pathname);
   const pathName = paths.pathname;
 
   const history = useNavigate();
+
+  const addUser = async () => {
+    try {
+      const res = await axios.post('http://localhost:8800/user', user);
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const getLastestWorkspace = async (uid) => {
+    try {
+      const res = await axios.get(`http://localhost:8800/lastworkspace/${uid}`);
+      history(`/workspace-setting/${res.data.id}?user=${uid}`);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   React.useEffect(() => {
     const unsubscribed = auth.onAuthStateChanged((user) => {
-      console.log({user});
       if (user) {
         const {displayName, email, uid, photoURL} = user;
         console.log(displayName, email, uid, photoURL);
         setUser({displayName, email, uid, photoURL});
+        addUser();
         if (pathName === '/login' || pathName === '/signup') {
-          history('/workspace-setting');
+          getLastestWorkspace(uid);
         }
         setIsLoading(false);
       } else {
@@ -44,7 +64,14 @@ function AuthProvider({children}) {
     <AuthContext.Provider value={{user}}>
       {/* {children} */}
       {isLoading ? (
-        <CircularProgress sx={{position: 'absolute', top: '50%', left:'50%', transform:'translate(-50%,-50%)'}} />
+        <CircularProgress
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%,-50%)',
+          }}
+        />
       ) : (
         children
       )}

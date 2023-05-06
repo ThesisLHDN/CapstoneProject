@@ -1,13 +1,27 @@
-import { useState } from 'react';
+import {useState, useEffect, useContext} from 'react';
 import 'src/App.scss';
-import { Typography, Breadcrumbs, Link, Button, Box, Grid } from '@mui/material';
+import {
+  Typography,
+  Breadcrumbs,
+  Link,
+  Button,
+  Box,
+  Grid,
+  CircularProgress,
+} from '@mui/material';
 import Gantt from './Gantt';
 import Toolbar from './toolbar';
-// import Filter from 'src/components/Filter';
-import { styled } from '@mui/material/styles';
-import { color } from 'src/style';
-
+import {styled} from '@mui/material/styles';
+import {color} from 'src/style';
+import tasks from './tasks';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import {useLocation} from 'react-router-dom';
+import axios from 'axios';
+import {AppContext} from 'src/Context/AppProvider';
+import {AuthContext} from 'src/Context/AuthProvider';
+import MessageArea from './messageArea';
+
+// import Filter from 'src/components/Filter';
 // import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
 // import PermIdentityRoundedIcon from '@mui/icons-material/PermIdentityRounded';
 // import FilterListRoundedIcon from '@mui/icons-material/FilterListRounded';
@@ -16,8 +30,6 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 // import {colorHover} from 'src/style';
 
 // import SearchBar from 'src/components/search';
-
-import data from './tasks';
 
 function handleClick(event) {
   event.preventDefault();
@@ -34,13 +46,63 @@ const GrayButton = styled(Button)({
 });
 
 function RoadMap() {
+  const location = useLocation();
+  const pId = location.pathname.split('/')[2];
   const [zoom, setZoom] = useState('Days');
   const [messagesState, setMessagesState] = useState([]);
-  // d
+  const [issues, setIssues] = useState({data: []});
+  const {
+    user: {uid},
+  } = useContext(AuthContext);
+  const {workspace, project} = useContext(AppContext);
+
+  const fetchIssuesData = async () => {
+    try {
+      const res = await axios.get(`http://localhost:8800/issues/${pId}`);
+      console.log('raw data', res);
+      const data = {
+        data: res.data.map((issue) => ({
+          text: issue.issuename,
+          id: issue.id,
+          start_date: new Date(issue.createTime),
+          duration: 1,
+          parent: issue.parentId ? issue.parentId : 0,
+          progress: 100,
+          status: issue.issuestatus,
+          open: true,
+          projectId: issue.projectId,
+          cId: issue.cycleId,
+        })),
+      };
+
+      setIssues(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const updateIssue = async (cId, id, status, startDate, dueDate) => {
+    try {
+      const res = await axios.put(`http://localhost:8800/issue/${id}`, {
+        cId: cId,
+        status: status,
+        startDate: startDate,
+        dueDate: dueDate ? dueDate : null,
+      });
+      // setIssues([...res.data]);
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchIssuesData();
+  }, []);
 
   const addMessage = (message) => {
     const maxLogLength = 5;
-    const newMessage = { message };
+    const newMessage = {message};
     const messages = [newMessage, ...messagesState];
 
     if (messages.length > maxLogLength) {
@@ -55,7 +117,35 @@ function RoadMap() {
     if (type === 'link' && action !== 'delete') {
       message += ` ( source: ${item.source}, target: ${item.target} )`;
     }
-    addMessage(message);
+    addMessage(
+      `Change ${item.id} ${item.text} time to [${item.start_date} - ${item.end_date}]`,
+    );
+    console.log(type, action, item, id);
+  };
+
+  const updateItem = (type, action, item, id) => {
+    console.log(
+      'update',
+      item.cId,
+      item.id,
+      item.status,
+      item.start_date,
+      item.end_date,
+    );
+    convertTime(item.start_date, item.end_date);
+    updateIssue(
+      item.cId,
+      item.id,
+      item.status,
+      convertTime(item.start_date),
+      convertTime(item.end_date),
+    );
+  };
+
+  const convertTime = (time) => {
+    const tSplit = time.split(' ');
+    const dateSplit = tSplit[0].split('-');
+    return `${dateSplit[2]}-${dateSplit[1]}-${dateSplit[0]} ${tSplit[1]}:00`;
   };
 
   const handleZoomChange = (zoom) => {
@@ -63,32 +153,34 @@ function RoadMap() {
   };
 
   return (
-    <div style={{ textAlign: 'left' }}>
+    <div style={{textAlign: 'left'}}>
       <Grid container spacing={2}>
-        <Grid item xs={5}>
-          <Breadcrumbs separator="›" aria-label="breadcrumb" sx={{ mb: 2 }}>
+        <Grid item xs={6}>
+          <Breadcrumbs separator="›" aria-label="breadcrumb" sx={{mb: 2}}>
             [
             <Link
               underline="hover"
               key="1"
               color="inherit"
-              href="/workspace-setting"
-              onClick={handleClick}
+              href={`/workspace-setting/${project.workspaceId}?user=${uid}`}
+              onClick={() => {}}
+              sx={{fontFamily: 'Open Sans, sans-serif'}}
             >
-              Dang&apos;s Workspace
+              {project.wsname}
             </Link>
             ,
             <Link
               underline="hover"
               key="2"
               color="inherit"
-              href="/roadmap"
-              onClick={handleClick}
+              href={`/roadmap/${project.id}`}
+              onClick={() => {}}
+              sx={{fontFamily: 'Open Sans, sans-serif'}}
             >
-              First Scrum Project
+              {project.pname}
             </Link>
             ,
-            <Typography key="3" color="text.primary" sx={{ fontSize: 'inherit' }}>
+            <Typography key="3" color="text.primary" sx={{fontSize: 'inherit'}}>
               Roadmap
             </Typography>
             , ]
@@ -102,71 +194,38 @@ function RoadMap() {
             justifyContent: 'flex-end',
             alignItems: 'center',
           }}
-        >
-          {/* <Typography sx={{mx: 1, display: 'flex', justifyItems: 'center'}}>
-            <AccessTimeRoundedIcon sx={{mr: 1}} />
-            10 days remaining
-          </Typography> */}
-          {/* <GrayButton variant="contained">Complete sprint</GrayButton> */}
-          {/* <GrayButton sx={{ mx: 1, width: '32px !important', minWidth: 32 }}>
-            <MoreHorizIcon />
-          </GrayButton> */}
-        </Grid>
+        ></Grid>
       </Grid>
-      <Typography variant="h5" sx={{ color: color.green03, fontWeight: 700 }}>
+      <Typography variant="h5" sx={{color: color.green03, fontWeight: 700}}>
         RoadMap
       </Typography>
-      {/* <Typography variant="caption" sx={{ color: '#555' }}>
-        Lorem Ipsum is simply dummy text of the printing and typesetting
-        industry. Lorem Ipsum has been the industry&apos; s standard dummy text
-        ever since the 1500s, when an unknown printer took a galley of type and
-        scrambled it to make a type specimen book.
-      </Typography> */}
-
-      {/* <Box
-        sx={{
-          display: 'flex',
-          gap: 1,
-          gridTemplateColumns: 'repeat(4, 1fr)',
-          mt: 1,
-        }}
-      > */}
-      {/* <SearchBar sx={{width: '250px'}} />
-        <Filter/> */}
-      {/* <Button
-          variant="text"
-          startIcon={<FilterAltRoundedIcon />}
-          sx={{color: '#181818', textTransform: 'none'}}
-        >
-          Filter
-        </Button> */}
-      {/* <Button
-          variant="text"
-          startIcon={<SortRoundedIcon />}
-          sx={{color: '#181818'}}
-        >
-          Sort
-        </Button>*/}
-      {/* <Button
-          variant="text"
-          startIcon={<PermIdentityRoundedIcon />}
-          sx={{color: '#181818', textTransform: 'none'}}
-        >
-          Me
-        </Button> */}
-      {/* </Box> */}
-
       <Box>
         <Box
           className="zoom-bar"
-          sx={{ display: 'flex', justifyContent: 'flex-end' }}
+          sx={{display: 'flex', justifyContent: 'flex-end'}}
         >
           <Toolbar zoom={zoom} onZoomChange={handleZoomChange} />
         </Box>
         <Box className="gantt-container">
-          <Gantt tasks={data} zoom={zoom} onDataUpdated={logDataUpdate} />
+          {issues && issues.data.length ? (
+            <Gantt
+              projectId={pId}
+              tasks={issues}
+              zoom={zoom}
+              onDataUpdated={updateItem}
+            />
+          ) : (
+            <>
+              {' '}
+              <Gantt
+                tasks={{data: []}}
+                zoom={zoom}
+                onDataUpdated={updateItem}
+              />
+            </>
+          )}
         </Box>
-        {/* <MessageArea messages={messagesState} /> */}
+        <MessageArea messages={messagesState} />
       </Box>
     </div>
   );

@@ -1,9 +1,6 @@
 import {useState} from 'react';
-import {errorCodeConverter} from '../authFunction';
-// import {useNavigate} from 'react-router-dom';
-// import AuthContext from 'src/Context/AuthProvider';
+import {errorCodeConverter} from 'src/firebase/authFunction';
 
-// import Avatar from '@mui/material/Avatar';
 import {
   Button,
   IconButton,
@@ -23,152 +20,46 @@ import {ReactComponent as FacebookIcon} from '../logo/Facebook.svg';
 import {ReactComponent as GoogleIcon} from '../logo/Google.svg';
 import {color, colorHover} from 'src/style';
 
-// import app, {auth} from 'src/firebase/config.js';
+import {signInWithEmailAndPassword} from 'firebase/auth';
+import {auth} from 'src/firebase/config';
+import {setDocument} from 'src/firebase/firestoreServices';
 import {
-  getAuth,
-  FacebookAuthProvider,
-  GoogleAuthProvider,
-  signInWithPopup,
-  signInWithEmailAndPassword,
-  getAdditionalUserInfo,
-} from 'firebase/auth';
-import {db, auth} from 'src/firebase/config';
-import {addDocument} from 'src/firebase/services';
-import {collection, addDoc} from 'firebase/firestore';
-
-const facebookProvider = new FacebookAuthProvider();
-const googleProvider = new GoogleAuthProvider();
+  facebookLoginHandler,
+  googleLoginHandler,
+} from 'src/firebase/authServices';
 
 const theme = createTheme();
 
 export default function SignInSide() {
   const [error, setError] = useState('');
   const [formData, setFormData] = useState({});
-  // const auth = getAuth();
 
   const onChangeHandler = (e) => {
     e.preventDefault();
 
-    console.log(e.target.name);
-    console.log(e.target.value);
     setFormData({
       ...formData,
 
-      // Trimming any whitespace
       [e.target.name]: e.target.value.trim(),
     });
-
-    // setFormData()
   };
 
   const onSubmitHandler = (event) => {
     event.preventDefault();
-    const data = formData;
-    const email = data.email;
-    const password = data.password;
+    const email = formData.email;
+    const password = formData.password;
 
     if (!(email && password)) {
       setError('All fields are required.');
       return;
     }
+
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Signed in
         const user = userCredential.user;
-        // ...
       })
       .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
-        setError(errorCodeConverter(errorCode));
-      });
-  };
-
-  const facebookLoginHandler = async () => {
-    // const auth = getAuth();
-    signInWithPopup(auth, facebookProvider)
-      .then(async (result) => {
-        // The signed-in user info.
-        const user = result.user;
-
-        if (getAdditionalUserInfo(result).isNewUser) {
-          try {
-            // const docRef = await addDoc(collection(db, 'users'), {
-            //   displayName: user.displayName,
-            //   email: user.email,
-            //   photoURL: user.photoURL,
-            //   uid: user.uid,
-            //   provider: getAdditionalUserInfo(result).providerId,
-            // });
-            // console.log('Document written with ID: ', docRef.id);
-            addDocument('users', {
-              displayName: user.displayName,
-              email: user.email,
-              photoURL: user.photoURL,
-              uid: user.uid,
-              provider: getAdditionalUserInfo(result).providerId,
-            });
-          } catch (e) {
-            console.error('Error adding document: ', e);
-          }
-        }
-
-        // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-        const credential = FacebookAuthProvider.credentialFromResult(result);
-        // console.log('credential: ', credential);
-        const accessToken = credential.accessToken;
-      })
-      .catch((error) => {
-        // Handle Errors here.
         setError(errorCodeConverter(error.code));
-        // const errorMessage = error.message;
-        // The email of the user's account used.
-        // const email = error.customData.email;
-        // The AuthCredential type that was used.
-        // const credential = FacebookAuthProvider.credentialFromError(error);
-      });
-    // console.log('Login facebook', {data});
-  };
-
-  const googleLoginHandler = () => {
-    signInWithPopup(auth, googleProvider)
-      .then(async (result) => {
-        // The signed-in user info.
-        const user = result.user;
-        if (getAdditionalUserInfo(result).isNewUser) {
-          try {
-            // const docRef = await addDoc(collection(db, 'users'), {
-            //   displayName: user.displayName,
-            //   email: user.email,
-            //   photoURL: user.photoURL,
-            //   uid: user.uid,
-            //   providerId: getAdditionalUserInfo(result).providerId,
-            // });
-            // console.log('Document written with ID: ', docRef.id);
-            addDocument('users', {
-              displayName: user.displayName,
-              email: user.email,
-              photoURL: user.photoURL,
-              uid: user.uid,
-              provider: getAdditionalUserInfo(result).providerId,
-            });
-          } catch (e) {
-            console.error('Error adding document: ', e);
-          }
-        }
-
-        // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const accessToken = credential.accessToken;
-      })
-      .catch((error) => {
-        // Handle Errors here.
-        setError(errorCodeConverter(error.code));
-        // // The email of the user's account used.
-        // const email = error.customData.email;
-        // // The AuthCredential type that was used.
-        // const credential = GoogleAuthProvider.credentialFromError(error);
       });
   };
 
@@ -265,8 +156,6 @@ export default function SignInSide() {
               fullWidth
               variant="contained"
               sx={{...colorHover.greenBtn}}
-              // href="/"
-              // onClick={onSubmitHandler}
             >
               Login
             </Button>
@@ -300,10 +189,16 @@ export default function SignInSide() {
               </Typography>{' '}
             </Divider>
             <Box sx={{display: 'flex', gap: 1, justifyContent: 'center'}}>
-              <IconButton variant="contained" onClick={facebookLoginHandler}>
+              <IconButton
+                variant="contained"
+                onClick={() => setError(facebookLoginHandler)}
+              >
                 <FacebookIcon style={{width: 32, height: 32}} />
               </IconButton>
-              <IconButton variant="contained" onClick={googleLoginHandler}>
+              <IconButton
+                variant="contained"
+                onClick={() => setError(googleLoginHandler)}
+              >
                 <GoogleIcon style={{width: 32, height: 32}} />
               </IconButton>
             </Box>

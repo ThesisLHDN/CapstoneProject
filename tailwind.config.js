@@ -7,10 +7,6 @@ module.exports = {
       body: ['Open Sans', 'sans-serif'],
     },
     extend: {
-      padding: {
-        'md': '34vw',
-        'lg': '40vw'
-      },
       fontSize: {
         14: '14px',
       },
