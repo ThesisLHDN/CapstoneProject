@@ -11,7 +11,6 @@ import {
   query,
   where,
 } from 'firebase/firestore';
-// import {v4 as uuidv4} from 'uuid';
 
 const addDocument = async (coll, data) => {
   try {
