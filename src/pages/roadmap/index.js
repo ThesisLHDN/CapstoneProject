@@ -225,7 +225,7 @@ function RoadMap() {
             </>
           )}
         </Box>
-        <MessageArea messages={messagesState} />
+        {/* <MessageArea messages={messagesState} /> */}
       </Box>
     </div>
   );
