@@ -1,5 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {
+  IconButton,
   Button,
   Avatar,
   Popper,
@@ -18,6 +19,8 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {NavLink, Link} from 'react-router-dom';
 import {AppContext} from 'src/Context/AppProvider';
 import axios from 'axios';
+import ClearRoundedIcon from '@mui/icons-material/ClearRounded';
+import WarningPopup from 'src/components/popup/Warning';
 
 export const IssueIcon = (type) => {
   switch (type) {
@@ -100,6 +103,7 @@ function TaskCard({issue, setTrigger, isChild = false}) {
   const [status, setStatus] = useState(issue.issuestatus);
   const [anchorEl, setAnchorEl] = useState(null);
   const [assignee, setAssignee] = useState({});
+  const [openDelPopup, setOpenDelPopup] = useState(false);
 
   const getAssignee = async () => {
     try {
@@ -140,6 +144,13 @@ function TaskCard({issue, setTrigger, isChild = false}) {
     }
   };
 
+  const deleteIssueHandler = (confirm) => {
+    if (confirm) {
+      console.log('Issue deleted', issue);
+    }
+    setOpenDelPopup(false);
+  };
+
   useEffect(() => {
     if (issue.assigneeId) {
       getAssignee();
@@ -147,10 +158,15 @@ function TaskCard({issue, setTrigger, isChild = false}) {
   }, [issue]);
 
   return (
-    <div
+    <Box
       className={`flex justify-between hover:cursor-pointer ${
         isChild ? 'my-2' : ''
       }`}
+      sx={{
+        '&:hover .deleteBtn': {
+          visibility: 'visible',
+        },
+      }}
     >
       <Link to={`/issue/${project.id}/${issue.id}`}>
         <div
@@ -277,8 +293,24 @@ function TaskCard({issue, setTrigger, isChild = false}) {
           }}
           alt={assignee ? assignee.username : ''}
         />
+        <IconButton
+          className={'deleteBtn'}
+          sx={{width: 24, height: 24, visibility: 'hidden'}}
+          onClick={() => setOpenDelPopup(true)}
+        >
+          <ClearRoundedIcon />{' '}
+        </IconButton>
       </div>
-    </div>
+      <WarningPopup
+        title={'Delete Issue'}
+        open={openDelPopup}
+        onClose={() => setOpenDelPopup(false)}
+        handleSubmit={deleteIssueHandler}
+        content={
+          `Do you really want to delete this Issue? This cannot be undone`
+        }
+      />
+    </Box>
   );
 }
 

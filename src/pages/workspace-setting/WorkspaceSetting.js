@@ -125,6 +125,7 @@ function WorkspaceSetting() {
     }
     setDelWpPopup(false)
   }
+  
   return (
     <Box sx={{textAlign: 'left'}}>
       <Typography

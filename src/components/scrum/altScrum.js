@@ -3,9 +3,9 @@ import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
 import {v4 as uuid} from 'uuid';
 import Card from './card/index.js';
 import './scrum.scss';
-import {Button, Box, Typography} from '@mui/material';
-import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import {colorHover} from 'src/style';
+import {Box, Typography} from '@mui/material';
+// import AddRoundedIcon from '@mui/icons-material/AddRounded';
+// import {colorHover} from 'src/style';
 import axios from 'axios';
 import {useLocation} from 'react-router-dom';
 import {AppContext} from 'src/Context/AppProvider.js';
@@ -68,14 +68,14 @@ function Scrum({sprint, vals, fil, setFil, srtVal, srt, setSrt}) {
 
     if (source.droppableId !== destination.droppableId) {
       const sourceColumn = columns.filter((column) => {
-        return column.title == source.droppableId;
+        return column.title === source.droppableId;
       });
       const destColumn = columns.filter((column) => {
-        return column.title == destination.droppableId;
+        return column.title === destination.droppableId;
       });
       const sourceIssues = issues
         .filter((issue) => {
-          return issue.issuestatus == sourceColumn[0].title;
+          return issue.issuestatus === sourceColumn[0].title;
         })
         .sort((a, b) => {
           return a.issueorder < b.issueorder
@@ -85,7 +85,7 @@ function Scrum({sprint, vals, fil, setFil, srtVal, srt, setSrt}) {
             : 0;
         });
       const destIssues = issues.filter((issue) => {
-        return issue.issuestatus == destColumn[0].title;
+        return issue.issuestatus === destColumn[0].title;
       });
       const [removed] = sourceIssues.splice(source.index, 1);
       destIssues.splice(destination.index, 0, removed);
@@ -99,10 +99,10 @@ function Scrum({sprint, vals, fil, setFil, srtVal, srt, setSrt}) {
       setTriggerBoard(true);
     } else {
       const column = columns.filter((column) => {
-        return column.title == source.droppableId;
+        return column.title === source.droppableId;
       });
       const copiedItems = issues.filter((issue) => {
-        return issue.issuestatus == column[0].title;
+        return issue.issuestatus === column[0].title;
       });
       const [removed] = copiedItems.splice(source.index, 1);
       copiedItems.splice(destination.index, 0, removed);
@@ -202,7 +202,7 @@ function Scrum({sprint, vals, fil, setFil, srtVal, srt, setSrt}) {
                           </Typography>
                           {issues
                             .filter((issue) => {
-                              return issue.issuestatus == column.title;
+                              return issue.issuestatus === column.title;
                             })
                             .sort((a, b) => {
                               if (srtVal == 'None') {

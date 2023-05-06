@@ -75,7 +75,11 @@ const Editor = ({file, onClose, open, editing}) => {
   };
 
   return (
-    <Dialog onClose={() => onClose(false)} open={open}>
+    <Dialog
+      onClose={() => onClose(false)}
+      open={open}
+      sx={{'& .MuiDialog-paper': {maxWidth: 'none !important'}}}
+    >
       {file.name && (
         <Paper sx={{p: 2, gap: 2, display: 'flex', flexDirection: 'column'}}>
           <TextField
