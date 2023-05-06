@@ -31,10 +31,10 @@ const db = getFirestore(app);
 
 connectAuthEmulator(auth, 'http://localhost:9099');
 
-if (window.location.hostname === 'localhost') {
-  connectFirestoreEmulator(db, 'localhost', 8080);
-}
+// if (window.location.hostname === 'localhost') {
+//   connectFirestoreEmulator(db, 'localhost', 8080);
+// }
 
-export {db, auth, analytics};
+// export {db, auth, analytics};
 
 export default app;
