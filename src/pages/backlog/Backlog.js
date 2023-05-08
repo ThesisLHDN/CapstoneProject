@@ -21,6 +21,7 @@ function Backlog() {
   });
   const [srt, setSrt] = useState(false);
   const [srtVal, setSrtVal] = useState('None');
+  const [input, setInput] = useState('');
   const {
     user: {uid},
   } = useContext(AuthContext);
@@ -76,7 +77,7 @@ function Backlog() {
           mt: 2,
         }}
       >
-        {/* <SearchBar sx={{width: '210px'}} /> */}
+        <SearchBar sx={{width: '210px'}} setInput={setInput} />
         <Filter vals={vals} setVals={setVals} setFil={setFil} />
         <Sort setSrtVal={setSrtVal} setSrt={setSrt} />
         {isHide ? (
@@ -117,6 +118,7 @@ function Backlog() {
           srtVal={srtVal}
           srt={srt}
           setSrt={setSrt}
+          input={input}
         />
       </div>
     </div>

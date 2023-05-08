@@ -79,7 +79,7 @@ const AccordionDetails = styled(MuiAccordionDetails)(({theme}) => ({
   padding: theme.spacing(2),
 }));
 
-function TaskList({hide, vals, fil, setFil, srtVal, srt, setSrt}) {
+function TaskList({hide, vals, fil, setFil, srtVal, srt, setSrt, input}) {
   const location = useLocation();
   const pId = location.pathname.split('/')[2];
   const {
@@ -104,7 +104,7 @@ function TaskList({hide, vals, fil, setFil, srtVal, srt, setSrt}) {
     estimatePoint: '',
     assigneeId: '',
   });
-  // const [isCreate, setIsCreate] = useState(false);
+  const [tempIssues, setTempIssues] = useState([]);
 
   const fetchSprintsData = async () => {
     try {
@@ -121,6 +121,7 @@ function TaskList({hide, vals, fil, setFil, srtVal, srt, setSrt}) {
     try {
       const res = await axios.get(`http://localhost:8800/issues/${pId}`);
       setIssues([...res.data]);
+      setTempIssues(res.data);
       setTriggerIssue(false);
       // console.log(issues);
     } catch (err) {
@@ -182,6 +183,7 @@ function TaskList({hide, vals, fil, setFil, srtVal, srt, setSrt}) {
     try {
       const res = await axios.post(`http://localhost:8800/filter/${pId}`, vals);
       setIssues([...res.data]);
+      setTempIssues(res.data);
       setTriggerIssue(false);
       console.log('AAAAAAAAAA', res);
     } catch (err) {
@@ -196,11 +198,20 @@ function TaskList({hide, vals, fil, setFil, srtVal, srt, setSrt}) {
         sort: srtVal,
       });
       setIssues([...res.data]);
+      setTempIssues(res.data);
       setTriggerIssue(false);
       console.log('AAAAAAAAAA', res);
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const searchIssue = () => {
+    const temp = tempIssues;
+    const findIssue = temp.filter((issue) =>
+      issue.issuename.toLowerCase().includes(input.toLowerCase()),
+    );
+    setIssues(findIssue);
   };
 
   const onDragEnd = (result, columns, issues) => {
@@ -285,7 +296,8 @@ function TaskList({hide, vals, fil, setFil, srtVal, srt, setSrt}) {
     if (srt) {
       sortIssue();
     }
-  }, [triggerIssue, triggerSprint, fil, srt]);
+    searchIssue();
+  }, [triggerIssue, triggerSprint, fil, srt, input]);
 
   return (
     <div>

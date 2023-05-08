@@ -25,8 +25,9 @@ const columns = [
   },
 ];
 
-function Scrum({sprint, vals, fil, setFil, srtVal, srt, setSrt}) {
+function Scrum({sprint, vals, fil, setFil, srtVal, srt, setSrt, input}) {
   const [issues, setIssues] = useState([]);
+  const [tempIssues, setTempIssues] = useState([]);
   const [triggerBoard, setTriggerBoard] = useState(false);
   const {project} = useContext(AppContext);
 
@@ -36,10 +37,11 @@ function Scrum({sprint, vals, fil, setFil, srtVal, srt, setSrt}) {
         `http://localhost:8800/sprintissue/${sprint.id}`,
       );
       setIssues(res.data);
-      setTriggerBoard(false);
+      setTempIssues(res.data);
     } catch (err) {
       console.log(err);
     }
+    setTriggerBoard(false);
   };
 
   const updateIssue = async (cId, id, status, startDate, dueDate) => {
@@ -125,8 +127,7 @@ function Scrum({sprint, vals, fil, setFil, srtVal, srt, setSrt}) {
         vals,
       );
       setIssues([...res.data]);
-      setTriggerBoard(false);
-      console.log('AAAAAAAAAA', res);
+      setTempIssues(res.data);
     } catch (err) {
       console.log(err);
     }
@@ -142,22 +143,37 @@ function Scrum({sprint, vals, fil, setFil, srtVal, srt, setSrt}) {
         },
       );
       setIssues([...res.data]);
-      setTriggerBoard(false);
-      console.log('AAAAAAAAAA', res);
+      setTempIssues(res.data);
     } catch (err) {
       console.log(err);
     }
   };
 
+  const searchIssue = () => {
+    const temp = tempIssues;
+    const findIssue = temp.filter((issue) =>
+      issue.issuename.toLowerCase().includes(input.toLowerCase()),
+    );
+    setIssues(findIssue);
+  };
+
   useEffect(() => {
-    fetchIssuesData();
+    if (triggerBoard == false && sprint && input == '') {
+      fetchIssuesData();
+    } else if (triggerBoard == true) {
+      fetchIssuesData();
+    }
     if (fil) {
       filterIssue();
     }
     if (srt) {
       sortIssue();
     }
-  }, [sprint, triggerBoard, fil, srt]);
+    searchIssue();
+    console.log(triggerBoard);
+  }, [sprint, triggerBoard, fil, srt, input]);
+
+  console.log(triggerBoard);
 
   return (
     <Box

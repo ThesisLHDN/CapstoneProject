@@ -52,6 +52,7 @@ function Board() {
   });
   const [srt, setSrt] = useState(false);
   const [srtVal, setSrtVal] = useState('None');
+  const [input, setInput] = useState('');
 
   const fetchLastestSprint = async () => {
     try {
@@ -159,7 +160,7 @@ function Board() {
           mt: 2,
         }}
       >
-        {/* <SearchBar sx={{width: '250px'}} /> */}
+        <SearchBar sx={{width: '210px'}} setInput={setInput} />
         <Filter vals={vals} setVals={setVals} setFil={setFil} />
         <Sort setSrtVal={setSrtVal} setSrt={setSrt} />
       </Box>
@@ -171,6 +172,7 @@ function Board() {
         srtVal={srtVal}
         srt={srt}
         setSrt={setSrt}
+        input={input}
       />
     </Box>
   );
