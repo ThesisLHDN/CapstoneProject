@@ -144,9 +144,14 @@ function TaskCard({issue, setTrigger, isChild = false}) {
     }
   };
 
-  const deleteIssueHandler = (confirm) => {
-    if (confirm) {
-      console.log('Issue deleted', issue);
+  const deleteIssueHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.delete(`http://localhost:8800/issue/${issue.id}`);
+      console.log(res);
+      setTrigger(true);
+    } catch (err) {
+      console.log(err);
     }
     setOpenDelPopup(false);
   };
@@ -306,9 +311,7 @@ function TaskCard({issue, setTrigger, isChild = false}) {
         open={openDelPopup}
         onClose={() => setOpenDelPopup(false)}
         handleSubmit={deleteIssueHandler}
-        content={
-          `Do you really want to delete this Issue? This cannot be undone`
-        }
+        content={`Do you really want to delete this Issue? This cannot be undone`}
       />
     </Box>
   );
