@@ -115,7 +115,8 @@ function ChatSideBar({data, currentUser, projectId}) {
 
                   '&:hover': {backgroundColor: '#efefef'},
                   borderRadius: 3,
-                  ...(id === selectedRoom.id
+                  // TODO set style of selected Room
+                  ...(id === (selectedRoom ? selectedRoom.id : '')
                     ? {backgroundColor: '#efefef'}
                     : {}),
                 }}
@@ -142,7 +143,7 @@ function ChatSideBar({data, currentUser, projectId}) {
                           whiteSpace: 'nowrap',
                         }}
                       >
-                        {lastMessage.body}
+                        {lastMessage ? lastMessage.body : ''}
                       </Typography>
                     </Grid>
                     <Grid item xs={3}>
