@@ -40,7 +40,12 @@ function AuthProvider({children}) {
         console.log(displayName, email, uid, photoURL);
         setUser({displayName, email, uid, photoURL});
         addUser();
-        if (pathName === '/login' || pathName === '/signup') {
+        if (
+          pathName === '/login' ||
+          pathName === '/signup' ||
+          pathName === '/forget' ||
+          pathName === '/'
+        ) {
           getLastestWorkspace(uid);
         }
         setIsLoading(false);
