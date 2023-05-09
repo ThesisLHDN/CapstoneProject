@@ -1,6 +1,6 @@
-import React, {useContext, useState} from 'react';
-import {color} from 'src/style';
-import {Typography, Grid, Breadcrumbs, Link} from '@mui/material';
+import { useContext, useState } from 'react';
+import { color } from 'src/style';
+import { Typography, Grid, Breadcrumbs, Link } from '@mui/material';
 import Workload from 'src/components/charts/Workload';
 import SprintBurndown from 'src/components/charts/SprintBurndown';
 import EpicCompletion from 'src/components/charts/EpicCompletion';
@@ -15,8 +15,8 @@ import {
   DelayData,
   PerformceData,
 } from '../../components/charts/Data';
-import {AppContext} from 'src/Context/AppProvider';
-import {AuthContext} from 'src/Context/AuthProvider';
+import { AppContext } from 'src/Context/AppProvider';
+import { AuthContext } from 'src/Context/AuthProvider';
 
 function convertDate(d) {
   const date = new Date(d);

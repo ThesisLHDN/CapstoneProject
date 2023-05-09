@@ -1,12 +1,11 @@
 // import React from 'react';
 import 'src/App.scss';
 
-import {Typography, Breadcrumbs, Link, Grid, Button, Box} from '@mui/material';
+import { Typography, Breadcrumbs, Link, Grid, Button, Box } from '@mui/material';
 // import {styled} from '@mui/material/styles';
 
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
-import PermIdentityRoundedIcon from '@mui/icons-material/PermIdentityRounded';
 // import FilterAltRoundedIcon from '@mui/icons-material/FilterAltRounded';
 // import SortRoundedIcon from '@mui/icons-material/SortRounded';
 
@@ -16,12 +15,12 @@ import SearchBar from 'src/components/search';
 import Filter from 'src/components/Filter';
 import Sort from 'src/components/Sort';
 
-import {color, colorHover} from 'src/style';
-import {useContext, useEffect, useState} from 'react';
+import { color, colorHover } from 'src/style';
+import { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
-import {useLocation} from 'react-router-dom';
-import {AppContext} from 'src/Context/AppProvider';
-import {AuthContext} from 'src/Context/AuthProvider';
+import { useLocation } from 'react-router-dom';
+import { AppContext } from 'src/Context/AppProvider';
+import { AuthContext } from 'src/Context/AuthProvider';
 
 function handleClick(event) {
   event.preventDefault();

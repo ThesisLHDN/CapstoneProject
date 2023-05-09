@@ -1,13 +1,11 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {Grid, Breadcrumbs, Typography, Link} from '@mui/material';
-import ElectricBoltIcon from '@mui/icons-material/ElectricBolt';
-import FiberManualRecordRoundedIcon from '@mui/icons-material/FiberManualRecordRounded';
+import { useContext, useEffect, useState } from 'react';
+import { Grid, Breadcrumbs, Typography, Link } from '@mui/material';
 import LeftIssueDetail from 'src/components/issue/LeftIssueDetail';
 import RightIssueDetail from 'src/components/issue/RightIssueDetail';
-import {useLocation} from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import axios from 'axios';
-import {AppContext} from 'src/Context/AppProvider';
-import {AuthContext} from 'src/Context/AuthProvider';
+import { AppContext } from 'src/Context/AppProvider';
+import { AuthContext } from 'src/Context/AuthProvider';
 
 function Issue() {
   const {

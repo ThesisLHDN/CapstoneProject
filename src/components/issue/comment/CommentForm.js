@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import { useState } from 'react';
 import {
   Avatar,
   Button,
@@ -10,16 +10,15 @@ import {
   Alert,
   Snackbar,
 } from '@mui/material';
-import {colorHover} from 'src/style';
+import { colorHover } from 'src/style';
 import PhotoRoundedIcon from '@mui/icons-material/PhotoRounded';
 import SmartDisplayRoundedIcon from '@mui/icons-material/SmartDisplayRounded';
 import CloseIcon from '@mui/icons-material/Close';
-import InsertDriveFileRoundedIcon from '@mui/icons-material/InsertDriveFileRounded';
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 
-import {getDownloadURL, uploadBytesResumable, ref} from 'firebase/storage';
-import {storage} from 'src/firebase/config';
+import { getDownloadURL, uploadBytesResumable, ref } from 'firebase/storage';
+import { storage } from 'src/firebase/config';
 
 const CommentForm = ({
   currentUser,

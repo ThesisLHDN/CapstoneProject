@@ -6,11 +6,11 @@ import {
   Typography,
 } from '@mui/material';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import mockData from './mockData';
-import {useState} from 'react';
+import { useState } from 'react';
 import Card from './card';
-import {colorHover} from 'src/style';
+import { colorHover } from 'src/style';
 
 const Scrum = () => {
   const [data, setData] = useState(mockData);

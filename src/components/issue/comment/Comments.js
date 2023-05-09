@@ -1,8 +1,8 @@
-import {useMemo, useState, useEffect} from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import CommentForm from './CommentForm';
 import Comment from './Comment';
 
-import {useFirestore} from 'src/hooks/useFirestore';
+import { useFirestore } from 'src/hooks/useFirestore';
 import {
   addDocument,
   deleteDocument,

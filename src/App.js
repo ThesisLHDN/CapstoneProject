@@ -1,6 +1,5 @@
 import './App.css';
-import {useContext, useState} from 'react';
-import {Routes, Route, useLocation} from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 
 // import {Box, Grid, Badge, IconButton, Modal} from '@mui/material';
 // import ChatRoundedIcon from '@mui/icons-material/ChatRounded';
@@ -29,8 +28,6 @@ import CreateWorkspace from './components/popup/CreateWorkspace';
 import AppProvider from './Context/AppProvider';
 import CreateProject from './components/popup/CreateProject';
 import DocProvider from './Context/DocProvider';
-// import ChatProvider from './Context/ChatProvider';
-// import DocProvider from './Context/DocProvider';
 
 function App() {
   const location = useLocation();

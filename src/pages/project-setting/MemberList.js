@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import { useContext, useEffect, useState } from 'react';
 import {
   Table,
   TableBody,
@@ -7,17 +7,11 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Button,
-  Popper,
-  ClickAwayListener,
-  MenuItem,
-  MenuList,
-  Box,
+  Button
 } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {AppContext} from 'src/Context/AppProvider';
+import { AppContext } from 'src/Context/AppProvider';
 import axios from 'axios';
-import {useLocation} from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 function createData(name, email, role) {
   return {name, email, role};
@@ -90,9 +84,9 @@ function MemberList() {
                     }}
                     onClick={handleClick}
                   >
-                    {member.id == project.adminId ? (
+                    {member.id === project.adminId ? (
                       <span className="pl-5">Administrator</span>
-                    ) : member.id == project.ownerId &&
+                    ) : member.id === project.ownerId &&
                       member.id !== project.adminId ? (
                       <span className="pl-5">Project Owner</span>
                     ) : (

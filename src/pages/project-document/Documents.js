@@ -1,11 +1,9 @@
-import {useContext, useMemo, useState} from 'react';
+import { useContext, useState } from 'react';
 
-import SearchBar from 'src/components/search';
-import Sort from 'src/components/Sort';
 import AddItem from './AddItem';
 import WarningPopup from 'src/components/popup/Warning';
 import TextEditor from './QuillEditor/Editor';
-import {addDocument, updateDocument} from 'src/firebase/firestoreServices';
+import { addDocument, updateDocument } from 'src/firebase/firestoreServices';
 
 import {
   Typography,
@@ -20,15 +18,13 @@ import FolderOutlinedIcon from '@mui/icons-material/FolderOutlined';
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
-import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
-import {DocContext} from 'src/Context/DocProvider';
-import {deleteDocument} from 'src/firebase/firestoreServices';
-import {styled} from '@mui/system';
-import {useLocation} from 'react-router-dom';
-import {AppContext} from 'src/Context/AppProvider';
-import {AuthContext} from 'src/Context/AuthProvider';
-import {colorHover} from 'src/style';
+import { DocContext } from 'src/Context/DocProvider';
+import { deleteDocument } from 'src/firebase/firestoreServices';
+import { styled } from '@mui/system';
+import { useLocation } from 'react-router-dom';
+import { AppContext } from 'src/Context/AppProvider';
+import { AuthContext } from 'src/Context/AuthProvider';
 
 function convertDate(d) {
   const date = new Date(d);
@@ -118,47 +114,6 @@ function Document({parentId}) {
     // setOpenEditPopup(false);
     setSelectedFile({name: 'Untitled', body: ''});
     setEnableEditText(true);
-  };
-
-  const docButton = (doc) => {
-    switch (doc.type) {
-      case 'folder':
-        return (
-          <PlainButton
-            startIcon={<FolderOutlinedIcon />}
-            onClick={() => (doc ? setParent(doc.id, doc.name) : null)}
-          >
-            {doc.name}
-          </PlainButton>
-        );
-      case 'editableHTML':
-        return (
-          <PlainButton
-            startIcon={<DescriptionOutlinedIcon />}
-            onClick={(doc) => {
-              setOpenEditor(true);
-              setSelectedFile(doc);
-            }}
-          >
-            {doc.name}
-          </PlainButton>
-        );
-      default:
-        return (
-          <a href={doc.downloadURL} target="_blank" download>
-            <PlainButton
-              startIcon={<DescriptionOutlinedIcon />}
-              onClick={() => {
-                setOpenEditor(true);
-                setSelectedFile(doc);
-                // setEnableEditText(false);
-              }}
-            >
-              {doc.name}
-            </PlainButton>
-          </a>
-        );
-    }
   };
 
   return (

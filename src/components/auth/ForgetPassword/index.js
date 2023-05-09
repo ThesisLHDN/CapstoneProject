@@ -1,11 +1,11 @@
-import {useState} from 'react';
-import {color, colorHover} from 'src/style';
-import {errorCodeConverter} from 'src/firebase/authServices';
+import { useState } from 'react';
+import { color, colorHover } from 'src/style';
+import { errorCodeConverter } from 'src/firebase/authServices';
 
-import {Button, TextField, Link, Box, Grid, Typography} from '@mui/material';
-import {createTheme, ThemeProvider} from '@mui/material/styles';
-import {auth} from 'src/firebase/config';
-import {sendPasswordResetEmail} from 'firebase/auth';
+import { Button, TextField, Link, Box, Grid, Typography } from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { auth } from 'src/firebase/config';
+import { sendPasswordResetEmail } from 'firebase/auth';
 
 const theme = createTheme();
 
@@ -14,7 +14,7 @@ export default function SignInSide() {
   const [email, setEmail] = useState();
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log('forget ', email);
+    // console.log('forget ', email);
     sendPasswordResetEmail(auth, email)
       .then(() => {
         setError('Password reset email has been sent to ' + email);

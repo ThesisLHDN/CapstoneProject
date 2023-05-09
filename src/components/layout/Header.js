@@ -1,4 +1,4 @@
-import {useContext, useEffect, useState} from 'react';
+import { useContext, useState } from 'react';
 import logo from 'src/assets/images/logo.png';
 import {
   Box,
@@ -10,24 +10,21 @@ import {
   Popper,
   ClickAwayListener,
   MenuList,
-  MenuItem,
-  Dialog,
-  DialogTitle,
+  MenuItem
 } from '@mui/material';
 
 import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
 
 import Avatar from '@mui/material/Avatar';
 
-import SearchBar from 'src/components/search';
-import {Link, useNavigate} from 'react-router-dom';
-import {signOut} from 'firebase/auth';
-import {auth} from 'src/firebase/config';
-import {color, colorHover} from 'src/style';
+import { Link, useNavigate } from 'react-router-dom';
+import { signOut } from 'firebase/auth';
+import { auth } from 'src/firebase/config';
+import { color, colorHover } from 'src/style';
 import Notification from '../notification/Notification';
 import AddMember from 'src/components/popup/AddMember';
-import {AuthContext} from 'src/Context/AuthProvider';
-import {AppContext} from 'src/Context/AppProvider';
+import { AuthContext } from 'src/Context/AuthProvider';
+import { AppContext } from 'src/Context/AppProvider';
 import axios from 'axios';
 
 // function LinkTab(props) {

@@ -75,7 +75,7 @@ function WorkspaceSetting() {
   const {
     user: {uid},
   } = useContext(AuthContext);
-  const {workspace, setWorkspace, admin, setAdmin} = useContext(AppContext);
+  const {workspace, setWorkspace} = useContext(AppContext);
 
   const location = useLocation();
   const wsId = location.pathname.split('/')[2];

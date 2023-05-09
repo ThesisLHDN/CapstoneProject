@@ -1,29 +1,22 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {styled} from '@mui/material/styles';
+import { useContext, useState } from 'react';
+import { styled } from '@mui/material/styles';
 import {
   Typography,
   Grid,
   Breadcrumbs,
   Link,
-  Button,
-  Dialog,
-  TextField,
+  Button, TextField
 } from '@mui/material';
-import SearchBar from 'src/components/search';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import KeyIcon from '@mui/icons-material/Key';
 import ShareIcon from '@mui/icons-material/Share';
-import LogoutIcon from '@mui/icons-material/Logout';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import LockOpenIcon from '@mui/icons-material/LockOpen';
 import MemberList from './MemberList';
 import WarningPopup from 'src/components/popup/Warning';
-import LeavePopup from 'src/components/popup/LeaveProject';
-import {v4 as uuid} from 'uuid';
-import {AppContext} from 'src/Context/AppProvider';
+import { AppContext } from 'src/Context/AppProvider';
 import axios from 'axios';
-import {AuthContext} from 'src/Context/AuthProvider';
-import {useNavigate} from 'react-router-dom';
+import { AuthContext } from 'src/Context/AuthProvider';
+import { useNavigate } from 'react-router-dom';
 
 // const PrivacyButton = styled(Button)({
 //   textTransform: 'none',
@@ -188,10 +181,10 @@ function ProjectSetting() {
             }}
             name="pname"
             onChange={handleRename}
-            disabled={uid == project.adminId ? false : true}
+            disabled={uid === project.adminId ? false : true}
           ></TextField>
         </Grid>
-        {uid == project.adminId && (
+        {uid === project.adminId && (
           <Grid item xs={3} sx={{marginTop: 1}}>
             {rename && (
               <GradButton
@@ -231,10 +224,10 @@ function ProjectSetting() {
             }}
             name="pkey"
             onChange={handleKey}
-            disabled={uid == project.adminId ? false : true}
+            disabled={uid === project.adminId ? false : true}
           ></TextField>
         </Grid>
-        {uid == project.adminId && (
+        {uid === project.adminId && (
           <Grid item xs={3} sx={{marginTop: 1}}>
             {key && (
               <GradButton
@@ -266,7 +259,7 @@ function ProjectSetting() {
       {/* <SearchBar sx={{width: '250px', marginLeft: 6, marginTop: 2}} /> */}
       <MemberList />
 
-      {uid == workspace.adminId && (
+      {uid === workspace.adminId && (
         <Grid container>
           <Grid item xs={2}>
             <Button

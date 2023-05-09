@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import { useContext } from 'react';
 import {
   Box,
   Button,
@@ -17,11 +17,11 @@ import CreateNewFolderRoundedIcon from '@mui/icons-material/CreateNewFolderRound
 import NoteAddRoundedIcon from '@mui/icons-material/NoteAddRounded';
 import EditNoteRoundedIcon from '@mui/icons-material/EditNoteRounded';
 import CloseIcon from '@mui/icons-material/Close';
-import {useState} from 'react';
-import {storage} from 'src/firebase/config';
-import {getDownloadURL, ref, uploadBytesResumable} from 'firebase/storage';
-import {addDocument} from 'src/firebase/firestoreServices';
-import {AuthContext} from 'src/Context/AuthProvider';
+import { useState } from 'react';
+import { storage } from 'src/firebase/config';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { addDocument } from 'src/firebase/firestoreServices';
+import { AuthContext } from 'src/Context/AuthProvider';
 
 function AddItem({parentId, projectId, onClose}) {
   const {

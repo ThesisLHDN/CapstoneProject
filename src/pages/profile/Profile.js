@@ -1,14 +1,11 @@
-import {useContext} from 'react';
-import {AuthContext} from 'src/Context/AuthProvider';
-import {useFirestoreDoc} from 'src/hooks/useFirestore';
-import {color} from 'src/style';
-import {Typography, Grid, TextField, Button, Avatar} from '@mui/material';
+import { useContext } from 'react';
+import { AuthContext } from 'src/Context/AuthProvider';
+import { useFirestoreDoc } from 'src/hooks/useFirestore';
+import { color } from 'src/style';
+import { Typography, Grid, TextField, Avatar } from '@mui/material';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import PhoneEnabledOutlinedIcon from '@mui/icons-material/PhoneEnabledOutlined';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function Profile() {
   const {
