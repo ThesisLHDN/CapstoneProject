@@ -137,7 +137,6 @@ function AddItem({parentId, projectId, onClose}) {
               color: 'black',
               fontSize: '14px',
               textTransform: 'none',
-              mt: 2,
             }}
             onClick={handleClick}
           >
