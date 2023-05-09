@@ -12,9 +12,11 @@ import {
   Breadcrumbs,
   Link,
   IconButton,
+  Box,
   CircularProgress,
 } from '@mui/material';
 import FolderOutlinedIcon from '@mui/icons-material/FolderOutlined';
+import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
@@ -158,17 +160,6 @@ function Document({parentId}) {
             Documents
           </Typography>
 
-          {selectedParentId && (
-            <Button
-              color="success"
-              variant="contained"
-              sx={{mt: 1, ...colorHover.greenBtn}}
-              onClick={onBack}
-            >
-              Back
-            </Button>
-          )}
-
           {/* <Box
             sx={{
               display: 'flex',
@@ -187,14 +178,32 @@ function Document({parentId}) {
               View
             </Button>
           </Box> */}
-          <AddItem
-            parentId={selectedParentId}
-            projectId={selectedProjectId}
-            onClose={() => {
-              setSelectedFile({name: 'Untitled', body: ''});
-              setOpenEditor(true);
-            }}
-          />
+          <Box sx={{mt: 2, display: 'flex'}}>
+            {selectedParentId && (
+              <Button
+                color="success"
+                startIcon={<ArrowBackRoundedIcon />}
+                sx={{
+                  color: 'black',
+                  fontSize: '14px',
+                  textTransform: 'none',
+                  mr: 2,
+                }}
+                onClick={onBack}
+              >
+                Back
+              </Button>
+            )}
+            <AddItem
+              parentId={selectedParentId}
+              projectId={selectedProjectId}
+              onClose={() => {
+                setSelectedFile({name: 'Untitled', body: ''});
+                setOpenEditor(true);
+              }}
+            />
+          </Box>
+
           {documents.map((item) => {
             return (
               <Grid

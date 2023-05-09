@@ -79,7 +79,7 @@ const AccordionDetails = styled(MuiAccordionDetails)(({theme}) => ({
   padding: theme.spacing(2),
 }));
 
-function TaskList(props) {
+function TaskList({hide, vals, fil, setFil, srtVal, srt, setSrt, input}) {
   const location = useLocation();
   const pId = location.pathname.split('/')[2];
   const {
@@ -104,7 +104,7 @@ function TaskList(props) {
     estimatePoint: '',
     assigneeId: '',
   });
-  // const [isCreate, setIsCreate] = useState(false);
+  const [tempIssues, setTempIssues] = useState([]);
 
   const fetchSprintsData = async () => {
     try {
@@ -121,6 +121,7 @@ function TaskList(props) {
     try {
       const res = await axios.get(`http://localhost:8800/issues/${pId}`);
       setIssues([...res.data]);
+      setTempIssues(res.data);
       setTriggerIssue(false);
       // console.log(issues);
     } catch (err) {
@@ -140,7 +141,7 @@ function TaskList(props) {
       });
       // setIssues([...res.data]);
       setTriggerIssue(true);
-      console.log('###########', res);
+      // console.log('###########', res);
     } catch (err) {
       console.log(err);
     }
@@ -166,7 +167,7 @@ function TaskList(props) {
           cycleId: columnId,
         });
         setTriggerIssue(true);
-        console.log(res);
+        // console.log(res);
         event.target.value = '';
       }
       setCreateIssueCurSprint(false);
@@ -177,8 +178,44 @@ function TaskList(props) {
     }
   };
 
+  const filterIssue = async () => {
+    setFil(false);
+    try {
+      const res = await axios.post(`http://localhost:8800/filter/${pId}`, vals);
+      setIssues([...res.data]);
+      setTempIssues(res.data);
+      setTriggerIssue(false);
+      console.log('AAAAAAAAAA', res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const sortIssue = async () => {
+    setSrt(false);
+    try {
+      const res = await axios.post(`http://localhost:8800/sort/${pId}`, {
+        sort: srtVal,
+      });
+      setIssues([...res.data]);
+      setTempIssues(res.data);
+      setTriggerIssue(false);
+      console.log('AAAAAAAAAA', res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const searchIssue = () => {
+    const temp = tempIssues;
+    const findIssue = temp.filter((issue) =>
+      issue.issuename.toLowerCase().includes(input.toLowerCase()),
+    );
+    setIssues(findIssue);
+  };
+
   const onDragEnd = (result, columns, issues) => {
-    console.log('AAAAAAAAAAAAAAA');
+    // console.log('AAAAAAAAAAAAAAA');
     if (!result.destination) return;
     const {source, destination} = result;
 
@@ -253,7 +290,14 @@ function TaskList(props) {
     if (triggerSprint) {
       fetchSprintsData();
     }
-  }, [triggerIssue, triggerSprint]);
+    if (fil) {
+      filterIssue();
+    }
+    if (srt) {
+      sortIssue();
+    }
+    searchIssue();
+  }, [triggerIssue, triggerSprint, fil, srt, input]);
 
   return (
     <div>
@@ -264,7 +308,7 @@ function TaskList(props) {
           return (
             <div key={column.id}>
               {/* hide if id of column is backlog's id or lastest sprint's id  */}
-              {!props.hide || ['1', columns[0].id].includes(column.id) ? (
+              {!hide || ['1', columns[0].id].includes(column.id) ? (
                 <div className="align-center mb-4" key={column.id}>
                   <Accordion
                     defaultExpanded={
@@ -378,11 +422,13 @@ function TaskList(props) {
                                     return issue.cycleId == column.id;
                                   })
                                   .sort((a, b) => {
-                                    return a.issueorder < b.issueorder
-                                      ? -1
-                                      : a.issueorder > b.issueorder
-                                      ? 1
-                                      : 0;
+                                    if (srtVal == 'None') {
+                                      return a.issueorder < b.issueorder
+                                        ? -1
+                                        : a.issueorder > b.issueorder
+                                        ? 1
+                                        : 0;
+                                    }
                                   })
                                   .map((issue, index) => {
                                     return (

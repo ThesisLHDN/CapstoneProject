@@ -13,6 +13,15 @@ import {AuthContext} from 'src/Context/AuthProvider';
 function Backlog() {
   const [isHide, setIsHide] = useState(true);
   const {project} = useContext(AppContext);
+  const [fil, setFil] = useState(false);
+  const [vals, setVals] = useState({
+    status: '',
+    type: '',
+    priority: '',
+  });
+  const [srt, setSrt] = useState(false);
+  const [srtVal, setSrtVal] = useState('None');
+  const [input, setInput] = useState('');
   const {
     user: {uid},
   } = useContext(AuthContext);
@@ -68,20 +77,9 @@ function Backlog() {
           mt: 2,
         }}
       >
-        {/* <SearchBar sx={{width: '210px'}} /> */}
-        <Filter />
-        <Sort />
-        {/* <Button
-          variant="text"
-          startIcon={<PermIdentityRoundedIcon />}
-          sx={{
-            color: '#181818',
-            textTransform: 'none',
-            fontFamily: 'Open Sans, sans-serif',
-          }}
-        >
-          Me
-        </Button> */}
+        <SearchBar sx={{width: '210px'}} setInput={setInput} />
+        <Filter vals={vals} setVals={setVals} setFil={setFil} />
+        <Sort setSrtVal={setSrtVal} setSrt={setSrt} />
         {isHide ? (
           <Button
             variant="text"
@@ -112,7 +110,16 @@ function Backlog() {
       </Box>
 
       <div className="mt-5">
-        <TaskList hide={isHide} />
+        <TaskList
+          hide={isHide}
+          vals={vals}
+          fil={fil}
+          setFil={setFil}
+          srtVal={srtVal}
+          srt={srt}
+          setSrt={setSrt}
+          input={input}
+        />
       </div>
     </div>
   );

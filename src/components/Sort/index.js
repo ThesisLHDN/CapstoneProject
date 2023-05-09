@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Paper,
   Typography,
@@ -11,6 +11,7 @@ import {
 import {ClickAwayListener} from '@mui/base';
 import SortRoundedIcon from '@mui/icons-material/SortRounded';
 import {color} from 'src/style';
+import {useLocation} from 'react-router-dom';
 
 const data = {
   status: 'Status',
@@ -20,9 +21,11 @@ const data = {
   none: 'None',
 };
 
-function Sort() {
+function Sort({setSrtVal, setSrt}) {
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
+  const location = useLocation();
+  const position = location.pathname.split('/')[1];
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -32,7 +35,15 @@ function Sort() {
     // if (anchorRef.current && anchorRef.current.contains(event.target)) {
     //   return;
     // }
+    setOpen(false);
+  };
 
+  const handleSubmit = (value) => {
+    // if (anchorRef.current && anchorRef.current.contains(event.target)) {
+    //   return;
+    // }
+    setSrtVal(value);
+    setSrt(true);
     setOpen(false);
   };
 
@@ -107,30 +118,29 @@ function Sort() {
                   onKeyDown={handleListKeyDown}
                   sx={{py: 0}}
                 >
-                  {Object.entries(data).map(([key, value]) => (
-                    <MenuItem
-                      onClick={handleClose}
-                      sx={{
-                        width: 150,
-                        ...(key === 'none' && {
-                          fontWeight: 700,
-                          fontStyle: 'italic',
-                          color: color.gray02,
-                        }),
-                      }}
-                    >
-                      {value}
-                    </MenuItem>
-                  ))}
+                  {Object.entries(data).map(([key, value]) => {
+                    if (
+                      position != 'board' ||
+                      (position == 'board' && key != 'status')
+                    )
+                      return (
+                        <MenuItem
+                          onClick={() => handleSubmit(value)}
+                          sx={{
+                            width: 150,
+                            ...(key === 'none' && {
+                              fontWeight: 700,
+                              fontStyle: 'italic',
+                              color: color.gray02,
+                            }),
+                          }}
+                        >
+                          {value}
+                        </MenuItem>
+                      );
+                  })}
                 </MenuList>
               </ClickAwayListener>
-              {/* <Button
-                sx={{...colorHover.greenGradBtn}}
-                variant="contained"
-                onClick={handleToggle}
-              >
-                Confirm
-              </Button> */}
             </Paper>
           </Grow>
         )}

@@ -50,7 +50,7 @@ function App() {
                 ></Route>
               </Route>
               <Route element={<Layout />}>
-                <Route path="" element={<RoadMap />}></Route>
+                {/* <Route path="" element={<RoadMap />}></Route> */}
                 <Route
                   path="project-setting/:id"
                   element={<ProjectSetting></ProjectSetting>}

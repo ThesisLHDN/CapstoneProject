@@ -19,7 +19,7 @@ import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import ProjectTable from 'src/components/project-list/ProjectTable';
 import AvatarList from './AvatarList';
 import axios from 'axios';
-import {Link, useLocation} from 'react-router-dom';
+import {Link, useLocation, useNavigate} from 'react-router-dom';
 import {AppContext} from 'src/Context/AppProvider';
 import {AuthContext} from 'src/Context/AuthProvider';
 import WarningPopup from 'src/components/popup/Warning';
@@ -67,8 +67,7 @@ const StyledAccordionDetails = styled(AccordionDetails)(({theme}) => ({
 }));
 
 function WorkspaceSetting() {
-
-  const [delWpPopup, setDelWpPopup] = useState(false)
+  const [delWpPopup, setDelWpPopup] = useState(false);
 
   const [rename, setRename] = useState(false);
   const [changeDescription, setChangeDescription] = useState(false);
@@ -77,6 +76,7 @@ function WorkspaceSetting() {
   } = useContext(AuthContext);
   const {workspace, setWorkspace} = useContext(AppContext);
 
+  const navigate = useNavigate();
   const location = useLocation();
   const wsId = location.pathname.split('/')[2];
 
@@ -119,13 +119,27 @@ function WorkspaceSetting() {
     fetchWorkspace();
   }, [wsId]);
 
-  const deleteWorkspaceHandler=(confirm)=>{
-    if (confirm){
-      console.log('Workspace deleted')
+  const getLastestWorkspace = async () => {
+    try {
+      const res = await axios.get(`http://localhost:8800/lastworkspace/${uid}`);
+      navigate(`/workspace-setting/${res.data.id}?user=${uid}`);
+    } catch (err) {
+      console.log(err);
     }
-    setDelWpPopup(false)
-  }
-  
+  };
+
+  const deleteWorkspaceHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.delete(`http://localhost:8800/workspace/${wsId}`);
+      console.log(res);
+      getLastestWorkspace();
+    } catch (err) {
+      console.log(err);
+    }
+    setDelWpPopup(false);
+  };
+
   return (
     <Box sx={{textAlign: 'left'}}>
       <Typography
@@ -262,21 +276,23 @@ function WorkspaceSetting() {
           <AvatarList />
         </StyledAccordionDetails>
       </StyledAccordion>
-      <Button
-        variant="contained"
-        color="error"
-        sx={{mx: 2, mt: 1, textTransform: 'none', fontWeight: 'bold'}}
-        onClick={()=>setDelWpPopup(true)}
-      >
-        Delete Workspace
-      </Button>
+      {uid === workspace.adminId && (
+        <Button
+          variant="contained"
+          color="error"
+          sx={{mx: 2, mt: 1, textTransform: 'none', fontWeight: 'bold'}}
+          onClick={() => setDelWpPopup(true)}
+        >
+          Delete Workspace
+        </Button>
+      )}
       <WarningPopup
         title={'Delete Workspace'}
         open={delWpPopup}
         onClose={() => setDelWpPopup(false)}
         handleSubmit={deleteWorkspaceHandler}
         content={
-          'Do you really want to delete this workspace? This cannot be undone'
+          'Do you really want to delete this workspace? This action cannot be undone.'
         }
       ></WarningPopup>
     </Box>
