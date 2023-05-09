@@ -276,14 +276,16 @@ function WorkspaceSetting() {
           <AvatarList />
         </StyledAccordionDetails>
       </StyledAccordion>
-      <Button
-        variant="contained"
-        color="error"
-        sx={{mx: 2, mt: 1, textTransform: 'none', fontWeight: 'bold'}}
-        onClick={() => setDelWpPopup(true)}
-      >
-        Delete Workspace
-      </Button>
+      {uid === workspace.adminId && (
+        <Button
+          variant="contained"
+          color="error"
+          sx={{mx: 2, mt: 1, textTransform: 'none', fontWeight: 'bold'}}
+          onClick={() => setDelWpPopup(true)}
+        >
+          Delete Workspace
+        </Button>
+      )}
       <WarningPopup
         title={'Delete Workspace'}
         open={delWpPopup}
