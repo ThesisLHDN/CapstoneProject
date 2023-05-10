@@ -5,7 +5,8 @@ import {
   Grid,
   Breadcrumbs,
   Link,
-  Button, TextField
+  Button,
+  TextField,
 } from '@mui/material';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import KeyIcon from '@mui/icons-material/Key';
@@ -41,21 +42,21 @@ const GradButton = styled(Button)({
 });
 
 function ProjectSetting() {
-  const [openLeave, setOpenLeave] = useState(false);
+  // const [openLeave, setOpenLeave] = useState(false);
   const {project, setProject, workspace} = useContext(AppContext);
   const {
     user: {uid},
   } = useContext(AuthContext);
-  function handleCloseLeave(email) {
-    setOpenLeave(false);
-    setNewOwner(email);
-  }
+  // function handleCloseLeave(email) {
+  //   setOpenLeave(false);
+  //   setNewOwner(email);
+  // }
   const [openDelete, setOpenDelete] = useState(false);
   function handleCloseDelete(result) {
     setOpenDelete(false);
   }
 
-  const [newOwner, setNewOwner] = useState(false);
+  // const [newOwner, setNewOwner] = useState(false);
 
   const [rename, setRename] = useState(false);
   const [key, setKey] = useState(false);

@@ -1,7 +1,6 @@
-import {useState} from 'react';
-import {Box, Paper, Typography, Button, TextField, Dialog} from '@mui/material';
-import {color} from 'src/style';
-import ReportRoundedIcon from '@mui/icons-material/ReportRounded';
+import { useState } from 'react';
+import { Box, Paper, Typography, Button, TextField, Dialog } from '@mui/material';
+import { color } from 'src/style';
 
 function CreationPopup({
   title,

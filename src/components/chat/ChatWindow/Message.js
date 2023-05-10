@@ -1,5 +1,3 @@
-import React from 'react';
-import format from 'date-fns/format';
 import moment from 'moment/moment';
 
 import {Box, Paper, Typography, Avatar, IconButton} from '@mui/material';
@@ -7,7 +5,7 @@ import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 
 function Message({mine, children}) {
-  const {author, authorId, body, type, createdAt, file} = children;
+  const {author, body, createdAt, file} = children;
   var timepassed = '';
   if (createdAt) {
     const start = moment(createdAt.toDate());
@@ -82,7 +80,7 @@ function Message({mine, children}) {
                 <source type={file.type} src={file.downloadURL}></source>
               </video>
             )) || (
-              <a href={file.downloadURL} target="_blank">
+              <a href={file.downloadURL} target="_blank" rel="noreferrer">
                 {' '}
                 <Paper
                   sx={{
@@ -125,7 +123,11 @@ function Message({mine, children}) {
                           gap: 1,
                         }}
                       >
-                        <a href={file.downloadURL} target="_blank">
+                        <a
+                          href={file.downloadURL}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
                           <IconButton
                             sx={{
                               width: 28,

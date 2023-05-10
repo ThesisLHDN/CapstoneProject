@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import {useContext, useEffect} from 'react';
 import {
   Box,
   Button,
@@ -15,41 +15,29 @@ import axios from 'axios';
 import {AppContext} from 'src/Context/AppProvider';
 import {AuthContext} from 'src/Context/AuthProvider';
 
-function stringToColor(string) {
-  let hash = 0;
-  let i;
+// function stringToColor(string) {
+//   let hash = 0;
+//   let i;
 
-  /* eslint-disable no-bitwise */
-  for (i = 0; i < string.length; i += 1) {
-    hash = string.charCodeAt(i) + ((hash << 5) - hash);
-  }
+//   for (i = 0; i < string.length; i += 1) {
+//     hash = string.charCodeAt(i) + ((hash << 5) - hash);
+//   }
 
-  let color = '#';
+//   let color = '#';
 
-  for (i = 0; i < 3; i += 1) {
-    const value = (hash >> (i * 8)) & 0xff;
-    color += `00${value.toString(16)}`.slice(-2);
-  }
-  /* eslint-enable no-bitwise */
+//   for (i = 0; i < 3; i += 1) {
+//     const value = (hash >> (i * 8)) & 0xff;
+//     color += `00${value.toString(16)}`.slice(-2);
+//   }
 
-  return color;
-}
-
-function stringAvatar(name) {
-  return {
-    sx: {
-      bgcolor: stringToColor(name),
-    },
-    children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
-  };
-}
+//   return color;
+// }
 
 function ImageIndividual({member, workspace, uid}) {
   const [open, setOpen] = useState(false);
 
-  function handleClose(result) {
+  function handleClose() {
     setOpen(false);
-    // setNewOwner(email);
   }
 
   const handleSubmit = async (e) => {
@@ -82,7 +70,7 @@ function ImageIndividual({member, workspace, uid}) {
           // {...stringAvatar(member.username ? member.username : member.email)}
         />
       </ImageListItem>
-      {uid == workspace.adminId && (
+      {uid === workspace.adminId && (
         <Paper
           elevation={3}
           className="memberSelect"
@@ -177,7 +165,7 @@ function AvatarList() {
       rowHeight={50}
     >
       {members
-        .filter((member) => member.id != workspace.adminId)
+        .filter((member) => member.id !== workspace.adminId)
         .map((member) => (
           <ImageIndividual
             key={member.id}

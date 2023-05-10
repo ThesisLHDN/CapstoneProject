@@ -25,7 +25,6 @@ import {
   AccordionDetails,
 } from '@mui/material';
 
-
 const StyledTypo = styled(Typography)({
   display: 'block',
   color: color.green03,
@@ -144,7 +143,7 @@ function WorkspaceSetting() {
 
   return (
     <Box sx={{textAlign: 'left'}}>
-      {workspace && (
+      {workspace ? (
         <Box>
           <Typography
             variant="h5"
@@ -228,7 +227,7 @@ function WorkspaceSetting() {
               {uid === workspace.adminId && (
                 <Button
                   sx={{
-                    width: '155px',
+                    // width: '155px',
                     height: '38px',
                     ...colorHover.greenGradBtn,
                   }}
@@ -300,6 +299,8 @@ function WorkspaceSetting() {
             </Button>
           )}
         </Box>
+      ) : (
+        <Typography>Please select a workspace</Typography>
       )}
       <WarningPopup
         title={'Delete Workspace'}

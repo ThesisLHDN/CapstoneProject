@@ -57,7 +57,6 @@ export default function ProjectTable() {
     <Box>
       {projects.length ? (
         <Paper sx={{overflow: 'hidden', mt: 2}}>
-          (
           <TableContainer>
             <Table sx={{minWidth: 700}} aria-label="customized table">
               <TableHead
@@ -98,7 +97,6 @@ export default function ProjectTable() {
               </TableBody>
             </Table>
           </TableContainer>
-          )
         </Paper>
       ) : (
         <div></div>

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useMemo } from 'react';
+import React, {useState, useContext, useMemo} from 'react';
 import DatePicker from 'react-datepicker';
 import {
   Grid,
@@ -19,15 +19,14 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 import 'react-datepicker/dist/react-datepicker.css';
 import Comments from './comment/Comments';
 import CloseIcon from '@mui/icons-material/Close';
-import { colorHover } from 'src/style';
+import {colorHover} from 'src/style';
 
-import { storage } from 'src/firebase/config';
-import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-import { addDocument } from 'src/firebase/firestoreServices';
-import { AuthContext } from 'src/Context/AuthProvider';
+import {storage} from 'src/firebase/config';
+import {getDownloadURL, ref, uploadBytesResumable} from 'firebase/storage';
+import {addDocument} from 'src/firebase/firestoreServices';
+import {AuthContext} from 'src/Context/AuthProvider';
 import Attachments from './Attachments';
 import axios from 'axios';
-
 
 function handleCreateTime(time) {
   const t = new Date(time);
@@ -42,9 +41,9 @@ function LeftIssueDetail({issue, setIssue, trigger, setTrigger}) {
   const [open, setOpen] = useState(false);
   const [openPriority, setOpenPriority] = useState(false);
 
-  function handleClose() {
-    setOpen(false);
-  }
+  // function handleClose() {
+  //   setOpen(false);
+  // }
 
   const CommentArea = useMemo(
     () => <Comments currentUser={user} issueId={issue.id} />,
@@ -342,6 +341,7 @@ function LeftIssueDetail({issue, setIssue, trigger, setTrigger}) {
       </Typography>
 
       <TextField
+        hiddenLabel
         sx={{
           width: '100%',
           scrollbarGutter: 'stable',
@@ -407,6 +407,7 @@ function LeftIssueDetail({issue, setIssue, trigger, setTrigger}) {
           </div>
           <div className="mt-4 mb-0 ml-4 text-sm">
             <Button
+              aria-label="priority"
               style={{
                 textTransform: 'none',
                 height: 20,

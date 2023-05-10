@@ -1,23 +1,15 @@
-import React, {useContext, useEffect, useState} from 'react';
+import { useContext, useState } from 'react';
 import {
   Button,
   Dialog,
   DialogTitle,
   DialogActions,
-  DialogContent,
-  DialogContentText,
-  FormControl,
-  Select,
-  MenuItem,
-  Typography,
-  List,
-  ListItem,
-  ListSubheader,
+  DialogContent, Typography
 } from '@mui/material';
-import {styled} from '@mui/material/styles';
-import {colorHover} from 'src/style';
+import { styled } from '@mui/material/styles';
+import { colorHover } from 'src/style';
 import axios from 'axios';
-import {AppContext} from 'src/Context/AppProvider';
+import { AppContext } from 'src/Context/AppProvider';
 
 const GrayButton = styled(Button)({
   textTransform: 'none',
@@ -33,7 +25,7 @@ const GrayButton = styled(Button)({
 
 function CompleteSprint({setTriggerIssue, sprintId}) {
   const [open, setOpen] = useState(false);
-  const [sprint, setSprint] = useState('DFP Sprint 4');
+  // const [sprint, setSprint] = useState('DFP Sprint 4');
   const [display, setDisplay] = useState(true);
   const {project} = useContext(AppContext);
 
@@ -41,9 +33,9 @@ function CompleteSprint({setTriggerIssue, sprintId}) {
     setOpen(false);
   };
 
-  const handleChangeSprint = (event) => {
-    setSprint(event.target.value);
-  };
+  // const handleChangeSprint = (event) => {
+  //   setSprint(event.target.value);
+  // };
 
   const handleClick = async (e) => {
     e.preventDefault();

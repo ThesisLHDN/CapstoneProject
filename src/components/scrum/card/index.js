@@ -1,16 +1,16 @@
 import './card.scss';
 import format from 'date-fns/format';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-import {Avatar, Typography, Chip, Paper} from '@mui/material';
+import { Avatar, Typography, Chip, Paper } from '@mui/material';
 
 import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
 import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
 import FiberManualRecordRoundedIcon from '@mui/icons-material/FiberManualRecordRounded';
 import FlagRoundedIcon from '@mui/icons-material/FlagRounded';
 import QuestionMarkRoundedIcon from '@mui/icons-material/QuestionMarkRounded';
-import {useContext, useEffect, useState} from 'react';
-import {AppContext} from 'src/Context/AppProvider';
+import { useContext, useEffect, useState } from 'react';
+import { AppContext } from 'src/Context/AppProvider';
 import axios from 'axios';
 
 const Epic = (props) => {

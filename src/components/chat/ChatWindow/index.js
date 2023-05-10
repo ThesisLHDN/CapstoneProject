@@ -1,43 +1,28 @@
-import React, {useContext, useMemo, useState, useRef, useEffect} from 'react';
-import {styled} from '@mui/material/styles';
-import {color, colorHover} from 'src/style';
+import React, { useContext, useMemo, useState } from 'react';
+import { styled } from '@mui/material/styles';
+import { color, colorHover } from 'src/style';
 import {
-  Box,
-  Modal,
-  Paper,
-  IconButton,
+  Box, IconButton,
   Button,
   Divider,
   Typography,
-  Avatar,
-  Switch,
-  Drawer,
+  Avatar, Drawer
 } from '@mui/material';
-import {useTheme} from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles';
 import MuiAppBar from '@mui/material/AppBar';
 import PersonRemoveAlt1RoundedIcon from '@mui/icons-material/PersonRemoveAlt1Rounded';
 import Toolbar from '@mui/material/Toolbar';
-import CssBaseline from '@mui/material/CssBaseline';
-import List from '@mui/material/List';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import PersonAddAltRoundedIcon from '@mui/icons-material/PersonAddAltRounded';
-import CircularProgress from '@mui/material/CircularProgress';
 import CreationPopup from 'src/components/popup/Create';
 
 import Message from './Message';
 import TypingArea from './TypingArea';
-import {ChatContext} from 'src/Context/ChatProvider';
-import {useFirestore} from 'src/hooks/useFirestore';
+import { ChatContext } from 'src/Context/ChatProvider';
+import { useFirestore } from 'src/hooks/useFirestore';
 import {
   getDocumentWithCondition,
   updateDocument,
@@ -103,9 +88,9 @@ const DrawerHeader = styled('div')(({theme}) => ({
 }));
 
 function ChatWindow({currentUser}) {
-  const messagesEndRef = useRef(
-    document.getElementById('chat-window-messages'),
-  );
+  // const messagesEndRef = useRef(
+  //   document.getElementById('chat-window-messages'),
+  // );
 
   const theme = useTheme();
   const [openDrawer, setOpenDrawer] = useState(false);

@@ -1,6 +1,4 @@
-import axios from 'axios';
-import React, {useEffect, useState} from 'react';
-import {useLocation} from 'react-router-dom';
+import React, { useState } from 'react';
 
 export const AppContext = React.createContext();
 

@@ -1,38 +1,16 @@
-import React, {useState, useContext, useMemo} from 'react';
-import DatePicker from 'react-datepicker';
+import { useState, useMemo } from 'react';
 import {
-  Grid,
-  Typography,
-  Button,
-  TextField,
-  ClickAwayListener,
-  MenuItem,
-  MenuList,
-  Paper,
-  IconButton,
-  Popper,
-  Box,
-  Snackbar,
-  Alert,
+  Typography, Paper,
+  IconButton, Box
 } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import AttachFileIcon from '@mui/icons-material/AttachFile';
-import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
-import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 import 'react-datepicker/dist/react-datepicker.css';
-import Comments from './comment/Comments';
-import ChildIssues from './ChildIssues';
-import {useFirestore} from 'src/hooks/useFirestore';
-import CloseIcon from '@mui/icons-material/Close';
+import { useFirestore } from 'src/hooks/useFirestore';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
 import WarningPopup from 'src/components/popup/Warning';
 
-import {storage} from 'src/firebase/config';
-import {getDownloadURL, ref, uploadBytesResumable} from 'firebase/storage';
-import {addDocument, deleteDocument} from 'src/firebase/firestoreServices';
-import {AuthContext} from 'src/Context/AuthProvider';
+import { deleteDocument } from 'src/firebase/firestoreServices';
 
 function Attachments({issueId, uid}) {
   const attachmentsCondition = useMemo(

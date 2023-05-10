@@ -29,13 +29,13 @@ function AddItem({parentId, projectId, onClose}) {
   } = useContext(AuthContext);
 
   const [open, setOpen] = useState(false);
-  function handleClose() {
-    setOpen(false);
-  }
+  // function handleClose() {
+  //   setOpen(false);
+  // }
 
-  const [openSnackbar, setOpenSnackbar] = useState('');
+  // const [openSnackbar, setOpenSnackbar] = useState('');
   const [snackbarContent, setSnackbarContent] = useState('');
-  const [selectedFile, setSelectedFile] = useState();
+  // const [selectedFile, setSelectedFile] = useState();
 
   const uploadHandler = async (files) => {
     if (files) {

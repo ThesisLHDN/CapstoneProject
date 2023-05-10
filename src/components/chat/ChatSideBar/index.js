@@ -7,16 +7,10 @@ import {
   Dialog,
   Paper,
   TextField,
-  DialogContentText,
-  DialogActions,
-  DialogTitle,
-  DialogContent,
   Box,
   Avatar,
-  FormControl,
   Button,
   styled,
-  Select,
 } from '@mui/material';
 import {colorHover} from 'src/style';
 
@@ -24,7 +18,6 @@ import {colorHover} from 'src/style';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 // import PersonAddAltRoundedIcon from '@mui/icons-material/PersonAddAltRounded';
 
-import SearchBar from 'src/components/search';
 import {addDocument} from 'src/firebase/firestoreServices';
 
 import {ChatContext} from 'src/Context/ChatProvider';
@@ -43,13 +36,11 @@ const CssTextField = styled(TextField)({
   },
 });
 function ChatSideBar({data, currentUser, projectId}) {
-  const {selectedRoomId, setSelectedRoomId, selectedRoom, setProjectId} =
+  const {setSelectedRoomId, selectedRoom} =
     useContext(ChatContext);
   const [open, setOpen] = useState(false);
   const [newRoom, setNewRoom] = useState('');
   const [description, setDescription] = useState('');
-  setProjectId(projectId);
-  console.log('reload chat side bar');
   const handleClose = () => {
     setOpen(false);
   };

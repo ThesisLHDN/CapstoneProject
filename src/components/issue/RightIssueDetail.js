@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import {
   Typography,
   Grid,
@@ -148,6 +148,7 @@ function RightIssueDetail({issue, setIssue, trigger, setTrigger}) {
           </Grid>
           <Grid item xs={6.5}>
             <LinearProgress
+              aria-label="progress-bar"
               variant="determinate"
               value={`${
                 issue.dueDate
@@ -190,6 +191,7 @@ function RightIssueDetail({issue, setIssue, trigger, setTrigger}) {
           <Grid item xs={6.5}>
             <div className="flex">
               <Button
+                aria-label="assignee"
                 style={{
                   textTransform: 'none',
                   height: assignee.username ? '' : 20,

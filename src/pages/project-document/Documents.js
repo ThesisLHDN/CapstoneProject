@@ -1,9 +1,9 @@
-import { useContext, useState } from 'react';
+import {useContext, useState, Suspense} from 'react';
 
 import AddItem from './AddItem';
 import WarningPopup from 'src/components/popup/Warning';
 import TextEditor from './QuillEditor/Editor';
-import { addDocument, updateDocument } from 'src/firebase/firestoreServices';
+import {addDocument, updateDocument} from 'src/firebase/firestoreServices';
 
 import {
   Typography,
@@ -21,12 +21,12 @@ import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
-import { DocContext } from 'src/Context/DocProvider';
-import { deleteDocument } from 'src/firebase/firestoreServices';
-import { styled } from '@mui/system';
-import { useLocation } from 'react-router-dom';
-import { AppContext } from 'src/Context/AppProvider';
-import { AuthContext } from 'src/Context/AuthProvider';
+import {DocContext} from 'src/Context/DocProvider';
+import {deleteDocument} from 'src/firebase/firestoreServices';
+import {styled} from '@mui/system';
+import {useLocation} from 'react-router-dom';
+import {AppContext} from 'src/Context/AppProvider';
+import {AuthContext} from 'src/Context/AuthProvider';
 
 function convertDate(d) {
   const date = new Date(d);
@@ -60,7 +60,7 @@ function Document({parentId}) {
   const {
     user: {uid},
   } = useContext(AuthContext);
-  const {workspace, project} = useContext(AppContext);
+  const {project} = useContext(AppContext);
 
   setSelectedProjectId(projectId);
   const [openDeletePopup, setOpenDeletePopup] = useState(false);
@@ -120,7 +120,18 @@ function Document({parentId}) {
 
   return (
     <div>
-      {documents ? (
+      <Suspense
+        fallback={
+          <CircularProgress
+            sx={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(50%,-50%)',
+            }}
+          />
+        }
+      >
         <div>
           <Grid container spacing={2}>
             <Grid item xs={6}>
@@ -228,7 +239,12 @@ function Document({parentId}) {
                         {item.name}
                       </PlainButton>
                     ) : (
-                      <a href={item.downloadURL} target="_blank" download>
+                      <a
+                        href={item.downloadURL}
+                        target="_blank"
+                        download
+                        rel="noreferrer"
+                      >
                         <PlainButton
                           startIcon={<DescriptionOutlinedIcon />}
                           onClick={() => {
@@ -279,7 +295,12 @@ function Document({parentId}) {
                     )}
 
                     {item.type !== 'folder' && item.type !== 'editableHTML' && (
-                      <a href={item.downloadURL} download target="_blank">
+                      <a
+                        href={item.downloadURL}
+                        download
+                        target="_blank"
+                        rel="noreferrer"
+                      >
                         <IconButton>
                           <DownloadRoundedIcon
                             sx={{color: '#181818'}}
@@ -316,16 +337,8 @@ function Document({parentId}) {
             content="This file will be permanently deleted"
           ></WarningPopup>
         </div>
-      ) : (
-        <CircularProgress
-          sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(50%,-50%)',
-          }}
-        />
-      )}
+      </Suspense>
+
       <TextEditor
         open={openEditor}
         onClose={onSubmitTextEditor}

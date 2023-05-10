@@ -1,19 +1,19 @@
 import React, {useState, useMemo, useContext} from 'react';
-import {useNavigate, useLocation} from 'react-router-dom';
 import {useFirestore} from 'src/hooks/useFirestore';
-import {auth} from 'src/firebase/config';
-import CircularProgress from '@mui/material/CircularProgress';
 import {AuthContext} from './AuthProvider';
+import {AppContext} from './AppProvider';
 export const ChatContext = React.createContext();
 
 export default function ChatProvider({children}) {
   const {
     user: {uid},
   } = useContext(AuthContext);
-  // console.log('Chat provider', uid);
+  const {
+    project: {id},
+  } = useContext(AppContext);
+
   const [selectedRoomId, setSelectedRoomId] = useState('');
-  const [projectId, setProjectId] = useState();
-  // console.log('ChatProvider', user);
+  // const [projectId, setProjectId] = useState();
 
   const RoomsCondition = useMemo(
     () => ({
@@ -26,7 +26,7 @@ export default function ChatProvider({children}) {
 
   const rawRooms = useFirestore('rooms', RoomsCondition);
 
-  const rooms = rawRooms.filter((room) => room.projectId === projectId);
+  const rooms = rawRooms.filter((room) => room.projectId === id);
 
   const selectedRoom = selectedRoomId
     ? rooms.find((room) => room.id === selectedRoomId)
@@ -40,8 +40,6 @@ export default function ChatProvider({children}) {
     }),
     [selectedRoom],
   );
-
-  // console.log('membersCondition', membersCondition);
 
   const roomMembers = useFirestore('users', membersCondition);
   const currentRoomMembers =
@@ -58,8 +56,8 @@ export default function ChatProvider({children}) {
         selectedRoomId,
         setSelectedRoomId,
         currentRoomMembers,
-        projectId,
-        setProjectId,
+        // projectId,
+        // setProjectId,
       }}
     >
       {children}

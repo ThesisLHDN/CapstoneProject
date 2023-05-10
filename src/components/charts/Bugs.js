@@ -1,17 +1,9 @@
-import {useState} from 'react';
+import { useState } from 'react';
 import {
-  Button,
-  Radio,
-  RadioGroup,
-  FormControl,
-  FormControlLabel,
-  Typography,
+  Button
 } from '@mui/material';
-import {Bar} from 'react-chartjs-2';
-import {Chart as ChartJS} from 'chart.js/auto';
+import { Bar } from 'react-chartjs-2';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
-import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
-import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 
 function Bugs({chartData}) {
   const [activeAllBtn, setActiveAllBtn] = useState(false);

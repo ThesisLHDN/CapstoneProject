@@ -11,8 +11,6 @@ import {
   Box,
   Grid,
 } from '@mui/material';
-import PhotoRoundedIcon from '@mui/icons-material/PhotoRounded';
-import SmartDisplayRoundedIcon from '@mui/icons-material/SmartDisplayRounded';
 import InsertDriveFileRoundedIcon from '@mui/icons-material/InsertDriveFileRounded';
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
@@ -27,14 +25,14 @@ function TypingArea({currentUser, roomId}) {
   const [reparedFiles, setReparedFiles] = useState([]);
   // console.log(currentUser)
 
-  const [open, setOpen] = useState(false);
-  function handleClose() {
-    setOpen(false);
-  }
+  // const [open, setOpen] = useState(false);
+  // function handleClose() {
+  //   setOpen(false);
+  // }
 
-  const [openSnackbar, setOpenSnackbar] = useState('');
+  // const [openSnackbar, setOpenSnackbar] = useState('');
   const [snackbarContent, setSnackbarContent] = useState('');
-  const [selectedFile, setSelectedFile] = useState();
+  // const [selectedFile, setSelectedFile] = useState();
 
   const uploadHandler = async (file) => {
     // event.preventDefault();
@@ -100,12 +98,12 @@ function TypingArea({currentUser, roomId}) {
     setMessage({body: ''});
   };
 
-  const handleOnSubmit = (message = message) => {
+  const handleOnSubmit = (varmessage = message) => {
     if (roomId) {
-      if (message.body.length) {
+      if (varmessage.body.length) {
         const messageData = {
           authorId: currentUser.uid,
-          body: message.body,
+          body: varmessage.body,
           roomId: roomId,
         };
         console.log('new message', messageData);
@@ -114,7 +112,7 @@ function TypingArea({currentUser, roomId}) {
         setMessage({body: ''});
       }
       if (reparedFiles.length) {
-        reparedFiles.map((file) => {
+        reparedFiles.forEach((file) => {
           uploadHandler(file);
         });
       }
@@ -144,7 +142,7 @@ function TypingArea({currentUser, roomId}) {
           placeholder="Aa"
           sx={{width: '100%'}}
           onKeyPress={handleKeyPress}
-          disabled={reparedFiles.length}
+          disabled={!!reparedFiles.length}
           InputProps={{
             startAdornment: (
               <>
