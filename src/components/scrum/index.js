@@ -2,7 +2,6 @@ import './scrum.scss';
 import {
   Button,
   Box,
-  // Paper,
   Typography,
 } from '@mui/material';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';

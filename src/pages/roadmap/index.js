@@ -33,7 +33,7 @@ function RoadMap() {
   const location = useLocation();
   const pId = location.pathname.split('/')[2];
   const [zoom, setZoom] = useState('Days');
-  const [messagesState, setMessagesState] = useState([]);
+  // const [messagesState, setMessagesState] = useState([]);
   const [issues, setIssues] = useState({data: []});
   const {
     user: {uid},
@@ -43,7 +43,7 @@ function RoadMap() {
   const fetchIssuesData = async () => {
     try {
       const res = await axios.get(`http://localhost:8800/issues/${pId}`);
-      console.log('raw data', res);
+      // console.log('raw data', res);
       const data = {
         data: res.data.map((issue) => ({
           text: issue.issuename,

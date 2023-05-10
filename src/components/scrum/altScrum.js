@@ -1,14 +1,12 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
-import {v4 as uuid} from 'uuid';
+import { useContext, useEffect, useState } from 'react';
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import Card from './card/index.js';
 import './scrum.scss';
-import {Box, Typography} from '@mui/material';
+import { Box, Typography } from '@mui/material';
 // import AddRoundedIcon from '@mui/icons-material/AddRounded';
 // import {colorHover} from 'src/style';
 import axios from 'axios';
-import {useLocation} from 'react-router-dom';
-import {AppContext} from 'src/Context/AppProvider.js';
+import { AppContext } from 'src/Context/AppProvider.js';
 
 const columns = [
   {
@@ -158,9 +156,9 @@ function Scrum({sprint, vals, fil, setFil, srtVal, srt, setSrt, input}) {
   };
 
   useEffect(() => {
-    if (triggerBoard == false && sprint && input == '') {
+    if (triggerBoard === false && sprint && input === '') {
       fetchIssuesData();
-    } else if (triggerBoard == true) {
+    } else if (triggerBoard === true) {
       fetchIssuesData();
     }
     if (fil) {
@@ -170,10 +168,10 @@ function Scrum({sprint, vals, fil, setFil, srtVal, srt, setSrt, input}) {
       sortIssue();
     }
     searchIssue();
-    console.log(triggerBoard);
+    // console.log(triggerBoard);
   }, [sprint, triggerBoard, fil, srt, input]);
 
-  console.log(triggerBoard);
+  // console.log(triggerBoard);
 
   return (
     <Box
@@ -221,7 +219,7 @@ function Scrum({sprint, vals, fil, setFil, srtVal, srt, setSrt, input}) {
                               return issue.issuestatus === column.title;
                             })
                             .sort((a, b) => {
-                              if (srtVal == 'None') {
+                              if (srtVal === 'None') {
                                 return a.issueorder < b.issueorder
                                   ? -1
                                   : a.issueorder > b.issueorder

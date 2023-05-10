@@ -210,7 +210,7 @@ const Comment = ({
                 />
               </div>
             )}
-            {replies && replies.length > 0 && (
+            {!subcomment && replies && replies.length > 0 && (
               <div className="mt-5">
                 {replies.map((reply, index) => (
                   <Comment

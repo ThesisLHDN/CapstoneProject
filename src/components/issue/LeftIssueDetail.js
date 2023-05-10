@@ -1,4 +1,4 @@
-import React, {useState, useContext, useMemo} from 'react';
+import React, { useState, useContext, useMemo } from 'react';
 import DatePicker from 'react-datepicker';
 import {
   Grid,
@@ -16,45 +16,18 @@ import {
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
-import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
-import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 import 'react-datepicker/dist/react-datepicker.css';
 import Comments from './comment/Comments';
-import ChildIssues from './ChildIssues';
-import {useFirestore} from 'src/hooks/useFirestore';
 import CloseIcon from '@mui/icons-material/Close';
-import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
-import {color, colorHover} from 'src/style';
+import { colorHover } from 'src/style';
 
-import {storage} from 'src/firebase/config';
-import {getDownloadURL, ref, uploadBytesResumable} from 'firebase/storage';
-import {addDocument} from 'src/firebase/firestoreServices';
-import {AuthContext} from 'src/Context/AuthProvider';
+import { storage } from 'src/firebase/config';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { addDocument } from 'src/firebase/firestoreServices';
+import { AuthContext } from 'src/Context/AuthProvider';
 import Attachments from './Attachments';
 import axios from 'axios';
 
-// const tasks = [
-//   {
-//     id: 'SCR1',
-//     name: 'First task',
-//     status: 'To do',
-//     type: 'task',
-//     epic: 'Epic 1',
-//     due: '2022-02-01',
-//     point: 15,
-//     assignee: 'Đăng Nguyễn',
-//   },
-//   {
-//     id: 'SCR2',
-//     name: 'Second task',
-//     status: 'To do',
-//     type: 'task',
-//     epic: 'Epic 1',
-//     due: '2022-02-01',
-//     point: 10,
-//     assignee: 'Lâm Nguyễn',
-//   },
-// ];
 
 function handleCreateTime(time) {
   const t = new Date(time);
@@ -65,7 +38,6 @@ function handleCreateTime(time) {
 
 function LeftIssueDetail({issue, setIssue, trigger, setTrigger}) {
   const {user} = useContext(AuthContext);
-  // console.log('issue user', user);
 
   const [open, setOpen] = useState(false);
   const [openPriority, setOpenPriority] = useState(false);
@@ -439,9 +411,9 @@ function LeftIssueDetail({issue, setIssue, trigger, setTrigger}) {
                 textTransform: 'none',
                 height: 20,
                 color: `${
-                  issue.priority == 'High'
+                  issue.priority === 'High'
                     ? 'red'
-                    : issue.priority == 'Medium'
+                    : issue.priority === 'Medium'
                     ? 'orange'
                     : 'green'
                 }`,

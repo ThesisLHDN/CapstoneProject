@@ -187,12 +187,14 @@ export default function SignInSide() {
             </Divider>
             <Box sx={{display: 'flex', gap: 1, justifyContent: 'center'}}>
               <IconButton
+                aria-label="facebook"
                 variant="contained"
                 onClick={() => setError(facebookLoginHandler)}
               >
                 <FacebookIcon style={{width: 32, height: 32}} />
               </IconButton>
               <IconButton
+                aria-label="google"
                 variant="contained"
                 onClick={() => setError(googleLoginHandler)}
               >

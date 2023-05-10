@@ -87,7 +87,7 @@ export default function Header() {
       }}
     >
       <Link to="/">
-        <img src={logo} width="150" alt="Logo" />
+        <img src={logo} width="150" height="45" alt="Logo" />
       </Link>
 
       {/* <SearchBar value={value}></SearchBar> */}

@@ -236,6 +236,7 @@ function RightIssueDetail({issue, setIssue, trigger, setTrigger}) {
                     {members.map((element) => {
                       return (
                         <MenuItem
+                          key={element.username}
                           sx={{
                             py: 1,
                             fontSize: 14,
