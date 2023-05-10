@@ -25,9 +25,7 @@ export default function ProjectTable() {
   const fetchProjects = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:8800/projects/${wsId}?user=${
-          uid == workspace.adminId ? '' : uid
-        }`,
+        `/projects/${wsId}?user=${uid == workspace.adminId ? '' : uid}`,
       );
       setProjects(res.data);
     } catch (err) {
@@ -37,7 +35,7 @@ export default function ProjectTable() {
 
   const handleClick = async (pid) => {
     try {
-      await axios.post('http://localhost:8800/pmember', {
+      await axios.post('/pmember', {
         email: email,
         projectId: pid,
       });

@@ -95,7 +95,7 @@ function LeftIssueDetail({issue, setIssue, trigger, setTrigger}) {
 
   const updateIssue = async ({status, due, priority, assignee, point} = {}) => {
     try {
-      const res = await axios.put(`http://localhost:8800/issue/${issue.id}`, {
+      const res = await axios.put(`/issue/${issue.id}`, {
         issuestatus: status ? status : issue.issuestatus,
         descript: issue.descript,
         dueDate: due

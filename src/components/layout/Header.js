@@ -57,7 +57,7 @@ export default function Header() {
 
   const getLastestWorkspace = async () => {
     try {
-      const res = await axios.get(`http://localhost:8800/lastworkspace/${uid}`);
+      const res = await axios.get(`/lastworkspace/${uid}`);
       navigate(`/workspace-setting/${res.data.id}?user=${uid}`);
     } catch (err) {
       console.log(err);

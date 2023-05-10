@@ -108,7 +108,7 @@ function TaskList({hide, vals, fil, setFil, srtVal, srt, setSrt, input}) {
 
   const fetchSprintsData = async () => {
     try {
-      const res = await axios.get(`http://localhost:8800/sprints/${pId}`);
+      const res = await axios.get(`/sprints/${pId}`);
       setColumns([...res.data, ...columns]);
       setTriggerSprint(false);
       // console.log(res.data);
@@ -119,7 +119,7 @@ function TaskList({hide, vals, fil, setFil, srtVal, srt, setSrt, input}) {
 
   const fetchIssuesData = async () => {
     try {
-      const res = await axios.get(`http://localhost:8800/issues/${pId}`);
+      const res = await axios.get(`/issues/${pId}`);
       setIssues([...res.data]);
       setTempIssues(res.data);
       setTriggerIssue(false);
@@ -132,7 +132,7 @@ function TaskList({hide, vals, fil, setFil, srtVal, srt, setSrt, input}) {
   const updateIssue = async (cId, id, status, destination, source, pId) => {
     // console.log('$$$$$$$$$$$$$$$', status);
     try {
-      const res = await axios.put(`http://localhost:8800/issue/${id}`, {
+      const res = await axios.put(`/issue/${id}`, {
         cId: cId,
         status: status,
         destination: destination,
@@ -161,7 +161,7 @@ function TaskList({hide, vals, fil, setFil, srtVal, srt, setSrt, input}) {
   const addIssue = async (event, columnId) => {
     try {
       if (event.target.value !== '') {
-        const res = await axios.post('http://localhost:8800/issue', {
+        const res = await axios.post('/issue', {
           ...issue,
           createTime: new Date().toISOString().slice(0, 19).replace('T', ' '),
           cycleId: columnId,
@@ -181,7 +181,7 @@ function TaskList({hide, vals, fil, setFil, srtVal, srt, setSrt, input}) {
   const filterIssue = async () => {
     setFil(false);
     try {
-      const res = await axios.post(`http://localhost:8800/filter/${pId}`, vals);
+      const res = await axios.post(`/filter/${pId}`, vals);
       setIssues([...res.data]);
       setTempIssues(res.data);
       setTriggerIssue(false);
@@ -194,7 +194,7 @@ function TaskList({hide, vals, fil, setFil, srtVal, srt, setSrt, input}) {
   const sortIssue = async () => {
     setSrt(false);
     try {
-      const res = await axios.post(`http://localhost:8800/sort/${pId}`, {
+      const res = await axios.post(`/sort/${pId}`, {
         sort: srtVal,
       });
       setIssues([...res.data]);

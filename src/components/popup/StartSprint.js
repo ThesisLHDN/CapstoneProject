@@ -66,7 +66,7 @@ function StartSprint({setTriggerSprint}) {
     e.preventDefault();
     setDisplay(false);
     try {
-      await axios.post('http://localhost:8800/sprint', sprint);
+      await axios.post('/sprint', sprint);
       setOpen(false);
       setTriggerSprint(true);
       // setIsSprint(true);

@@ -147,6 +147,23 @@ function Dashboard() {
           <Grid item sx={{paddingRight: 1, paddingBottom: 2}}>
             <Workload chartData={workloadData} />
           </Grid>
+          <Grid item sx={{paddingLeft: 1, paddingBottom: 2}}>
+            <DelayPrediction chartData={delayData} />
+          </Grid>
+        </Grid>
+
+        <Grid item xs={6}>
+          <Grid item sx={{paddingLeft: 1, paddingBottom: 2}}>
+            <SprintBurndown chartData={burndownData} />
+          </Grid>
+          <Grid item sx={{paddingLeft: 1, paddingBottom: 2}}>
+            <MemberManagement data={performanceData} />
+          </Grid>
+        </Grid>
+        {/* <Grid item xs={6}>
+          <Grid item sx={{paddingRight: 1, paddingBottom: 2}}>
+            <Workload chartData={workloadData} />
+          </Grid>
           <Grid item sx={{paddingRight: 1, paddingBottom: 2}}>
             <EpicCompletion chartData={completionData} />
           </Grid>
@@ -165,7 +182,7 @@ function Dashboard() {
           <Grid item sx={{paddingLeft: 1, paddingBottom: 2}}>
             <MemberManagement data={performanceData} />
           </Grid>
-        </Grid>
+        </Grid> */}
       </Grid>
     </div>
   );

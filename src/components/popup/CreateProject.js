@@ -77,7 +77,7 @@ function CreateProject() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:8800/project', project);
+      await axios.post('/project', project);
       setProjects([project, ...projects]);
       navigate(`/workspace-setting/${workspace.id}?user=${uid}`);
     } catch (err) {

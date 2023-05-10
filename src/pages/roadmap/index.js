@@ -58,7 +58,7 @@ function RoadMap() {
 
   const fetchIssuesData = async () => {
     try {
-      const res = await axios.get(`http://localhost:8800/issues/${pId}`);
+      const res = await axios.get(`/issues/${pId}`);
       console.log('raw data', res);
       const data = {
         data: res.data.map((issue) => ({
@@ -83,7 +83,7 @@ function RoadMap() {
 
   const updateIssue = async (cId, id, status, startDate, dueDate) => {
     try {
-      const res = await axios.put(`http://localhost:8800/issue/${id}`, {
+      const res = await axios.put(`/issue/${id}`, {
         cId: cId,
         status: status,
         startDate: startDate,

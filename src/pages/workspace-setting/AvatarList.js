@@ -56,7 +56,7 @@ function ImageIndividual({member, workspace, uid}) {
     e.preventDefault();
     try {
       const res = await axios.delete(
-        `http://localhost:8800/wsmember/${member.id}?wsId=${workspace.id}`,
+        `/wsmember/${member.id}?wsId=${workspace.id}`,
       );
       window.location.reload();
     } catch (err) {
@@ -153,7 +153,9 @@ function AvatarList() {
 
   const fetchWorkspaceMember = async () => {
     try {
-      const res = await axios.get(`http://localhost:8800/wsmember/${wsId}`);
+      const res = await axios.get(
+        `https://backend-capstone-project.vercel.app/wsmember/${wsId}`,
+      );
       setMembers(res.data);
     } catch (err) {
       console.log(err);

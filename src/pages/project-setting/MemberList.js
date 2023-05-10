@@ -39,7 +39,7 @@ function MemberList() {
 
   const fetchProjectMember = async () => {
     try {
-      const res = await axios.get(`http://localhost:8800/pmembers/${pId}`);
+      const res = await axios.get(`/pmembers/${pId}`);
       // console.log(res.data);
       setMembers([...members, ...res.data]);
       console.log(members);

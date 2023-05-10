@@ -56,7 +56,7 @@ function Board() {
 
   const fetchLastestSprint = async () => {
     try {
-      const res = await axios.get(`http://localhost:8800/lastsprint/${pId}`);
+      const res = await axios.get(`/lastsprint/${pId}`);
       setLastestSprint(res.data);
       console.log(res.data);
     } catch (err) {

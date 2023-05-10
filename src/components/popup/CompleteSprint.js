@@ -49,7 +49,7 @@ function CompleteSprint({setTriggerIssue, sprintId}) {
     e.preventDefault();
     setDisplay(false);
     try {
-      const res = await axios.put(`http://localhost:8800/sprint/${sprintId}`, {
+      const res = await axios.put(`/sprint/${sprintId}`, {
         pId: project.id,
       });
       // console.log(res);
