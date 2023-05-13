@@ -29,13 +29,13 @@ function ChatButton({currentUser, projectId}) {
           <ChatRoundedIcon sx={{width: 40, height: 40, color: color.green03}} />
         </IconButton>
         <ChatRoom
-        openChat={openChat}
-        onCloseChat={() => {
-          setOpenChat(false);
-        }}
-        currentUser={currentUser}
-        projectId={projectId}
-      />
+          openChat={openChat}
+          onCloseChat={() => {
+            setOpenChat(false);
+          }}
+          currentUser={currentUser}
+          projectId={projectId}
+        />
       </Badge>
     </ChatProvider>
   );

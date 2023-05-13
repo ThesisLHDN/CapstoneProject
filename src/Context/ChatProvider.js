@@ -50,6 +50,7 @@ export default function ChatProvider({children}) {
   return (
     <ChatContext.Provider
       value={{
+        uid,
         rooms,
         roomMembers,
         selectedRoom,

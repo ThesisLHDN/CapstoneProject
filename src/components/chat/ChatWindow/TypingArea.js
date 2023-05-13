@@ -21,7 +21,7 @@ import {addDocument, updateDocument} from 'src/firebase/firestoreServices';
 import {getDownloadURL, ref, uploadBytesResumable} from 'firebase/storage';
 import {storage} from 'src/firebase/config';
 
-function TypingArea({currentUser, roomId}) {
+function TypingArea({uid, roomId}) {
   const [reparedFiles, setReparedFiles] = useState([]);
   // console.log(currentUser)
 
@@ -59,7 +59,7 @@ function TypingArea({currentUser, roomId}) {
             let downloadURL = url;
             if (downloadURL) {
               const messageData = {
-                authorId: currentUser.uid,
+                authorId: uid,
                 body: 'File: ' + file.name,
                 file: {
                   name: file.name,
@@ -102,7 +102,7 @@ function TypingArea({currentUser, roomId}) {
     if (roomId) {
       if (varmessage.body.length) {
         const messageData = {
-          authorId: currentUser.uid,
+          authorId: uid,
           body: varmessage.body,
           roomId: roomId,
         };

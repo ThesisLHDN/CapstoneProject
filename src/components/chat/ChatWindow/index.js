@@ -1,14 +1,16 @@
-import React, { useContext, useMemo, useState } from 'react';
-import { styled } from '@mui/material/styles';
-import { color, colorHover } from 'src/style';
+import React, {useContext, useMemo, useState} from 'react';
+import {styled} from '@mui/material/styles';
+import {color, colorHover} from 'src/style';
 import {
-  Box, IconButton,
+  Box,
+  IconButton,
   Button,
   Divider,
   Typography,
-  Avatar, Drawer
+  Avatar,
+  Drawer,
 } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
+import {useTheme} from '@mui/material/styles';
 import MuiAppBar from '@mui/material/AppBar';
 import PersonRemoveAlt1RoundedIcon from '@mui/icons-material/PersonRemoveAlt1Rounded';
 import Toolbar from '@mui/material/Toolbar';
@@ -21,8 +23,8 @@ import CreationPopup from 'src/components/popup/Create';
 
 import Message from './Message';
 import TypingArea from './TypingArea';
-import { ChatContext } from 'src/Context/ChatProvider';
-import { useFirestore } from 'src/hooks/useFirestore';
+import {ChatContext} from 'src/Context/ChatProvider';
+import {useFirestore} from 'src/hooks/useFirestore';
 import {
   getDocumentWithCondition,
   updateDocument,
@@ -96,7 +98,7 @@ function ChatWindow({currentUser}) {
   const [openDrawer, setOpenDrawer] = useState(false);
 
   const [open, setOpen] = useState(false);
-  const {selectedRoom, roomMembers, currentRoomMembers} =
+  const {selectedRoom, roomMembers, currentRoomMembers, uid} =
     useContext(ChatContext);
 
   const messagesCondition = useMemo(
@@ -190,9 +192,7 @@ function ChatWindow({currentUser}) {
     setMem(false);
   };
 
-  const adminRight = selectedRoom
-    ? currentUser.uid === selectedRoom.adminId
-    : false;
+  const adminRight = selectedRoom ? uid === selectedRoom.adminId : false;
 
   return (
     <Box container sx={{height: '100%', position: 'relative'}}>
@@ -250,7 +250,7 @@ function ChatWindow({currentUser}) {
               {newMess
                 .reverse()
                 .map(({author, authorId, body, type, createdAt, file}) => (
-                  <Message mine={authorId === currentUser.uid}>
+                  <Message mine={authorId === uid}>
                     {{author, authorId, body, type, createdAt, file}}
                   </Message>
                 ))}{' '}
@@ -341,7 +341,7 @@ function ChatWindow({currentUser}) {
                     {member.displayName}
                   </Box>
 
-                  {adminRight && member.id !== currentUser.uid && (
+                  {adminRight && member.id !== uid && (
                     <IconButton
                       onClick={() => {
                         setMem(member);
@@ -356,8 +356,7 @@ function ChatWindow({currentUser}) {
             </Box>
             <StyledDiv
               style={{
-                display:
-                  selectedRoom.adminId === currentUser.uid ? 'flex' : 'none',
+                display: selectedRoom.adminId === uid ? 'flex' : 'none',
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 height: 40,
@@ -367,10 +366,7 @@ function ChatWindow({currentUser}) {
               <Typography sx={{color: 'red'}}>Delete room</Typography>
             </StyledDiv>
           </Drawer>
-          <TypingArea
-            currentUser={currentUser}
-            roomId={selectedRoom ? selectedRoom.id : ''}
-          />
+          <TypingArea uid={uid} roomId={selectedRoom ? selectedRoom.id : ''} />
         </Box>
       ) : (
         // <CircularProgress

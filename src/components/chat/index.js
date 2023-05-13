@@ -10,7 +10,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 const ChatWindow = lazy(() => import('./ChatWindow'));
 
-function ChatRoom({currentUser, projectId, openChat, onCloseChat}) {
+function ChatRoom({ projectId, openChat, onCloseChat}) {
   const {rooms} = useContext(ChatContext);
 
   return (
@@ -50,13 +50,15 @@ function ChatRoom({currentUser, projectId, openChat, onCloseChat}) {
             <Grid item xs={4} sx={{height: '100%'}}>
               <ChatSideBar
                 data={rooms}
-                currentUser={currentUser}
+                // currentUser={currentUser}
                 projectId={projectId}
               />
             </Grid>
             <Grid item xs={8} sx={{height: '100%'}}>
               <Paper elevation={3} sx={{height: '100%', borderRadius: 0}}>
-                <ChatWindow currentUser={currentUser} />
+                <ChatWindow 
+                // currentUser={currentUser} 
+                />
               </Paper>
             </Grid>
           </Grid>

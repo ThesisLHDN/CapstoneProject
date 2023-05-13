@@ -35,9 +35,8 @@ const CssTextField = styled(TextField)({
     },
   },
 });
-function ChatSideBar({data, currentUser, projectId}) {
-  const {setSelectedRoomId, selectedRoom} =
-    useContext(ChatContext);
+function ChatSideBar({data, projectId}) {
+  const {setSelectedRoomId, selectedRoom, uid} = useContext(ChatContext);
   const [open, setOpen] = useState(false);
   const [newRoom, setNewRoom] = useState('');
   const [description, setDescription] = useState('');
@@ -49,9 +48,9 @@ function ChatSideBar({data, currentUser, projectId}) {
       projectId: projectId,
       name: newRoom,
       description: description,
-      adminId: currentUser.uid,
-      members: [currentUser.uid],
-      allmembers: [currentUser.uid],
+      adminId: uid,
+      members: [uid],
+      allmembers: [uid],
       coverPicture: '',
     };
     if (newRoom) {
