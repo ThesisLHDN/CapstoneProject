@@ -34,6 +34,7 @@ const facebookLoginHandler = () => {
   signInWithPopup(auth, facebookProvider)
     .then(async (result) => {
       const user = result.user;
+      console.log('Login successful');
 
       if (getAdditionalUserInfo(result).isNewUser) {
         try {
@@ -44,6 +45,7 @@ const facebookLoginHandler = () => {
       }
     })
     .catch((error) => {
+      console.log('Facebook login error', error);
       return errorCodeConverter(error.code);
     });
 };

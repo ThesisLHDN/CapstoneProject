@@ -1,31 +1,73 @@
-import {useContext, Suspense} from 'react';
+import {useContext, Suspense, useState, lazy} from 'react';
 import {AuthContext} from 'src/Context/AuthProvider';
 import {color} from 'src/style';
-import {Typography, Grid, TextField, Avatar} from '@mui/material';
+import {
+  Typography,
+  Grid,
+  TextField,
+  Avatar,
+  Button,
+  CircularProgress,
+  Box,
+} from '@mui/material';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
+
+import {ref, getDownloadURL, uploadBytesResumable} from 'firebase/storage';
+import {updateDocument} from 'src/firebase/firestoreServices';
+import {storage} from 'src/firebase/config';
 
 function Profile() {
   const {
     user: {displayName, email, photoURL, uid},
   } = useContext(AuthContext);
 
-  // const users = useFirestore('users', {
-  //   fieldName: 'uid',
-  //   operator: '==',
-  //   compareValue: uid,
-  // });
-  // const user = users[0];
-  // const user = useFirestoreDoc('users', uid);
-  // console.log(user);
+  const [snackbarContent, setSnackbarContent] = useState('');
 
-  // console.log('usedoc', user);
+  const [progress, setProgress] = useState();
 
-  // const navigate = useNavigate();
-
-  // const handleClick = () => {
-  //   navigate('/forget');
-  // };
+  const uploadHandler = async (files) => {
+    if (files) {
+      let file = files[0];
+      console.log('Updating');
+      if (file) {
+        console.log(file);
+        const path = `avatar/${new Date().getTime() + file.name}`;
+        const fileRef = ref(storage, path);
+        const upLoadTask = uploadBytesResumable(fileRef, file);
+        upLoadTask.on(
+          'state_changed',
+          (snapshot) => {
+            const progress = Math.round(
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100,
+            );
+            setSnackbarContent('Upload is ' + progress + '% done');
+            setProgress(progress);
+            if (progress === 100) {
+              setProgress();
+              setSnackbarContent();
+            }
+          },
+          (err) => {
+            console.log(err);
+          },
+          () => {
+            getDownloadURL(upLoadTask.snapshot.ref).then(async (url) => {
+              let downloadURL = url;
+              if (downloadURL) {
+                console.log(
+                  `Update avatar from user ${uid} with URL ${downloadURL}`,
+                );
+                // TODO Update Document
+                updateDocument('users', uid, {photoURL: downloadURL});
+              }
+            });
+          },
+        );
+      }
+    }
+    return;
+  };
 
   return (
     <div style={{marginLeft: '-15vw'}}>
@@ -33,7 +75,13 @@ function Profile() {
         Account Settings
       </Typography>
       <Suspense fallback={<div>Loading...</div>}>
-        <Grid container alignItems="center" justifyContent="center">
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
           <Avatar
             src={photoURL}
             sx={{
@@ -43,9 +91,22 @@ function Profile() {
               fontSize: 120,
             }}
             alt={displayName}
-          />
-        </Grid>
-
+          ></Avatar>
+          <Button variant="contained" component="label">
+            Change avatar
+            <input
+              hidden
+              accept="image/*"
+              multiple
+              type="file"
+              onChange={(event) => {
+                uploadHandler(event.target.files);
+              }}
+              onClick={(e) => (e.target.value = null)}
+            />
+          </Button>
+          <CircularProgress variant="determinate" value={progress} />
+        </Box>
         <Grid
           container
           alignItems="center"

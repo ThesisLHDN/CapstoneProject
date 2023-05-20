@@ -1,5 +1,5 @@
-import { useContext, useState } from 'react';
-import { styled } from '@mui/material/styles';
+import {useContext, useState} from 'react';
+import {styled} from '@mui/material/styles';
 import {
   Typography,
   Grid,
@@ -14,21 +14,11 @@ import ShareIcon from '@mui/icons-material/Share';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import MemberList from './MemberList';
 import WarningPopup from 'src/components/popup/Warning';
-import { AppContext } from 'src/Context/AppProvider';
+import {AppContext} from 'src/Context/AppProvider';
 import axios from 'axios';
-import { AuthContext } from 'src/Context/AuthProvider';
-import { useNavigate } from 'react-router-dom';
-
-// const PrivacyButton = styled(Button)({
-//   textTransform: 'none',
-//   color: 'white',
-//   fontSize: 14,
-//   fontWeight: 700,
-//   backgroundColor: 'red',
-//   '&:hover': {
-//     backgroundColor: '#F44336',
-//   },
-// });
+import {AuthContext} from 'src/Context/AuthProvider';
+import {useNavigate} from 'react-router-dom';
+import {deleteDocument} from 'src/firebase/firestoreServices';
 
 const GradButton = styled(Button)({
   my: 1,
@@ -105,6 +95,7 @@ function ProjectSetting() {
       const res = await axios.delete(
         `http://localhost:8800/project/${project.id}`,
       );
+      deleteDocument('projects', `${project.id}`);
       console.log(res);
       getLastestWorkspace();
     } catch (err) {

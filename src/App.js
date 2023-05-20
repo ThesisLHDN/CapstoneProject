@@ -24,7 +24,7 @@ import CreateWorkspace from './components/popup/CreateWorkspace';
 import AppProvider from './Context/AppProvider';
 // import CreateProject from './components/popup/CreateProject';
 import DocProvider from './Context/DocProvider';
-const CreateProject = lazy(() => import('./components/popup/CreateProject'));
+import CreateProject from './components/popup/CreateProject';
 
 function App() {
   const location = useLocation();

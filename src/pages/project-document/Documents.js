@@ -42,6 +42,11 @@ function convertDate(d) {
 const PlainButton = styled(Button)({
   color: '#181818',
   textTransform: 'none',
+  width: '100% !important',
+  overflow: 'hidden',
+  whiteSpace: 'nowrap',
+  textOverflow: 'ellipsis',
+  justifyContent: 'flex-start',
   '& :hover': {backgroundColor: '#eee'},
 });
 
@@ -227,38 +232,43 @@ function Document({parentId}) {
                 }}
                 key={item.id}
               >
-                <Grid item xs={5}>
-                  <Grid container>
-                    {item.type === 'folder' ? (
-                      <PlainButton
-                        startIcon={<FolderOutlinedIcon />}
-                        onClick={() =>
-                          item ? setParent(item.id, item.name) : null
+                <Grid item xs={5} sx={{pr: 1, ustifyContent: 'flex-start'}}>
+                  {item.type === 'folder' ? (
+                    <PlainButton
+                      startIcon={<FolderOutlinedIcon />}
+                      onClick={() =>
+                        item ? setParent(item.id, item.name) : null
+                      }
+                    >
+                      {item.name}
+                    </PlainButton>
+                  ) : item.type === 'editableHTML' ? (
+                    <PlainButton
+                      startIcon={<DescriptionOutlinedIcon />}
+                      onClick={() => {
+                        if (item.type === 'editableHTML') {
+                          setOpenEditor(true);
+                          setSelectedFile(item);
                         }
-                      >
-                        {item.name}
-                      </PlainButton>
-                    ) : (
-                      <a
-                        href={item.downloadURL}
-                        target="_blank"
-                        download
-                        rel="noreferrer"
-                      >
-                        <PlainButton
-                          startIcon={<DescriptionOutlinedIcon />}
-                          onClick={() => {
-                            if (item.type === 'editableHTML') {
-                              setOpenEditor(true);
-                              setSelectedFile(item);
-                            }
-                          }}
-                        >
-                          {item.name}
-                        </PlainButton>
-                      </a>
-                    )}
-                  </Grid>
+                      }}
+                      target="_blank"
+                      download
+                      rel="noreferrer"
+                      sx={{}}
+                    >
+                      {item.name}
+                    </PlainButton>
+                  ) : (
+                    <PlainButton
+                      startIcon={<DescriptionOutlinedIcon />}
+                      href={item.downloadURL}
+                      target="_blank"
+                      download
+                      rel="noreferrer"
+                    >
+                      {item.name}
+                    </PlainButton>
+                  )}
                 </Grid>
                 {/* <Grid item xs={4}>
                   <Typography sx={{marginTop: 1.5, fontSize: 14}}>
@@ -282,14 +292,15 @@ function Document({parentId}) {
                 <Grid item xs={2}>
                   <Grid container sx={{justifyContent: 'flex-end'}}>
                     {item.type === 'editableHTML' && (
-                      <IconButton>
+                      <IconButton
+                        onClick={() => {
+                          setOpenEditor(true);
+                          setSelectedFile(item);
+                          // setEnableEditText(false);
+                        }}
+                      >
                         <EditRoundedIcon
                           sx={{color: '#181818'}}
-                          onClick={() => {
-                            setOpenEditor(true);
-                            setSelectedFile(item);
-                            // setEnableEditText(false);
-                          }}
                         ></EditRoundedIcon>
                       </IconButton>
                     )}

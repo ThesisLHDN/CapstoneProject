@@ -13,6 +13,7 @@ import {
 import {useTheme} from '@mui/material/styles';
 import MuiAppBar from '@mui/material/AppBar';
 import PersonRemoveAlt1RoundedIcon from '@mui/icons-material/PersonRemoveAlt1Rounded';
+import KeyRoundedIcon from '@mui/icons-material/KeyRounded';
 import Toolbar from '@mui/material/Toolbar';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -98,6 +99,7 @@ function ChatWindow({currentUser}) {
   const [openDrawer, setOpenDrawer] = useState(false);
 
   const [open, setOpen] = useState(false);
+  const [openRename, setOpenRename] = useState(false);
   const {selectedRoom, roomMembers, currentRoomMembers, uid} =
     useContext(ChatContext);
 
@@ -164,6 +166,18 @@ function ChatWindow({currentUser}) {
     setOpen(false);
   };
 
+  const renameHandler = (name) => {
+    if (name) {
+      console.log('rename', name);
+      setOpenRename(false);
+      updateDocument('rooms', selectedRoom.id, {
+        name: name,
+      });
+    } else {
+      console.log('Cancel rename');
+    }
+  };
+
   // const path = useMemo(() => `rooms/${selectedRoom.id}/messages`, []);
   // const messages = useFirestore(path);
 
@@ -209,9 +223,9 @@ function ChatWindow({currentUser}) {
                 <Box>
                   {' '}
                   <Typography variant="h6">{selectedRoom.name}</Typography>
-                  <Typography variant="subtitle2">
+                  {/* <Typography variant="subtitle2">
                     {selectedRoom.description}
-                  </Typography>
+                  </Typography> */}
                 </Box>
               </Box>
               <Box>
@@ -261,6 +275,8 @@ function ChatWindow({currentUser}) {
           <Drawer
             sx={{
               width: drawerWidth,
+              columnGap: 2,
+              gap: 2,
               flexShrink: 0,
               '& .MuiDrawer-paper': {
                 width: drawerWidth,
@@ -299,27 +315,16 @@ function ChatWindow({currentUser}) {
                 alignItems: 'center',
                 height: 40,
               }}
+              onClick={() => {
+                setOpenRename(true);
+              }}
             >
               <Typography>Rename</Typography>
             </StyledDiv>
-            {/* <StyledDiv
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                height: 40,
-                gap: 2,
-              }}
-            >
-              <Typography>Notifications</Typography>
-              <Switch defaultChecked />
-            </StyledDiv>*/}
             <StyledDiv
               style={{
-                // display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                // height: 40,
               }}
             >
               <Typography>Members</Typography>
@@ -331,17 +336,15 @@ function ChatWindow({currentUser}) {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    mt: 1,
-                    px: 1,
                   }}
                 >
                   <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>
                     {' '}
                     <Avatar src={member.photoURL} alt={member.name}></Avatar>
-                    {member.displayName}
+                    <Typography>{member.displayName}</Typography>
                   </Box>
 
-                  {adminRight && member.id !== uid && (
+                  {adminRight && member.id !== uid ? (
                     <IconButton
                       onClick={() => {
                         setMem(member);
@@ -349,6 +352,10 @@ function ChatWindow({currentUser}) {
                       }}
                     >
                       <PersonRemoveAlt1RoundedIcon />
+                    </IconButton>
+                  ) : (
+                    <IconButton disabled>
+                      <KeyRoundedIcon sx={{color: '#f4c430'}} />
                     </IconButton>
                   )}
                 </Box>
@@ -369,14 +376,6 @@ function ChatWindow({currentUser}) {
           <TypingArea uid={uid} roomId={selectedRoom ? selectedRoom.id : ''} />
         </Box>
       ) : (
-        // <CircularProgress
-        //   sx={{
-        //     position: 'absolute',
-        //     top: '50%',
-        //     right: '50%',
-        //     transform: 'translate(-50%,-50%)',
-        //   }}
-        // />
         <Box sx={{position: 'relative', m: 0, height: '100%'}}>
           <Typography
             sx={{
@@ -399,6 +398,7 @@ function ChatWindow({currentUser}) {
         onSubmit={addMemberHandler}
         confirmContent={'Add'}
       ></CreationPopup>
+
       <WarningPopup
         title={'Delete room'}
         open={openDeleteRoom}
@@ -408,6 +408,7 @@ function ChatWindow({currentUser}) {
           'Do you really want to delete this room? This cannot be undone'
         }
       ></WarningPopup>
+
       <WarningPopup
         title={'Remove member'}
         open={openRemoveMem}
@@ -421,6 +422,15 @@ function ChatWindow({currentUser}) {
           </Typography>
         }
       ></WarningPopup>
+
+      <CreationPopup
+        title="Rename room"
+        fieldLabel={'Please enter new name'}
+        open={openRename}
+        onClose={() => setOpenRename(false)}
+        onSubmit={renameHandler}
+        confirmContent={'Rename'}
+      ></CreationPopup>
     </Box>
   );
 }
