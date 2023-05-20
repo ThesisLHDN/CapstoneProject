@@ -14,15 +14,17 @@ import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutli
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 
 import {ref, getDownloadURL, uploadBytesResumable} from 'firebase/storage';
-import {updateDocument} from 'src/firebase/firestoreServices';
+import {
+  updateDocument,
+  updateAuthFirestore,
+} from 'src/firebase/firestoreServices';
 import {storage} from 'src/firebase/config';
-
+import {colorHover} from 'src/style';
 function Profile() {
   const {
     user: {displayName, email, photoURL, uid},
   } = useContext(AuthContext);
-
-  const [snackbarContent, setSnackbarContent] = useState('');
+  const [name, setName] = useState();
 
   const [progress, setProgress] = useState();
 
@@ -41,11 +43,9 @@ function Profile() {
             const progress = Math.round(
               (snapshot.bytesTransferred / snapshot.totalBytes) * 100,
             );
-            setSnackbarContent('Upload is ' + progress + '% done');
             setProgress(progress);
             if (progress === 100) {
               setProgress();
-              setSnackbarContent();
             }
           },
           (err) => {
@@ -59,7 +59,8 @@ function Profile() {
                   `Update avatar from user ${uid} with URL ${downloadURL}`,
                 );
                 // TODO Update Document
-                updateDocument('users', uid, {photoURL: downloadURL});
+                // updateDocument('users', uid, {photoURL: downloadURL});
+                updateAuthFirestore(uid, {photoURL: downloadURL});
               }
             });
           },
@@ -67,6 +68,14 @@ function Profile() {
       }
     }
     return;
+  };
+
+  const renameHandler = (e) => {
+    e.preventDefault();
+    if (name) {
+      updateAuthFirestore(uid, {displayName: name});
+      setName();
+    }
   };
 
   return (
@@ -92,7 +101,11 @@ function Profile() {
             }}
             alt={displayName}
           ></Avatar>
-          <Button variant="contained" component="label">
+          <Button
+            variant="contained"
+            component="label"
+            sx={{my: 1, ...colorHover.greenBtn}}
+          >
             Change avatar
             <input
               hidden
@@ -132,10 +145,28 @@ function Profile() {
           <Grid item xs={3.5}>
             <TextField
               hiddenLabel
-              value={displayName}
+              defaultValue={displayName}
+              value={name}
               size="small"
               sx={{width: '100%', backgroundColor: '#ECECEC'}}
+              onChange={(e) => {
+                setName(e.target.value);
+              }}
+              onKeyUp={(event) =>
+                event.key === 'Enter' ? renameHandler(event) : null
+              }
             ></TextField>
+          </Grid>
+          <Grid item xs={2}>
+            {name && (
+              <Button
+                variant="contained"
+                sx={{ml: 1, ...colorHover.greenBtn}}
+                onClick={renameHandler}
+              >
+                Rename
+              </Button>
+            )}
           </Grid>
         </Grid>
 
@@ -170,37 +201,38 @@ function Profile() {
               }}
             ></TextField>
           </Grid>
+          <Grid item xs={2}></Grid>
         </Grid>
 
-        <Grid
+        {/* <Grid
           container
           alignItems="center"
           justifyContent="center"
           sx={{mt: 2}}
         >
-          {/* <Grid item xs={3}>
-              <Button
-                variant="text"
-                startIcon={
-                  <LockOutlinedIcon
-                    sx={{marginRight: 1, width: 24, height: 24}}
-                  />
-                }
-                sx={{
-                  color: color.green03,
-                  textTransform: 'none',
-                  fontSize: 16,
-                  fontWeight: 700,
-                  paddingX: 2,
-                  marginTop: 1,
-                }}
-                onClick={handleClick}
-              >
-                Change password
-              </Button>
-            </Grid> */}
+          <Grid item xs={3}>
+            <Button
+              variant="text"
+              // startIcon={
+              //   <LockOutlinedIcon
+              //     sx={{marginRight: 1, width: 24, height: 24}}
+              //   />
+              // }
+              sx={{
+                color: color.green03,
+                textTransform: 'none',
+                fontSize: 16,
+                fontWeight: 700,
+                paddingX: 2,
+                marginTop: 1,
+              }}
+              // onClick={handleClick}
+            >
+              Change password
+            </Button>
+          </Grid>
           <Grid item xs={2.75}></Grid>
-        </Grid>
+        </Grid> */}
 
         {/* <Grid
             container

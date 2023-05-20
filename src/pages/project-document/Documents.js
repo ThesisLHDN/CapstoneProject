@@ -83,7 +83,6 @@ function Document({parentId}) {
 
   const deleteFileHandler = (confirmed) => {
     const path = `projects/${selectedProjectId}/documents`;
-    console.log('delete', path, selectedFile);
 
     deleteDocument(path, selectedFile.id);
 

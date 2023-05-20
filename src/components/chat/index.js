@@ -1,4 +1,4 @@
-import {useContext, lazy, Suspense} from 'react';
+import {useContext, lazy, Suspense, useMemo} from 'react';
 
 import ChatSideBar from './ChatSideBar';
 // import ChatWindow from './ChatWindow';
@@ -10,8 +10,12 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 const ChatWindow = lazy(() => import('./ChatWindow'));
 
-function ChatRoom({ projectId, openChat, onCloseChat}) {
+function ChatRoom({projectId, openChat, onCloseChat}) {
   const {rooms} = useContext(ChatContext);
+  const ChatSidebar = useMemo(
+    () => <ChatSideBar projectId={projectId}></ChatSideBar>,
+    [projectId],
+  );
 
   return (
     <Dialog open={openChat} onClose={onCloseChat}>
@@ -48,17 +52,16 @@ function ChatRoom({ projectId, openChat, onCloseChat}) {
             }}
           >
             <Grid item xs={4} sx={{height: '100%'}}>
-              <ChatSideBar
-                data={rooms}
+              {/* <ChatSideBar
+                // data={rooms}
                 // currentUser={currentUser}
                 projectId={projectId}
-              />
+              /> */}
+              {ChatSidebar}
             </Grid>
             <Grid item xs={8} sx={{height: '100%'}}>
               <Paper elevation={3} sx={{height: '100%', borderRadius: 0}}>
-                <ChatWindow 
-                // currentUser={currentUser} 
-                />
+                <ChatWindow projectId={projectId} />
               </Paper>
             </Grid>
           </Grid>

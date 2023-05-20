@@ -1,7 +1,7 @@
-import { AuthContext } from './AuthProvider';
-import React, { useState, useMemo, useContext } from 'react';
-import { useFirestore } from 'src/hooks/useFirestore';
-import { AppContext } from './AppProvider';
+import {AuthContext} from './AuthProvider';
+import React, {useState, useMemo, useContext} from 'react';
+import {useFirestore} from 'src/hooks/useFirestore';
+import {AppContext} from './AppProvider';
 
 export const DocContext = React.createContext();
 

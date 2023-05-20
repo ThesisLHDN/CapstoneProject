@@ -1,4 +1,4 @@
-import {db, auth} from './config';
+import {db, auth, storage} from './config';
 import {
   collection,
   addDoc,
@@ -7,11 +7,14 @@ import {
   setDoc,
   serverTimestamp,
   deleteDoc,
+  getDoc,
   updateDoc,
   query,
   where,
   limit,
 } from 'firebase/firestore';
+
+import {ref, deleteObject} from 'firebase/storage';
 
 import {updateProfile} from 'firebase/auth';
 
@@ -87,7 +90,8 @@ const deleteCollection = async (collectionPath, condition = {}) => {
     }
     batchSnap.forEach((snap) => {
       console.log('deletesnap', snap.id);
-      deleteDoc(doc(db, collectionPath, `${snap.id}`));
+      // deleteDoc(doc(db, collectionPath, `${snap.id}`));
+      deleteDoc(collectionPath, `${snap.id}`);
     });
   }
 };
@@ -119,11 +123,13 @@ const deleteCollection = async (collectionPath, condition = {}) => {
 //   }
 // };
 
-const deleteDocument = async (collectionPath, id = null) => {
+const deleteDocument = async (collectionPath, id, data = {}) => {
   console.log('delete', collectionPath, id);
   try {
-    const docRef = await deleteDoc(doc(db, collectionPath, id));
-    switch (collectionPath) {
+    const split = collectionPath.split('/');
+    const last = split[split.length - 1];
+    // console.log('last', last, collectionPath);
+    switch (last) {
       case 'projects':
         deleteCollection(`projects/${id}/documents`);
         break;
@@ -134,17 +140,57 @@ const deleteDocument = async (collectionPath, id = null) => {
         break;
       case 'rooms':
         // TODO must use filter
-        deleteCollection(`rooms`, {
+        deleteCollection(`messages`, {
           fieldName: 'roomId',
           operator: '==',
           compareValue: `${id}`,
         });
         break;
+      case 'comments':
+        // const comment = await getDoc(doc(db, collectionPath, id));
+        // const desertRef = ref(storage, comment.downloadURL);
+        // deleteObject(desertRef)
+        //   .then(() => {
+        //     // File deleted successfully
+        //   })
+        //   .catch((error) => {
+        //     // Uh-oh, an error occurred!
+        //   });
+        break;
+      case 'documents':
+        const docSnap = await getDoc(doc(db, collectionPath, id));
+        // console.log(document.data());
+        const {storagePath} = docSnap.data();
+        if (storagePath) {
+          const desertRef = ref(storage, storagePath);
+          // console.log('document path', document.data().storagePath);
+          deleteObject(desertRef)
+            .then(() => {
+              console.log(
+                'deleted: ',
+                collectionPath,
+                storagePath,
+                id,
+              );
+              // File deleted successfully
+            })
+            .catch((error) => {
+              // Uh-oh, an error occurred!
+              console.log(
+                'deleted: ',
+                collectionPath,
+                storagePath,
+                error,
+              );
+            });
+        }
+        break;
       default:
-        console.log('cannot delete collection', collectionPath);
+        console.log(collectionPath.split('/')[collectionPath.length - 1]);
+        console.log('Cannot delete collection', collectionPath);
         break;
     }
-
+    const docRef = await deleteDoc(doc(db, collectionPath, id));
     console.log(`Deleted document at ${collectionPath} with id: ${id}`);
   } catch (e) {
     console.error('Error delete document: ', e);

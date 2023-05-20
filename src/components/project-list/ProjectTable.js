@@ -82,7 +82,6 @@ export default function ProjectTable() {
                     // to={`/roadmap/${project.id}`}
                     hover
                     onClick={() => handleClick(project.id)}
-                    // onClick={() => navigate(`/roadmap/${project.id}`)}
                     sx={{cursor: 'pointer'}}
                   >
                     <TableCell align="left">{project.pname}</TableCell>

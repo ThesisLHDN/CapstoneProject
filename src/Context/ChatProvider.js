@@ -31,6 +31,7 @@ export default function ChatProvider({children}) {
   const selectedRoom = selectedRoomId
     ? rooms.find((room) => room.id === selectedRoomId)
     : rooms[0];
+  // const selectedRoom = rooms.find((room) => room.id === selectedRoomId);
 
   const membersCondition = useMemo(
     () => ({
