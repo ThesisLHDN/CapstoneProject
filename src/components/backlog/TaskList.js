@@ -1,26 +1,21 @@
-import { useContext, useEffect, useState } from 'react';
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import {useContext, useEffect, useState} from 'react';
+import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
 import ClickAwayListener from '@mui/base/ClickAwayListener';
-import { styled } from '@mui/material/styles';
+import {styled} from '@mui/material/styles';
 import MuiAccordion from '@mui/material/Accordion';
 import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
-import {
-  Button,
-  Box,
-  TextField, Select,
-  MenuItem
-} from '@mui/material';
+import {Button, Box, TextField, Select, MenuItem} from '@mui/material';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import SprintHeader from './SprintHeader';
 import TaskCard from './TaskCard';
 import AddIcon from '@mui/icons-material/Add';
-import { IssueIcon } from './TaskCard';
+import {IssueIcon} from './TaskCard';
 import StartSprint from '../popup/StartSprint';
 import CompleteSprint from '../popup/CompleteSprint';
-import { useLocation } from 'react-router-dom';
+import {useLocation} from 'react-router-dom';
 import axios from 'axios';
-import { AuthContext } from 'src/Context/AuthProvider';
+import {AuthContext} from 'src/Context/AuthProvider';
 
 const columnsFromBackend = [
   {
@@ -350,6 +345,23 @@ function TaskList({hide, vals, fil, setFil, srtVal, srt, setSrt, input}) {
                                 {issues
                                   .filter((x) => {
                                     return x.issuestatus == 'In progress';
+                                  })
+                                  .reduce((sum, a) => sum + a.estimatePoint, 0)}
+                              </span>
+                            ) : (
+                              <></>
+                            )}
+
+                            {issues.filter((x) => {
+                              return (
+                                x.issuestatus === 'Testing' &&
+                                x.cycleId === column.id
+                              );
+                            }).length > 0 ? (
+                              <span className="px-1.5 py-1 rounded-xl text-white bg-testing-color my-10 mr-1 text-xs">
+                                {issues
+                                  .filter((x) => {
+                                    return x.issuestatus == 'Done';
                                   })
                                   .reduce((sum, a) => sum + a.estimatePoint, 0)}
                               </span>

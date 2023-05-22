@@ -4,6 +4,8 @@ import {Typography, Box, Button, Grid, Breadcrumbs, Link} from '@mui/material';
 import SearchBar from 'src/components/search';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import PersonOffOutlinedIcon from '@mui/icons-material/PersonOffOutlined';
 import TaskList from 'src/components/backlog/TaskList';
 import Filter from 'src/components/Filter';
 import Sort from 'src/components/Sort';
@@ -80,6 +82,13 @@ function Backlog() {
         <SearchBar sx={{width: '210px'}} setInput={setInput} />
         <Filter vals={vals} setVals={setVals} setFil={setFil} />
         <Sort setSrtVal={setSrtVal} setSrt={setSrt} />
+        <Button
+          variant="text"
+          startIcon={<PersonOutlineOutlinedIcon />}
+          sx={{color: '#181818', textTransform: 'none'}}
+        >
+          Me
+        </Button>
         {isHide ? (
           <Button
             variant="text"

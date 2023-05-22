@@ -1,12 +1,12 @@
-import { useContext, useEffect, useState } from 'react';
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import {useContext, useEffect, useState} from 'react';
+import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
 import Card from './card/index.js';
 import './scrum.scss';
-import { Box, Typography } from '@mui/material';
+import {Box, Typography} from '@mui/material';
 // import AddRoundedIcon from '@mui/icons-material/AddRounded';
 // import {colorHover} from 'src/style';
 import axios from 'axios';
-import { AppContext } from 'src/Context/AppProvider.js';
+import {AppContext} from 'src/Context/AppProvider.js';
 
 const columns = [
   {
@@ -19,6 +19,10 @@ const columns = [
   },
   {
     id: '3',
+    title: 'Testing',
+  },
+  {
+    id: '4',
     title: 'Done',
   },
 ];
@@ -201,7 +205,7 @@ function Scrum({sprint, vals, fil, setFil, srtVal, srt, setSrt, input}) {
                               ? '#ccf2ff'
                               : '#e8e8e8',
                             padding: 8,
-                            width: 300,
+                            width: '19vw',
                             minHeight: 500,
                             borderRadius: 5,
                           }}

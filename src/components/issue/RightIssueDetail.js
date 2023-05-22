@@ -219,7 +219,7 @@ function RightIssueDetail({issue, setIssue, trigger, setTrigger}) {
                   sx={{
                     backgroundColor: 'white',
                     borderRadius: 1,
-                    right: -120,
+                    right: -210,
                     marginTop: '5px',
                     border: 'solid 1px #ECEDF0',
                     boxShadow: '2px 2px 5px #00000020',
@@ -238,7 +238,7 @@ function RightIssueDetail({issue, setIssue, trigger, setTrigger}) {
                           sx={{
                             py: 1,
                             fontSize: 14,
-                            fontWeight: 900,
+                            fontWeight: 600,
                           }}
                           onClick={(e) => handleChange(e, element)}
                         >

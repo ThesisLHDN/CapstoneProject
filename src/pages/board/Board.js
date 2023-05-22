@@ -1,11 +1,13 @@
 // import React from 'react';
 import 'src/App.scss';
 
-import { Typography, Breadcrumbs, Link, Grid, Box } from '@mui/material';
+import {Typography, Breadcrumbs, Link, Grid, Box, Button} from '@mui/material';
 // import {styled} from '@mui/material/styles';
 
 // import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import PersonOffOutlinedIcon from '@mui/icons-material/PersonOffOutlined';
 // import FilterAltRoundedIcon from '@mui/icons-material/FilterAltRounded';
 // import SortRoundedIcon from '@mui/icons-material/SortRounded';
 
@@ -15,12 +17,12 @@ import SearchBar from 'src/components/search';
 import Filter from 'src/components/Filter';
 import Sort from 'src/components/Sort';
 
-import { color } from 'src/style';
-import { useContext, useEffect, useState } from 'react';
+import {color} from 'src/style';
+import {useContext, useEffect, useState} from 'react';
 import axios from 'axios';
-import { useLocation } from 'react-router-dom';
-import { AppContext } from 'src/Context/AppProvider';
-import { AuthContext } from 'src/Context/AuthProvider';
+import {useLocation} from 'react-router-dom';
+import {AppContext} from 'src/Context/AppProvider';
+import {AuthContext} from 'src/Context/AuthProvider';
 
 function handleClick(event) {
   event.preventDefault();
@@ -162,6 +164,13 @@ function Board() {
         <SearchBar sx={{width: '210px'}} setInput={setInput} />
         <Filter vals={vals} setVals={setVals} setFil={setFil} />
         <Sort setSrtVal={setSrtVal} setSrt={setSrt} />
+        <Button
+          variant="text"
+          startIcon={<PersonOutlineOutlinedIcon />}
+          sx={{color: '#181818', textTransform: 'none'}}
+        >
+          Me
+        </Button>
       </Box>
       <AltScrum
         sprint={lastestSprint}
