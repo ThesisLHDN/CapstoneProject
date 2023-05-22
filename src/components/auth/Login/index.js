@@ -152,7 +152,7 @@ export default function SignInSide() {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{...colorHover.greenBtn}}
+              sx={{...colorHover.greenGradBtn}}
             >
               Login
             </Button>

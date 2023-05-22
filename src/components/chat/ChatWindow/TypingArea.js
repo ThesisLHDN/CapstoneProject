@@ -301,7 +301,7 @@ function TypingArea({uid, roomId}) {
       <Grid item xs={2}>
         <Button
           variant="contained"
-          sx={{width: '100%', height: '100%', ...colorHover.greenBtn}}
+          sx={{width: '100%', height: '100%', ...colorHover.greenGradBtn}}
           onClick={() => handleOnSubmit(message)}
         >
           Send

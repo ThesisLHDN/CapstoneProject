@@ -104,7 +104,7 @@ function Profile() {
           <Button
             variant="contained"
             component="label"
-            sx={{my: 1, ...colorHover.greenBtn}}
+            sx={{my: 1, ...colorHover.greenGradBtn}}
           >
             Change avatar
             <input
@@ -161,7 +161,7 @@ function Profile() {
             {name && (
               <Button
                 variant="contained"
-                sx={{ml: 1, ...colorHover.greenBtn}}
+                sx={{ml: 1, ...colorHover.greenGradBtn}}
                 onClick={renameHandler}
               >
                 Rename

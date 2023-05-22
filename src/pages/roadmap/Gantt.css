@@ -59,8 +59,13 @@
 }
 
 .todo {
-  background-color: #e4e4e4;
-  color: #4a4a4a;
+  background-color: #edcbb7;
+  color: #d73905;
+}
+
+.testing {
+  background-color: #ffe663;
+  color: #ec8e00;
 }
 
 .gantt_tree_content {

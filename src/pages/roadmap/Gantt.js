@@ -179,6 +179,9 @@ export default class Gantt extends Component {
         case 'In progress':
           color = 'progress';
           break;
+        case 'Testing':
+          color = 'testing';
+          break;
         default:
           color = 'todo';
       }

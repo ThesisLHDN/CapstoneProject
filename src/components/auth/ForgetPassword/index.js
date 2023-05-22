@@ -91,7 +91,7 @@ export default function SignInSide() {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{mt: 2, ...colorHover.greenBtn}}
+              sx={{mt: 2, ...colorHover.greenGradBtn}}
               onClick={handleSubmit}
             >
               Send reset password email
