@@ -3,13 +3,10 @@ import {
   Paper,
   Typography,
   Button,
-  // Select,
   FormControl,
-  // MenuItem,
   Popper,
   Grow,
   MenuList,
-  // TextField,
   ClickAwayListener,
 } from '@mui/material';
 import FilterAltRoundedIcon from '@mui/icons-material/FilterAltRounded';

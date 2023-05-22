@@ -1,7 +1,18 @@
 import {useContext, useEffect, useState} from 'react';
-import {styled} from '@mui/material/styles';
 import {color, colorHover} from 'src/style';
 
+import {AppContext} from 'src/Context/AppProvider';
+
+import ProjectTable from 'src/components/project-list/ProjectTable';
+import AvatarList from './AvatarList';
+import axios from 'axios';
+import {Link, useLocation, useNavigate} from 'react-router-dom';
+import {AuthContext} from 'src/Context/AuthProvider';
+import WarningPopup from 'src/components/popup/Warning';
+
+import {styled} from '@mui/material/styles';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import {
   Typography,
   Avatar,
@@ -13,16 +24,6 @@ import {
   AccordionSummary,
   AccordionDetails,
 } from '@mui/material';
-
-import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
-import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import ProjectTable from 'src/components/project-list/ProjectTable';
-import AvatarList from './AvatarList';
-import axios from 'axios';
-import {Link, useLocation, useNavigate} from 'react-router-dom';
-import {AppContext} from 'src/Context/AppProvider';
-import {AuthContext} from 'src/Context/AuthProvider';
-import WarningPopup from 'src/components/popup/Warning';
 
 const StyledTypo = styled(Typography)({
   display: 'block',
@@ -74,7 +75,7 @@ function WorkspaceSetting() {
   const {
     user: {uid},
   } = useContext(AuthContext);
-  const {workspace, setWorkspace, admin, setAdmin} = useContext(AppContext);
+  const {workspace, setWorkspace} = useContext(AppContext);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -139,148 +140,165 @@ function WorkspaceSetting() {
 
   return (
     <Box sx={{textAlign: 'left'}}>
-      <Typography
-        variant="h5"
-        sx={{mb: 2, color: color.green03, fontWeight: 700}}
-      >
-        Workspace Setting
-      </Typography>
-      <StyledAccordion>
-        <StyledAccordionSummary>
-          {' '}
-          <StyledTypo>Workspace details</StyledTypo>
-        </StyledAccordionSummary>
-        <StyledAccordionDetails sx={{p: 2}}>
-          <Grid container spacing={2} sx={{alignItems: 'center'}}>
-            <Grid item xs={2}>
-              <Typography sx={{my: 2}}>Name:</Typography>
-            </Grid>
-            <Grid item xs={5}>
+      {workspace ? (
+        <Box>
+          <Typography
+            variant="h5"
+            sx={{mb: 2, color: color.green03, fontWeight: 700}}
+          >
+            Workspace Setting
+          </Typography>
+
+          <StyledAccordion>
+            <StyledAccordionSummary>
+              {' '}
+              <StyledTypo>Workspace details</StyledTypo>
+            </StyledAccordionSummary>
+            <StyledAccordionDetails sx={{p: 2}}>
+              <Grid container spacing={2} sx={{alignItems: 'center'}}>
+                <Grid item xs={2}>
+                  <Typography sx={{my: 2}}>Name:</Typography>
+                </Grid>
+                <Grid item xs={5}>
+                  <TextField
+                    value={workspace.wsname}
+                    name="wsname"
+                    onChange={handleRename}
+                    disabled={uid === workspace.adminId ? false : true}
+                    size="small"
+                    sx={{
+                      width: '100%',
+                      border: '0px',
+                      backgroundColor: '#efefef',
+                    }}
+                  ></TextField>
+                </Grid>
+                <Grid item xs={5}>
+                  {uid === workspace.adminId && rename && (
+                    <Button
+                      variant="contained"
+                      size="medium"
+                      sx={{...colorHover.greenGradBtn}}
+                      onClick={handleUpdate}
+                    >
+                      Save
+                    </Button>
+                  )}
+                </Grid>
+              </Grid>
+              <Typography sx={{my: 2}}>Description:</Typography>
               <TextField
-                value={workspace.wsname}
-                name="wsname"
-                onChange={handleRename}
-                disabled={uid === workspace.adminId ? false : true}
-                size="small"
                 sx={{
                   width: '100%',
-                  border: '0px',
-                  backgroundColor: '#efefef',
+                  scrollbarGutter: 'stable',
+                  textAlign: 'justify',
+                  '& textarea': {
+                    textAlign: 'justify',
+                  },
                 }}
+                onChange={handleChangeDescription}
+                name="descript"
+                multiline
+                rows={2}
+                value={workspace.descript ? workspace.descript : ''}
+                disabled={uid === workspace.adminId ? false : true}
               ></TextField>
-            </Grid>
-            <Grid item xs={5}>
-              {uid === workspace.adminId && rename && (
+              {uid === workspace.adminId && changeDescription && (
                 <Button
                   variant="contained"
                   size="medium"
-                  sx={{...colorHover.greenGradBtn}}
+                  sx={{mt: 2, ...colorHover.greenGradBtn}}
                   onClick={handleUpdate}
                 >
-                  Save
+                  Update description
                 </Button>
               )}
-            </Grid>
-          </Grid>
-          <Typography sx={{my: 2}}>Description:</Typography>
-          <TextField
-            sx={{
-              width: '100%',
-              scrollbarGutter: 'stable',
-              textAlign: 'justify',
-              '& textarea': {
-                textAlign: 'justify',
-              },
-            }}
-            onChange={handleChangeDescription}
-            name="descript"
-            multiline
-            rows={2}
-            value={workspace.descript ? workspace.descript : ''}
-            disabled={uid === workspace.adminId ? false : true}
-          ></TextField>
-          {uid === workspace.adminId && changeDescription && (
-            <Button
-              variant="contained"
-              size="medium"
-              sx={{mt: 2, ...colorHover.greenGradBtn}}
-              onClick={handleUpdate}
-            >
-              Update description
-            </Button>
-          )}
-        </StyledAccordionDetails>
-      </StyledAccordion>
-      <StyledAccordion>
-        <StyledAccordionSummary>
-          <StyledTypo>Projects</StyledTypo>
-        </StyledAccordionSummary>
-        <StyledAccordionDetails sx={{p: 2}}>
-          {' '}
+            </StyledAccordionDetails>
+          </StyledAccordion>
+          <StyledAccordion>
+            <StyledAccordionSummary>
+              <StyledTypo>Projects</StyledTypo>
+            </StyledAccordionSummary>
+            <StyledAccordionDetails sx={{p: 2}}>
+              {' '}
+              {uid === workspace.adminId && (
+                <Button
+                  sx={{
+                    // width: '155px',
+                    height: '38px',
+                    ...colorHover.greenGradBtn,
+                  }}
+                  variant="contained"
+                  startIcon={<AddRoundedIcon />}
+                >
+                  <Link to="/create-project" state={{background: location}}>
+                    Create project
+                  </Link>
+                </Button>
+              )}
+              <ProjectTable />
+            </StyledAccordionDetails>
+          </StyledAccordion>
+          <StyledAccordion>
+            <StyledAccordionSummary>
+              <StyledTypo>People</StyledTypo>
+            </StyledAccordionSummary>
+
+            <StyledAccordionDetails sx={{p: 2}}>
+              {' '}
+              <Grid container spacing={2}>
+                <Grid container item>
+                  <Grid item xs={2}>
+                    <Typography sx={{my: 2}}>Administrator</Typography>
+                  </Grid>
+
+                  <Grid
+                    item
+                    xs={10}
+                    sx={{display: 'flex', alignItems: 'center'}}
+                  >
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Avatar
+                        alt={
+                          workspace.username
+                            ? workspace.username
+                            : workspace.email
+                        }
+                        src={workspace.photoURL}
+                      />
+                      <Typography sx={{mx: 2}}>
+                        {' '}
+                        {workspace.username
+                          ? workspace.username
+                          : workspace.email}
+                      </Typography>{' '}
+                    </Box>
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Typography sx={{my: 2}}>Members</Typography>
+              <AvatarList />
+            </StyledAccordionDetails>
+          </StyledAccordion>
           {uid === workspace.adminId && (
             <Button
-              sx={{
-                width: '155px',
-                height: '38px',
-                ...colorHover.greenGradBtn,
-              }}
               variant="contained"
-              startIcon={<AddRoundedIcon />}
+              color="error"
+              sx={{mx: 2, mt: 1, textTransform: 'none', fontWeight: 'bold'}}
+              onClick={() => setDelWpPopup(true)}
             >
-              <Link to="/create-project" state={{background: location}}>
-                Create project
-              </Link>
+              Delete Workspace
             </Button>
           )}
-          <ProjectTable />
-        </StyledAccordionDetails>
-      </StyledAccordion>
-      <StyledAccordion>
-        <StyledAccordionSummary>
-          <StyledTypo>People</StyledTypo>
-        </StyledAccordionSummary>
-
-        <StyledAccordionDetails sx={{p: 2}}>
-          {' '}
-          <Grid container spacing={2}>
-            <Grid container item>
-              <Grid item xs={2}>
-                <Typography sx={{my: 2}}>Administrator</Typography>
-              </Grid>
-
-              <Grid item xs={10} sx={{display: 'flex', alignItems: 'center'}}>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}
-                >
-                  <Avatar
-                    alt={
-                      workspace.username ? workspace.username : workspace.email
-                    }
-                    src={workspace.photoURL}
-                  />
-                  <Typography sx={{mx: 2}}>
-                    {' '}
-                    {workspace.username ? workspace.username : workspace.email}
-                  </Typography>{' '}
-                </Box>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Typography sx={{my: 2}}>Members</Typography>
-          <AvatarList />
-        </StyledAccordionDetails>
-      </StyledAccordion>
-      <Button
-        variant="contained"
-        color="error"
-        sx={{mx: 2, mt: 1, textTransform: 'none', fontWeight: 'bold'}}
-        onClick={() => setDelWpPopup(true)}
-      >
-        Delete Workspace
-      </Button>
+        </Box>
+      ) : (
+        <Typography>Please select a workspace</Typography>
+      )}
       <WarningPopup
         title={'Delete Workspace'}
         open={delWpPopup}

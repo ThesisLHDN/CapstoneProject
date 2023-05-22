@@ -18,7 +18,6 @@ import SimpleImage from '@editorjs/simple-image';
 export const EDITOR_JS_TOOLS = {
   embed: Embed,
   table: Table,
-  // paragraph: Paragraph,
   list: List,
   warning: Warning,
   code: Code,

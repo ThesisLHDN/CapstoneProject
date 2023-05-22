@@ -1,19 +1,14 @@
 import './App.css';
-import {useContext, useState} from 'react';
 import {Routes, Route, useLocation} from 'react-router-dom';
-
-// import {Box, Grid, Badge, IconButton, Modal} from '@mui/material';
+import {lazy} from 'react';
 // import ChatRoundedIcon from '@mui/icons-material/ChatRounded';
 
 import Layout from 'src/components/layout';
 import AuthLayout from 'src/components/layout/AuthLayout';
-// import ChatRoom from './components/ChatRoom';
-// import ChatButton from './components/ChatRoom/ChatButton';
 import Login from './components/auth/Login';
 import Signup from './components/auth/Signup';
 import ForgetPassword from './components/auth/ForgetPassword';
 
-// import Home from './pages/Home';
 import RoadMap from './pages/roadmap';
 import Issue from './pages/issue/Issue';
 import Board from './pages/board/Board';
@@ -27,10 +22,9 @@ import WorkspaceSetting from './pages/workspace-setting/WorkspaceSetting';
 import AuthProvider from 'src/Context/AuthProvider';
 import CreateWorkspace from './components/popup/CreateWorkspace';
 import AppProvider from './Context/AppProvider';
-import CreateProject from './components/popup/CreateProject';
+// import CreateProject from './components/popup/CreateProject';
 import DocProvider from './Context/DocProvider';
-// import ChatProvider from './Context/ChatProvider';
-// import DocProvider from './Context/DocProvider';
+import CreateProject from './components/popup/CreateProject';
 
 function App() {
   const location = useLocation();
@@ -53,7 +47,7 @@ function App() {
                 ></Route>
               </Route>
               <Route element={<Layout />}>
-                <Route path="" element={<RoadMap />}></Route>
+                {/* <Route path="" element={<RoadMap />}></Route> */}
                 <Route
                   path="project-setting/:id"
                   element={<ProjectSetting></ProjectSetting>}

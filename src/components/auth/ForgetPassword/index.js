@@ -1,21 +1,27 @@
-import {useContext} from 'react';
-// import {useNavigate} from 'react-router-dom';
-// import AuthContext from 'src/Context/AuthProvider';
-import {color, colorHover} from 'src/style';
+import { useState } from 'react';
+import { color, colorHover } from 'src/style';
+import { errorCodeConverter } from 'src/firebase/authServices';
 
-import {Button, TextField, Link, Box, Grid, Typography} from '@mui/material';
-import {createTheme, ThemeProvider} from '@mui/material/styles';
+import { Button, TextField, Link, Box, Grid, Typography } from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { auth } from 'src/firebase/config';
+import { sendPasswordResetEmail } from 'firebase/auth';
 
 const theme = createTheme();
 
 export default function SignInSide() {
+  const [error, setError] = useState();
+  const [email, setEmail] = useState();
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    // console.log('forget ', email);
+    sendPasswordResetEmail(auth, email)
+      .then(() => {
+        setError('Password reset email has been sent to ' + email);
+      })
+      .catch((error) => {
+        setError(errorCodeConverter(error.code));
+      });
   };
 
   return (
@@ -33,16 +39,15 @@ export default function SignInSide() {
       >
         <Box
           sx={{
-            my: 8,
-            mx: 4,
             display: 'flex',
+            gap: 1,
             flexDirection: 'column',
             alignItems: 'center',
             backgroundColor: 'white',
             borderRadius: 10,
             width: '30vw',
-            px: 4,
-            py: 2,
+            minWidth: 460,
+            p: 4,
             justifySelf: 'center',
             height: 'fit-content',
           }}
@@ -62,6 +67,7 @@ export default function SignInSide() {
             }}
           >
             <TextField
+              size="small"
               margin="normal"
               required
               fullWidth
@@ -70,20 +76,37 @@ export default function SignInSide() {
               name="email"
               autoComplete="email"
               autoFocus
-              size="small"
+              onChange={(e) => setEmail(e.target.value)}
+              sx={{borderWidth: 2, borderColor: 'green'}}
             />
+            {error && (
+              <Typography
+                variant="subtitle2"
+                sx={{color: 'red', textAlign: 'center', mb: 2}}
+              >
+                {error}
+              </Typography>
+            )}
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              sx={{mt: 3, mb: 2, ...colorHover.greenBtn}}
+              sx={{mt: 2, ...colorHover.greenBtn}}
+              onClick={handleSubmit}
             >
-              Continue
+              Send reset password email
             </Button>
-            <Grid container>
+            <Grid
+              container
+              sx={{lineHeight: '40px', mt: 1, color: color.gray02}}
+            >
               <Grid item xs></Grid>
               <Grid item>
-                <Link href="/login" variant="body2" sx={{color: color.green03}}>
+                <Link
+                  href="/login"
+                  variant="body2"
+                  sx={{mt: 2, color: color.green03}}
+                >
                   {'Login'}
                 </Link>
               </Grid>

@@ -1,7 +1,5 @@
-import {useContext, useMemo, useState} from 'react';
+import {useContext, useState, Suspense} from 'react';
 
-import SearchBar from 'src/components/search';
-import Sort from 'src/components/Sort';
 import AddItem from './AddItem';
 import WarningPopup from 'src/components/popup/Warning';
 import TextEditor from './QuillEditor/Editor';
@@ -14,13 +12,14 @@ import {
   Breadcrumbs,
   Link,
   IconButton,
+  Box,
   CircularProgress,
 } from '@mui/material';
 import FolderOutlinedIcon from '@mui/icons-material/FolderOutlined';
+import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
-import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import {DocContext} from 'src/Context/DocProvider';
 import {deleteDocument} from 'src/firebase/firestoreServices';
@@ -28,7 +27,6 @@ import {styled} from '@mui/system';
 import {useLocation} from 'react-router-dom';
 import {AppContext} from 'src/Context/AppProvider';
 import {AuthContext} from 'src/Context/AuthProvider';
-import {colorHover} from 'src/style';
 
 function convertDate(d) {
   const date = new Date(d);
@@ -44,6 +42,11 @@ function convertDate(d) {
 const PlainButton = styled(Button)({
   color: '#181818',
   textTransform: 'none',
+  width: '100% !important',
+  overflow: 'hidden',
+  whiteSpace: 'nowrap',
+  textOverflow: 'ellipsis',
+  justifyContent: 'flex-start',
   '& :hover': {backgroundColor: '#eee'},
 });
 
@@ -62,7 +65,7 @@ function Document({parentId}) {
   const {
     user: {uid},
   } = useContext(AuthContext);
-  const {workspace, project} = useContext(AppContext);
+  const {project} = useContext(AppContext);
 
   setSelectedProjectId(projectId);
   const [openDeletePopup, setOpenDeletePopup] = useState(false);
@@ -120,50 +123,20 @@ function Document({parentId}) {
     setEnableEditText(true);
   };
 
-  const docButton = (doc) => {
-    switch (doc.type) {
-      case 'folder':
-        return (
-          <PlainButton
-            startIcon={<FolderOutlinedIcon />}
-            onClick={() => (doc ? setParent(doc.id, doc.name) : null)}
-          >
-            {doc.name}
-          </PlainButton>
-        );
-      case 'editableHTML':
-        return (
-          <PlainButton
-            startIcon={<DescriptionOutlinedIcon />}
-            onClick={(doc) => {
-              setOpenEditor(true);
-              setSelectedFile(doc);
-            }}
-          >
-            {doc.name}
-          </PlainButton>
-        );
-      default:
-        return (
-          <a href={doc.downloadURL} target="_blank" download>
-            <PlainButton
-              startIcon={<DescriptionOutlinedIcon />}
-              onClick={() => {
-                setOpenEditor(true);
-                setSelectedFile(doc);
-                // setEnableEditText(false);
-              }}
-            >
-              {doc.name}
-            </PlainButton>
-          </a>
-        );
-    }
-  };
-
   return (
     <div>
-      {documents ? (
+      <Suspense
+        fallback={
+          <CircularProgress
+            sx={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(50%,-50%)',
+            }}
+          />
+        }
+      >
         <div>
           <Grid container spacing={2}>
             <Grid item xs={6}>
@@ -203,17 +176,6 @@ function Document({parentId}) {
             Documents
           </Typography>
 
-          {selectedParentId && (
-            <Button
-              color="success"
-              variant="contained"
-              sx={{mt: 1, ...colorHover.greenBtn}}
-              onClick={onBack}
-            >
-              Back
-            </Button>
-          )}
-
           {/* <Box
             sx={{
               display: 'flex',
@@ -232,14 +194,32 @@ function Document({parentId}) {
               View
             </Button>
           </Box> */}
-          <AddItem
-            parentId={selectedParentId}
-            projectId={selectedProjectId}
-            onClose={() => {
-              setSelectedFile({name: 'Untitled', body: ''});
-              setOpenEditor(true);
-            }}
-          />
+          <Box sx={{mt: 2, display: 'flex'}}>
+            {selectedParentId && (
+              <Button
+                color="success"
+                startIcon={<ArrowBackRoundedIcon />}
+                sx={{
+                  color: 'black',
+                  fontSize: '14px',
+                  textTransform: 'none',
+                  mr: 2,
+                }}
+                onClick={onBack}
+              >
+                Back
+              </Button>
+            )}
+            <AddItem
+              parentId={selectedParentId}
+              projectId={selectedProjectId}
+              onClose={() => {
+                setSelectedFile({name: 'Untitled', body: ''});
+                setOpenEditor(true);
+              }}
+            />
+          </Box>
+
           {documents.map((item) => {
             return (
               <Grid
@@ -252,33 +232,43 @@ function Document({parentId}) {
                 }}
                 key={item.id}
               >
-                <Grid item xs={5}>
-                  <Grid container>
-                    {item.type === 'folder' ? (
-                      <PlainButton
-                        startIcon={<FolderOutlinedIcon />}
-                        onClick={() =>
-                          item ? setParent(item.id, item.name) : null
+                <Grid item xs={5} sx={{pr: 1, ustifyContent: 'flex-start'}}>
+                  {item.type === 'folder' ? (
+                    <PlainButton
+                      startIcon={<FolderOutlinedIcon />}
+                      onClick={() =>
+                        item ? setParent(item.id, item.name) : null
+                      }
+                    >
+                      {item.name}
+                    </PlainButton>
+                  ) : item.type === 'editableHTML' ? (
+                    <PlainButton
+                      startIcon={<DescriptionOutlinedIcon />}
+                      onClick={() => {
+                        if (item.type === 'editableHTML') {
+                          setOpenEditor(true);
+                          setSelectedFile(item);
                         }
-                      >
-                        {item.name}
-                      </PlainButton>
-                    ) : (
-                      <a href={item.downloadURL} target="_blank" download>
-                        <PlainButton
-                          startIcon={<DescriptionOutlinedIcon />}
-                          onClick={() => {
-                            if (item.type === 'editableHTML') {
-                              setOpenEditor(true);
-                              setSelectedFile(item);
-                            }
-                          }}
-                        >
-                          {item.name}
-                        </PlainButton>
-                      </a>
-                    )}
-                  </Grid>
+                      }}
+                      target="_blank"
+                      download
+                      rel="noreferrer"
+                      sx={{}}
+                    >
+                      {item.name}
+                    </PlainButton>
+                  ) : (
+                    <PlainButton
+                      startIcon={<DescriptionOutlinedIcon />}
+                      href={item.downloadURL}
+                      target="_blank"
+                      download
+                      rel="noreferrer"
+                    >
+                      {item.name}
+                    </PlainButton>
+                  )}
                 </Grid>
                 {/* <Grid item xs={4}>
                   <Typography sx={{marginTop: 1.5, fontSize: 14}}>
@@ -302,20 +292,26 @@ function Document({parentId}) {
                 <Grid item xs={2}>
                   <Grid container sx={{justifyContent: 'flex-end'}}>
                     {item.type === 'editableHTML' && (
-                      <IconButton>
+                      <IconButton
+                        onClick={() => {
+                          setOpenEditor(true);
+                          setSelectedFile(item);
+                          // setEnableEditText(false);
+                        }}
+                      >
                         <EditRoundedIcon
                           sx={{color: '#181818'}}
-                          onClick={() => {
-                            setOpenEditor(true);
-                            setSelectedFile(item);
-                            // setEnableEditText(false);
-                          }}
                         ></EditRoundedIcon>
                       </IconButton>
                     )}
 
                     {item.type !== 'folder' && item.type !== 'editableHTML' && (
-                      <a href={item.downloadURL} download target="_blank">
+                      <a
+                        href={item.downloadURL}
+                        download
+                        target="_blank"
+                        rel="noreferrer"
+                      >
                         <IconButton>
                           <DownloadRoundedIcon
                             sx={{color: '#181818'}}
@@ -352,16 +348,8 @@ function Document({parentId}) {
             content="This file will be permanently deleted"
           ></WarningPopup>
         </div>
-      ) : (
-        <CircularProgress
-          sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(50%,-50%)',
-          }}
-        />
-      )}
+      </Suspense>
+
       <TextEditor
         open={openEditor}
         onClose={onSubmitTextEditor}

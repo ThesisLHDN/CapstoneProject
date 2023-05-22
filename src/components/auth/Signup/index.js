@@ -35,7 +35,7 @@ const theme = createTheme();
 export default function SignInSide() {
   const [error, setError] = useState('');
   const [formData, setFormData] = useState({});
-  const [userData, setUserData] = useState({});
+  // const [userData, setUserData] = useState({});
 
   const onChangeHandler = (e) => {
     e.preventDefault();
@@ -64,10 +64,10 @@ export default function SignInSide() {
         const user = userCredential.user;
 
         const newUser = {...user, displayName: `${fName} ${lName}`};
-        console.log(newUser);
+        // console.log(newUser);
 
         addNewUser(newUser, getAdditionalUserInfo(userCredential).providerId);
-        setUserData(newUser);
+        // setUserData(newUser);
       })
       .then(() =>
         updateProfile(auth.currentUser, {
@@ -215,12 +215,14 @@ export default function SignInSide() {
             </Divider>
             <Box sx={{display: 'flex', gap: 1, justifyContent: 'center'}}>
               <IconButton
+                aria-label="facebook"
                 variant="contained"
                 onClick={() => setError(facebookLoginHandler)}
               >
                 <FacebookIcon style={{width: 32, height: 32}} />
               </IconButton>
               <IconButton
+                aria-label="google"
                 variant="contained"
                 onClick={() => setError(googleLoginHandler)}
               >

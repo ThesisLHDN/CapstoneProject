@@ -1,22 +1,16 @@
-import React, {useContext, useState} from 'react';
+import { useContext, useState } from 'react';
 import {
   Button,
   Dialog,
   DialogTitle,
   DialogActions,
-  DialogContent,
-  DialogContentText,
-  TextField,
-  FormControl,
-  Select,
-  MenuItem,
-  Typography,
+  DialogContent, TextField,
+  FormControl, Typography
 } from '@mui/material';
-import {styled} from '@mui/material/styles';
-import {CssTextField} from './CreateProject';
-import {colorHover} from 'src/style';
-import DatePicker from 'react-datepicker';
-import {AppContext} from 'src/Context/AppProvider';
+import { styled } from '@mui/material/styles';
+import { CssTextField } from './CreateProject';
+import { colorHover } from 'src/style';
+import { AppContext } from 'src/Context/AppProvider';
 import axios from 'axios';
 
 const GrayButton = styled(Button)({

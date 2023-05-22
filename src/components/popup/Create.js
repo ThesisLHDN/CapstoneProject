@@ -1,12 +1,10 @@
 import {useState} from 'react';
 import {Box, Paper, Typography, Button, TextField, Dialog} from '@mui/material';
 import {color} from 'src/style';
-import ReportRoundedIcon from '@mui/icons-material/ReportRounded';
 
 function CreationPopup({
   title,
   onSubmit,
-  content,
   confirmContent,
   cancelContent,
   icon,
@@ -17,15 +15,35 @@ function CreationPopup({
   open,
 }) {
   const [input, setInput] = useState('');
+  const [error, setError] = useState('');
+
   const handleKeyPress = (e) => {
-    //it triggers by pressing the enter key
     if (e.key === 'Enter') {
-      onSubmit(input);
+      onSubmitHandler(input);
+      setInput(false);
     }
   };
 
+  const onSubmitHandler = (field) => {
+    if (field) {
+      console.log('submit', field);
+      onSubmit(field);
+      setError();
+      setInput(false);
+    } else {
+      setError('Please input a valid value');
+      setInput(false);
+    }
+  };
+
+  const onCancelHandler = () => {
+    setInput(false);
+    setError();
+    onClose();
+  };
+
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog open={open} onClose={onCancelHandler}>
       <Paper
         sx={{
           width: 300,
@@ -74,6 +92,11 @@ function CreationPopup({
           onChange={(e) => setInput(e.target.value)}
           onKeyPress={handleKeyPress}
         ></TextField>
+        {error && (
+          <Typography variant="subtitle2" sx={{color: 'red', fontSize: '12px'}}>
+            {error}
+          </Typography>
+        )}
         <Box
           sx={{
             display: 'flex',
@@ -89,7 +112,7 @@ function CreationPopup({
         >
           {' '}
           <Button
-            onClick={onClose}
+            onClick={onCancelHandler}
             sx={{
               color: '#818181',
             }}
@@ -103,12 +126,9 @@ function CreationPopup({
               color: 'white',
               '&:hover': {backgroundColor: '#1BB738'},
             }}
-            onClick={() => {
-              onSubmit(input);
-              setInput(false);
-            }}
+            onClick={() => onSubmitHandler(input)}
           >
-            {confirmContent ? confirmContent : 'Delete'}
+            {confirmContent ? confirmContent : 'Confirm'}
           </Button>
         </Box>
       </Paper>

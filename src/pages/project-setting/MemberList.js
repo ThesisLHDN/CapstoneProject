@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import { useContext, useEffect, useState } from 'react';
 import {
   Table,
   TableBody,
@@ -7,25 +7,19 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Button,
-  Popper,
-  ClickAwayListener,
-  MenuItem,
-  MenuList,
-  Box,
+  Button
 } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {AppContext} from 'src/Context/AppProvider';
+import { AppContext } from 'src/Context/AppProvider';
 import axios from 'axios';
-import {useLocation} from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
-function createData(name, email, role) {
-  return {name, email, role};
-}
+// function createData(name, email, role) {
+//   return {name, email, role};
+// }
 
 function MemberList() {
   const [anchorEl, setAnchorEl] = useState(null);
-  const [role, setRole] = useState('');
+  // const [role, setRole] = useState('');
   const {project} = useContext(AppContext);
   const [members, setMembers] = useState([]);
   const location = useLocation();
@@ -52,8 +46,8 @@ function MemberList() {
     fetchProjectMember();
   }, []);
 
-  const open = Boolean(anchorEl);
-  const id = open ? 'simple-popper' : undefined;
+  // const open = Boolean(anchorEl);
+  // const id = open ? 'simple-popper' : undefined;
   return (
     <div style={{width: '95%'}}>
       <TableContainer component={Paper} sx={{marginLeft: 6, marginY: 2}}>
@@ -90,9 +84,9 @@ function MemberList() {
                     }}
                     onClick={handleClick}
                   >
-                    {member.id == project.adminId ? (
+                    {member.id === project.adminId ? (
                       <span className="pl-5">Administrator</span>
-                    ) : member.id == project.ownerId &&
+                    ) : member.id === project.ownerId &&
                       member.id !== project.adminId ? (
                       <span className="pl-5">Project Owner</span>
                     ) : (

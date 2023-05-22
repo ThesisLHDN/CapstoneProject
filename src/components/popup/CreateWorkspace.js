@@ -104,6 +104,9 @@ export default function CreateWorkspace() {
                   },
                 }}
                 onChange={onChangeHandler}
+                onKeyUp={(event) =>
+                  event.key === 'Enter' ? handleSubmit(event) : null
+                }
               ></TextField>
               <Box
                 sx={{

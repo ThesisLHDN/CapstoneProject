@@ -37,10 +37,15 @@ function AuthProvider({children}) {
     const unsubscribed = auth.onAuthStateChanged((user) => {
       if (user) {
         const {displayName, email, uid, photoURL} = user;
-        console.log(displayName, email, uid, photoURL);
+        // console.log(displayName, email, uid, photoURL);
         setUser({displayName, email, uid, photoURL});
         addUser();
-        if (pathName === '/login' || pathName === '/signup') {
+        if (
+          pathName === '/login' ||
+          pathName === '/signup' ||
+          pathName === '/forget' ||
+          pathName === '/'
+        ) {
           getLastestWorkspace(uid);
         }
         setIsLoading(false);

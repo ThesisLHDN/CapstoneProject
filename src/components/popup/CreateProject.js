@@ -18,6 +18,7 @@ import {useNavigate} from 'react-router-dom';
 import {AuthContext} from 'src/Context/AuthProvider';
 import {AppContext} from 'src/Context/AppProvider';
 import axios from 'axios';
+import {setDocument} from 'src/firebase/firestoreServices';
 
 export const CssTextField = styled(TextField)({
   '& .MuiOutlinedInput-root': {
@@ -79,6 +80,7 @@ function CreateProject() {
     try {
       await axios.post('/project', project);
       setProjects([project, ...projects]);
+      // setDocument('projects', `${project.id}`, {...project});
       navigate(`/workspace-setting/${workspace.id}?user=${uid}`);
     } catch (err) {
       console.log(err);
@@ -110,10 +112,17 @@ function CreateProject() {
               Project type
               <span style={{color: 'red'}}>&nbsp;*</span>
             </Typography>
-            <CssSelect size="small" value={type} onChange={handleChangeType}>
-              <MenuItem value="scrum">Scrum</MenuItem>
+            <Select
+              defaultValue="scrum"
+              size="small"
+              // value={type}
+              onChange={handleChangeType}
+            >
+              <MenuItem value="scrum" selected>
+                Scrum
+              </MenuItem>
               {/* <MenuItem value="kanban">Kanban</MenuItem> */}
-            </CssSelect>
+            </Select>
             <Typography
               sx={{
                 color: 'black',

@@ -1,13 +1,9 @@
-import {useState} from 'react';
-// import {errorCodeConverter} from 'src/firebase/authFunction';
 import authErrors from './authErrors';
 
 import {
-  getAuth,
   FacebookAuthProvider,
   GoogleAuthProvider,
   signInWithPopup,
-  signInWithEmailAndPassword,
   getAdditionalUserInfo,
 } from 'firebase/auth';
 import {auth} from 'src/firebase/config';
@@ -38,6 +34,7 @@ const facebookLoginHandler = () => {
   signInWithPopup(auth, facebookProvider)
     .then(async (result) => {
       const user = result.user;
+      console.log('Login successful');
 
       if (getAdditionalUserInfo(result).isNewUser) {
         try {
@@ -46,9 +43,9 @@ const facebookLoginHandler = () => {
           console.error('Error adding document: ', e);
         }
       }
-      // setUserData(user);
     })
     .catch((error) => {
+      console.log('Facebook login error', error);
       return errorCodeConverter(error.code);
     });
 };
@@ -70,4 +67,9 @@ const googleLoginHandler = () => {
     });
 };
 
-export {googleLoginHandler, facebookLoginHandler, addNewUser};
+export {
+  googleLoginHandler,
+  facebookLoginHandler,
+  addNewUser,
+  errorCodeConverter,
+};

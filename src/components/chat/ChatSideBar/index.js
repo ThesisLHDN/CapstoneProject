@@ -7,67 +7,41 @@ import {
   Dialog,
   Paper,
   TextField,
-  DialogContentText,
-  DialogActions,
-  DialogTitle,
-  DialogContent,
   Box,
   Avatar,
-  FormControl,
   Button,
   styled,
-  Select,
 } from '@mui/material';
 import {colorHover} from 'src/style';
+
+import CreationPopup from 'src/components/popup/Create';
 
 // import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 // import PersonAddAltRoundedIcon from '@mui/icons-material/PersonAddAltRounded';
 
-import SearchBar from 'src/components/search';
 import {addDocument} from 'src/firebase/firestoreServices';
 
 import {ChatContext} from 'src/Context/ChatProvider';
 
-const CssTextField = styled(TextField)({
-  '& label.Mui-focused': {
-    color: color.green03,
-  },
-  '& .MuiInput-underline:after': {
-    borderBottomColor: color.green03,
-  },
-  '& .MuiOutlinedInput-root': {
-    '&.Mui-focused fieldset': {
-      borderColor: color.green03,
-    },
-  },
-});
-function ChatSideBar({data, currentUser, projectId}) {
-  const {selectedRoomId, setSelectedRoomId, selectedRoom, setProjectId} =
-    useContext(ChatContext);
+function ChatSideBar({data, projectId}) {
+  const {setSelectedRoomId, selectedRoom, uid} = useContext(ChatContext);
   const [open, setOpen] = useState(false);
-  const [newRoom, setNewRoom] = useState('');
-  const [description, setDescription] = useState('');
-  setProjectId(projectId);
-  console.log('reload chat side bar');
-  const handleClose = () => {
-    setOpen(false);
-  };
-  const addRoomHandler = () => {
-    const newRoomData = {
-      projectId: projectId,
-      name: newRoom,
-      description: description,
-      adminId: currentUser.uid,
-      members: [currentUser.uid],
-      allmembers: [currentUser.uid],
-      coverPicture: '',
-    };
-    if (newRoom) {
+  // const handleClose = () => {
+  //   setOpen(false);
+  // };
+  const addRoomHandler = (name) => {
+    if (name) {
+      const newRoomData = {
+        projectId: projectId,
+        name: name,
+        adminId: uid,
+        members: [uid],
+        allmembers: [uid],
+        coverPicture: '',
+      };
       addDocument('rooms', newRoomData);
     }
-    setNewRoom('');
-    setDescription('');
     setOpen(false);
   };
   return (
@@ -87,7 +61,8 @@ function ChatSideBar({data, currentUser, projectId}) {
             sx={{justifyContent: 'flex-end', display: 'inline-flex'}}
           >
             <Button
-              sx={{...colorHover.greenBtn}}
+              variant="contained"
+              sx={{...colorHover.greenBtn, height: 36}}
               endIcon={<AddRoundedIcon />}
               onClick={() => {
                 setOpen(true);
@@ -115,7 +90,8 @@ function ChatSideBar({data, currentUser, projectId}) {
 
                   '&:hover': {backgroundColor: '#efefef'},
                   borderRadius: 3,
-                  ...(id === selectedRoom.id
+                  // TODO set style of selected Room
+                  ...(id === (selectedRoom ? selectedRoom.id : '')
                     ? {backgroundColor: '#efefef'}
                     : {}),
                 }}
@@ -142,7 +118,7 @@ function ChatSideBar({data, currentUser, projectId}) {
                           whiteSpace: 'nowrap',
                         }}
                       >
-                        {lastMessage.body}
+                        {lastMessage ? lastMessage.body : ''}
                       </Typography>
                     </Grid>
                     <Grid item xs={3}>
@@ -154,73 +130,17 @@ function ChatSideBar({data, currentUser, projectId}) {
                 </Box>
               </Box>
             ))}
-          <Dialog
+          {/* <CreatePopup></CreatePopup> */}
+          <CreationPopup
+            title="Create new room"
+            fieldLabel={"Please room's name"}
             open={open}
-            onClose={() => {
-              setOpen(false);
-            }}
-          >
-            <Paper sx={{padding: '20px 30px', width: 360}}>
-              <Grid
-                container
-                sx={{display: 'flex', flexDirection: 'row', gap: 4}}
-              >
-                <Typography sx={{fontSize: 20, fontWeight: 700}}>
-                  Create new chat room
-                </Typography>{' '}
-                <CssTextField
-                  label="Name"
-                  size="small"
-                  placeholder="Enter room's name"
-                  onChange={(e) => setNewRoom(e.target.value)}
-                  sx={{
-                    width: '100%',
-                    height: 30,
-                    '& ::after': {
-                      border: `solid ${color.green03} 2px !important`,
-                    },
-                  }}
-                ></CssTextField>
-                <CssTextField
-                  label="Description"
-                  size="small"
-                  placeholder="Enter room's description"
-                  onChange={(e) => setDescription(e.target.value)}
-                  sx={{
-                    width: '100%',
-                    height: 30,
-                    '& ::after': {
-                      border: `solid ${color.green03} 2px !important`,
-                    },
-                  }}
-                ></CssTextField>
-                <Box
-                  sx={{
-                    width: '100%',
-                    display: 'flex',
-                    justifyContent: 'flex-end',
-                    gap: 1,
-                  }}
-                >
-                  <Button
-                    sx={{...colorHover.greenBtn}}
-                    onClick={(e) => addRoomHandler(e)}
-                  >
-                    Confirm
-                  </Button>
-                  <Button
-                    sx={{textTransform: 'none', color: '#818181'}}
-                    onClick={handleClose}
-                  >
-                    Cancel
-                  </Button>
-                </Box>
-              </Grid>
-            </Paper>
-          </Dialog>
+            onClose={() => setOpen(false)}
+            onSubmit={addRoomHandler}
+            confirmContent={'Create'}
+          ></CreationPopup>
         </Box>
       </Grid>
-      {/* <Grid container></Grid> */}
     </>
   );
 }

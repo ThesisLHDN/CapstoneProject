@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
   Paper,
   Typography,
@@ -8,10 +8,10 @@ import {
   Popper,
   Grow,
 } from '@mui/material';
-import {ClickAwayListener} from '@mui/base';
+import { ClickAwayListener } from '@mui/base';
 import SortRoundedIcon from '@mui/icons-material/SortRounded';
-import {color} from 'src/style';
-import {useLocation} from 'react-router-dom';
+import { color } from 'src/style';
+import { useLocation } from 'react-router-dom';
 
 const data = {
   status: 'Status',
@@ -120,8 +120,8 @@ function Sort({setSrtVal, setSrt}) {
                 >
                   {Object.entries(data).map(([key, value]) => {
                     if (
-                      position != 'board' ||
-                      (position == 'board' && key != 'status')
+                      position !== 'board' ||
+                      (position == 'board' && key !== 'status')
                     )
                       return (
                         <MenuItem

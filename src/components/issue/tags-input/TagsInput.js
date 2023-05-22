@@ -42,7 +42,7 @@ function TagsInput(props) {
     setTags(props.tags);
   }, [props.tags]);
 
-  console.log('###########', props.tags);
+  // console.log('###########', props.tags);
 
   return (
     <div className="flex items-start flex-wrap w-full">

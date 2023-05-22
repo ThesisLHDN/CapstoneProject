@@ -9,7 +9,7 @@ import {
   collection,
 } from 'firebase/firestore';
 
-const useFirestore = (collectionName, condition = {}) => {
+const useFirestore = (collectionName, condition) => {
   const [documents, setDocuments] = useState([]);
 
   useEffect(() => {

@@ -1,7 +1,5 @@
-import React from 'react';
-import {Box, Paper, Typography, Button, Dialog} from '@mui/material';
-import {color} from 'src/style';
-// import { Delete } from '@mui/icons-material';
+import { Box, Paper, Typography, Button, Dialog } from '@mui/material';
+import { color } from 'src/style';
 import ReportRoundedIcon from '@mui/icons-material/ReportRounded';
 
 function WarningPopup({
@@ -42,7 +40,6 @@ function WarningPopup({
             borderBottom: 'solid black 1px',
           }}
         >
-          {/* {icon && icon} */}
           <Typography
             sx={{
               display: 'flex',

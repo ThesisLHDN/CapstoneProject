@@ -1,15 +1,13 @@
 import {useState} from 'react';
-import {errorCodeConverter} from 'src/firebase/authFunction';
+import {errorCodeConverter} from 'src/firebase/authServices';
 
 import {
   Button,
   IconButton,
-  CssBaseline,
   TextField,
   FormControlLabel,
   Checkbox,
   Link,
-  Paper,
   Box,
   Grid,
   Divider,
@@ -22,7 +20,6 @@ import {color, colorHover} from 'src/style';
 
 import {signInWithEmailAndPassword} from 'firebase/auth';
 import {auth} from 'src/firebase/config';
-import {setDocument} from 'src/firebase/firestoreServices';
 import {
   facebookLoginHandler,
   googleLoginHandler,
@@ -99,7 +96,7 @@ export default function SignInSide() {
             noValidate
             onSubmit={onSubmitHandler}
             sx={{
-              // mt: 1,
+              mt: 1,
               '& .MuiInputLabel-root': {
                 color: color.gray01,
                 fontSize: 14,
@@ -190,12 +187,14 @@ export default function SignInSide() {
             </Divider>
             <Box sx={{display: 'flex', gap: 1, justifyContent: 'center'}}>
               <IconButton
+                aria-label="facebook"
                 variant="contained"
                 onClick={() => setError(facebookLoginHandler)}
               >
                 <FacebookIcon style={{width: 32, height: 32}} />
               </IconButton>
               <IconButton
+                aria-label="google"
                 variant="contained"
                 onClick={() => setError(googleLoginHandler)}
               >

@@ -1,5 +1,5 @@
-import {useContext, useEffect, useState} from 'react';
-import logo from 'src/assets/images/logo.png';
+import {useContext, useState} from 'react';
+import logo from 'src/assets/images/logo.svg';
 import {
   Box,
   Tabs,
@@ -11,15 +11,12 @@ import {
   ClickAwayListener,
   MenuList,
   MenuItem,
-  Dialog,
-  DialogTitle,
 } from '@mui/material';
 
 import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
 
 import Avatar from '@mui/material/Avatar';
 
-import SearchBar from 'src/components/search';
 import {Link, useNavigate} from 'react-router-dom';
 import {signOut} from 'firebase/auth';
 import {auth} from 'src/firebase/config';
@@ -83,20 +80,20 @@ export default function Header() {
     setAnchorEl(anchorEl ? null : event.currentTarget);
   };
 
-  const [anchorElAdd, setAnchorElAdd] = useState(null);
+  // const [anchorElAdd, setAnchorElAdd] = useState(null);
 
-  const handleClickAdd = (event) => {
-    setAnchorElAdd(anchorElAdd ? null : event.currentTarget);
-  };
+  // const handleClickAdd = (event) => {
+  //   setAnchorElAdd(anchorElAdd ? null : event.currentTarget);
+  // };
 
   const open = Boolean(anchorEl);
-  const openAdd = Boolean(anchorElAdd);
+  // const openAdd = Boolean(anchorElAdd);
   const id = open ? 'simple-popper' : undefined;
 
-  function handleClose(value) {
-    // TODO get value
-    setOpenAddMembers(false);
-  }
+  // function handleClose(value) {
+  //   // TODO get value
+  //   setOpenAddMembers(false);
+  // }
 
   return (
     <Paper
@@ -116,8 +113,8 @@ export default function Header() {
       }}
     >
       <Box sx={{display: 'flex'}}>
-        <Link to="/">
-          <img src={logo} width="150" alt="Logo" />
+        <Link to="/" style={{display: 'flex', alignItems: 'center'}}>
+          <img src={logo} width="120" height="40" alt="Logo" />
         </Link>
         <Tabs
           value={value}
@@ -166,7 +163,7 @@ export default function Header() {
           position: 'relative',
         }}
       >
-        {uid == project.adminId && (
+        {uid === project.adminId && (
           <Button
             variant="contained"
             sx={{

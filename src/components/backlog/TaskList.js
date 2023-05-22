@@ -1,29 +1,26 @@
-import {useContext, useEffect, useState} from 'react';
-import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
+import { useContext, useEffect, useState } from 'react';
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import ClickAwayListener from '@mui/base/ClickAwayListener';
-import {styled} from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import MuiAccordion from '@mui/material/Accordion';
 import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import {
   Button,
   Box,
-  TextField,
-  FormControl,
-  Select,
-  MenuItem,
+  TextField, Select,
+  MenuItem
 } from '@mui/material';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import SprintHeader from './SprintHeader';
 import TaskCard from './TaskCard';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import AddIcon from '@mui/icons-material/Add';
-import {IssueIcon} from './TaskCard';
+import { IssueIcon } from './TaskCard';
 import StartSprint from '../popup/StartSprint';
 import CompleteSprint from '../popup/CompleteSprint';
-import {useLocation} from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import axios from 'axios';
-import {AuthContext} from 'src/Context/AuthProvider';
+import { AuthContext } from 'src/Context/AuthProvider';
 
 const columnsFromBackend = [
   {
@@ -38,17 +35,17 @@ const columnsFromBackend = [
   },
 ];
 
-const GrayButton = styled(Button)({
-  textTransform: 'none',
-  backgroundColor: '#cdcdcd',
-  color: 'black',
-  borderRadius: 3,
-  height: 24,
-  fontSize: 12,
-  '&:hover': {
-    backgroundColor: '#ddd',
-  },
-});
+// const GrayButton = styled(Button)({
+//   textTransform: 'none',
+//   backgroundColor: '#cdcdcd',
+//   color: 'black',
+//   borderRadius: 3,
+//   height: 24,
+//   fontSize: 12,
+//   '&:hover': {
+//     backgroundColor: '#ddd',
+//   },
+// });
 
 const Accordion = styled((props) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -394,11 +391,11 @@ function TaskList({hide, vals, fil, setFil, srtVal, srt, setSrt, input}) {
                           ) : (
                             <></>
                           )}
-                          <GrayButton
+                          {/* <GrayButton
                             sx={{mx: 1, width: '24px !important', minWidth: 24}}
                           >
                             <MoreHorizIcon />
-                          </GrayButton>
+                          </GrayButton> */}
                         </div>
                       ) : (
                         <></>

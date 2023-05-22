@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import { useState } from 'react';
 import firebase from '../firebase';
 const storage = firebase.storage();
 const firestore = firebase.firestore();

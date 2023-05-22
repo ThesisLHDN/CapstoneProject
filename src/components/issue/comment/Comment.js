@@ -1,10 +1,9 @@
-import {useMemo, useState} from 'react';
+import { useMemo, useState } from 'react';
 import CommentForm from './CommentForm';
-import Subcomment from './Subcomment';
 import moment from 'moment/moment';
 
-import {Avatar, Box, Typography} from '@mui/material';
-import {useFirestore} from 'src/hooks/useFirestore';
+import { Avatar, Box, Typography } from '@mui/material';
+import { useFirestore } from 'src/hooks/useFirestore';
 
 // import {addDocument, setDocument} from 'src/firebase/services';
 
@@ -211,7 +210,7 @@ const Comment = ({
                 />
               </div>
             )}
-            {replies && replies.length > 0 && (
+            {!subcomment && replies && replies.length > 0 && (
               <div className="mt-5">
                 {replies.map((reply, index) => (
                   <Comment

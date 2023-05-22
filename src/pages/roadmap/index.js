@@ -1,25 +1,13 @@
 import {useState, useEffect, useContext} from 'react';
 import 'src/App.scss';
-import {
-  Typography,
-  Breadcrumbs,
-  Link,
-  Button,
-  Box,
-  Grid,
-  CircularProgress,
-} from '@mui/material';
+import {Typography, Breadcrumbs, Link, Box, Grid} from '@mui/material';
 import Gantt from './Gantt';
 import Toolbar from './toolbar';
-import {styled} from '@mui/material/styles';
 import {color} from 'src/style';
-import tasks from './tasks';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import {useLocation} from 'react-router-dom';
 import axios from 'axios';
 import {AppContext} from 'src/Context/AppProvider';
 import {AuthContext} from 'src/Context/AuthProvider';
-import MessageArea from './messageArea';
 
 // import Filter from 'src/components/Filter';
 // import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
@@ -31,35 +19,26 @@ import MessageArea from './messageArea';
 
 // import SearchBar from 'src/components/search';
 
-function handleClick(event) {
-  event.preventDefault();
-  console.info('You clicked a breadcrumb.');
-}
-const GrayButton = styled(Button)({
-  backgroundColor: '#cdcdcd',
-  color: 'black',
-  borderRadius: 3,
-  height: 32,
-  '&:hover': {
-    backgroundColor: '#ddd',
-  },
-});
+// function handleClick(event) {
+//   event.preventDefault();
+//   console.info('You clicked a breadcrumb.');
+// }
 
 function RoadMap() {
   const location = useLocation();
   const pId = location.pathname.split('/')[2];
   const [zoom, setZoom] = useState('Days');
-  const [messagesState, setMessagesState] = useState([]);
+  // const [messagesState, setMessagesState] = useState([]);
   const [issues, setIssues] = useState({data: []});
   const {
     user: {uid},
   } = useContext(AuthContext);
-  const {workspace, project} = useContext(AppContext);
+  const {project} = useContext(AppContext);
 
   const fetchIssuesData = async () => {
     try {
       const res = await axios.get(`/issues/${pId}`);
-      console.log('raw data', res);
+      // console.log('raw data', res);
       const data = {
         data: res.data.map((issue) => ({
           text: issue.issuename,
@@ -100,28 +79,16 @@ function RoadMap() {
     fetchIssuesData();
   }, []);
 
-  const addMessage = (message) => {
-    const maxLogLength = 5;
-    const newMessage = {message};
-    const messages = [newMessage, ...messagesState];
+  // const addMessage = (message) => {
+  //   const maxLogLength = 5;
+  //   const newMessage = {message};
+  //   const messages = [newMessage, ...messagesState];
 
-    if (messages.length > maxLogLength) {
-      messages.length = maxLogLength;
-    }
-    setMessagesState(messages);
-  };
-
-  const logDataUpdate = (type, action, item, id) => {
-    let text = item && item.text ? ` (${item.text})` : '';
-    let message = `${type} ${action}: ${id} ${text}`;
-    if (type === 'link' && action !== 'delete') {
-      message += ` ( source: ${item.source}, target: ${item.target} )`;
-    }
-    addMessage(
-      `Change ${item.id} ${item.text} time to [${item.start_date} - ${item.end_date}]`,
-    );
-    console.log(type, action, item, id);
-  };
+  //   if (messages.length > maxLogLength) {
+  //     messages.length = maxLogLength;
+  //   }
+  //   setMessagesState(messages);
+  // };
 
   const updateItem = (type, action, item, id) => {
     console.log(
@@ -225,7 +192,7 @@ function RoadMap() {
             </>
           )}
         </Box>
-        <MessageArea messages={messagesState} />
+        {/* <MessageArea messages={messagesState} /> */}
       </Box>
     </div>
   );

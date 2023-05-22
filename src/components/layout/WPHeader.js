@@ -1,5 +1,5 @@
 import {useContext, useState} from 'react';
-import logo from 'src/assets/images/logo.png';
+import logo from 'src/assets/images/logo.svg';
 import {
   Box,
   // Tabs,
@@ -20,12 +20,10 @@ import AddIcon from '@mui/icons-material/Add';
 
 import Avatar from '@mui/material/Avatar';
 
-import SearchBar from 'src/components/search';
 import {Link} from 'react-router-dom';
 import {signOut} from 'firebase/auth';
 import {colorHover} from 'src/style';
 import Notification from '../notification/Notification';
-import CreateWorkspace from 'src/components/popup/CreateWorkspace';
 import {auth} from 'src/firebase/config';
 import {AuthContext} from 'src/Context/AuthProvider';
 
@@ -42,14 +40,14 @@ import {AuthContext} from 'src/Context/AuthProvider';
 // }
 
 export default function Header() {
-  const [value, setValue] = useState(0);
+  // const [value, setValue] = useState(0);
   const {
     user: {displayName, photoURL},
   } = useContext(AuthContext);
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+  // const handleChange = (event, newValue) => {
+  //   setValue(newValue);
+  // };
   const handleLogout = () => {
     // const auth = getAuth();
     signOut(auth)
@@ -86,8 +84,8 @@ export default function Header() {
         zIndex: 5,
       }}
     >
-      <Link to="/">
-        <img src={logo} width="150" alt="Logo" />
+      <Link to="/" style={{display: 'flex', alignItems: 'center'}}>
+        <img src={logo} width="120" height="40" alt="Logo" />
       </Link>
 
       {/* <SearchBar value={value}></SearchBar> */}
