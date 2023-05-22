@@ -45,6 +45,7 @@ function Board() {
   const {
     user: {uid},
   } = useContext(AuthContext);
+  const [isMe, setIsMe] = useState(false);
   const [fil, setFil] = useState(false);
   const [vals, setVals] = useState({
     status: '',
@@ -166,13 +167,17 @@ function Board() {
         <Sort setSrtVal={setSrtVal} setSrt={setSrt} />
         <Button
           variant="text"
-          startIcon={<PersonOutlineOutlinedIcon />}
+          startIcon={
+            isMe ? <PersonOutlineOutlinedIcon /> : <PersonOffOutlinedIcon />
+          }
           sx={{color: '#181818', textTransform: 'none'}}
+          onClick={() => setIsMe(!isMe)}
         >
           Me
         </Button>
       </Box>
       <AltScrum
+        me={isMe}
         sprint={lastestSprint}
         vals={vals}
         fil={fil}

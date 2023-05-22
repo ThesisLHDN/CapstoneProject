@@ -71,7 +71,7 @@ const AccordionDetails = styled(MuiAccordionDetails)(({theme}) => ({
   padding: theme.spacing(2),
 }));
 
-function TaskList({hide, vals, fil, setFil, srtVal, srt, setSrt, input}) {
+function TaskList({hide, me, vals, fil, setFil, srtVal, srt, setSrt, input}) {
   const location = useLocation();
   const pId = location.pathname.split('/')[2];
   const {
@@ -441,45 +441,51 @@ function TaskList({hide, vals, fil, setFil, srtVal, srt, setSrt, input}) {
                                   })
                                   .map((issue, index) => {
                                     return (
-                                      <Draggable
-                                        key={issue.id}
-                                        draggableId={issue.id?.toString()}
-                                        index={index}
-                                      >
-                                        {(provided, snapshot) => {
-                                          return (
-                                            <Box
-                                              ref={provided.innerRef}
-                                              {...provided.draggableProps}
-                                              {...provided.dragHandleProps}
-                                              className="select-none h-10 mb-0.5 text-sm"
-                                              sx={{
-                                                borderRadius: 1,
-                                                backgroundColor:
-                                                  snapshot.isDragging
-                                                    ? '#D6D6D6'
-                                                    : '#00000000',
-                                                color: 'black',
-                                                ...provided.draggableProps
-                                                  .style,
-                                                paddingTop: '8px',
-                                                paddingBottom: '8px',
-                                                opacity: snapshot.isDragging
-                                                  ? 0.8
-                                                  : 1,
-                                                '&:hover': {
-                                                  backgroundColor: '#ddd',
-                                                },
-                                              }}
-                                            >
-                                              <TaskCard
-                                                issue={issue}
-                                                setTrigger={setTriggerIssue}
-                                              />
-                                            </Box>
-                                          );
-                                        }}
-                                      </Draggable>
+                                      <div>
+                                        {!me || issue.assigneeId === uid ? (
+                                          <Draggable
+                                            key={issue.id}
+                                            draggableId={issue.id?.toString()}
+                                            index={index}
+                                          >
+                                            {(provided, snapshot) => {
+                                              return (
+                                                <Box
+                                                  ref={provided.innerRef}
+                                                  {...provided.draggableProps}
+                                                  {...provided.dragHandleProps}
+                                                  className="select-none h-10 mb-0.5 text-sm"
+                                                  sx={{
+                                                    borderRadius: 1,
+                                                    backgroundColor:
+                                                      snapshot.isDragging
+                                                        ? '#D6D6D6'
+                                                        : '#00000000',
+                                                    color: 'black',
+                                                    ...provided.draggableProps
+                                                      .style,
+                                                    paddingTop: '8px',
+                                                    paddingBottom: '8px',
+                                                    opacity: snapshot.isDragging
+                                                      ? 0.8
+                                                      : 1,
+                                                    '&:hover': {
+                                                      backgroundColor: '#ddd',
+                                                    },
+                                                  }}
+                                                >
+                                                  <TaskCard
+                                                    issue={issue}
+                                                    setTrigger={setTriggerIssue}
+                                                  />
+                                                </Box>
+                                              );
+                                            }}
+                                          </Draggable>
+                                        ) : (
+                                          <></>
+                                        )}
+                                      </div>
                                     );
                                   })}
                                 {provided.placeholder}

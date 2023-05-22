@@ -7,6 +7,7 @@ import {Box, Typography} from '@mui/material';
 // import {colorHover} from 'src/style';
 import axios from 'axios';
 import {AppContext} from 'src/Context/AppProvider.js';
+import {AuthContext} from 'src/Context/AuthProvider.js';
 
 const columns = [
   {
@@ -27,11 +28,14 @@ const columns = [
   },
 ];
 
-function Scrum({sprint, vals, fil, setFil, srtVal, srt, setSrt, input}) {
+function Scrum({me, sprint, vals, fil, setFil, srtVal, srt, setSrt, input}) {
   const [issues, setIssues] = useState([]);
   const [tempIssues, setTempIssues] = useState([]);
   const [triggerBoard, setTriggerBoard] = useState(false);
   const {project} = useContext(AppContext);
+  const {
+    user: {uid},
+  } = useContext(AuthContext);
 
   const fetchIssuesData = async () => {
     try {
@@ -228,32 +232,38 @@ function Scrum({sprint, vals, fil, setFil, srtVal, srt, setSrt, input}) {
                             })
                             .map((issue, index) => {
                               return (
-                                <Draggable
-                                  key={issue.id}
-                                  draggableId={issue.id?.toString()}
-                                  index={index}
-                                >
-                                  {(provided, snapshot) => {
-                                    return (
-                                      <Box
-                                        ref={provided.innerRef}
-                                        {...provided.draggableProps}
-                                        {...provided.dragHandleProps}
-                                        style={{
-                                          ...provided.draggableProps.style,
-                                          userSelect: 'none',
-                                          margin: '0 0 8px 0',
-                                          minHeight: '50px',
-                                          opacity: snapshot.isDragging
-                                            ? '0.7'
-                                            : '1',
-                                        }}
-                                      >
-                                        <Card issue={issue} />
-                                      </Box>
-                                    );
-                                  }}
-                                </Draggable>
+                                <div>
+                                  {!me || issue.assigneeId === uid ? (
+                                    <Draggable
+                                      key={issue.id}
+                                      draggableId={issue.id?.toString()}
+                                      index={index}
+                                    >
+                                      {(provided, snapshot) => {
+                                        return (
+                                          <Box
+                                            ref={provided.innerRef}
+                                            {...provided.draggableProps}
+                                            {...provided.dragHandleProps}
+                                            style={{
+                                              ...provided.draggableProps.style,
+                                              userSelect: 'none',
+                                              margin: '0 0 8px 0',
+                                              minHeight: '50px',
+                                              opacity: snapshot.isDragging
+                                                ? '0.7'
+                                                : '1',
+                                            }}
+                                          >
+                                            <Card issue={issue} />
+                                          </Box>
+                                        );
+                                      }}
+                                    </Draggable>
+                                  ) : (
+                                    <></>
+                                  )}
+                                </div>
                               );
                             })}
                           {provided.placeholder}
