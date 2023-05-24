@@ -66,7 +66,7 @@ function LeftIssueDetail({issue, setIssue, trigger, setTrigger}) {
 
   const updateIssue = async ({status, due, priority, assignee, point} = {}) => {
     try {
-      const res = await axios.put(`http://localhost:8800/issue/${issue.id}`, {
+      const res = await axios.put(`/issue/${issue.id}`, {
         issuestatus: status ? status : issue.issuestatus,
         descript: issue.descript,
         dueDate: due
@@ -263,7 +263,7 @@ function LeftIssueDetail({issue, setIssue, trigger, setTrigger}) {
               }}
             >
               <MenuList sx={{px: 0, width: '100%'}}>
-                {['To do', 'In progress', 'Done']
+                {['To do', 'In progress', 'Testing', 'Done']
                   .filter((element) => {
                     return element !== issue.issuestatus;
                   })
@@ -273,12 +273,14 @@ function LeftIssueDetail({issue, setIssue, trigger, setTrigger}) {
                         sx={{
                           py: 1,
                           fontSize: 14,
-                          fontWeight: 900,
+                          fontWeight: 600,
                           color: `${
                             element === 'Done'
                               ? '#009606'
                               : element === 'In progress'
                               ? '#006BA7'
+                              : element === 'Testing'
+                              ? '#EC8E00'
                               : '#EC6F28'
                           }`,
                         }}
@@ -456,7 +458,7 @@ function LeftIssueDetail({issue, setIssue, trigger, setTrigger}) {
                             sx={{
                               py: 1,
                               fontSize: 14,
-                              fontWeight: 900,
+                              fontWeight: 600,
                               color: `${
                                 element === 'High'
                                   ? 'red'

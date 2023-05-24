@@ -1,16 +1,16 @@
 import './card.scss';
 import format from 'date-fns/format';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
-import { Avatar, Typography, Chip, Paper } from '@mui/material';
+import {Avatar, Typography, Chip, Paper} from '@mui/material';
 
 import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
 import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
 import FiberManualRecordRoundedIcon from '@mui/icons-material/FiberManualRecordRounded';
 import FlagRoundedIcon from '@mui/icons-material/FlagRounded';
 import QuestionMarkRoundedIcon from '@mui/icons-material/QuestionMarkRounded';
-import { useContext, useEffect, useState } from 'react';
-import { AppContext } from 'src/Context/AppProvider';
+import {useContext, useEffect, useState} from 'react';
+import {AppContext} from 'src/Context/AppProvider';
 import axios from 'axios';
 
 const Epic = (props) => {
@@ -43,17 +43,18 @@ const Epic = (props) => {
   );
 };
 
-const issueIcon = (type) => {
+export const issueIcon = (type) => {
   switch (type) {
     case 'task':
       return (
         <DoneRoundedIcon
           sx={{
-            backgroundColor: '#A5F1E9',
+            backgroundColor: '#4856D7',
             color: 'white',
             borderRadius: 1,
-            width: 18,
-            height: 18,
+            width: 24,
+            height: 24,
+            padding: 0.25,
           }}
         />
       );
@@ -61,11 +62,12 @@ const issueIcon = (type) => {
       return (
         <FiberManualRecordRoundedIcon
           sx={{
-            backgroundColor: '#EF9A53',
+            backgroundColor: 'red',
             color: 'white',
             borderRadius: 1,
-            width: 18,
-            height: 18,
+            width: 24,
+            height: 24,
+            padding: 0.25,
           }}
         />
       );
@@ -73,11 +75,12 @@ const issueIcon = (type) => {
       return (
         <FlagRoundedIcon
           sx={{
-            backgroundColor: '#82CD47',
+            backgroundColor: '#00980F',
             color: 'white',
             borderRadius: 1,
-            width: 18,
-            height: 18,
+            width: 24,
+            height: 24,
+            padding: 0.25,
           }}
         />
       );
@@ -88,8 +91,9 @@ const issueIcon = (type) => {
             backgroundColor: '#BAD1C2',
             color: 'white',
             borderRadius: 1,
-            width: 18,
-            height: 18,
+            width: 24,
+            height: 24,
+            padding: 0.25,
           }}
         />
       );
@@ -102,9 +106,7 @@ function Card({issue}) {
 
   const getAssignee = async () => {
     try {
-      const res = await axios.get(
-        `http://localhost:8800/user/${issue.assigneeId}`,
-      );
+      const res = await axios.get(`/user/${issue.assigneeId}`);
       setAssignee(res.data);
       // console.log(res);
     } catch (err) {

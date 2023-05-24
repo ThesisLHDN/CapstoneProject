@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import {useContext, useEffect, useState} from 'react';
 import {
   IconButton,
   Button,
@@ -16,8 +16,8 @@ import FlagRoundedIcon from '@mui/icons-material/FlagRounded';
 import QuestionMarkRoundedIcon from '@mui/icons-material/QuestionMarkRounded';
 import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Link } from 'react-router-dom';
-import { AppContext } from 'src/Context/AppProvider';
+import {Link} from 'react-router-dom';
+import {AppContext} from 'src/Context/AppProvider';
 import axios from 'axios';
 import ClearRoundedIcon from '@mui/icons-material/ClearRounded';
 import WarningPopup from 'src/components/popup/Warning';
@@ -107,9 +107,7 @@ function TaskCard({issue, setTrigger, isChild = false}) {
 
   const getAssignee = async () => {
     try {
-      const res = await axios.get(
-        `http://localhost:8800/user/${issue.assigneeId}`,
-      );
+      const res = await axios.get(`/user/${issue.assigneeId}`);
       setAssignee(res.data);
       // console.log(res);
     } catch (err) {
@@ -132,7 +130,7 @@ function TaskCard({issue, setTrigger, isChild = false}) {
 
   const updateIssue = async (element) => {
     try {
-      const res = await axios.put(`http://localhost:8800/issue/${issue.id}`, {
+      const res = await axios.put(`/issue/${issue.id}`, {
         cId: issue.cycleId,
         status: element,
       });
@@ -147,7 +145,7 @@ function TaskCard({issue, setTrigger, isChild = false}) {
   const deleteIssueHandler = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.delete(`http://localhost:8800/issue/${issue.id}`);
+      const res = await axios.delete(`/issue/${issue.id}`);
       console.log(res);
       setTrigger(true);
     } catch (err) {
@@ -204,6 +202,8 @@ function TaskCard({issue, setTrigger, isChild = false}) {
             ? 'bg-done-color'
             : status === 'In progress'
             ? 'bg-in-progress-color'
+            : status === 'Testing'
+            ? 'bg-testing-color'
             : 'bg-to-do-color'
         }`}
         >
@@ -223,6 +223,8 @@ function TaskCard({issue, setTrigger, isChild = false}) {
                 ? '#A4E7AB'
                 : status === 'In progress'
                 ? '#9AD1EF'
+                : status === 'Testing'
+                ? '#FFE663'
                 : '#EDCBB9'
             }`,
             color: `${
@@ -230,6 +232,8 @@ function TaskCard({issue, setTrigger, isChild = false}) {
                 ? '#009606'
                 : status === 'In progress'
                 ? '#006BA7'
+                : status === 'Testing'
+                ? '#EC8E00'
                 : '#EC6F28'
             }`,
           }}
@@ -256,7 +260,7 @@ function TaskCard({issue, setTrigger, isChild = false}) {
               }}
             >
               <MenuList sx={{px: 0, width: '100%'}}>
-                {['To do', 'In progress', 'Done']
+                {['To do', 'In progress', 'Testing', 'Done']
                   .filter((element) => {
                     return element != status;
                   })
@@ -267,12 +271,14 @@ function TaskCard({issue, setTrigger, isChild = false}) {
                         sx={{
                           py: 1,
                           fontSize: 14,
-                          fontWeight: 900,
+                          fontWeight: 600,
                           color: `${
                             element === 'Done'
                               ? '#009606'
                               : element === 'In progress'
                               ? '#006BA7'
+                              : element === 'Testing'
+                              ? '#EC8E00'
                               : '#EC6F28'
                           }`,
                         }}

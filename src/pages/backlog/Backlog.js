@@ -4,6 +4,8 @@ import {Typography, Box, Button, Grid, Breadcrumbs, Link} from '@mui/material';
 import SearchBar from 'src/components/search';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import PersonOffOutlinedIcon from '@mui/icons-material/PersonOffOutlined';
 import TaskList from 'src/components/backlog/TaskList';
 import Filter from 'src/components/Filter';
 import Sort from 'src/components/Sort';
@@ -12,6 +14,7 @@ import {AuthContext} from 'src/Context/AuthProvider';
 
 function Backlog() {
   const [isHide, setIsHide] = useState(true);
+  const [isMe, setIsMe] = useState(false);
   const {project} = useContext(AppContext);
   const [fil, setFil] = useState(false);
   const [vals, setVals] = useState({
@@ -80,38 +83,36 @@ function Backlog() {
         <SearchBar sx={{width: '210px'}} setInput={setInput} />
         <Filter vals={vals} setVals={setVals} setFil={setFil} />
         <Sort setSrtVal={setSrtVal} setSrt={setSrt} />
-        {isHide ? (
-          <Button
-            variant="text"
-            startIcon={<VisibilityOffOutlinedIcon />}
-            sx={{
-              color: '#181818',
-              textTransform: 'none',
-              fontFamily: 'Open Sans, sans-serif',
-            }}
-            onClick={() => setIsHide(!isHide)}
-          >
-            Unhide Completed Sprint
-          </Button>
-        ) : (
-          <Button
-            variant="text"
-            startIcon={<VisibilityOutlinedIcon />}
-            sx={{
-              color: '#181818',
-              textTransform: 'none',
-              fontFamily: 'Open Sans, sans-serif',
-            }}
-            onClick={() => setIsHide(!isHide)}
-          >
-            Hide Completed Sprint
-          </Button>
-        )}
+        <Button
+          variant="text"
+          startIcon={
+            isMe ? <PersonOutlineOutlinedIcon /> : <PersonOffOutlinedIcon />
+          }
+          sx={{color: '#181818', textTransform: 'none'}}
+          onClick={() => setIsMe(!isMe)}
+        >
+          Me
+        </Button>
+        <Button
+          variant="text"
+          startIcon={
+            isHide ? <VisibilityOffOutlinedIcon /> : <VisibilityOutlinedIcon />
+          }
+          sx={{
+            color: '#181818',
+            textTransform: 'none',
+            fontFamily: 'Open Sans, sans-serif',
+          }}
+          onClick={() => setIsHide(!isHide)}
+        >
+          {isHide ? 'Unhide Completed Sprint' : 'Hide Completed Sprint'}
+        </Button>
       </Box>
 
       <div className="mt-5">
         <TaskList
           hide={isHide}
+          me={isMe}
           vals={vals}
           fil={fil}
           setFil={setFil}

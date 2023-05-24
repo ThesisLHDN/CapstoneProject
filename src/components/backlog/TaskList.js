@@ -1,26 +1,21 @@
-import { useContext, useEffect, useState } from 'react';
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import {useContext, useEffect, useState} from 'react';
+import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
 import ClickAwayListener from '@mui/base/ClickAwayListener';
-import { styled } from '@mui/material/styles';
+import {styled} from '@mui/material/styles';
 import MuiAccordion from '@mui/material/Accordion';
 import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
-import {
-  Button,
-  Box,
-  TextField, Select,
-  MenuItem
-} from '@mui/material';
+import {Button, Box, TextField, Select, MenuItem} from '@mui/material';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import SprintHeader from './SprintHeader';
 import TaskCard from './TaskCard';
 import AddIcon from '@mui/icons-material/Add';
-import { IssueIcon } from './TaskCard';
+import {IssueIcon} from './TaskCard';
 import StartSprint from '../popup/StartSprint';
 import CompleteSprint from '../popup/CompleteSprint';
-import { useLocation } from 'react-router-dom';
+import {useLocation} from 'react-router-dom';
 import axios from 'axios';
-import { AuthContext } from 'src/Context/AuthProvider';
+import {AuthContext} from 'src/Context/AuthProvider';
 
 const columnsFromBackend = [
   {
@@ -76,7 +71,7 @@ const AccordionDetails = styled(MuiAccordionDetails)(({theme}) => ({
   padding: theme.spacing(2),
 }));
 
-function TaskList({hide, vals, fil, setFil, srtVal, srt, setSrt, input}) {
+function TaskList({hide, me, vals, fil, setFil, srtVal, srt, setSrt, input}) {
   const location = useLocation();
   const pId = location.pathname.split('/')[2];
   const {
@@ -105,7 +100,7 @@ function TaskList({hide, vals, fil, setFil, srtVal, srt, setSrt, input}) {
 
   const fetchSprintsData = async () => {
     try {
-      const res = await axios.get(`http://localhost:8800/sprints/${pId}`);
+      const res = await axios.get(`/sprints/${pId}`);
       setColumns([...res.data, ...columns]);
       setTriggerSprint(false);
       // console.log(res.data);
@@ -116,7 +111,7 @@ function TaskList({hide, vals, fil, setFil, srtVal, srt, setSrt, input}) {
 
   const fetchIssuesData = async () => {
     try {
-      const res = await axios.get(`http://localhost:8800/issues/${pId}`);
+      const res = await axios.get(`/issues/${pId}`);
       setIssues([...res.data]);
       setTempIssues(res.data);
       setTriggerIssue(false);
@@ -129,7 +124,7 @@ function TaskList({hide, vals, fil, setFil, srtVal, srt, setSrt, input}) {
   const updateIssue = async (cId, id, status, destination, source, pId) => {
     // console.log('$$$$$$$$$$$$$$$', status);
     try {
-      const res = await axios.put(`http://localhost:8800/issue/${id}`, {
+      const res = await axios.put(`/issue/${id}`, {
         cId: cId,
         status: status,
         destination: destination,
@@ -158,7 +153,7 @@ function TaskList({hide, vals, fil, setFil, srtVal, srt, setSrt, input}) {
   const addIssue = async (event, columnId) => {
     try {
       if (event.target.value !== '') {
-        const res = await axios.post('http://localhost:8800/issue', {
+        const res = await axios.post('/issue', {
           ...issue,
           createTime: new Date().toISOString().slice(0, 19).replace('T', ' '),
           cycleId: columnId,
@@ -178,7 +173,7 @@ function TaskList({hide, vals, fil, setFil, srtVal, srt, setSrt, input}) {
   const filterIssue = async () => {
     setFil(false);
     try {
-      const res = await axios.post(`http://localhost:8800/filter/${pId}`, vals);
+      const res = await axios.post(`/filter/${pId}`, vals);
       setIssues([...res.data]);
       setTempIssues(res.data);
       setTriggerIssue(false);
@@ -191,7 +186,7 @@ function TaskList({hide, vals, fil, setFil, srtVal, srt, setSrt, input}) {
   const sortIssue = async () => {
     setSrt(false);
     try {
-      const res = await axios.post(`http://localhost:8800/sort/${pId}`, {
+      const res = await axios.post(`/sort/${pId}`, {
         sort: srtVal,
       });
       setIssues([...res.data]);
@@ -359,6 +354,23 @@ function TaskList({hide, vals, fil, setFil, srtVal, srt, setSrt, input}) {
 
                             {issues.filter((x) => {
                               return (
+                                x.issuestatus === 'Testing' &&
+                                x.cycleId === column.id
+                              );
+                            }).length > 0 ? (
+                              <span className="px-1.5 py-1 rounded-xl text-white bg-testing-color my-10 mr-1 text-xs">
+                                {issues
+                                  .filter((x) => {
+                                    return x.issuestatus == 'Done';
+                                  })
+                                  .reduce((sum, a) => sum + a.estimatePoint, 0)}
+                              </span>
+                            ) : (
+                              <></>
+                            )}
+
+                            {issues.filter((x) => {
+                              return (
                                 x.issuestatus === 'Done' &&
                                 x.cycleId === column.id
                               );
@@ -429,45 +441,51 @@ function TaskList({hide, vals, fil, setFil, srtVal, srt, setSrt, input}) {
                                   })
                                   .map((issue, index) => {
                                     return (
-                                      <Draggable
-                                        key={issue.id}
-                                        draggableId={issue.id?.toString()}
-                                        index={index}
-                                      >
-                                        {(provided, snapshot) => {
-                                          return (
-                                            <Box
-                                              ref={provided.innerRef}
-                                              {...provided.draggableProps}
-                                              {...provided.dragHandleProps}
-                                              className="select-none h-10 mb-0.5 text-sm"
-                                              sx={{
-                                                borderRadius: 1,
-                                                backgroundColor:
-                                                  snapshot.isDragging
-                                                    ? '#D6D6D6'
-                                                    : '#00000000',
-                                                color: 'black',
-                                                ...provided.draggableProps
-                                                  .style,
-                                                paddingTop: '8px',
-                                                paddingBottom: '8px',
-                                                opacity: snapshot.isDragging
-                                                  ? 0.8
-                                                  : 1,
-                                                '&:hover': {
-                                                  backgroundColor: '#ddd',
-                                                },
-                                              }}
-                                            >
-                                              <TaskCard
-                                                issue={issue}
-                                                setTrigger={setTriggerIssue}
-                                              />
-                                            </Box>
-                                          );
-                                        }}
-                                      </Draggable>
+                                      <div>
+                                        {!me || issue.assigneeId === uid ? (
+                                          <Draggable
+                                            key={issue.id}
+                                            draggableId={issue.id?.toString()}
+                                            index={index}
+                                          >
+                                            {(provided, snapshot) => {
+                                              return (
+                                                <Box
+                                                  ref={provided.innerRef}
+                                                  {...provided.draggableProps}
+                                                  {...provided.dragHandleProps}
+                                                  className="select-none h-10 mb-0.5 text-sm"
+                                                  sx={{
+                                                    borderRadius: 1,
+                                                    backgroundColor:
+                                                      snapshot.isDragging
+                                                        ? '#D6D6D6'
+                                                        : '#00000000',
+                                                    color: 'black',
+                                                    ...provided.draggableProps
+                                                      .style,
+                                                    paddingTop: '8px',
+                                                    paddingBottom: '8px',
+                                                    opacity: snapshot.isDragging
+                                                      ? 0.8
+                                                      : 1,
+                                                    '&:hover': {
+                                                      backgroundColor: '#ddd',
+                                                    },
+                                                  }}
+                                                >
+                                                  <TaskCard
+                                                    issue={issue}
+                                                    setTrigger={setTriggerIssue}
+                                                  />
+                                                </Box>
+                                              );
+                                            }}
+                                          </Draggable>
+                                        ) : (
+                                          <></>
+                                        )}
+                                      </div>
                                     );
                                   })}
                                 {provided.placeholder}

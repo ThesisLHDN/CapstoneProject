@@ -67,10 +67,7 @@ function ProjectSetting() {
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.put(
-        `http://localhost:8800/project/${project.id}`,
-        project,
-      );
+      const res = await axios.put(`/project/${project.id}`, project);
       // console.log(workspace);
       // console.log(res);
       setRename(false);
@@ -82,7 +79,7 @@ function ProjectSetting() {
 
   const getLastestWorkspace = async () => {
     try {
-      const res = await axios.get(`http://localhost:8800/lastworkspace/${uid}`);
+      const res = await axios.get(`/lastworkspace/${uid}`);
       navigate(`/workspace-setting/${res.data.id}?user=${uid}`);
     } catch (err) {
       console.log(err);
@@ -92,9 +89,7 @@ function ProjectSetting() {
   const handleDelete = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.delete(
-        `http://localhost:8800/project/${project.id}`,
-      );
+      const res = await axios.delete(`/project/${project.id}`);
       deleteDocument('projects', `${project.id}`);
       console.log(res);
       getLastestWorkspace();

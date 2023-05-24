@@ -83,7 +83,7 @@ function WorkspaceSetting() {
 
   const fetchWorkspace = async () => {
     try {
-      const res = await axios.get(`http://localhost:8800/workspace/${wsId}`);
+      const res = await axios.get(`/workspace/${wsId}`);
       setWorkspace(res.data);
     } catch (err) {
       console.log(err);
@@ -105,10 +105,7 @@ function WorkspaceSetting() {
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.put(
-        `http://localhost:8800/workspace/${wsId}`,
-        workspace,
-      );
+      const res = await axios.put(`/workspace/${wsId}`, workspace);
       setRename(false);
       setChangeDescription(false);
     } catch (err) {
@@ -122,7 +119,7 @@ function WorkspaceSetting() {
 
   const getLastestWorkspace = async () => {
     try {
-      const res = await axios.get(`http://localhost:8800/lastworkspace/${uid}`);
+      const res = await axios.get(`/lastworkspace/${uid}`);
       navigate(`/workspace-setting/${res.data.id}?user=${uid}`);
     } catch (err) {
       console.log(err);
@@ -132,7 +129,7 @@ function WorkspaceSetting() {
   const deleteWorkspaceHandler = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.delete(`http://localhost:8800/workspace/${wsId}`);
+      const res = await axios.delete(`/workspace/${wsId}`);
       console.log(res);
       getLastestWorkspace();
     } catch (err) {

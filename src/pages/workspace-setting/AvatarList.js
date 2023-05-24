@@ -44,7 +44,7 @@ function ImageIndividual({member, workspace, uid}) {
     e.preventDefault();
     try {
       const res = await axios.delete(
-        `http://localhost:8800/wsmember/${member.id}?wsId=${workspace.id}`,
+        `/wsmember/${member.id}?wsId=${workspace.id}`,
       );
       window.location.reload();
     } catch (err) {

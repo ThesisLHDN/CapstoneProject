@@ -21,7 +21,7 @@ function TagsInput(props) {
 
   const createTag = async (tagname) => {
     try {
-      await axios.post('http://localhost:8800/tag', {
+      await axios.post('/tag', {
         tagname: tagname,
         issueId: props.issueId,
       });
@@ -32,9 +32,7 @@ function TagsInput(props) {
 
   const deleteTag = async (tagname) => {
     try {
-      await axios.delete(
-        `http://localhost:8800/tag/${props.issueId}?name=${tagname}`,
-      );
+      await axios.delete(`/tag/${props.issueId}?name=${tagname}`);
     } catch (err) {
       console.log(err);
     }

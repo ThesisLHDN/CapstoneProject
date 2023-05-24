@@ -1,12 +1,13 @@
-import { useContext, useEffect, useState } from 'react';
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import {useContext, useEffect, useState} from 'react';
+import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
 import Card from './card/index.js';
 import './scrum.scss';
-import { Box, Typography } from '@mui/material';
+import {Box, Typography} from '@mui/material';
 // import AddRoundedIcon from '@mui/icons-material/AddRounded';
 // import {colorHover} from 'src/style';
 import axios from 'axios';
-import { AppContext } from 'src/Context/AppProvider.js';
+import {AppContext} from 'src/Context/AppProvider.js';
+import {AuthContext} from 'src/Context/AuthProvider.js';
 
 const columns = [
   {
@@ -19,21 +20,26 @@ const columns = [
   },
   {
     id: '3',
+    title: 'Testing',
+  },
+  {
+    id: '4',
     title: 'Done',
   },
 ];
 
-function Scrum({sprint, vals, fil, setFil, srtVal, srt, setSrt, input}) {
+function Scrum({me, sprint, vals, fil, setFil, srtVal, srt, setSrt, input}) {
   const [issues, setIssues] = useState([]);
   const [tempIssues, setTempIssues] = useState([]);
   const [triggerBoard, setTriggerBoard] = useState(false);
   const {project} = useContext(AppContext);
+  const {
+    user: {uid},
+  } = useContext(AuthContext);
 
   const fetchIssuesData = async () => {
     try {
-      const res = await axios.get(
-        `http://localhost:8800/sprintissue/${sprint.id}`,
-      );
+      const res = await axios.get(`/sprintissue/${sprint.id}`);
       setIssues(res.data);
       setTempIssues(res.data);
     } catch (err) {
@@ -44,7 +50,7 @@ function Scrum({sprint, vals, fil, setFil, srtVal, srt, setSrt, input}) {
 
   const updateIssue = async (cId, id, status, startDate, dueDate) => {
     try {
-      const res = await axios.put(`http://localhost:8800/issue/${id}`, {
+      const res = await axios.put(`/issue/${id}`, {
         cId: cId,
         status: status,
         startDate: new Date(startDate)
@@ -121,7 +127,7 @@ function Scrum({sprint, vals, fil, setFil, srtVal, srt, setSrt, input}) {
     setFil(false);
     try {
       const res = await axios.post(
-        `http://localhost:8800/filter/${project.id}?sprint=${sprint.id}`,
+        `/filter/${project.id}?sprint=${sprint.id}`,
         vals,
       );
       setIssues([...res.data]);
@@ -134,12 +140,9 @@ function Scrum({sprint, vals, fil, setFil, srtVal, srt, setSrt, input}) {
   const sortIssue = async () => {
     setSrt(false);
     try {
-      const res = await axios.post(
-        `http://localhost:8800/sort/${project.id}?sprint=${sprint.id}`,
-        {
-          sort: srtVal,
-        },
-      );
+      const res = await axios.post(`/sort/${project.id}?sprint=${sprint.id}`, {
+        sort: srtVal,
+      });
       setIssues([...res.data]);
       setTempIssues(res.data);
     } catch (err) {
@@ -206,7 +209,7 @@ function Scrum({sprint, vals, fil, setFil, srtVal, srt, setSrt, input}) {
                               ? '#ccf2ff'
                               : '#e8e8e8',
                             padding: 8,
-                            width: 300,
+                            width: '19vw',
                             minHeight: 500,
                             borderRadius: 5,
                           }}
@@ -229,32 +232,38 @@ function Scrum({sprint, vals, fil, setFil, srtVal, srt, setSrt, input}) {
                             })
                             .map((issue, index) => {
                               return (
-                                <Draggable
-                                  key={issue.id}
-                                  draggableId={issue.id?.toString()}
-                                  index={index}
-                                >
-                                  {(provided, snapshot) => {
-                                    return (
-                                      <Box
-                                        ref={provided.innerRef}
-                                        {...provided.draggableProps}
-                                        {...provided.dragHandleProps}
-                                        style={{
-                                          ...provided.draggableProps.style,
-                                          userSelect: 'none',
-                                          margin: '0 0 8px 0',
-                                          minHeight: '50px',
-                                          opacity: snapshot.isDragging
-                                            ? '0.7'
-                                            : '1',
-                                        }}
-                                      >
-                                        <Card issue={issue} />
-                                      </Box>
-                                    );
-                                  }}
-                                </Draggable>
+                                <div>
+                                  {!me || issue.assigneeId === uid ? (
+                                    <Draggable
+                                      key={issue.id}
+                                      draggableId={issue.id?.toString()}
+                                      index={index}
+                                    >
+                                      {(provided, snapshot) => {
+                                        return (
+                                          <Box
+                                            ref={provided.innerRef}
+                                            {...provided.draggableProps}
+                                            {...provided.dragHandleProps}
+                                            style={{
+                                              ...provided.draggableProps.style,
+                                              userSelect: 'none',
+                                              margin: '0 0 8px 0',
+                                              minHeight: '50px',
+                                              opacity: snapshot.isDragging
+                                                ? '0.7'
+                                                : '1',
+                                            }}
+                                          >
+                                            <Card issue={issue} />
+                                          </Box>
+                                        );
+                                      }}
+                                    </Draggable>
+                                  ) : (
+                                    <></>
+                                  )}
+                                </div>
                               );
                             })}
                           {provided.placeholder}

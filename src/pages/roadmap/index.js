@@ -1,18 +1,13 @@
-import { useState, useEffect, useContext } from 'react';
+import {useState, useEffect, useContext} from 'react';
 import 'src/App.scss';
-import {
-  Typography,
-  Breadcrumbs,
-  Link, Box,
-  Grid
-} from '@mui/material';
+import {Typography, Breadcrumbs, Link, Box, Grid} from '@mui/material';
 import Gantt from './Gantt';
 import Toolbar from './toolbar';
-import { color } from 'src/style';
-import { useLocation } from 'react-router-dom';
+import {color} from 'src/style';
+import {useLocation} from 'react-router-dom';
 import axios from 'axios';
-import { AppContext } from 'src/Context/AppProvider';
-import { AuthContext } from 'src/Context/AuthProvider';
+import {AppContext} from 'src/Context/AppProvider';
+import {AuthContext} from 'src/Context/AuthProvider';
 
 // import Filter from 'src/components/Filter';
 // import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
@@ -42,7 +37,7 @@ function RoadMap() {
 
   const fetchIssuesData = async () => {
     try {
-      const res = await axios.get(`http://localhost:8800/issues/${pId}`);
+      const res = await axios.get(`/issues/${pId}`);
       // console.log('raw data', res);
       const data = {
         data: res.data.map((issue) => ({
@@ -67,7 +62,7 @@ function RoadMap() {
 
   const updateIssue = async (cId, id, status, startDate, dueDate) => {
     try {
-      const res = await axios.put(`http://localhost:8800/issue/${id}`, {
+      const res = await axios.put(`/issue/${id}`, {
         cId: cId,
         status: status,
         startDate: startDate,

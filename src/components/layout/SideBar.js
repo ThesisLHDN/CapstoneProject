@@ -57,7 +57,7 @@ function SideBar(props) {
 
   const fetchWorkspacesData = async () => {
     try {
-      const res = await axios.get(`http://localhost:8800/workspaces${user}`);
+      const res = await axios.get(`/workspaces${user}`);
       setWorkspaces(res.data);
     } catch (err) {
       console.log(err);
@@ -66,12 +66,12 @@ function SideBar(props) {
 
   const fetchProjectData = async () => {
     try {
-      const res = await axios.get(`http://localhost:8800/project/${pId}`);
+      const res = await axios.get(`/project/${pId}`);
       setProject(res.data);
-      setChar(res.data.pname.charAt(0));
     } catch (err) {
       console.log(err);
     }
+    setChar(project.pname?.charAt(0));
   };
 
   useEffect(() => {
@@ -127,7 +127,7 @@ function SideBar(props) {
               }}
               className="text-4xl font-extrabold px-3 py-0.5 rounded text-white"
             >
-              {char.toUpperCase()}
+              {char?.toUpperCase()}
             </p>
             <p className="ml-3 2xl:text-base xl:text-sm py-3 font-semibold text-green-tx overflow-hidden truncate">
               {project.pname}
