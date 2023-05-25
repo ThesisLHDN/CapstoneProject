@@ -1,22 +1,13 @@
-import { useContext, useState } from 'react';
-import { color } from 'src/style';
-import { Typography, Grid, Breadcrumbs, Link } from '@mui/material';
+import {useContext, useEffect, useState} from 'react';
+import {color} from 'src/style';
+import {Typography, Grid, Breadcrumbs, Link} from '@mui/material';
 import Workload from 'src/components/charts/Workload';
 import SprintBurndown from 'src/components/charts/SprintBurndown';
-import EpicCompletion from 'src/components/charts/EpicCompletion';
-import DelayPrediction from 'src/components/charts/DelayPrediction';
-import Bugs from 'src/components/charts/Bugs';
 import MemberManagement from 'src/components/charts/MemberManagement';
-import {
-  WorkloadData,
-  CompletionData,
-  BurndownData,
-  BugsData,
-  DelayData,
-  PerformceData,
-} from '../../components/charts/Data';
-import { AppContext } from 'src/Context/AppProvider';
-import { AuthContext } from 'src/Context/AuthProvider';
+import {BurndownData, PerformceData} from '../../components/charts/Data';
+import {AppContext} from 'src/Context/AppProvider';
+import {AuthContext} from 'src/Context/AuthProvider';
+import axios from 'axios';
 
 function convertDate(d) {
   const date = new Date(d);
@@ -24,29 +15,51 @@ function convertDate(d) {
 }
 
 function Dashboard() {
+  // Context
   const {
     user: {uid},
   } = useContext(AuthContext);
   const {project} = useContext(AppContext);
-  const [workloadData, setWorkloadData] = useState({
-    labels: WorkloadData.map((data) => data.label),
-    datasets: [
-      {
-        label: 'Amount',
-        data: WorkloadData.map((data) => data.numbers),
-        backgroundColor: ['#F1F1F1', '#054077', '#E83800', '#00980F'],
-        borderWidth: 0,
-      },
-    ],
-  });
 
+  // Handle Workload data
+  const [workloadScope, setWorkloadScope] = useState('Sprint');
+  const WorkloadData = {'To do': 0, 'In progress': 0, Testing: 0, Done: 0};
+  const [workloadData, setWorkloadData] = useState({
+    labels: [],
+    datasets: [{}],
+  });
+  const fetchWorkloadData = async (pId, scope) => {
+    try {
+      const res =
+        scope == 'Project'
+          ? await axios.get(`/workload/${pId}`)
+          : await axios.get(`/workload/${pId}?sprint=${true}`);
+      for (let i = 0; i < 4; i++)
+        WorkloadData[res.data[i]?.issuestatus] = res.data[i]?.numbers;
+      setWorkloadData({
+        labels: Object.keys(WorkloadData).slice(0, 4),
+        datasets: [
+          {
+            label: 'Amount',
+            data: Object.values(WorkloadData),
+            backgroundColor: ['#EC6F28', '#006BA7', '#EC8E00', '#009606'],
+            borderWidth: 0,
+          },
+        ],
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // Handle Burndown data
   const [burndownData, setBurndownData] = useState({
     labels: BurndownData['Remaining Values'].map((data) =>
       convertDate(data.date),
     ),
     datasets: [
       {
-        label: 'Remaining Values',
+        label: 'Remaining Points',
         data: BurndownData['Remaining Values'].map((data) => data.estimate),
         backgroundColor: 'red',
         borderColor: 'red',
@@ -62,42 +75,14 @@ function Dashboard() {
     ],
   });
 
-  const [bugsData, setBugsData] = useState({
-    labels: BugsData['Epic 01'].map((data) => data.date),
-    datasets: [
-      {
-        label: 'Epic 01',
-        data: BugsData['Epic 01'].map((data) => data.bugs),
-        backgroundColor: '#04BF00',
-      },
-      {
-        label: 'Epic 02',
-        data: BugsData['Epic 02'].map((data) => data.bugs),
-        backgroundColor: '#59D44E',
-      },
-      {
-        label: 'Epic 03',
-        data: BugsData['Epic 03'].map((data) => data.bugs),
-        backgroundColor: '#A4E7AB',
-      },
-    ],
-  });
-
-  const [delayData, setDelayData] = useState({
-    labels: DelayData.map((data) => data.id),
-    datasets: [
-      {
-        label: 'Delay',
-        data: DelayData.map((data) => data.delay),
-        backgroundColor: ['#03AA00', '#E9B500', '#E71515', '#E87D00'],
-        borderWidth: 0,
-        borderRadius: Number.MAX_VALUE,
-      },
-    ],
-  });
-
-  const [completionData, setCompletionData] = useState(CompletionData);
+  // Handle Performance data
   const [performanceData, setPerformanceData] = useState(PerformceData);
+
+  // Just useEffect
+  useEffect(() => {
+    console.log(workloadScope);
+    fetchWorkloadData(project.id, workloadScope);
+  }, [project.id, workloadScope]);
 
   return (
     <div>
@@ -145,10 +130,7 @@ function Dashboard() {
       <Grid container sx={{marginTop: 2}}>
         <Grid item xs={6}>
           <Grid item sx={{paddingRight: 1, paddingBottom: 2}}>
-            <Workload chartData={workloadData} />
-          </Grid>
-          <Grid item sx={{paddingLeft: 1, paddingBottom: 2}}>
-            <DelayPrediction chartData={delayData} />
+            <Workload chartData={workloadData} setScope={setWorkloadScope} />
           </Grid>
         </Grid>
 
@@ -160,29 +142,6 @@ function Dashboard() {
             <MemberManagement data={performanceData} />
           </Grid>
         </Grid>
-        {/* <Grid item xs={6}>
-          <Grid item sx={{paddingRight: 1, paddingBottom: 2}}>
-            <Workload chartData={workloadData} />
-          </Grid>
-          <Grid item sx={{paddingRight: 1, paddingBottom: 2}}>
-            <EpicCompletion chartData={completionData} />
-          </Grid>
-          <Grid item sx={{paddingRight: 1, paddingBottom: 2}}>
-            <Bugs chartData={bugsData} />
-          </Grid>
-        </Grid>
-
-        <Grid item xs={6}>
-          <Grid item sx={{paddingLeft: 1, paddingBottom: 2}}>
-            <SprintBurndown chartData={burndownData} />
-          </Grid>
-          <Grid item sx={{paddingLeft: 1, paddingBottom: 2}}>
-            <DelayPrediction chartData={delayData} />
-          </Grid>
-          <Grid item sx={{paddingLeft: 1, paddingBottom: 2}}>
-            <MemberManagement data={performanceData} />
-          </Grid>
-        </Grid> */}
       </Grid>
     </div>
   );
