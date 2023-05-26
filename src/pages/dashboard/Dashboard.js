@@ -4,15 +4,10 @@ import {Typography, Grid, Breadcrumbs, Link} from '@mui/material';
 import Workload from 'src/components/charts/Workload';
 import SprintBurndown from 'src/components/charts/SprintBurndown';
 import MemberManagement from 'src/components/charts/MemberManagement';
-import {BurndownData, PerformceData} from '../../components/charts/Data';
+import {PerformceData} from '../../components/charts/Data';
 import {AppContext} from 'src/Context/AppProvider';
 import {AuthContext} from 'src/Context/AuthProvider';
 import axios from 'axios';
-
-function convertDate(d) {
-  const date = new Date(d);
-  return date.getDate() + ' ' + date.toLocaleString('en-us', {month: 'short'});
-}
 
 function Dashboard() {
   // Context
@@ -34,7 +29,7 @@ function Dashboard() {
         scope == 'Project'
           ? await axios.get(`/workload/${pId}`)
           : await axios.get(`/workload/${pId}?sprint=${true}`);
-      for (let i = 0; i < 4; i++)
+      for (let i = 0; i < res.data.length; i++)
         WorkloadData[res.data[i]?.issuestatus] = res.data[i]?.numbers;
       setWorkloadData({
         labels: Object.keys(WorkloadData).slice(0, 4),
@@ -54,34 +49,59 @@ function Dashboard() {
 
   // Handle Burndown data
   const [burndownData, setBurndownData] = useState({
-    labels: BurndownData['Remaining Values'].map((data) =>
-      convertDate(data.date),
-    ),
+    labels: [],
     datasets: [
       {
         label: 'Remaining Points',
-        data: BurndownData['Remaining Values'].map((data) => data.estimate),
+        data: [],
         backgroundColor: 'red',
         borderColor: 'red',
         borderWidth: 2,
       },
       {
         label: 'Guidelines',
-        data: BurndownData['Guidelines'].map((data) => data.estimate),
+        data: [],
         backgroundColor: 'gray',
         borderColor: 'gray',
         borderWidth: 2,
       },
     ],
   });
+  const fetchBurndownData = async (pId) => {
+    try {
+      const res = await axios.get(`/burndown/${pId}`);
+      console.log('ZZZZZZZZZZ', res.data);
+      setBurndownData({
+        labels: res.data[0],
+        datasets: [
+          {
+            label: 'Remaining Points',
+            data: res.data[2],
+            backgroundColor: 'red',
+            borderColor: 'red',
+            borderWidth: 2,
+          },
+          {
+            label: 'Guidelines',
+            data: res.data[1],
+            backgroundColor: 'gray',
+            borderColor: 'gray',
+            borderWidth: 2,
+          },
+        ],
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   // Handle Performance data
   const [performanceData, setPerformanceData] = useState(PerformceData);
 
   // Just useEffect
   useEffect(() => {
-    console.log(workloadScope);
     fetchWorkloadData(project.id, workloadScope);
+    fetchBurndownData(project.id);
   }, [project.id, workloadScope]);
 
   return (

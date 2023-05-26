@@ -1,39 +1,3 @@
-export const BurndownData = {
-  'Remaining Values': [
-    {date: '2022-10-26', estimate: 36},
-    {date: '2022-10-27', estimate: 29},
-    {date: '2022-10-28', estimate: 0},
-    {date: '2022-10-29', estimate: 15},
-    {date: '2022-10-30', estimate: 15},
-    {date: '2022-10-31', estimate: 15},
-    {date: '2022-11-01', estimate: 15},
-    {date: '2022-11-02', estimate: 15},
-    {date: '2022-11-03', estimate: 15},
-    {date: '2022-11-04', estimate: 15},
-    {date: '2022-11-05', estimate: 15},
-    {date: '2022-11-06', estimate: 15},
-    {date: '2022-11-07', estimate: 15},
-    {date: '2022-11-08', estimate: 15},
-  ],
-  Guidelines: [
-    {date: '2022-10-26', estimate: 36},
-    {date: '2022-10-26', estimate: (36 * 13) / 14},
-    {date: '2022-10-27', estimate: (36 * 12) / 14},
-    {date: '2022-10-28', estimate: (36 * 11) / 14},
-    {date: '2022-10-29', estimate: (36 * 10) / 14},
-    {date: '2022-10-30', estimate: (36 * 9) / 14},
-    {date: '2022-10-31', estimate: (36 * 8) / 14},
-    {date: '2022-11-01', estimate: (36 * 7) / 14},
-    {date: '2022-11-02', estimate: (36 * 6) / 14},
-    {date: '2022-11-03', estimate: (36 * 5) / 14},
-    {date: '2022-11-04', estimate: (36 * 4) / 14},
-    {date: '2022-11-05', estimate: (36 * 3) / 14},
-    {date: '2022-11-06', estimate: (36 * 2) / 14},
-    {date: '2022-11-07', estimate: (36 * 1) / 14},
-    {date: '2022-11-08', estimate: 0},
-  ],
-};
-
 export const PerformceData = [
   {
     id: 1,

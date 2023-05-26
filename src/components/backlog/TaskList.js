@@ -361,7 +361,7 @@ function TaskList({hide, me, vals, fil, setFil, srtVal, srt, setSrt, input}) {
                               <span className="px-1.5 py-1 rounded-xl text-white bg-testing-color my-10 mr-1 text-xs">
                                 {issues
                                   .filter((x) => {
-                                    return x.issuestatus == 'Done';
+                                    return x.issuestatus == 'Testing';
                                   })
                                   .reduce((sum, a) => sum + a.estimatePoint, 0)}
                               </span>

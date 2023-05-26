@@ -68,7 +68,9 @@ function Profile() {
     }
     return;
   };
-
+  {
+    console.log('AAAAAAAAAAAAAAAA', photoURL);
+  }
   return (
     <div style={{marginLeft: '-15vw'}}>
       <Typography variant="h5" sx={{color: color.green03, fontWeight: 700}}>
