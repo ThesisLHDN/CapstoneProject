@@ -149,7 +149,7 @@ function LeftIssueDetail({issue, setIssue, trigger, setTrigger}) {
       console.log('Updating');
       if (file) {
         console.log(file);
-        let refPath = `documents/${new Date().getTime() + file.name}`;
+        let refPath = `attachments/${new Date().getTime() + file.name}`;
         const fileRef = ref(storage, refPath);
         const upLoadTask = uploadBytesResumable(fileRef, file);
         upLoadTask.on(

@@ -41,7 +41,7 @@ function MemberList() {
 
   useEffect(() => {
     fetchProjectMember();
-  }, [members]);
+  }, []);
 
   // const open = Boolean(anchorEl);
   // const id = open ? 'simple-popper' : undefined;

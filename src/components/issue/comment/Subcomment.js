@@ -1,10 +1,7 @@
-import {useMemo} from 'react';
 import CommentForm from './CommentForm';
 import moment from 'moment/moment';
 
-import {Avatar, Typography} from '@mui/material';
-
-// import {addDocument, setDocument} from 'src/firebase/services';
+import { Avatar, Typography } from '@mui/material';
 
 const Comment = ({
   issueId,
@@ -29,7 +26,7 @@ const Comment = ({
     activeComment.type === 'replying';
   const canEdit = currentUserId === comment.authorId;
   const canDelete = currentUserId === comment.authorId;
-  
+
   var timepassed = '';
   if (comment.createdAt) {
     const start = moment(comment.createdAt.toDate());
@@ -100,11 +97,7 @@ const Comment = ({
                   {canDelete && (
                     <div
                       className="mr-2 hover:underline font-bold"
-                      onClick={() =>
-                        subcomment
-                          ? deleteComment(comment.id, parentId)
-                          : deleteComment(comment.id)
-                      }
+                      onClick={() => deleteComment(comment)}
                     >
                       Delete
                     </div>

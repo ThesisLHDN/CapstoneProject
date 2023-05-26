@@ -70,7 +70,7 @@ function AddMember(props) {
         </Typography>
         <TextField
           size="small"
-          placeholder="eg. dangnguyen@gmail.com"
+          placeholder="e.g. dangnguyen@gmail.com"
           sx={{
             width: '100%',
             '& *': {fontSize: 14},

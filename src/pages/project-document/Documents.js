@@ -84,7 +84,7 @@ function Document({parentId}) {
   const deleteFileHandler = (confirmed) => {
     const path = `projects/${selectedProjectId}/documents`;
 
-    deleteDocument(path, selectedFile.id);
+    deleteDocument(path, selectedFile);
 
     setOpenDeletePopup(false);
     setSelectedFile({name: 'Untitled', body: ''});

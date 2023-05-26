@@ -90,7 +90,7 @@ function ProjectSetting() {
     e.preventDefault();
     try {
       const res = await axios.delete(`/project/${project.id}`);
-      deleteDocument('projects', `${project.id}`);
+      deleteDocument('projects', {id: project.id});
       console.log(res);
       getLastestWorkspace();
     } catch (err) {

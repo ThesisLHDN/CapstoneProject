@@ -1,20 +1,56 @@
 import {useContext, lazy, Suspense, useMemo} from 'react';
 
 import ChatSideBar from './ChatSideBar';
-// import ChatWindow from './ChatWindow';
+import ChatWindow from './ChatWindow';
 
 import {ChatContext} from 'src/Context/ChatProvider';
 
 import {Grid, Paper, Dialog} from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
+import {useFirestore} from 'src/hooks/useFirestore';
 
-const ChatWindow = lazy(() => import('./ChatWindow'));
+// const ChatWindow = lazy(() => import('./ChatWindow'));
 
 function ChatRoom({projectId, openChat, onCloseChat}) {
-  const {rooms} = useContext(ChatContext);
+  const {rooms, selectedRoom, roomMembers, currentRoomMembers, uid} =
+    useContext(ChatContext);
+
+  const messagesCondition = useMemo(
+    () => ({
+      fieldName: 'roomId',
+      operator: '==',
+      compareValue: selectedRoom ? selectedRoom.id : '',
+      sort: 'desc',
+    }),
+    [selectedRoom],
+  );
+
+  const messages = useFirestore('messages', messagesCondition);
+  if (messages && roomMembers) {
+    var newMess = messages.map((message) => {
+      return {
+        author: roomMembers.find((member) => member.uid === message.authorId),
+        ...message,
+      };
+    });
+  }
+
   const ChatSidebar = useMemo(
-    () => <ChatSideBar projectId={projectId}></ChatSideBar>,
-    [projectId],
+    () => <ChatSideBar data={rooms} projectId={projectId}></ChatSideBar>,
+    [rooms],
+  );
+
+  const ChatContent = useMemo(
+    () => (
+      <ChatWindow
+        selectedRoom={selectedRoom}
+        newMess={newMess}
+        roomMembers={roomMembers}
+        currentRoomMembers={currentRoomMembers}
+        uid={uid}
+      />
+    ),
+    [newMess],
   );
 
   return (
@@ -61,7 +97,7 @@ function ChatRoom({projectId, openChat, onCloseChat}) {
             </Grid>
             <Grid item xs={8} sx={{height: '100%'}}>
               <Paper elevation={3} sx={{height: '100%', borderRadius: 0}}>
-                <ChatWindow projectId={projectId} />
+                {ChatContent}
               </Paper>
             </Grid>
           </Grid>

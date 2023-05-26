@@ -96,39 +96,28 @@ const deleteCollection = async (collectionPath, condition = {}) => {
   }
 };
 
-// const bulkDelete = async (collectionPath, condition = {}) => {
-//   console.log('delete bulk with condition:', collectionPath, condition);
-//   const collRef = collection(db, collectionPath);
-//   const q =
-//     collectionPath === 'rooms'
-//       ? query(
-//           collection(db, 'messages'),
-//           where(
-//             condition.fieldName,
-//             condition.operator,
-//             condition.compareValue,
-//           ),
-//         )
-//       : query(collRef, limit(batchSize));
-//   while (true) {
-//     const qBatch = query(q, limit(batchSize));
-//     const batchSnap = await getDocs(qBatch);
-//     if (batchSnap.length === 0) {
-//       break;
-//     }
-//     batchSnap.forEach((snap) => {
-//       console.log('deletesnap', snap.id);
-//       deleteDoc(doc(db, collectionPath, `${snap.id}`));
-//     });
-//   }
-// };
+const deleteFromStorage = (path) => {
+  if (path) {
+    const desertRef = ref(storage, path);
+    // console.log('document path', document.data().storagePath);
+    deleteObject(desertRef)
+      .then(() => {
+        console.log('Deleted: ', path);
+      })
+      .catch((error) => {
+        console.log('Error deleted: ', path, error);
+      });
+  }
+  return false;
+};
 
-const deleteDocument = async (collectionPath, id, data = {}) => {
+const deleteDocument = async (collectionPath, data) => {
+  console.log(data);
+  const id = `${data.id}`;
   console.log('delete', collectionPath, id);
   try {
     const split = collectionPath.split('/');
     const last = split[split.length - 1];
-    // console.log('last', last, collectionPath);
     switch (last) {
       case 'projects':
         deleteCollection(`projects/${id}/documents`);
@@ -136,51 +125,34 @@ const deleteDocument = async (collectionPath, id, data = {}) => {
       case 'issues':
         deleteCollection(`issues/${id}/comments`);
         deleteCollection(`issues/${id}/replies`);
-        // TODO delete file too
+        deleteCollection(`issues/${id}/documents`);
         break;
       case 'rooms':
-        // TODO must use filter
         deleteCollection(`messages`, {
           fieldName: 'roomId',
           operator: '==',
           compareValue: `${id}`,
         });
         break;
+      case 'messages':
+        var storagePath = data.file ? data.file.storagePath : null;
+        console.log('delete nè trời', storagePath);
+        deleteFromStorage(storagePath);
+        break;
       case 'comments':
-        // const comment = await getDoc(doc(db, collectionPath, id));
-        // const desertRef = ref(storage, comment.downloadURL);
-        // deleteObject(desertRef)
-        //   .then(() => {
-        //     // File deleted successfully
-        //   })
-        //   .catch((error) => {
-        //     // Uh-oh, an error occurred!
-        //   });
+        var storagePath = data.storagePath;
+        deleteFromStorage(storagePath);
         break;
       case 'documents':
-        const docSnap = await getDoc(doc(db, collectionPath, id));
-        // console.log(document.data());
-        const {storagePath} = docSnap.data();
-        if (storagePath) {
-          const desertRef = ref(storage, storagePath);
-          // console.log('document path', document.data().storagePath);
-          deleteObject(desertRef)
-            .then(() => {
-              console.log('deleted: ', collectionPath, storagePath, id);
-              // File deleted successfully
-            })
-            .catch((error) => {
-              // Uh-oh, an error occurred!
-              console.log('deleted: ', collectionPath, storagePath, error);
-            });
-        }
+        var storagePath = data.storagePath;
+        deleteFromStorage(storagePath);
         break;
       default:
         console.log(collectionPath.split('/')[collectionPath.length - 1]);
         console.log('Cannot delete collection', collectionPath);
         break;
     }
-    const docRef = await deleteDoc(doc(db, collectionPath, id));
+    await deleteDoc(doc(db, collectionPath, id));
     console.log(`Deleted document at ${collectionPath} with id: ${id}`);
   } catch (e) {
     console.error('Error delete document: ', e);

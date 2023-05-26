@@ -1,12 +1,25 @@
-import {useContext, useState} from 'react';
+import {useMemo, useState} from 'react';
 import {color} from 'src/style';
-import {Badge, IconButton, Dialog} from '@mui/material';
+import {IconButton} from '@mui/material';
 import ChatRoundedIcon from '@mui/icons-material/ChatRounded';
 import ChatProvider from 'src/Context/ChatProvider';
 import ChatRoom from './index';
 
 function ChatButton({currentUser, projectId}) {
   const [openChat, setOpenChat] = useState(false);
+  const Chat = useMemo(
+    () => (
+      <ChatRoom
+        openChat={openChat}
+        onCloseChat={() => {
+          setOpenChat(false);
+        }}
+        currentUser={currentUser}
+        projectId={projectId}
+      />
+    ),
+    [openChat],
+  );
   return (
     <ChatProvider>
       {/* <Badge
@@ -32,14 +45,7 @@ function ChatButton({currentUser, projectId}) {
       >
         <ChatRoundedIcon sx={{width: 40, height: 40, color: color.green03}} />
       </IconButton>
-      <ChatRoom
-        openChat={openChat}
-        onCloseChat={() => {
-          setOpenChat(false);
-        }}
-        currentUser={currentUser}
-        projectId={projectId}
-      />
+      {Chat}
       {/* </Badge> */}
     </ChatProvider>
   );

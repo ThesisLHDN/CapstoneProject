@@ -1,16 +1,13 @@
-import { useState, useMemo } from 'react';
-import {
-  Typography, Paper,
-  IconButton, Box
-} from '@mui/material';
+import {useState, useMemo} from 'react';
+import {Typography, Paper, IconButton, Box} from '@mui/material';
 import 'react-datepicker/dist/react-datepicker.css';
-import { useFirestore } from 'src/hooks/useFirestore';
+import {useFirestore} from 'src/hooks/useFirestore';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
 import WarningPopup from 'src/components/popup/Warning';
 
-import { deleteDocument } from 'src/firebase/firestoreServices';
+import {deleteDocument} from 'src/firebase/firestoreServices';
 
 function Attachments({issueId, uid}) {
   const attachmentsCondition = useMemo(
@@ -32,7 +29,7 @@ function Attachments({issueId, uid}) {
     const path = `issues/${issueId}/documents`;
 
     console.log('delete', path, selectedFile);
-    deleteDocument(path, selectedFile.id);
+    deleteDocument(path, selectedFile);
 
     setSelectedFile();
     setOpenDeletePopup(false);
@@ -122,7 +119,11 @@ function Attachments({issueId, uid}) {
                       }}
                       onClick={() => {
                         setOpenDeletePopup(true);
-                        setSelectedFile({id: file.id, name: file.name});
+                        setSelectedFile({
+                          id: file.id,
+                          name: file.name,
+                          storagePath: file.storagePath,
+                        });
                       }}
                     >
                       <DeleteOutlineRoundedIcon sx={{color: '#181818'}} />

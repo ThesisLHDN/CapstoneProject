@@ -156,7 +156,7 @@ function RightIssueDetail({issue, setIssue, trigger, setTrigger}) {
                           100,
                       ),
                     )
-                  : '0'
+                  : 0
               }`}
               color="success"
               sx={{

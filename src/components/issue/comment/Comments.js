@@ -1,8 +1,8 @@
-import {useMemo, useState, useEffect} from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import CommentForm from './CommentForm';
 import Comment from './Comment';
 
-import {useFirestore} from 'src/hooks/useFirestore';
+import { useFirestore } from 'src/hooks/useFirestore';
 import {
   addDocument,
   deleteDocument,
@@ -58,12 +58,14 @@ const Comments = ({currentUser, issueId}) => {
     // });
   };
 
-  const deleteComment = (thisId, parentId = null) => {
+  const deleteComment = (comment) => {
+    const thisId = comment.id;
+    const parentId = comment.parentId;
     // TODO
     const path = parentId ? `${refPath}/replies` : `${refPath}/comments`;
 
     if (window.confirm('Are you sure you want to remove comment?')) {
-      deleteDocument(path, thisId);
+      deleteDocument(path, comment);
     }
   };
 

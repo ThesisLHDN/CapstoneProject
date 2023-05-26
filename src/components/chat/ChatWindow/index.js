@@ -32,6 +32,7 @@ import {
   deleteDocument,
 } from 'src/firebase/firestoreServices';
 import WarningPopup from 'src/components/popup/Warning';
+import InviteMember from '../InviteMember';
 
 const StyledDiv = styled(`div`)({
   padding: '12px',
@@ -43,7 +44,6 @@ const Main = styled('main', {shouldForwardProp: (prop) => prop !== 'open'})(
   ({theme, open}) => ({
     height: 'calc(100% - 70px)',
     flexGrow: 1,
-    // width: '100%',
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -90,7 +90,13 @@ const DrawerHeader = styled('div')(({theme}) => ({
   justifyContent: 'flex-start',
 }));
 
-function ChatWindow({currentUser}) {
+function ChatWindow({
+  selectedRoom,
+  newMess,
+  roomMembers,
+  currentRoomMembers,
+  uid,
+}) {
   // const messagesEndRef = useRef(
   //   document.getElementById('chat-window-messages'),
   // );
@@ -100,18 +106,17 @@ function ChatWindow({currentUser}) {
 
   const [open, setOpen] = useState(false);
   const [openRename, setOpenRename] = useState(false);
-  const {selectedRoom, roomMembers, currentRoomMembers, uid} =
-    useContext(ChatContext);
+  // const {roomMembers, currentRoomMembers, uid} = useContext(ChatContext);
 
-  const messagesCondition = useMemo(
-    () => ({
-      fieldName: 'roomId',
-      operator: '==',
-      compareValue: selectedRoom ? selectedRoom.id : '',
-      sort: 'desc',
-    }),
-    [selectedRoom],
-  );
+  // const messagesCondition = useMemo(
+  //   () => ({
+  //     fieldName: 'roomId',
+  //     operator: '==',
+  //     compareValue: selectedRoom ? selectedRoom.id : '',
+  //     sort: 'desc',
+  //   }),
+  //   [selectedRoom],
+  // );
 
   const messagesRef = React.useRef(null);
 
@@ -121,21 +126,21 @@ function ChatWindow({currentUser}) {
     });
   };
 
-  const messages = useFirestore('messages', messagesCondition);
-  if (messages && roomMembers) {
-    var newMess = messages.map((message) => {
-      return {
-        author: roomMembers.find((member) => member.uid === message.authorId),
-        ...message,
-      };
-    });
-  }
+  // const messages = useFirestore('messages', messagesCondition);
+  // if (messages && roomMembers) {
+  //   var newMess = messages.map((message) => {
+  //     return {
+  //       author: roomMembers.find((member) => member.uid === message.authorId),
+  //       ...message,
+  //     };
+  //   });
+  // }
 
   React.useEffect(() => {
     if (messagesRef.current) {
       scrollToBottom();
     }
-  }, [messages]);
+  }, [selectedRoom]);
 
   const addMemberHandler = async (email) => {
     console.log(email);
@@ -186,7 +191,7 @@ function ChatWindow({currentUser}) {
   const [mem, setMem] = useState(false);
   const deleteRoomHandler = () => {
     console.log('deleteRoomHandler');
-    deleteDocument('rooms', selectedRoom.id);
+    deleteDocument('rooms', selectedRoom);
     // Todo delete all messages
     setOpenDeleteRoom(false);
   };
@@ -336,6 +341,7 @@ function ChatWindow({currentUser}) {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
+                    py: 1,
                   }}
                 >
                   <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>
@@ -390,14 +396,23 @@ function ChatWindow({currentUser}) {
           </Typography>
         </Box>
       )}
-      <CreationPopup
+      {/* <CreationPopup
         title="Add member"
         fieldLabel={'Please enter an email'}
         open={open}
         onClose={() => setOpen(false)}
         onSubmit={addMemberHandler}
         confirmContent={'Add'}
-      ></CreationPopup>
+      ></CreationPopup> */}
+
+      <InviteMember
+        open={open}
+        onClose={() => setOpen(false)}
+        selectedRoom={selectedRoom}
+        roomMembers={roomMembers}
+        currentRoomMembers={currentRoomMembers}
+        // onSubmit={addMemberHandler}
+      ></InviteMember>
 
       <WarningPopup
         title={'Delete room'}

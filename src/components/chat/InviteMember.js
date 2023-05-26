@@ -1,21 +1,86 @@
-import {useState} from 'react';
-import {Box, Paper, Typography, Button, TextField, Dialog} from '@mui/material';
-import {color} from 'src/style';
+import { useContext, useState } from 'react';
+import { Box, Paper, Typography, Button, TextField, Dialog } from '@mui/material';
+import { color } from 'src/style';
+import { AppContext } from 'src/Context/AppProvider';
+import { updateDocument } from 'src/firebase/firestoreServices';
 
 function InviteMember({
-  title,
   onSubmit,
-  confirmContent,
-  cancelContent,
   icon,
-  fieldLabel,
-  placeholder,
   sx,
   onClose,
   open,
+  currentRoomMembers,
+  roomMembers,
+  selectedRoom,
 }) {
   const [input, setInput] = useState('');
   const [error, setError] = useState('');
+
+  const {members} = useContext(AppContext);
+  const membersEmail = members.map((mem) => mem.email);
+
+  const addMemberHandler = async (email) => {
+    console.log('email to add: ' + email);
+    const currentRoomMemEmails = currentRoomMembers.map(
+      (member) => member.email,
+    );
+    if (email) {
+      if (membersEmail.includes(email)) {
+        if (currentRoomMemEmails.includes(email)) {
+          setError('Member is already in this room');
+        } else {
+          console.log('Add member', email);
+          const memId = members.filter((member) => member.email === email)[0]
+            .id;
+          console.log(memId);
+          if (!selectedRoom.members.includes(memId)) {
+            selectedRoom.members.push(memId);
+          }
+          if (!selectedRoom.allmembers.includes(memId)) {
+            selectedRoom.allmembers.push(memId);
+          }
+          updateDocument('rooms', selectedRoom.id, {
+            members: selectedRoom.members,
+            allmembers: selectedRoom.allmembers,
+          });
+          setError();
+        }
+      } else {
+        setError('Member not found in project');
+      }
+    } else {
+      setError('Please enter email');
+    }
+    // TODO check member in project
+    // TODO check member not in chat
+    // console.log(email);
+    // // TODO validate
+    // const newMemberList = await getDocumentWithCondition('users', {
+    //   fieldName: 'email',
+    //   operator: '==',
+    //   compareValue: email,
+    // });
+
+    // console.log(newMemberList);
+    // const member = newMemberList.docs.map((member) => ({
+    //   id: member.id,
+    //   ...member.data(),
+    // }))[0];
+    // console.log(member);
+    // if (member) {
+    //   if (!(member.id in currentRoomMembers)) {
+    //     selectedRoom.members.push(member.id);
+    //     console.log('start update', member);
+    //     updateDocument('rooms', selectedRoom.id, {
+    //       members: selectedRoom.members,
+    //       allmembers: selectedRoom.members,
+    //     });
+    //   }
+    // }
+
+    // onClose();
+  };
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
@@ -75,16 +140,16 @@ function InviteMember({
             }}
           >
             {icon && ''}
-            {title ? title : 'Untitled Warning'}
+            Invite member
           </Typography>
         </Box>
 
         <Typography sx={{fontSize: 14, textAlign: 'justify'}}>
-          {fieldLabel ? fieldLabel : 'Untitled field'}
+          Please enter an email address
         </Typography>
         <TextField
           size="small"
-          placeholder={placeholder}
+          placeholder={'e.g. dangnguyen@gmail.com'}
           sx={{
             width: '100%',
             '& *': {fontSize: 14},
@@ -93,7 +158,15 @@ function InviteMember({
           onKeyPress={handleKeyPress}
         ></TextField>
         {error && (
-          <Typography variant="subtitle2" sx={{color: 'red', fontSize: '12px'}}>
+          <Typography
+            variant="subtitle2"
+            sx={{
+              color: 'red',
+              fontSize: '12px',
+              textAlign: 'center',
+              width: '100%',
+            }}
+          >
             {error}
           </Typography>
         )}
@@ -117,7 +190,7 @@ function InviteMember({
               color: '#818181',
             }}
           >
-            {cancelContent ? cancelContent : 'Cancel'}
+            Cancel
           </Button>
           <Button
             size="small"
@@ -126,9 +199,9 @@ function InviteMember({
               color: 'white',
               '&:hover': {backgroundColor: '#1BB738'},
             }}
-            onClick={() => onSubmitHandler(input)}
+            onClick={() => addMemberHandler(input)}
           >
-            {confirmContent ? confirmContent : 'Confirm'}
+            Add member
           </Button>
         </Box>
       </Paper>

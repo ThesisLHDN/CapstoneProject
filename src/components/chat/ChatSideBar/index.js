@@ -62,7 +62,7 @@ function ChatSideBar({data, projectId}) {
           >
             <Button
               variant="contained"
-              sx={{...colorHover.greenBtn, height: 36}}
+              sx={{...colorHover.greenGradBtn, height: 36}}
               endIcon={<AddRoundedIcon />}
               onClick={() => {
                 setOpen(true);

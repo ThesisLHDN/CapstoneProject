@@ -22,7 +22,6 @@ function WarningPopup({
     <Dialog onClose={handleClose} open={open}>
       <Paper
         sx={{
-          width: 300,
           p: '10px',
           display: 'flex',
           flexDirection: 'column',

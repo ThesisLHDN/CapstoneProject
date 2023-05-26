@@ -8,6 +8,7 @@ export default function ChatProvider({children}) {
   const {
     user: {uid},
   } = useContext(AuthContext);
+
   const {
     project: {id},
   } = useContext(AppContext);
@@ -58,8 +59,6 @@ export default function ChatProvider({children}) {
         selectedRoomId,
         setSelectedRoomId,
         currentRoomMembers,
-        // projectId,
-        // setProjectId,
       }}
     >
       {children}

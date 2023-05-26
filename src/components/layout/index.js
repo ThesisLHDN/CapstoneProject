@@ -1,23 +1,44 @@
-import { useContext, useMemo } from 'react';
-import { Outlet } from 'react-router-dom';
-import { Box, Grid } from '@mui/material';
+import {useContext, useMemo, useState} from 'react';
+import {Outlet} from 'react-router-dom';
+import {Box, Grid, IconButton} from '@mui/material';
 import Header from './Header';
 import WPHeader from './WPHeader';
 import SideBar from './SideBar';
-import ChatButton from 'src/components/chat/ChatButton';
+import ChatRoom from '../chat';
+import {color} from 'src/style';
+import ChatRoundedIcon from '@mui/icons-material/ChatRounded';
 
-import { AuthContext } from 'src/Context/AuthProvider';
-import { AppContext } from 'src/Context/AppProvider';
+import {AuthContext} from 'src/Context/AuthProvider';
+import {AppContext} from 'src/Context/AppProvider';
+import ChatProvider from 'src/Context/ChatProvider';
 function Layout({pf, wp}) {
   const {user} = useContext(AuthContext);
   const {
     project: {id},
   } = useContext(AppContext);
-
+  const [openChat, setOpenChat] = useState(false);
   const Chat = useMemo(
-    () => <ChatButton currentUser={user} projectId={id} />,
-    [id],
+    () => (
+      <ChatProvider>
+        <ChatRoom
+          openChat={openChat}
+          onCloseChat={() => {
+            setOpenChat(false);
+          }}
+          currentUser={user}
+          projectId={id}
+        />
+      </ChatProvider>
+    ),
+    [openChat],
   );
+
+  const Children = useMemo(() => <Outlet />, [id]);
+
+  // const Chat = useMemo(
+  //   () => <ChatButton currentUser={user} projectId={id} />,
+  //   [id],
+  // );
 
   return (
     <div>
@@ -30,12 +51,21 @@ function Layout({pf, wp}) {
           </Grid>
           <Grid item xs={10}>
             <Box sx={{p: 4}}>
-              <Outlet />
+              {Children}
+              {/* <Outlet /> */}
+              {/* <Outlet /> */}
             </Box>
           </Grid>
         </Grid>
       </Box>{' '}
-      {!wp && Chat}
+      <IconButton
+        aria-label="chat-button"
+        onClick={() => setOpenChat(true)}
+        sx={{position: 'fixed', bottom: 40, right: 40}}
+      >
+        <ChatRoundedIcon sx={{width: 40, height: 40, color: color.green03}} />
+      </IconButton>
+      {!wp && !pf && Chat}
     </div>
   );
 }

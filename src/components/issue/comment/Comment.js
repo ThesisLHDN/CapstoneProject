@@ -1,9 +1,9 @@
-import { useMemo, useState } from 'react';
+import {useMemo, useState} from 'react';
 import CommentForm from './CommentForm';
 import moment from 'moment/moment';
 
-import { Avatar, Box, Typography } from '@mui/material';
-import { useFirestore } from 'src/hooks/useFirestore';
+import {Avatar, Box, Typography} from '@mui/material';
+import {useFirestore} from 'src/hooks/useFirestore';
 
 // import {addDocument, setDocument} from 'src/firebase/services';
 
@@ -186,11 +186,12 @@ const Comment = ({
                   {canDelete && (
                     <div
                       className="mr-2 hover:underline font-bold"
-                      onClick={() =>
-                        subcomment
-                          ? deleteComment(comment.id, parentId)
-                          : deleteComment(comment.id)
-                      }
+                      // onClick={() =>
+                      //   subcomment
+                      //     ? deleteComment(comment.id, parentId)
+                      //     : deleteComment(comment.id)
+                      // }
+                      onClick={() => deleteComment(comment)}
                     >
                       Delete
                     </div>
