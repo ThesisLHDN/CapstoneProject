@@ -78,10 +78,15 @@ function CreateProject() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('/project', project);
-      setProjects([project, ...projects]);
-      // setDocument('projects', `${project.id}`, {...project});
-      navigate(`/workspace-setting/${workspace.id}?user=${uid}`);
+      const newPj = await axios.post('/project', project);
+      if (newPj.data) {
+        setProjects([project, ...projects]);
+        setDocument('projects', `${newPj.data.id}`, {
+          workspaceId: workspace.id,
+          ...project,
+        });
+        navigate(`/workspace-setting/${workspace.id}?user=${uid}`);
+      }
     } catch (err) {
       console.log(err);
     }

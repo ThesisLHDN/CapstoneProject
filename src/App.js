@@ -1,6 +1,6 @@
 import './App.css';
 import {Routes, Route, useLocation} from 'react-router-dom';
-import {lazy} from 'react';
+import {CircularProgress} from '@mui/material';
 // import ChatRoundedIcon from '@mui/icons-material/ChatRounded';
 
 import Layout from 'src/components/layout';
@@ -47,6 +47,10 @@ function App() {
                 ></Route>
               </Route>
               <Route element={<Layout />}>
+                <Route
+                  path=""
+                  element={<CircularProgress></CircularProgress>}
+                ></Route>
                 <Route
                   path="project-setting/:id"
                   element={<ProjectSetting></ProjectSetting>}

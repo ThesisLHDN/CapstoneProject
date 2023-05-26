@@ -57,7 +57,7 @@ const updateDocument = async (collectionPath, id, data) => {
       updatedAt: serverTimestamp(),
     };
 
-    const docRef = await updateDoc(doc(db, collectionPath, id), docData);
+    const docRef = await updateDoc(doc(db, collectionPath, `${id}`), docData);
 
     console.log(
       'Document with ID updated: ',
@@ -166,22 +166,12 @@ const deleteDocument = async (collectionPath, id, data = {}) => {
           // console.log('document path', document.data().storagePath);
           deleteObject(desertRef)
             .then(() => {
-              console.log(
-                'deleted: ',
-                collectionPath,
-                storagePath,
-                id,
-              );
+              console.log('deleted: ', collectionPath, storagePath, id);
               // File deleted successfully
             })
             .catch((error) => {
               // Uh-oh, an error occurred!
-              console.log(
-                'deleted: ',
-                collectionPath,
-                storagePath,
-                error,
-              );
+              console.log('deleted: ', collectionPath, storagePath, error);
             });
         }
         break;
@@ -214,7 +204,7 @@ const getDocumentWithCondition = (collectionName, condition) => {
 const updateAuthFirestore = (uid, data) => {
   if (uid && data) {
     try {
-      updateDocument('users', uid, data);
+      updateDocument('users', `${uid}`, data);
       updateProfile(auth.currentUser, data);
     } catch (e) {
       console.log('Error updating both Authentication and Firestore', e);

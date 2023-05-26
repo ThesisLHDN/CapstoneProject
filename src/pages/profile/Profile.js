@@ -1,6 +1,6 @@
-import {useContext, Suspense, useState, lazy} from 'react';
+import {useContext, Suspense, useState} from 'react';
 import {AuthContext} from 'src/Context/AuthProvider';
-import {color} from 'src/style';
+
 import {
   Typography,
   Grid,
@@ -14,18 +14,18 @@ import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutli
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 
 import {ref, getDownloadURL, uploadBytesResumable} from 'firebase/storage';
-import {
-  updateDocument,
-  updateAuthFirestore,
-} from 'src/firebase/firestoreServices';
+import {updateAuthFirestore} from 'src/firebase/firestoreServices';
 import {storage} from 'src/firebase/config';
-import {colorHover} from 'src/style';
+import {colorHover, color} from 'src/style';
+import axios from 'axios';
+
 function Profile() {
   const {
     user: {displayName, email, photoURL, uid},
   } = useContext(AuthContext);
-  const [name, setName] = useState();
 
+  const [name, setName] = useState(displayName);
+  const [avatar, setAvatar] = useState(photoURL);
   const [progress, setProgress] = useState();
 
   const uploadHandler = async (files) => {
@@ -55,12 +55,19 @@ function Profile() {
             getDownloadURL(upLoadTask.snapshot.ref).then(async (url) => {
               let downloadURL = url;
               if (downloadURL) {
-                console.log(
-                  `Update avatar from user ${uid} with URL ${downloadURL}`,
-                );
-                // TODO Update Document
-                // updateDocument('users', uid, {photoURL: downloadURL});
-                updateAuthFirestore(uid, {photoURL: downloadURL});
+                try {
+                  const res = await axios.put(`/user/${uid}`, {
+                    username: name,
+                    photoURL: downloadURL,
+                  });
+
+                  updateAuthFirestore(uid, {photoURL: downloadURL});
+                  console.log(res);
+                  setAvatar(downloadURL);
+                  // TODO update SQL
+                } catch (err) {
+                  console.log(err);
+                }
               }
             });
           },
@@ -70,11 +77,20 @@ function Profile() {
     return;
   };
 
-  const renameHandler = (e) => {
+  const renameHandler = async (e) => {
     e.preventDefault();
     if (name) {
-      updateAuthFirestore(uid, {displayName: name});
-      setName();
+      try {
+        const res = await axios.put(`/user/${uid}`, {
+          username: name,
+          photoURL: avatar,
+        });
+        updateAuthFirestore(uid, {displayName: name});
+        console.log(res);
+        // TODO update SQL
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 
@@ -92,7 +108,8 @@ function Profile() {
           }}
         >
           <Avatar
-            src={photoURL}
+            // src={photoURL}
+            src={avatar}
             sx={{
               width: '15vw',
               height: '15vw',

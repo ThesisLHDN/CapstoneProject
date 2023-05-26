@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import {useContext, useEffect, useState} from 'react';
 import {
   Table,
   TableBody,
@@ -7,21 +7,17 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Button
+  Button,
 } from '@mui/material';
-import { AppContext } from 'src/Context/AppProvider';
+import {AppContext} from 'src/Context/AppProvider';
 import axios from 'axios';
-import { useLocation } from 'react-router-dom';
-
-// function createData(name, email, role) {
-//   return {name, email, role};
-// }
+import {useLocation} from 'react-router-dom';
 
 function MemberList() {
   const [anchorEl, setAnchorEl] = useState(null);
   // const [role, setRole] = useState('');
-  const {project} = useContext(AppContext);
-  const [members, setMembers] = useState([]);
+  const {project, members, setMembers} = useContext(AppContext);
+  // const [members, setMembers] = useState([]);
   const location = useLocation();
   const pId = location.pathname.split('/')[2];
   // console.log(workspace);
@@ -33,6 +29,7 @@ function MemberList() {
 
   const fetchProjectMember = async () => {
     try {
+      // TODO get memberlist
       const res = await axios.get(`/pmembers/${pId}`);
       // console.log(res.data);
       setMembers([...members, ...res.data]);
@@ -44,7 +41,7 @@ function MemberList() {
 
   useEffect(() => {
     fetchProjectMember();
-  }, []);
+  }, [members]);
 
   // const open = Boolean(anchorEl);
   // const id = open ? 'simple-popper' : undefined;

@@ -79,18 +79,18 @@ export const IssueIcon = (type) => {
   }
 };
 
-const epicColor = (epic) => {
-  switch (epic) {
-    case 'Epic 1':
-      return ['#bee8e8', '#3db0d1'];
-    case 'Epic 2':
-      return ['#FFE5E2', '#E93B81'];
-    case 'Epic 3':
-      return ['#DEFBC2', '#459D72'];
-    default:
-      return ['#FF95E6', '#3C4048'];
-  }
-};
+// const epicColor = (epic) => {
+//   switch (epic) {
+//     case 'Epic 1':
+//       return ['#bee8e8', '#3db0d1'];
+//     case 'Epic 2':
+//       return ['#FFE5E2', '#E93B81'];
+//     case 'Epic 3':
+//       return ['#DEFBC2', '#459D72'];
+//     default:
+//       return ['#FF95E6', '#3C4048'];
+//   }
+// };
 
 function convertDate(d) {
   const date = new Date(d);
@@ -109,7 +109,6 @@ function TaskCard({issue, setTrigger, isChild = false}) {
     try {
       const res = await axios.get(`/user/${issue.assigneeId}`);
       setAssignee(res.data);
-      // console.log(res);
     } catch (err) {
       console.log(err);
     }

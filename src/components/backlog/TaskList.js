@@ -158,6 +158,7 @@ function TaskList({hide, me, vals, fil, setFil, srtVal, srt, setSrt, input}) {
           createTime: new Date().toISOString().slice(0, 19).replace('T', ' '),
           cycleId: columnId,
         });
+        console.log('issue created', res);
         setTriggerIssue(true);
         // console.log(res);
         event.target.value = '';
@@ -441,7 +442,7 @@ function TaskList({hide, me, vals, fil, setFil, srtVal, srt, setSrt, input}) {
                                   })
                                   .map((issue, index) => {
                                     return (
-                                      <div>
+                                      <div key={issue.id}>
                                         {!me || issue.assigneeId === uid ? (
                                           <Draggable
                                             key={issue.id}

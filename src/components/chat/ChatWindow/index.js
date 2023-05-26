@@ -231,7 +231,7 @@ function ChatWindow({currentUser}) {
               <Box>
                 <Button
                   variant="contained"
-                  sx={{...colorHover.greenBtn}}
+                  sx={{...colorHover.greenGradBtn}}
                   startIcon={<PersonAddAltRoundedIcon />}
                   onClick={() => {
                     setOpen(true);

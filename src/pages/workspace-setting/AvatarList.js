@@ -142,6 +142,7 @@ function AvatarList() {
   const fetchWorkspaceMember = async () => {
     try {
       const res = await axios.get(`http://localhost:8800/wsmember/${wsId}`);
+      console.log(res, res.data);
       setMembers(res.data);
     } catch (err) {
       console.log(err);
@@ -151,6 +152,8 @@ function AvatarList() {
   useEffect(() => {
     fetchWorkspaceMember();
   }, [wsId]);
+
+  console.log('member: ', members);
 
   return (
     <ImageList

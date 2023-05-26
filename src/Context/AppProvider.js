@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 
 export const AppContext = React.createContext();
 
@@ -7,6 +7,7 @@ function AppProvider({children}) {
   const [projects, setProjects] = useState([]);
   const [project, setProject] = useState({});
   const [admin, setAdmin] = useState({});
+  const [members, setMembers] = useState([]);
 
   return (
     <AppContext.Provider
@@ -19,6 +20,8 @@ function AppProvider({children}) {
         setProject,
         admin,
         setAdmin,
+        members,
+        setMembers,
       }}
     >
       {children}
