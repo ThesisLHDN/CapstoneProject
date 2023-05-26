@@ -8,6 +8,8 @@ import {useLocation} from 'react-router-dom';
 import axios from 'axios';
 import {AppContext} from 'src/Context/AppProvider';
 import {AuthContext} from 'src/Context/AuthProvider';
+import MessageArea from './messageArea';
+import moment from 'moment/moment';
 
 // import Filter from 'src/components/Filter';
 // import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
@@ -28,7 +30,7 @@ function RoadMap() {
   const location = useLocation();
   const pId = location.pathname.split('/')[2];
   const [zoom, setZoom] = useState('Days');
-  // const [messagesState, setMessagesState] = useState([]);
+  const [messagesState, setMessagesState] = useState([]);
   const [issues, setIssues] = useState({data: []});
   const {
     user: {uid},
@@ -38,21 +40,33 @@ function RoadMap() {
   const fetchIssuesData = async () => {
     try {
       const res = await axios.get(`/issues/${pId}`);
-      // console.log('raw data', res);
+
       const data = {
-        data: res.data.map((issue) => ({
-          text: issue.issuename,
-          id: issue.id,
-          start_date: new Date(issue.createTime),
-          duration: 1,
-          parent: issue.parentId ? issue.parentId : 0,
-          progress: 100,
-          status: issue.issuestatus,
-          open: true,
-          projectId: issue.projectId,
-          cId: issue.cycleId,
-        })),
+        data: res.data.map((issue) => {
+          console.log(
+            moment(issue.dueDate, 'YYYY-MM-DD HH:mm:ss'),
+            moment(issue.createTime, 'YYYY-MM-DD HH:mm:ss'),
+          );
+          return {
+            text: issue.issuename,
+            id: issue.id,
+            start_date: new Date(issue.createTime),
+            duration: issue.dueDate
+              ? moment(issue.dueDate, 'YYYY-MM-DD HH:mm:ss').diff(
+                  moment(issue.createTime, 'YYYY-MM-DD HH:mm:ss'),
+                  'days',
+                )
+              : 1,
+            parent: issue.parentId ? issue.parentId : 0,
+            progress: 100,
+            status: issue.issuestatus,
+            open: true,
+            projectId: issue.projectId,
+            cId: issue.cycleId,
+          };
+        }),
       };
+      console.log('roadmap data', data);
 
       setIssues(data);
     } catch (err) {
@@ -68,8 +82,8 @@ function RoadMap() {
         startDate: startDate,
         dueDate: dueDate ? dueDate : null,
       });
+      console.log('update successful', res);
       // setIssues([...res.data]);
-      console.log(res);
     } catch (err) {
       console.log(err);
     }
@@ -79,16 +93,16 @@ function RoadMap() {
     fetchIssuesData();
   }, []);
 
-  // const addMessage = (message) => {
-  //   const maxLogLength = 5;
-  //   const newMessage = {message};
-  //   const messages = [newMessage, ...messagesState];
+  const addMessage = (message) => {
+    const maxLogLength = 5;
+    const newMessage = {message};
+    const messages = [newMessage, ...messagesState];
 
-  //   if (messages.length > maxLogLength) {
-  //     messages.length = maxLogLength;
-  //   }
-  //   setMessagesState(messages);
-  // };
+    if (messages.length > maxLogLength) {
+      messages.length = maxLogLength;
+    }
+    setMessagesState(messages);
+  };
 
   const updateItem = (type, action, item, id) => {
     console.log(
@@ -192,7 +206,7 @@ function RoadMap() {
             </>
           )}
         </Box>
-        {/* <MessageArea messages={messagesState} /> */}
+        <MessageArea messages={messagesState} />
       </Box>
     </div>
   );
