@@ -7,27 +7,29 @@ function MemberManagement({data}) {
   return (
     <div style={{border: '1px solid #787878', borderRadius: 16}}>
       <div className="flex">
-        <p className="text-left text-tg-text-color font-bold text-base mt-6 mx-6">
+        <p className="text-left text-tg-text-color font-bold text-base mt-8 mx-6">
           Member Performance
         </p>
-        <SettingsOutlinedIcon sx={{marginTop: 3}} />
+        <SettingsOutlinedIcon sx={{marginTop: 3.75, cursor: 'pointer'}} />
       </div>
-      <p className="text-sm italic ml-6 mt-3">Short description</p>
+      <p className="text-sm italic ml-6 mt-4">
+        Manage workload and effort of each member through issues and points.
+      </p>
 
-      <div className="flex mt-8 mb-4 overflow-auto ml-6">
+      <div className="flex mt-6 mb-4 overflow-auto ml-6">
         {data.map((member) => {
           return (
             <div
+              className="xl:mb-2 2xl:mb-10 2xl:mt-5 3xl:mt-7 3xl:mb-16"
               key={member.id}
               style={{
                 border: '1px solid gray',
                 borderRadius: 8,
-                minWidth: 176,
+                minWidth: 190,
                 marginRight: 8,
-                marginBottom: 8,
               }}
             >
-              <div className="flex mt-3 ml-2">
+              <div className="flex xl:mt-4 xl:ml-3 3xl:mt-6">
                 <Avatar
                   src="X"
                   sx={{
@@ -42,75 +44,84 @@ function MemberManagement({data}) {
                 <span className="flex text-sm mt-1.5">{member.name}</span>
               </div>
 
-              <div className="flex mx-2 mt-2 justify-between">
-                <div
-                  style={{
-                    minWidth: 74,
-                    backgroundColor: '#EFEFEF',
-                    borderRadius: 4,
-                  }}
-                >
-                  <p className="text-sm font-bold ml-2 pt-1">
-                    {member.overdue}
-                  </p>
-                  <p className="text-xs ml-2 pb-1">Due</p>
-                </div>
-                <div style={{minWidth: 74, backgroundColor: '#EFEFEF'}}>
-                  <p className="text-sm font-bold ml-2 pt-1">
-                    {member.doneInTime + member.doneInDue}
-                  </p>
-                  <p className="text-xs ml-2 pb-1">Done</p>
-                </div>
-              </div>
-
-              <div className="flex justify-between ml-2 mr-3 mt-4">
+              <div className="flex justify-between ml-2 mr-3 mt-5">
                 <div className="flex">
                   <FiberManualRecordIcon
                     sx={{
-                      color: '#00980F',
+                      color: 'gray',
                       width: 12,
                       height: 12,
                       marginTop: 0.2,
                     }}
                   />
-                  <p className="text-xs ml-1">Done in time</p>
+                  <p className="text-xs ml-1">Total issues</p>
                 </div>
-                <p className="text-xs">{member.doneInTime}</p>
+                <p className="text-xs">{member.doneInTime} (xx points)</p>
               </div>
 
-              <div className="flex justify-between ml-2 mr-3 mt-2">
+              <div className="flex justify-between ml-2 mr-3 xl:mt-3 3xl:mt-4">
                 <div className="flex">
                   <FiberManualRecordIcon
                     sx={{
-                      color: '#F69400',
+                      color: '#ff0000',
                       width: 12,
                       height: 12,
                       marginTop: 0.2,
                     }}
                   />
-                  <p className="text-xs ml-1">Done in due</p>
+                  <p className="text-xs ml-1">To Do</p>
                 </div>
-                <p className="text-xs">{member.doneInDue}</p>
+                <p className="text-xs">{member.doneInTime} (xx points)</p>
               </div>
 
-              <div className="flex justify-between ml-2 mr-3 mt-2">
+              <div className="flex justify-between ml-2 mr-3 xl:mt-3 3xl:mt-4">
                 <div className="flex">
                   <FiberManualRecordIcon
                     sx={{
-                      color: '#D90000',
+                      color: '#006BA7',
                       width: 12,
                       height: 12,
                       marginTop: 0.2,
                     }}
                   />
-                  <p className="text-xs ml-1">Overdue</p>
+                  <p className="text-xs ml-1">In progress</p>
                 </div>
-                <p className="text-xs">{member.overdue}</p>
+                <p className="text-xs">{member.doneInDue} (xx points)</p>
               </div>
 
-              <div className="flex mx-2 mt-3">
+              <div className="flex justify-between ml-2 mr-3 xl:mt-3 3xl:mt-4">
+                <div className="flex">
+                  <FiberManualRecordIcon
+                    sx={{
+                      color: '#EC8E00',
+                      width: 12,
+                      height: 12,
+                      marginTop: 0.2,
+                    }}
+                  />
+                  <p className="text-xs ml-1">Testing</p>
+                </div>
+                <p className="text-xs">{member.doneInDue} (xx points)</p>
+              </div>
+
+              <div className="flex justify-between ml-2 mr-3 xl:mt-3 3xl:mt-4">
+                <div className="flex">
+                  <FiberManualRecordIcon
+                    sx={{
+                      color: '#009606',
+                      width: 12,
+                      height: 12,
+                      marginTop: 0.2,
+                    }}
+                  />
+                  <p className="text-xs ml-1">Done</p>
+                </div>
+                <p className="text-xs">{member.overdue} (xx points)</p>
+              </div>
+
+              <div className="flex mx-2 xl:mt-5 3xl:mt-7">
                 <p
-                  className="h-1 border-0"
+                  className="h-1.5 border-0"
                   style={{
                     width: `${
                       (member.doneInTime * 100) /
@@ -120,7 +131,7 @@ function MemberManagement({data}) {
                   }}
                 ></p>
                 <p
-                  className="h-1 border-0"
+                  className="h-1.5 border-0"
                   style={{
                     width: `${
                       (member.doneInDue * 100) /
@@ -130,7 +141,7 @@ function MemberManagement({data}) {
                   }}
                 ></p>
                 <p
-                  className="h-1 border-0"
+                  className="h-1.5 border-0"
                   style={{
                     width: `${
                       (member.overdue * 100) /
@@ -141,7 +152,7 @@ function MemberManagement({data}) {
                 ></p>
               </div>
 
-              <div className="flex mx-2 mt-1 justify-between">
+              <div className="flex mx-2 mt-1.5 xl:mb-5 3xl:mb-7 justify-between">
                 <p
                   className="text-xs font-bold"
                   style={{color: '#00980F'}}
@@ -163,17 +174,6 @@ function MemberManagement({data}) {
                   (member.overdue * 100) /
                     (member.doneInTime + member.doneInDue + member.overdue),
                 )}%`}</p>
-              </div>
-
-              <div
-                className="mx-2 my-3"
-                style={{backgroundColor: '#EFEFEF', borderRadius: 4}}
-              >
-                <p className="text-2xl font-bold ml-3 pt-1.5">{`${Math.round(
-                  ((member.doneInDue + member.doneInTime) * 100) /
-                    (member.doneInDue + member.doneInTime + member.overdue),
-                )}%`}</p>
-                <p className="text-xs ml-3 pb-2">Completion Rate</p>
               </div>
             </div>
           );

@@ -4,6 +4,7 @@ import {Typography, Grid, Breadcrumbs, Link} from '@mui/material';
 import Workload from 'src/components/charts/Workload';
 import SprintBurndown from 'src/components/charts/SprintBurndown';
 import MemberManagement from 'src/components/charts/MemberManagement';
+import CumulativeFlow from 'src/components/charts/CumulativeFlow';
 import {PerformceData} from '../../components/charts/Data';
 import {AppContext} from 'src/Context/AppProvider';
 import {AuthContext} from 'src/Context/AuthProvider';
@@ -95,6 +96,93 @@ function Dashboard() {
     }
   };
 
+  // Handle Cumulative Flow
+  const [cumulativeScope, setCumulativeScope] = useState('Sprint');
+  const [cumulative, setCumulative] = useState({
+    labels: [],
+    datasets: [
+      {
+        label: 'Done',
+        data: [],
+        backgroundColor: '#A4E7AB',
+        borderColor: '#009606',
+        borderWidth: 1,
+        fill: true,
+      },
+      {
+        label: 'Testing',
+        data: [],
+        backgroundColor: '#FFE663',
+        borderColor: '#EC8E00',
+        borderWidth: 1,
+        fill: true,
+      },
+      {
+        label: 'In progress',
+        data: [],
+        backgroundColor: '#9AD1EF',
+        borderColor: '#006BA7',
+        borderWidth: 1,
+        fill: true,
+      },
+      {
+        label: 'To Do',
+        data: [],
+        backgroundColor: '#EDCBB9',
+        borderColor: '#EC6F28',
+        borderWidth: 1,
+        fill: true,
+      },
+    ],
+  });
+  const fetchCumulativeData = async (pId, scope) => {
+    try {
+      const res =
+        scope == 'Project'
+          ? await axios.get(`/cumulative/${pId}`)
+          : await axios.get(`/cumulative/${pId}?sprint=${true}`);
+      setCumulative({
+        labels: res.data[0],
+        datasets: [
+          {
+            label: 'Done',
+            data: res.data[4],
+            backgroundColor: '#A4E7AB',
+            borderColor: '#009606',
+            borderWidth: 1,
+            fill: true,
+          },
+          {
+            label: 'Testing',
+            data: res.data[3],
+            backgroundColor: '#FFE663',
+            borderColor: '#EC8E00',
+            borderWidth: 1,
+            fill: true,
+          },
+          {
+            label: 'In progress',
+            data: res.data[2],
+            backgroundColor: '#9AD1EF',
+            borderColor: '#006BA7',
+            borderWidth: 1,
+            fill: true,
+          },
+          {
+            label: 'To Do',
+            data: res.data[1],
+            backgroundColor: '#EDCBB9',
+            borderColor: '#EC6F28',
+            borderWidth: 1,
+            fill: true,
+          },
+        ],
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   // Handle Performance data
   const [performanceData, setPerformanceData] = useState(PerformceData);
 
@@ -102,7 +190,8 @@ function Dashboard() {
   useEffect(() => {
     fetchWorkloadData(project.id, workloadScope);
     fetchBurndownData(project.id);
-  }, [project.id, workloadScope]);
+    fetchCumulativeData(project.id, cumulativeScope);
+  }, [project.id, workloadScope, cumulativeScope]);
 
   return (
     <div>
@@ -151,6 +240,12 @@ function Dashboard() {
         <Grid item xs={6}>
           <Grid item sx={{paddingRight: 1, paddingBottom: 2}}>
             <Workload chartData={workloadData} setScope={setWorkloadScope} />
+          </Grid>
+          <Grid item sx={{paddingRight: 1, paddingBottom: 2}}>
+            <CumulativeFlow
+              chartData={cumulative}
+              setScope={setCumulativeScope}
+            />
           </Grid>
         </Grid>
 

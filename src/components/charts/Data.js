@@ -13,4 +13,18 @@ export const PerformceData = [
     doneInDue: 1,
     overdue: 2,
   },
+  {
+    id: 3,
+    name: 'Dang Nguyen',
+    doneInTime: 13,
+    doneInDue: 1,
+    overdue: 2,
+  },
+  {
+    id: 4,
+    name: 'Dang Nguyen',
+    doneInTime: 13,
+    doneInDue: 1,
+    overdue: 2,
+  },
 ];

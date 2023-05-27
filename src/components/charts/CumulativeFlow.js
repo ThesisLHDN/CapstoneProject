@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Pie} from 'react-chartjs-2';
+import {Line} from 'react-chartjs-2';
 import {Chart as ChartJS} from 'chart.js/auto';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import {
@@ -11,7 +11,7 @@ import {
   Popper,
 } from '@mui/material';
 
-function Workload({chartData, setScope}) {
+function CumulativeFlow({chartData, setScope}) {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleChange = (event, element) => {
@@ -30,7 +30,7 @@ function Workload({chartData, setScope}) {
     <div style={{border: '1px solid #787878', borderRadius: 16}}>
       <div className="flex">
         <p className="text-left text-tg-text-color font-bold text-base mt-8 mx-6">
-          Workload
+          Sprint Burndown
         </p>
         <SettingsOutlinedIcon
           sx={{marginTop: 3.75, cursor: 'pointer'}}
@@ -73,34 +73,22 @@ function Workload({chartData, setScope}) {
           </ClickAwayListener>
         </Popper>
       </div>
-      <p className="text-sm italic ml-6 mt-4">
-        Track and manage the workload based on the number of issues by status.
+      <p className="text-sm italic ml-6 mt-4 pr-3">
+        Shows the statuses of project's issues over time. See which columns
+        accumulate more issues, and identify bottlenecks in workflow.
       </p>
       <div
         className="chart-container"
         style={{
-          width: '72%',
-          marginLeft: '10%',
-          marginTop: -30,
-          marginBottom: -40,
+          width: '92%',
+          marginLeft: '5%',
+          marginTop: 30,
+          marginBottom: 40,
         }}
       >
-        <Pie
-          data={chartData}
-          options={{
-            plugins: {
-              legend: {
-                display: true,
-                position: 'right',
-                labels: {
-                  padding: 30,
-                },
-              },
-            },
-          }}
-        />
+        <Line data={chartData} options={{elements: {point: {radius: 0}}}} />
       </div>
     </div>
   );
 }
-export default Workload;
+export default CumulativeFlow;
