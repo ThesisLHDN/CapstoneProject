@@ -5,7 +5,6 @@ import Workload from 'src/components/charts/Workload';
 import SprintBurndown from 'src/components/charts/SprintBurndown';
 import MemberManagement from 'src/components/charts/MemberManagement';
 import CumulativeFlow from 'src/components/charts/CumulativeFlow';
-import {PerformceData} from '../../components/charts/Data';
 import {AppContext} from 'src/Context/AppProvider';
 import {AuthContext} from 'src/Context/AuthProvider';
 import axios from 'axios';
@@ -71,7 +70,6 @@ function Dashboard() {
   const fetchBurndownData = async (pId) => {
     try {
       const res = await axios.get(`/burndown/${pId}`);
-      console.log('ZZZZZZZZZZ', res.data);
       setBurndownData({
         labels: res.data[0],
         datasets: [
@@ -184,14 +182,28 @@ function Dashboard() {
   };
 
   // Handle Performance data
-  const [performanceData, setPerformanceData] = useState(PerformceData);
+  const [performanceScope, setPerformanceScope] = useState('Sprint');
+  const [performanceData, setPerformanceData] = useState([]);
+  const fetchPerformance = async (pId, scope) => {
+    try {
+      const res =
+        scope == 'Project'
+          ? await axios.get(`/performance/${pId}`)
+          : await axios.get(`/performance/${pId}?sprint=${true}`);
+      console.log('ZZZZZZZZZZZZZ', res.data);
+      setPerformanceData(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   // Just useEffect
   useEffect(() => {
     fetchWorkloadData(project.id, workloadScope);
     fetchBurndownData(project.id);
     fetchCumulativeData(project.id, cumulativeScope);
-  }, [project.id, workloadScope, cumulativeScope]);
+    fetchPerformance(project.id, performanceScope);
+  }, [project.id, workloadScope, cumulativeScope, performanceScope]);
 
   return (
     <div>
@@ -254,7 +266,10 @@ function Dashboard() {
             <SprintBurndown chartData={burndownData} />
           </Grid>
           <Grid item sx={{paddingLeft: 1, paddingBottom: 2}}>
-            <MemberManagement data={performanceData} />
+            <MemberManagement
+              data={performanceData}
+              setScope={setPerformanceScope}
+            />
           </Grid>
         </Grid>
       </Grid>

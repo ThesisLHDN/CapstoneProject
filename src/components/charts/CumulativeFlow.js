@@ -30,7 +30,7 @@ function CumulativeFlow({chartData, setScope}) {
     <div style={{border: '1px solid #787878', borderRadius: 16}}>
       <div className="flex">
         <p className="text-left text-tg-text-color font-bold text-base mt-8 mx-6">
-          Sprint Burndown
+          Cumulative Flow
         </p>
         <SettingsOutlinedIcon
           sx={{marginTop: 3.75, cursor: 'pointer'}}
@@ -83,7 +83,7 @@ function CumulativeFlow({chartData, setScope}) {
           width: '92%',
           marginLeft: '5%',
           marginTop: 30,
-          marginBottom: 40,
+          marginBottom: 38,
         }}
       >
         <Line data={chartData} options={{elements: {point: {radius: 0}}}} />
