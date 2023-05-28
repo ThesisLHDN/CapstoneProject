@@ -44,7 +44,7 @@ export default function CreateWorkspace() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`http://localhost:8800/workspace`, workspace);
+      const res = await axios.post(`/workspace`, workspace);
       console.log('AAAAAAAAAAAAAAAAAAAAA', res.data.id);
       navigate(`/workspace-setting/${res.data.id}?user=${uid}`);
     } catch (err) {
@@ -54,7 +54,7 @@ export default function CreateWorkspace() {
 
   const getLastestWorkspace = async () => {
     try {
-      const res = await axios.get(`http://localhost:8800/lastworkspace/${uid}`);
+      const res = await axios.get(`/lastworkspace/${uid}`);
       setLastWorkspace(res.data.id);
     } catch (err) {
       console.log(err);

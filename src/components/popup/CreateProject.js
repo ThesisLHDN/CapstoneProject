@@ -78,7 +78,7 @@ function CreateProject() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const newPj = await axios.post(`http://localhost:8800/project`, project);
+      const newPj = await axios.post(`/project`, project);
       if (newPj.data) {
         setProjects([project, ...projects]);
         setDocument('projects', `${newPj.data.id}`, {

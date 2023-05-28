@@ -19,7 +19,7 @@ function Issue() {
 
   const fetchIssueData = async () => {
     try {
-      const res = await axios.get(`http://localhost:8800/issue/${issueId}`);
+      const res = await axios.get(`/issue/${issueId}`);
       setIssue(res.data);
     } catch (err) {
       console.log(err);

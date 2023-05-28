@@ -106,7 +106,7 @@ function Card({issue}) {
 
   const getAssignee = async () => {
     try {
-      const res = await axios.get(`http://localhost:8800/user/${issue.assigneeId}`);
+      const res = await axios.get(`/user/${issue.assigneeId}`);
       setAssignee(res.data);
       // console.log(res);
     } catch (err) {

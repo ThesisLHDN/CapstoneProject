@@ -39,7 +39,7 @@ function Scrum({me, sprint, vals, fil, setFil, srtVal, srt, setSrt, input}) {
 
   const fetchIssuesData = async () => {
     try {
-      const res = await axios.get(`http://localhost:8800/sprintissue/${sprint.id}`);
+      const res = await axios.get(`/sprintissue/${sprint.id}`);
       setIssues(res.data);
       setTempIssues(res.data);
     } catch (err) {
@@ -50,7 +50,7 @@ function Scrum({me, sprint, vals, fil, setFil, srtVal, srt, setSrt, input}) {
 
   const updateIssue = async (cId, id, status, startDate, dueDate) => {
     try {
-      const res = await axios.put(`http://localhost:8800/issue/${id}`, {
+      const res = await axios.put(`/issue/${id}`, {
         cId: cId,
         status: status,
         startDate: new Date(startDate)
@@ -127,7 +127,7 @@ function Scrum({me, sprint, vals, fil, setFil, srtVal, srt, setSrt, input}) {
     setFil(false);
     try {
       const res = await axios.post(
-        `http://localhost:8800/filter/${project.id}?sprint=${sprint.id}`,
+        `/filter/${project.id}?sprint=${sprint.id}`,
         vals,
       );
       setIssues([...res.data]);
@@ -140,7 +140,7 @@ function Scrum({me, sprint, vals, fil, setFil, srtVal, srt, setSrt, input}) {
   const sortIssue = async () => {
     setSrt(false);
     try {
-      const res = await axios.post(`http://localhost:8800/sort/${project.id}?sprint=${sprint.id}`, {
+      const res = await axios.post(`/sort/${project.id}?sprint=${sprint.id}`, {
         sort: srtVal,
       });
       setIssues([...res.data]);

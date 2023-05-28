@@ -46,7 +46,7 @@ function MemberList() {
   const fetchProjectMember = async () => {
     try {
       // TODO get memberlist
-      const res = await axios.get(`http://localhost:8800/pmembers/${pId}`);
+      const res = await axios.get(`/pmembers/${pId}`);
       // console.log(res.data);
       setMembers(res.data);
       console.log(members);
@@ -57,7 +57,7 @@ function MemberList() {
 
   const setOwner = async (ownerId) => {
     try {
-      const res = await axios.put(`http://localhost:8800/project/${pId}`, {
+      const res = await axios.put(`/project/${pId}`, {
         pname: project.pname,
         pkey: project.pkey,
         ownerId: ownerId,
@@ -70,7 +70,7 @@ function MemberList() {
 
   const handleRemove = async (uid) => {
     try {
-      await axios.delete(`http://localhost:8800/pmember/${pId}?uid=${uid}`);
+      await axios.delete(`/pmember/${pId}?uid=${uid}`);
       setOpenDelPopup(false);
     } catch (err) {
       console.log(err);

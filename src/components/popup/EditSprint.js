@@ -57,7 +57,7 @@ function EditSprint({setTriggerSprint, curSprint, complete}) {
   const handleClick = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.put(`http://localhost:8800/editsprint/${curSprint.id}`, sprint);
+      const res = await axios.put(`/editsprint/${curSprint.id}`, sprint);
       setOpen(false);
 
       // setIsSprint(true);

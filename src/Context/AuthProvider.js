@@ -17,7 +17,7 @@ function AuthProvider({children}) {
 
   const addUser = async () => {
     try {
-      const res = await axios.post(`http://localhost:8800/user`, user);
+      const res = await axios.post(`/user`, user);
       console.log(res);
     } catch (err) {
       console.log(err);
@@ -26,7 +26,7 @@ function AuthProvider({children}) {
 
   const getLastestWorkspace = async (uid) => {
     try {
-      const res = await axios.get(`http://localhost:8800/lastworkspace/${uid}`);
+      const res = await axios.get(`/lastworkspace/${uid}`);
       history(`/workspace-setting/${res.data.id}?user=${uid}`);
     } catch (err) {
       console.log(err);

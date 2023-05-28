@@ -108,7 +108,7 @@ function TaskCard({issue, setTrigger, isChild = false}) {
   const getAssignee = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:8800/user/${issue.assigneeId}`,
+        `/user/${issue.assigneeId}`,
       );
       setAssignee(res.data);
     } catch (err) {
@@ -133,7 +133,7 @@ function TaskCard({issue, setTrigger, isChild = false}) {
 
   const updateIssue = async (element) => {
     try {
-      const res = await axios.put(`http://localhost:8800/issue/${issue.id}`, {
+      const res = await axios.put(`/issue/${issue.id}`, {
         cId: issue.cycleId,
         status: element,
       });
@@ -150,7 +150,7 @@ function TaskCard({issue, setTrigger, isChild = false}) {
     setOpenDelPopup(false);
     try {
       await axios.delete(
-        `http://localhost:8800/issue/${issue.id}?pId=${project.id}`,
+        `/issue/${issue.id}?pId=${project.id}`,
       );
       setTrigger(true);
     } catch (err) {

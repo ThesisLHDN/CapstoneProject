@@ -57,7 +57,7 @@ function SideBar(props) {
 
   const fetchWorkspacesData = async () => {
     try {
-      const res = await axios.get(`http://localhost:8800/workspaces${user}`);
+      const res = await axios.get(`/workspaces${user}`);
       setWorkspaces(res.data);
     } catch (err) {
       console.log(err);
@@ -66,7 +66,7 @@ function SideBar(props) {
 
   const fetchProjectData = async () => {
     try {
-      const res = await axios.get(`http://localhost:8800/project/${pId}`);
+      const res = await axios.get(`/project/${pId}`);
       setProject(res.data);
     } catch (err) {
       console.log(err);

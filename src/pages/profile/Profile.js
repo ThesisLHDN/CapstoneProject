@@ -57,7 +57,7 @@ function Profile() {
               let downloadURL = url;
               if (downloadURL) {
                 try {
-                  const res = await axios.put(`http://localhost:8800/user/${uid}`, {
+                  const res = await axios.put(`/user/${uid}`, {
                     username: name,
                     photoURL: downloadURL,
                   });
@@ -82,7 +82,7 @@ function Profile() {
     e.preventDefault();
     if (name) {
       try {
-        const res = await axios.put(`http://localhost:8800/user/${uid}`, {
+        const res = await axios.put(`/user/${uid}`, {
           username: name,
           photoURL: avatar,
         });
