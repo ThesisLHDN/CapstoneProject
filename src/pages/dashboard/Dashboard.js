@@ -1,103 +1,209 @@
-import { useContext, useState } from 'react';
-import { color } from 'src/style';
-import { Typography, Grid, Breadcrumbs, Link } from '@mui/material';
+import {useContext, useEffect, useState} from 'react';
+import {color} from 'src/style';
+import {Typography, Grid, Breadcrumbs, Link} from '@mui/material';
 import Workload from 'src/components/charts/Workload';
 import SprintBurndown from 'src/components/charts/SprintBurndown';
-import EpicCompletion from 'src/components/charts/EpicCompletion';
-import DelayPrediction from 'src/components/charts/DelayPrediction';
-import Bugs from 'src/components/charts/Bugs';
 import MemberManagement from 'src/components/charts/MemberManagement';
-import {
-  WorkloadData,
-  CompletionData,
-  BurndownData,
-  BugsData,
-  DelayData,
-  PerformceData,
-} from '../../components/charts/Data';
-import { AppContext } from 'src/Context/AppProvider';
-import { AuthContext } from 'src/Context/AuthProvider';
-
-function convertDate(d) {
-  const date = new Date(d);
-  return date.getDate() + ' ' + date.toLocaleString('en-us', {month: 'short'});
-}
+import CumulativeFlow from 'src/components/charts/CumulativeFlow';
+import {AppContext} from 'src/Context/AppProvider';
+import {AuthContext} from 'src/Context/AuthProvider';
+import axios from 'axios';
 
 function Dashboard() {
+  // Context
   const {
     user: {uid},
   } = useContext(AuthContext);
   const {project} = useContext(AppContext);
-  const [workloadData, setWorkloadData] = useState({
-    labels: WorkloadData.map((data) => data.label),
-    datasets: [
-      {
-        label: 'Amount',
-        data: WorkloadData.map((data) => data.numbers),
-        backgroundColor: ['#F1F1F1', '#054077', '#E83800', '#00980F'],
-        borderWidth: 0,
-      },
-    ],
-  });
 
+  // Handle Workload data
+  const [workloadScope, setWorkloadScope] = useState('Sprint');
+  const WorkloadData = {'To do': 0, 'In progress': 0, Testing: 0, Done: 0};
+  const [workloadData, setWorkloadData] = useState({
+    labels: [],
+    datasets: [{}],
+  });
+  const fetchWorkloadData = async (pId, scope) => {
+    try {
+      const res =
+        scope == 'Project'
+          ? await axios.get(`/workload/${pId}`)
+          : await axios.get(`/workload/${pId}?sprint=${true}`);
+      for (let i = 0; i < res.data.length; i++)
+        WorkloadData[res.data[i]?.issuestatus] = res.data[i]?.numbers;
+      setWorkloadData({
+        labels: Object.keys(WorkloadData).slice(0, 4),
+        datasets: [
+          {
+            label: 'Amount',
+            data: Object.values(WorkloadData),
+            backgroundColor: ['#EC6F28', '#006BA7', '#EC8E00', '#009606'],
+            borderWidth: 0,
+          },
+        ],
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // Handle Burndown data
   const [burndownData, setBurndownData] = useState({
-    labels: BurndownData['Remaining Values'].map((data) =>
-      convertDate(data.date),
-    ),
+    labels: [],
     datasets: [
       {
-        label: 'Remaining Values',
-        data: BurndownData['Remaining Values'].map((data) => data.estimate),
+        label: 'Remaining Points',
+        data: [],
         backgroundColor: 'red',
         borderColor: 'red',
         borderWidth: 2,
       },
       {
         label: 'Guidelines',
-        data: BurndownData['Guidelines'].map((data) => data.estimate),
+        data: [],
         backgroundColor: 'gray',
         borderColor: 'gray',
         borderWidth: 2,
       },
     ],
   });
+  const fetchBurndownData = async (pId) => {
+    try {
+      const res = await axios.get(`/burndown/${pId}`);
+      setBurndownData({
+        labels: res.data[0],
+        datasets: [
+          {
+            label: 'Remaining Points',
+            data: res.data[2],
+            backgroundColor: 'red',
+            borderColor: 'red',
+            borderWidth: 2,
+          },
+          {
+            label: 'Guidelines',
+            data: res.data[1],
+            backgroundColor: 'gray',
+            borderColor: 'gray',
+            borderWidth: 2,
+          },
+        ],
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-  const [bugsData, setBugsData] = useState({
-    labels: BugsData['Epic 01'].map((data) => data.date),
+  // Handle Cumulative Flow
+  const [cumulativeScope, setCumulativeScope] = useState('Sprint');
+  const [cumulative, setCumulative] = useState({
+    labels: [],
     datasets: [
       {
-        label: 'Epic 01',
-        data: BugsData['Epic 01'].map((data) => data.bugs),
-        backgroundColor: '#04BF00',
-      },
-      {
-        label: 'Epic 02',
-        data: BugsData['Epic 02'].map((data) => data.bugs),
-        backgroundColor: '#59D44E',
-      },
-      {
-        label: 'Epic 03',
-        data: BugsData['Epic 03'].map((data) => data.bugs),
+        label: 'Done',
+        data: [],
         backgroundColor: '#A4E7AB',
+        borderColor: '#009606',
+        borderWidth: 1,
+        fill: true,
       },
-    ],
-  });
-
-  const [delayData, setDelayData] = useState({
-    labels: DelayData.map((data) => data.id),
-    datasets: [
       {
-        label: 'Delay',
-        data: DelayData.map((data) => data.delay),
-        backgroundColor: ['#03AA00', '#E9B500', '#E71515', '#E87D00'],
-        borderWidth: 0,
-        borderRadius: Number.MAX_VALUE,
+        label: 'Testing',
+        data: [],
+        backgroundColor: '#FFE663',
+        borderColor: '#EC8E00',
+        borderWidth: 1,
+        fill: true,
+      },
+      {
+        label: 'In progress',
+        data: [],
+        backgroundColor: '#9AD1EF',
+        borderColor: '#006BA7',
+        borderWidth: 1,
+        fill: true,
+      },
+      {
+        label: 'To Do',
+        data: [],
+        backgroundColor: '#EDCBB9',
+        borderColor: '#EC6F28',
+        borderWidth: 1,
+        fill: true,
       },
     ],
   });
+  const fetchCumulativeData = async (pId, scope) => {
+    try {
+      const res =
+        scope == 'Project'
+          ? await axios.get(`/cumulative/${pId}`)
+          : await axios.get(`/cumulative/${pId}?sprint=${true}`);
+      setCumulative({
+        labels: res.data[0],
+        datasets: [
+          {
+            label: 'Done',
+            data: res.data[4],
+            backgroundColor: '#A4E7AB',
+            borderColor: '#009606',
+            borderWidth: 1,
+            fill: true,
+          },
+          {
+            label: 'Testing',
+            data: res.data[3],
+            backgroundColor: '#FFE663',
+            borderColor: '#EC8E00',
+            borderWidth: 1,
+            fill: true,
+          },
+          {
+            label: 'In progress',
+            data: res.data[2],
+            backgroundColor: '#9AD1EF',
+            borderColor: '#006BA7',
+            borderWidth: 1,
+            fill: true,
+          },
+          {
+            label: 'To Do',
+            data: res.data[1],
+            backgroundColor: '#EDCBB9',
+            borderColor: '#EC6F28',
+            borderWidth: 1,
+            fill: true,
+          },
+        ],
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-  const [completionData, setCompletionData] = useState(CompletionData);
-  const [performanceData, setPerformanceData] = useState(PerformceData);
+  // Handle Performance data
+  const [performanceScope, setPerformanceScope] = useState('Sprint');
+  const [performanceData, setPerformanceData] = useState([]);
+  const fetchPerformance = async (pId, scope) => {
+    try {
+      const res =
+        scope == 'Project'
+          ? await axios.get(`/performance/${pId}`)
+          : await axios.get(`/performance/${pId}?sprint=${true}`);
+      console.log('ZZZZZZZZZZZZZ', res.data);
+      setPerformanceData(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // Just useEffect
+  useEffect(() => {
+    fetchWorkloadData(project.id, workloadScope);
+    fetchBurndownData(project.id);
+    fetchCumulativeData(project.id, cumulativeScope);
+    fetchPerformance(project.id, performanceScope);
+  }, [project.id, workloadScope, cumulativeScope, performanceScope]);
 
   return (
     <div>
@@ -145,10 +251,13 @@ function Dashboard() {
       <Grid container sx={{marginTop: 2}}>
         <Grid item xs={6}>
           <Grid item sx={{paddingRight: 1, paddingBottom: 2}}>
-            <Workload chartData={workloadData} />
+            <Workload chartData={workloadData} setScope={setWorkloadScope} />
           </Grid>
-          <Grid item sx={{paddingLeft: 1, paddingBottom: 2}}>
-            <DelayPrediction chartData={delayData} />
+          <Grid item sx={{paddingRight: 1, paddingBottom: 2}}>
+            <CumulativeFlow
+              chartData={cumulative}
+              setScope={setCumulativeScope}
+            />
           </Grid>
         </Grid>
 
@@ -157,32 +266,12 @@ function Dashboard() {
             <SprintBurndown chartData={burndownData} />
           </Grid>
           <Grid item sx={{paddingLeft: 1, paddingBottom: 2}}>
-            <MemberManagement data={performanceData} />
+            <MemberManagement
+              data={performanceData}
+              setScope={setPerformanceScope}
+            />
           </Grid>
         </Grid>
-        {/* <Grid item xs={6}>
-          <Grid item sx={{paddingRight: 1, paddingBottom: 2}}>
-            <Workload chartData={workloadData} />
-          </Grid>
-          <Grid item sx={{paddingRight: 1, paddingBottom: 2}}>
-            <EpicCompletion chartData={completionData} />
-          </Grid>
-          <Grid item sx={{paddingRight: 1, paddingBottom: 2}}>
-            <Bugs chartData={bugsData} />
-          </Grid>
-        </Grid>
-
-        <Grid item xs={6}>
-          <Grid item sx={{paddingLeft: 1, paddingBottom: 2}}>
-            <SprintBurndown chartData={burndownData} />
-          </Grid>
-          <Grid item sx={{paddingLeft: 1, paddingBottom: 2}}>
-            <DelayPrediction chartData={delayData} />
-          </Grid>
-          <Grid item sx={{paddingLeft: 1, paddingBottom: 2}}>
-            <MemberManagement data={performanceData} />
-          </Grid>
-        </Grid> */}
       </Grid>
     </div>
   );

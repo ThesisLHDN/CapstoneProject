@@ -1,35 +1,102 @@
-import React from 'react';
-import {Avatar} from '@mui/material';
+import React, {useState} from 'react';
+import {
+  Box,
+  Button,
+  ClickAwayListener,
+  MenuItem,
+  MenuList,
+  Popper,
+  Avatar,
+} from '@mui/material';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 
-function MemberManagement({data}) {
+function MemberManagement({data, setScope}) {
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleChange = (event, element) => {
+    setAnchorEl(anchorEl ? null : event.currentTarget);
+    setScope(element);
+  };
+
+  const handleClick = (event) => {
+    setAnchorEl(anchorEl ? null : event.currentTarget);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popper' : undefined;
+
   return (
     <div style={{border: '1px solid #787878', borderRadius: 16}}>
       <div className="flex">
-        <p className="text-left text-tg-text-color font-bold text-base mt-6 mx-6">
+        <p className="text-left text-tg-text-color font-bold text-base mt-8 mx-6">
           Member Performance
         </p>
-        <SettingsOutlinedIcon sx={{marginTop: 3}} />
+        <SettingsOutlinedIcon
+          sx={{marginTop: 3.75, cursor: 'pointer'}}
+          onClick={handleClick}
+        />
+        <Popper id={id} open={open} anchorEl={anchorEl} sx={{zIndex: 5}}>
+          <ClickAwayListener onClickAway={handleClick}>
+            <Box
+              sx={{
+                backgroundColor: 'white',
+                borderRadius: 1,
+                right: -45,
+                marginTop: '5px',
+                border: 'solid 1px #ECEDF0',
+                boxShadow: '2px 2px 5px #00000020',
+                display: 'flex',
+                flexDirection: 'column',
+                position: 'absolute',
+                width: 90,
+              }}
+            >
+              <MenuList sx={{px: 0, width: '100%'}}>
+                {['Sprint', 'Project'].map((element) => {
+                  return (
+                    <MenuItem
+                      key={element}
+                      sx={{
+                        py: 1,
+                        fontSize: 14,
+                        fontWeight: 600,
+                      }}
+                      onClick={(e) => handleChange(e, element)}
+                    >
+                      {element}
+                    </MenuItem>
+                  );
+                })}
+              </MenuList>
+            </Box>
+          </ClickAwayListener>
+        </Popper>
       </div>
-      <p className="text-sm italic ml-6 mt-3">Short description</p>
+      <p className="text-sm italic ml-6 mt-4">
+        Manage workload and effort of each member through issues and points.
+      </p>
 
-      <div className="flex mt-8 mb-4 overflow-auto ml-6">
+      <div
+        className={`flex mt-6 ${
+          data.length <= 2 ? 'xl:mb-8' : 'xl:mb-5'
+        } 2xl:mb-4 overflow-auto ml-6`}
+      >
         {data.map((member) => {
           return (
             <div
+              className="xl:mb-2 2xl:mb-10 2xl:mt-5 3xl:mt-7 3xl:mb-16"
               key={member.id}
               style={{
                 border: '1px solid gray',
                 borderRadius: 8,
-                minWidth: 176,
+                minWidth: 190,
                 marginRight: 8,
-                marginBottom: 8,
               }}
             >
-              <div className="flex mt-3 ml-2">
+              <div className="flex xl:mt-4 xl:ml-3 3xl:mt-6">
                 <Avatar
-                  src="X"
+                  src={member.photoURL}
                   sx={{
                     width: 32,
                     height: 32,
@@ -37,143 +104,211 @@ function MemberManagement({data}) {
                     marginRight: 1,
                     borderRadius: 1,
                   }}
-                  alt={member.name}
+                  alt={member.username}
                 />
-                <span className="flex text-sm mt-1.5">{member.name}</span>
+                <span className="flex text-sm mt-1.5 pr-3">
+                  {member.username}
+                </span>
               </div>
 
-              <div className="flex mx-2 mt-2 justify-between">
-                <div
-                  style={{
-                    minWidth: 74,
-                    backgroundColor: '#EFEFEF',
-                    borderRadius: 4,
-                  }}
-                >
-                  <p className="text-sm font-bold ml-2 pt-1">
-                    {member.overdue}
-                  </p>
-                  <p className="text-xs ml-2 pb-1">Due</p>
-                </div>
-                <div style={{minWidth: 74, backgroundColor: '#EFEFEF'}}>
-                  <p className="text-sm font-bold ml-2 pt-1">
-                    {member.doneInTime + member.doneInDue}
-                  </p>
-                  <p className="text-xs ml-2 pb-1">Done</p>
-                </div>
-              </div>
-
-              <div className="flex justify-between ml-2 mr-3 mt-4">
+              <div className={`flex justify-between ml-2 mr-3 mt-5`}>
                 <div className="flex">
                   <FiberManualRecordIcon
                     sx={{
-                      color: '#00980F',
+                      color: 'gray',
                       width: 12,
                       height: 12,
                       marginTop: 0.2,
                     }}
                   />
-                  <p className="text-xs ml-1">Done in time</p>
+                  <p className="text-xs ml-1">Total issues</p>
                 </div>
-                <p className="text-xs">{member.doneInTime}</p>
+                <p className="text-xs">
+                  {member['To do'][0] +
+                    member['In progress'][0] +
+                    member['Testing'][0] +
+                    member['Done'][0]}{' '}
+                  (
+                  {member['To do'][1] +
+                    member['In progress'][1] +
+                    member['Testing'][1] +
+                    member['Done'][1]}{' '}
+                  points)
+                </p>
               </div>
 
-              <div className="flex justify-between ml-2 mr-3 mt-2">
+              <div className="flex justify-between ml-2 mr-3 xl:mt-3 3xl:mt-4">
                 <div className="flex">
                   <FiberManualRecordIcon
                     sx={{
-                      color: '#F69400',
+                      color: '#ff0000',
                       width: 12,
                       height: 12,
                       marginTop: 0.2,
                     }}
                   />
-                  <p className="text-xs ml-1">Done in due</p>
+                  <p className="text-xs ml-1">To Do</p>
                 </div>
-                <p className="text-xs">{member.doneInDue}</p>
+                <p className="text-xs">
+                  {member['To do'][0]} ({member['To do'][1]} points)
+                </p>
               </div>
 
-              <div className="flex justify-between ml-2 mr-3 mt-2">
+              <div className="flex justify-between ml-2 mr-3 xl:mt-3 3xl:mt-4">
                 <div className="flex">
                   <FiberManualRecordIcon
                     sx={{
-                      color: '#D90000',
+                      color: '#006BA7',
                       width: 12,
                       height: 12,
                       marginTop: 0.2,
                     }}
                   />
-                  <p className="text-xs ml-1">Overdue</p>
+                  <p className="text-xs ml-1">In progress</p>
                 </div>
-                <p className="text-xs">{member.overdue}</p>
+                <p className="text-xs">
+                  {member['In progress'][0]} ({member['In progress'][0]} points)
+                </p>
               </div>
 
-              <div className="flex mx-2 mt-3">
+              <div className="flex justify-between ml-2 mr-3 xl:mt-3 3xl:mt-4">
+                <div className="flex">
+                  <FiberManualRecordIcon
+                    sx={{
+                      color: '#EC8E00',
+                      width: 12,
+                      height: 12,
+                      marginTop: 0.2,
+                    }}
+                  />
+                  <p className="text-xs ml-1">Testing</p>
+                </div>
+                <p className="text-xs">
+                  {member['Testing'][0]} ({member['Testing'][1]} points)
+                </p>
+              </div>
+
+              <div className="flex justify-between ml-2 mr-3 xl:mt-3 3xl:mt-4">
+                <div className="flex">
+                  <FiberManualRecordIcon
+                    sx={{
+                      color: '#009606',
+                      width: 12,
+                      height: 12,
+                      marginTop: 0.2,
+                    }}
+                  />
+                  <p className="text-xs ml-1">Done</p>
+                </div>
+                <p className="text-xs">
+                  {member['Done'][0]} ({member['Done'][1]} points)
+                </p>
+              </div>
+
+              <div className="flex mx-2.5 xl:mt-5 3xl:mt-7">
                 <p
-                  className="h-1 border-0"
+                  className="h-1.5 border-0"
                   style={{
                     width: `${
-                      (member.doneInTime * 100) /
-                      (member.doneInTime + member.doneInDue + member.overdue)
+                      (member['To do'][0] * 100) /
+                      (member['To do'][0] +
+                        member['In progress'][0] +
+                        member['Testing'][0] +
+                        member['Done'][0])
                     }%`,
-                    backgroundColor: '#00980F',
+                    backgroundColor: '#ff0000',
                   }}
                 ></p>
                 <p
-                  className="h-1 border-0"
+                  className="h-1.5 border-0"
                   style={{
                     width: `${
-                      (member.doneInDue * 100) /
-                      (member.doneInTime + member.doneInDue + member.overdue)
+                      (member['In progress'][0] * 100) /
+                      (member['To do'][0] +
+                        member['In progress'][0] +
+                        member['Testing'][0] +
+                        member['Done'][0])
                     }%`,
-                    backgroundColor: '#F69400',
+                    backgroundColor: '#006BA7',
                   }}
                 ></p>
                 <p
-                  className="h-1 border-0"
+                  className="h-1.5 border-0"
                   style={{
                     width: `${
-                      (member.overdue * 100) /
-                      (member.doneInTime + member.doneInDue + member.overdue)
+                      (member['Testing'][0] * 100) /
+                      (member['To do'][0] +
+                        member['In progress'][0] +
+                        member['Testing'][0] +
+                        member['Done'][0])
                     }%`,
-                    backgroundColor: '#D90000',
+                    backgroundColor: '#EC8E00',
+                  }}
+                ></p>
+                <p
+                  className="h-1.5 border-0"
+                  style={{
+                    width: `${
+                      (member['Done'][0] * 100) /
+                      (member['To do'][0] +
+                        member['In progress'][0] +
+                        member['Testing'][0] +
+                        member['Done'][0])
+                    }%`,
+                    backgroundColor: '#009606',
                   }}
                 ></p>
               </div>
 
-              <div className="flex mx-2 mt-1 justify-between">
-                <p
-                  className="text-xs font-bold"
-                  style={{color: '#00980F'}}
-                >{`${Math.round(
-                  (member.doneInTime * 100) /
-                    (member.doneInTime + member.doneInDue + member.overdue),
-                )}%`}</p>
-                <p
-                  className="text-xs font-bold"
-                  style={{color: '#F69400'}}
-                >{`${Math.round(
-                  (member.doneInDue * 100) /
-                    (member.doneInTime + member.doneInDue + member.overdue),
-                )}%`}</p>
-                <p
-                  className="text-xs font-bold"
-                  style={{color: '#D90000'}}
-                >{`${Math.round(
-                  (member.overdue * 100) /
-                    (member.doneInTime + member.doneInDue + member.overdue),
-                )}%`}</p>
-              </div>
-
-              <div
-                className="mx-2 my-3"
-                style={{backgroundColor: '#EFEFEF', borderRadius: 4}}
-              >
-                <p className="text-2xl font-bold ml-3 pt-1.5">{`${Math.round(
-                  ((member.doneInDue + member.doneInTime) * 100) /
-                    (member.doneInDue + member.doneInTime + member.overdue),
-                )}%`}</p>
-                <p className="text-xs ml-3 pb-2">Completion Rate</p>
+              <div className="flex mx-2 mt-1.5 xl:mb-5 3xl:mb-7 justify-between">
+                {member['To do'][0] != 0 && (
+                  <p
+                    className="text-xs font-bold"
+                    style={{color: '#ff0000'}}
+                  >{`${Math.round(
+                    (member['To do'][0] * 100) /
+                      (member['To do'][0] +
+                        member['In progress'][0] +
+                        member['Testing'][0] +
+                        member['Done'][0]),
+                  )}%`}</p>
+                )}
+                {member['In progress'][0] != 0 && (
+                  <p
+                    className="text-xs font-bold"
+                    style={{color: '#006BA7'}}
+                  >{`${Math.round(
+                    (member['In progress'][0] * 100) /
+                      (member['To do'][0] +
+                        member['In progress'][0] +
+                        member['Testing'][0] +
+                        member['Done'][0]),
+                  )}%`}</p>
+                )}
+                {member['Testing'][0] != 0 && (
+                  <p
+                    className="text-xs font-bold"
+                    style={{color: '#EC8E00'}}
+                  >{`${Math.round(
+                    (member['Testing'][0] * 100) /
+                      (member['To do'][0] +
+                        member['In progress'][0] +
+                        member['Testing'][0] +
+                        member['Done'][0]),
+                  )}%`}</p>
+                )}
+                {member['Done'][0] != 0 && (
+                  <p
+                    className="text-xs font-bold"
+                    style={{color: '#009606'}}
+                  >{`${Math.round(
+                    (member['Done'][0] * 100) /
+                      (member['To do'][0] +
+                        member['In progress'][0] +
+                        member['Testing'][0] +
+                        member['Done'][0]),
+                  )}%`}</p>
+                )}
               </div>
             </div>
           );

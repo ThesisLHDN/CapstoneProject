@@ -129,7 +129,6 @@ function ProjectSetting() {
           </Breadcrumbs>
         </Grid>
       </Grid>
-
       <Typography
         variant="h5"
         sx={{
@@ -140,7 +139,6 @@ function ProjectSetting() {
       >
         Project Settings
       </Typography>
-
       <Typography
         sx={{
           display: 'flex',
@@ -156,7 +154,6 @@ function ProjectSetting() {
         />
         Name
       </Typography>
-
       <Grid container spacing={2}>
         <Grid item xs={3} sx={{marginLeft: 6, marginTop: 1, marginBottom: 3}}>
           <TextField
@@ -185,7 +182,6 @@ function ProjectSetting() {
           </Grid>
         )}
       </Grid>
-
       <Typography
         sx={{
           display: 'flex',
@@ -199,7 +195,6 @@ function ProjectSetting() {
         <KeyIcon sx={{marginRight: 2, width: 24, height: 24}} />
         Project Key
       </Typography>
-
       <Grid container spacing={2}>
         <Grid item xs={3} sx={{marginLeft: 6, marginTop: 1, marginBottom: 3}}>
           <TextField
@@ -228,7 +223,6 @@ function ProjectSetting() {
           </Grid>
         )}
       </Grid>
-
       <Typography
         sx={{
           display: 'flex',
@@ -242,7 +236,6 @@ function ProjectSetting() {
         <ShareIcon sx={{marginRight: 2, width: 24, height: 24}} />
         Sharing & Permission
       </Typography>
-
       {/* <SearchBar sx={{width: '250px', marginLeft: 6, marginTop: 2}} /> */}
       <MemberList />
 

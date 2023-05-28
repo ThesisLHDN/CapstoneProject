@@ -143,14 +143,13 @@ function TaskCard({issue, setTrigger, isChild = false}) {
 
   const deleteIssueHandler = async (e) => {
     e.preventDefault();
+    setOpenDelPopup(false);
     try {
-      const res = await axios.delete(`/issue/${issue.id}`);
-      console.log(res);
+      await axios.delete(`/issue/${issue.id}?pId=${project.id}`);
       setTrigger(true);
     } catch (err) {
       console.log(err);
     }
-    setOpenDelPopup(false);
   };
 
   useEffect(() => {
