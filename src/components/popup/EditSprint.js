@@ -9,6 +9,7 @@ import {
   FormControl,
   Typography,
 } from '@mui/material';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import {styled} from '@mui/material/styles';
 import {CssTextField} from './CreateProject';
 import {colorHover} from 'src/style';
@@ -20,8 +21,9 @@ const GrayButton = styled(Button)({
   backgroundColor: '#cdcdcd',
   color: 'black',
   borderRadius: 3,
+  width: 50,
   height: 24,
-  fontSize: 12,
+  fontSize: '12px',
   '&:hover': {
     backgroundColor: '#ddd',
   },
@@ -37,20 +39,14 @@ function formatDate(date) {
   );
 }
 
-function StartSprint({setTriggerSprint}) {
-  const {project} = useContext(AppContext);
+function EditSprint({setTriggerSprint, curSprint, complete}) {
   const [open, setOpen] = useState(false);
-  const [display, setDisplay] = useState(true);
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date(Date.now() + 12096e5));
   const [sprint, setSprint] = useState({
-    cyclename: '',
-    startDate: formatDate(startDate.toLocaleDateString('en-GB')),
-    endDate: formatDate(endDate.toLocaleDateString('en-GB')),
-    cstatus: 1,
-    goal: '',
-    ownerId: project.ownerId,
-    projectId: project.id,
+    cyclename: curSprint.cyclename,
+    endDate: formatDate(
+      new Date(curSprint?.endDate).toLocaleDateString('en-GB'),
+    ),
+    goal: curSprint.goal,
   });
 
   const handleChange = (e) => {
@@ -60,26 +56,37 @@ function StartSprint({setTriggerSprint}) {
 
   const handleClick = async (e) => {
     e.preventDefault();
-    setDisplay(false);
     try {
-      await axios.post('/sprint', sprint);
+      const res = await axios.put(`/editsprint/${curSprint.id}`, sprint);
       setOpen(false);
-      setTriggerSprint(false);
+
       // setIsSprint(true);
     } catch (err) {
       console.log(err);
     }
+    setTriggerSprint(false);
+  };
+
+  const handleCancel = () => {
+    setOpen(false);
+    setSprint({
+      cyclename: curSprint.cyclename,
+      endDate: new Date(curSprint.endDate),
+      goal: curSprint.goal,
+    });
   };
 
   return (
     <div>
-      {display && (
+      {complete && (
         <GrayButton
           onClick={() => {
             setOpen(true);
           }}
+          sx={{ml: 1}}
         >
-          Start Sprint
+          {/* <EditOutlinedIcon fontSize="small" /> */}
+          Update
         </GrayButton>
       )}
       <Dialog
@@ -94,7 +101,7 @@ function StartSprint({setTriggerSprint}) {
         <DialogTitle
           sx={{color: '#00980F', fontWeight: '900', textAlign: 'center', mt: 1}}
         >
-          Start A New Sprint
+          Update Current Sprint
         </DialogTitle>
         <DialogContent sx={{pb: 0.5}}>
           <FormControl fullWidth>
@@ -107,9 +114,9 @@ function StartSprint({setTriggerSprint}) {
               }}
             >
               Sprint name
-              <span style={{color: 'red'}}>&nbsp;*</span>
             </Typography>
             <CssTextField
+              value={sprint.cyclename}
               size="small"
               margin="dense"
               fullWidth
@@ -145,12 +152,13 @@ function StartSprint({setTriggerSprint}) {
               }}
             >
               Start date
-              <span style={{color: 'red'}}>&nbsp;*</span>
             </Typography>
             <TextField
               size="small"
               type="date"
-              defaultValue={formatDate(startDate.toLocaleDateString('en-GB'))}
+              defaultValue={formatDate(
+                new Date(curSprint.startDate).toLocaleDateString('en-GB'),
+              )}
               sx={{width: '60%'}}
               InputLabelProps={{
                 shrink: true,
@@ -167,12 +175,13 @@ function StartSprint({setTriggerSprint}) {
               }}
             >
               End date
-              <span style={{color: 'red'}}>&nbsp;*</span>
             </Typography>
             <TextField
               size="small"
               type="date"
-              defaultValue={formatDate(endDate.toLocaleDateString('en-GB'))}
+              defaultValue={formatDate(
+                new Date(curSprint.endDate).toLocaleDateString('en-GB'),
+              )}
               sx={{width: '60%'}}
               InputLabelProps={{
                 shrink: true,
@@ -191,6 +200,7 @@ function StartSprint({setTriggerSprint}) {
               Sprint goal
             </Typography>
             <CssTextField
+              value={sprint.goal}
               size="small"
               multiline
               rows={3}
@@ -208,7 +218,7 @@ function StartSprint({setTriggerSprint}) {
             variant="contained"
             onClick={handleClick}
           >
-            Create
+            Confirm
           </Button>
           <Button
             sx={{
@@ -218,7 +228,7 @@ function StartSprint({setTriggerSprint}) {
               width: '85px',
             }}
             variant="text"
-            onClick={() => setOpen(false)}
+            onClick={handleCancel}
           >
             Cancel
           </Button>
@@ -228,4 +238,4 @@ function StartSprint({setTriggerSprint}) {
   );
 }
 
-export default StartSprint;
+export default EditSprint;

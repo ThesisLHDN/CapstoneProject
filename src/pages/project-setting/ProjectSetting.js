@@ -45,7 +45,6 @@ function ProjectSetting() {
   function handleCloseDelete(result) {
     setOpenDelete(false);
   }
-
   // const [newOwner, setNewOwner] = useState(false);
 
   const [rename, setRename] = useState(false);
@@ -239,7 +238,7 @@ function ProjectSetting() {
       {/* <SearchBar sx={{width: '250px', marginLeft: 6, marginTop: 2}} /> */}
       <MemberList />
 
-      {uid === workspace.adminId && (
+      {uid === project.adminId && (
         <Grid container>
           <Grid item xs={2}>
             <Button

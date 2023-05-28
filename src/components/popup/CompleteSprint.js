@@ -1,15 +1,16 @@
-import { useContext, useState } from 'react';
+import {useContext, useState} from 'react';
 import {
   Button,
   Dialog,
   DialogTitle,
   DialogActions,
-  DialogContent, Typography
+  DialogContent,
+  Typography,
 } from '@mui/material';
-import { styled } from '@mui/material/styles';
-import { colorHover } from 'src/style';
+import {styled} from '@mui/material/styles';
+import {colorHover} from 'src/style';
 import axios from 'axios';
-import { AppContext } from 'src/Context/AppProvider';
+import {AppContext} from 'src/Context/AppProvider';
 
 const GrayButton = styled(Button)({
   textTransform: 'none',
@@ -23,10 +24,10 @@ const GrayButton = styled(Button)({
   },
 });
 
-function CompleteSprint({setTriggerIssue, sprintId}) {
+function CompleteSprint({setTriggerIssue, sprintId, display, setDisplay}) {
   const [open, setOpen] = useState(false);
   // const [sprint, setSprint] = useState('DFP Sprint 4');
-  const [display, setDisplay] = useState(true);
+  // const [display, setDisplay] = useState(true);
   const {project} = useContext(AppContext);
 
   const handleClose = () => {

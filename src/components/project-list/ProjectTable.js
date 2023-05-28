@@ -37,7 +37,7 @@ export default function ProjectTable() {
 
   const handleClick = async (pid) => {
     try {
-      await axios.post('/pmember', {
+      const res = await axios.post('/pmember', {
         email: email,
         projectId: pid,
       });

@@ -16,6 +16,7 @@ import CompleteSprint from '../popup/CompleteSprint';
 import {useLocation} from 'react-router-dom';
 import axios from 'axios';
 import {AuthContext} from 'src/Context/AuthProvider';
+import EditSprint from '../popup/EditSprint';
 
 const columnsFromBackend = [
   {
@@ -30,17 +31,17 @@ const columnsFromBackend = [
   },
 ];
 
-// const GrayButton = styled(Button)({
-//   textTransform: 'none',
-//   backgroundColor: '#cdcdcd',
-//   color: 'black',
-//   borderRadius: 3,
-//   height: 24,
-//   fontSize: 12,
-//   '&:hover': {
-//     backgroundColor: '#ddd',
-//   },
-// });
+const GrayButton = styled(Button)({
+  textTransform: 'none',
+  backgroundColor: '#cdcdcd',
+  color: 'black',
+  borderRadius: 3,
+  height: 24,
+  fontSize: 12,
+  '&:hover': {
+    backgroundColor: '#ddd',
+  },
+});
 
 const Accordion = styled((props) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -79,6 +80,7 @@ function TaskList({hide, me, vals, fil, setFil, srtVal, srt, setSrt, input}) {
   } = useContext(AuthContext);
   const [triggerSprint, setTriggerSprint] = useState(true);
   const [triggerIssue, setTriggerIssue] = useState(true);
+  const [complete, setComplete] = useState(true);
   const [columns, setColumns] = useState(columnsFromBackend);
   const [createIssueCurSprint, setCreateIssueCurSprint] = useState(false);
   const [createIssueBacklog, setCreateIssueBacklog] = useState(false);
@@ -101,8 +103,12 @@ function TaskList({hide, me, vals, fil, setFil, srtVal, srt, setSrt, input}) {
   const fetchSprintsData = async () => {
     try {
       const res = await axios.get(`/sprints/${pId}`);
-      setColumns([...res.data, ...columns]);
-      setTriggerSprint(false);
+      if (triggerSprint) {
+        setColumns([...res.data, ...columns]);
+      } else {
+        setColumns([...res.data, ...[columns[columns.length - 1]]]);
+      }
+      // setTriggerSprint(false);
       // console.log(res.data);
     } catch (err) {
       console.log(err);
@@ -177,7 +183,6 @@ function TaskList({hide, me, vals, fil, setFil, srtVal, srt, setSrt, input}) {
       setIssues([...res.data]);
       setTempIssues(res.data);
       setTriggerIssue(false);
-      console.log('AAAAAAAAAA', res);
     } catch (err) {
       console.log(err);
     }
@@ -192,7 +197,6 @@ function TaskList({hide, me, vals, fil, setFil, srtVal, srt, setSrt, input}) {
       setIssues([...res.data]);
       setTempIssues(res.data);
       setTriggerIssue(false);
-      console.log('AAAAAAAAAA', res);
     } catch (err) {
       console.log(err);
     }
@@ -279,9 +283,9 @@ function TaskList({hide, me, vals, fil, setFil, srtVal, srt, setSrt, input}) {
     if (triggerIssue) {
       fetchIssuesData();
     }
-    if (triggerSprint) {
-      fetchSprintsData();
-    }
+    // if (triggerSprint) {
+    //   fetchSprintsData();
+    // }
     if (fil) {
       filterIssue();
     }
@@ -289,7 +293,11 @@ function TaskList({hide, me, vals, fil, setFil, srtVal, srt, setSrt, input}) {
       sortIssue();
     }
     searchIssue();
-  }, [triggerIssue, triggerSprint, fil, srt, input]);
+  }, [triggerIssue, fil, srt, input]);
+
+  useEffect(() => {
+    fetchSprintsData();
+  }, [triggerSprint]);
 
   return (
     <div>
@@ -396,18 +404,22 @@ function TaskList({hide, me, vals, fil, setFil, srtVal, srt, setSrt, input}) {
                               <></>
                             )
                           ) : column.cstatus == '1' ? (
-                            <CompleteSprint
-                              setTriggerIssue={setTriggerIssue}
-                              sprintId={column.id}
-                            />
+                            <>
+                              <CompleteSprint
+                                setTriggerIssue={setTriggerIssue}
+                                sprintId={column.id}
+                                display={complete}
+                                setDisplay={setComplete}
+                              />
+                              <EditSprint
+                                setTriggerSprint={setTriggerSprint}
+                                curSprint={column}
+                                complete={complete}
+                              />
+                            </>
                           ) : (
                             <></>
                           )}
-                          {/* <GrayButton
-                            sx={{mx: 1, width: '24px !important', minWidth: 24}}
-                          >
-                            <MoreHorizIcon />
-                          </GrayButton> */}
                         </div>
                       ) : (
                         <></>
