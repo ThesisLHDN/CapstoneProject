@@ -18,6 +18,7 @@ function AuthProvider({children}) {
   const addUser = async () => {
     try {
       const res = await axios.post('/user', user);
+      console.log(user);
       console.log(res);
     } catch (err) {
       console.log(err);
