@@ -11,7 +11,7 @@ import {
 import WarningPopup from 'src/components/popup/Warning';
 import {useState} from 'react';
 import {useLocation} from 'react-router-dom';
-import axios from 'axios';
+import axios from 'src/hooks/axios';
 import {AppContext} from 'src/Context/AppProvider';
 import {AuthContext} from 'src/Context/AuthProvider';
 
@@ -44,7 +44,7 @@ function ImageIndividual({member, workspace, uid}) {
     e.preventDefault();
     try {
       const res = await axios.delete(
-        `/wsmember/${member.id}?wsId=${workspace.id}`,
+        `http://localhost:8800/wsmember/${member.id}?wsId=${workspace.id}`,
       );
       window.location.reload();
     } catch (err) {

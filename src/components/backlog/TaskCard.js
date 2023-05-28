@@ -18,7 +18,7 @@ import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {Link} from 'react-router-dom';
 import {AppContext} from 'src/Context/AppProvider';
-import axios from 'axios';
+import axios from 'src/hooks/axios';
 import ClearRoundedIcon from '@mui/icons-material/ClearRounded';
 import WarningPopup from 'src/components/popup/Warning';
 
@@ -107,12 +107,16 @@ function TaskCard({issue, setTrigger, isChild = false}) {
 
   const getAssignee = async () => {
     try {
-      const res = await axios.get(`/user/${issue.assigneeId}`);
+      const res = await axios.get(
+        `http://localhost:8800/user/${issue.assigneeId}`,
+      );
       setAssignee(res.data);
     } catch (err) {
       console.log(err);
     }
   };
+
+  console.log(assignee);
 
   const handleChange = (event, element) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
@@ -129,7 +133,7 @@ function TaskCard({issue, setTrigger, isChild = false}) {
 
   const updateIssue = async (element) => {
     try {
-      const res = await axios.put(`/issue/${issue.id}`, {
+      const res = await axios.put(`http://localhost:8800/issue/${issue.id}`, {
         cId: issue.cycleId,
         status: element,
       });
@@ -145,7 +149,9 @@ function TaskCard({issue, setTrigger, isChild = false}) {
     e.preventDefault();
     setOpenDelPopup(false);
     try {
-      await axios.delete(`/issue/${issue.id}?pId=${project.id}`);
+      await axios.delete(
+        `http://localhost:8800/issue/${issue.id}?pId=${project.id}`,
+      );
       setTrigger(true);
     } catch (err) {
       console.log(err);
@@ -292,7 +298,7 @@ function TaskCard({issue, setTrigger, isChild = false}) {
         </Popper>
 
         <Avatar
-          src={assignee.photoURL}
+          src={assignee.photoURL ? assignee.photoURL : '/'}
           sx={{
             width: 24,
             height: 24,
@@ -301,7 +307,7 @@ function TaskCard({issue, setTrigger, isChild = false}) {
             marginRight: 1,
           }}
           alt={assignee ? assignee.username : ''}
-        />
+        ></Avatar>
         <IconButton
           className={'deleteBtn'}
           sx={{width: 24, height: 24, visibility: 'hidden'}}

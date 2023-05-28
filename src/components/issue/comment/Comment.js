@@ -2,7 +2,7 @@ import {useMemo, useState} from 'react';
 import CommentForm from './CommentForm';
 import moment from 'moment/moment';
 
-import {Avatar, Box, Typography} from '@mui/material';
+import {Avatar, Box, CircularProgress, Typography} from '@mui/material';
 import {useFirestore} from 'src/hooks/useFirestore';
 
 // import {addDocument, setDocument} from 'src/firebase/services';
@@ -29,6 +29,7 @@ const Comment = ({
       sort: 'desc',
       sortAttr: 'createdAt',
     }),
+    // TODO
     [parentId],
   );
   const repliesPath = 'issues/' + issueId + '/replies';
@@ -150,7 +151,8 @@ const Comment = ({
                   updateComment(
                     newComment,
                     comment.id,
-                    subcomment ? parentId : null, // TODO replace with firestore doc id
+                    subcomment ? parentId : null, 
+                    // TODO replace with firestore doc id
                   )
                 }
                 handleCancel={() => {
@@ -233,7 +235,7 @@ const Comment = ({
           </div>
         </div>
       ) : (
-        'Loading...'
+        <CircularProgress />
       )}
     </div>
   );

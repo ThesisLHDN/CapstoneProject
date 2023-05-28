@@ -25,7 +25,7 @@ import Notification from '../notification/Notification';
 import AddMember from 'src/components/popup/AddMember';
 import {AuthContext} from 'src/Context/AuthProvider';
 import {AppContext} from 'src/Context/AppProvider';
-import axios from 'axios';
+import axios from 'src/hooks/axios';
 
 // function LinkTab(props) {
 //   return (
@@ -54,7 +54,7 @@ export default function Header() {
 
   const getLastestWorkspace = async () => {
     try {
-      const res = await axios.get(`/lastworkspace/${uid}`);
+      const res = await axios.get(`http://localhost:8800/lastworkspace/${uid}`);
       navigate(`/workspace-setting/${res.data.id}?user=${uid}`);
     } catch (err) {
       console.log(err);

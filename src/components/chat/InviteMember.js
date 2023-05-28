@@ -52,10 +52,7 @@ function InviteMember({
     } else {
       setError('Please enter email');
     }
-    // TODO check member in project
-    // TODO check member not in chat
     // console.log(email);
-    // // TODO validate
     // const newMemberList = await getDocumentWithCondition('users', {
     //   fieldName: 'email',
     //   operator: '==',

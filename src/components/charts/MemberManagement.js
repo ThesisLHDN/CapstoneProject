@@ -96,7 +96,7 @@ function MemberManagement({data, setScope}) {
             >
               <div className="flex xl:mt-4 xl:ml-3 3xl:mt-6">
                 <Avatar
-                  src={member.photoURL}
+                  src={member.photoURL ? member.photoURL : '/'}
                   sx={{
                     width: 32,
                     height: 32,

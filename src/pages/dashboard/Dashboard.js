@@ -7,7 +7,7 @@ import MemberManagement from 'src/components/charts/MemberManagement';
 import CumulativeFlow from 'src/components/charts/CumulativeFlow';
 import {AppContext} from 'src/Context/AppProvider';
 import {AuthContext} from 'src/Context/AuthProvider';
-import axios from 'axios';
+import axios from 'src/hooks/axios';
 
 function Dashboard() {
   // Context
@@ -27,8 +27,8 @@ function Dashboard() {
     try {
       const res =
         scope == 'Project'
-          ? await axios.get(`/workload/${pId}`)
-          : await axios.get(`/workload/${pId}?sprint=${true}`);
+          ? await axios.get(`http://localhost:8800/workload/${pId}`)
+          : await axios.get(`http://localhost:8800/workload/${pId}?sprint=${true}`);
       for (let i = 0; i < res.data.length; i++)
         WorkloadData[res.data[i]?.issuestatus] = res.data[i]?.numbers;
       setWorkloadData({
@@ -69,7 +69,7 @@ function Dashboard() {
   });
   const fetchBurndownData = async (pId) => {
     try {
-      const res = await axios.get(`/burndown/${pId}`);
+      const res = await axios.get(`http://localhost:8800/burndown/${pId}`);
       setBurndownData({
         labels: res.data[0],
         datasets: [
@@ -137,8 +137,8 @@ function Dashboard() {
     try {
       const res =
         scope == 'Project'
-          ? await axios.get(`/cumulative/${pId}`)
-          : await axios.get(`/cumulative/${pId}?sprint=${true}`);
+          ? await axios.get(`http://localhost:8800/cumulative/${pId}`)
+          : await axios.get(`http://localhost:8800/cumulative/${pId}?sprint=${true}`);
       setCumulative({
         labels: res.data[0],
         datasets: [
@@ -188,8 +188,8 @@ function Dashboard() {
     try {
       const res =
         scope == 'Project'
-          ? await axios.get(`/performance/${pId}`)
-          : await axios.get(`/performance/${pId}?sprint=${true}`);
+          ? await axios.get(`http://localhost:8800/performance/${pId}`)
+          : await axios.get(`http://localhost:8800/performance/${pId}?sprint=${true}`);
       console.log('ZZZZZZZZZZZZZ', res.data);
       setPerformanceData(res.data);
     } catch (err) {

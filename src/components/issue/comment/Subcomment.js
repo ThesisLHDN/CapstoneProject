@@ -1,7 +1,7 @@
 import CommentForm from './CommentForm';
 import moment from 'moment/moment';
 
-import { Avatar, Typography } from '@mui/material';
+import {Avatar, CircularProgress, Typography} from '@mui/material';
 
 const Comment = ({
   issueId,
@@ -120,7 +120,7 @@ const Comment = ({
           </div>
         </div>
       ) : (
-        'Loading...'
+        <CircularProgress />
       )}
     </div>
   );

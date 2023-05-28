@@ -15,7 +15,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import MemberList from './MemberList';
 import WarningPopup from 'src/components/popup/Warning';
 import {AppContext} from 'src/Context/AppProvider';
-import axios from 'axios';
+import axios from 'src/hooks/axios';
 import {AuthContext} from 'src/Context/AuthProvider';
 import {useNavigate} from 'react-router-dom';
 import {deleteDocument} from 'src/firebase/firestoreServices';
@@ -66,7 +66,7 @@ function ProjectSetting() {
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.put(`/project/${project.id}`, project);
+      const res = await axios.put(`http://localhost:8800/project/${project.id}`, project);
       // console.log(workspace);
       // console.log(res);
       setRename(false);
@@ -78,7 +78,7 @@ function ProjectSetting() {
 
   const getLastestWorkspace = async () => {
     try {
-      const res = await axios.get(`/lastworkspace/${uid}`);
+      const res = await axios.get(`http://localhost:8800/lastworkspace/${uid}`);
       navigate(`/workspace-setting/${res.data.id}?user=${uid}`);
     } catch (err) {
       console.log(err);
@@ -88,7 +88,7 @@ function ProjectSetting() {
   const handleDelete = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.delete(`/project/${project.id}`);
+      const res = await axios.delete(`http://localhost:8800/project/${project.id}`);
       deleteDocument('projects', {id: project.id});
       console.log(res);
       getLastestWorkspace();

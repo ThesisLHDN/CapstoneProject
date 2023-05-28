@@ -26,7 +26,7 @@ import {getDownloadURL, ref, uploadBytesResumable} from 'firebase/storage';
 import {addDocument} from 'src/firebase/firestoreServices';
 import {AuthContext} from 'src/Context/AuthProvider';
 import Attachments from './Attachments';
-import axios from 'axios';
+import axios from 'src/hooks/axios';
 
 function handleCreateTime(time) {
   const t = new Date(time);
@@ -66,7 +66,7 @@ function LeftIssueDetail({issue, setIssue, trigger, setTrigger}) {
 
   const updateIssue = async ({status, due, priority, assignee, point} = {}) => {
     try {
-      const res = await axios.put(`/issue/${issue.id}`, {
+      const res = await axios.put(`http://localhost:8800/issue/${issue.id}`, {
         issuestatus: status ? status : issue.issuestatus,
         descript: issue.descript,
         dueDate: due

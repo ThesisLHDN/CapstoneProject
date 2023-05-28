@@ -13,7 +13,7 @@ import {
   ClickAwayListener,
 } from '@mui/material';
 import TagsInput from './tags-input/TagsInput';
-import axios from 'axios';
+import axios from 'src/hooks/axios';
 import {AppContext} from 'src/Context/AppProvider';
 import {useLocation} from 'react-router-dom';
 
@@ -32,7 +32,7 @@ function RightIssueDetail({issue, setIssue, trigger, setTrigger}) {
 
   const getTags = async () => {
     try {
-      const res = await axios.get(`/tags/${issue.id}`);
+      const res = await axios.get(`http://localhost:8800/tags/${issue.id}`);
       setTags(res.data.map((tag) => tag.tagname));
       // console.log(res.data.map((tag) => tag.tagname));
     } catch (err) {
@@ -42,7 +42,7 @@ function RightIssueDetail({issue, setIssue, trigger, setTrigger}) {
 
   const getReporter = async () => {
     try {
-      const res = await axios.get(`/user/${issue.reporterId}`);
+      const res = await axios.get(`http://localhost:8800/user/${issue.reporterId}`);
       setReporter(res.data);
       // console.log(res);
     } catch (err) {
@@ -52,7 +52,7 @@ function RightIssueDetail({issue, setIssue, trigger, setTrigger}) {
 
   const getAssignee = async () => {
     try {
-      const res = await axios.get(`/user/${issue.assigneeId}`);
+      const res = await axios.get(`http://localhost:8800/user/${issue.assigneeId}`);
       setAssignee(res.data);
       // console.log(res);
     } catch (err) {
@@ -62,7 +62,7 @@ function RightIssueDetail({issue, setIssue, trigger, setTrigger}) {
 
   const fetchProjectMember = async () => {
     try {
-      const res = await axios.get(`/pmembers/${pId}`);
+      const res = await axios.get(`http://localhost:8800/pmembers/${pId}`);
       // console.log(res.data);
       setMembers([...res.data]);
     } catch (err) {
@@ -78,7 +78,7 @@ function RightIssueDetail({issue, setIssue, trigger, setTrigger}) {
   const updateIssue = async ({status, due, priority, assignee, point} = {}) => {
     console.log('################', point);
     try {
-      const res = await axios.put(`/issue/${issue.id}`, {
+      const res = await axios.put(`http://localhost:8800/issue/${issue.id}`, {
         issuestatus: status ? status : issue.issuestatus,
         descript: issue.descript,
         dueDate: due

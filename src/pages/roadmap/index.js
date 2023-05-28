@@ -5,7 +5,7 @@ import Gantt from './Gantt';
 import Toolbar from './toolbar';
 import {color} from 'src/style';
 import {useLocation} from 'react-router-dom';
-import axios from 'axios';
+import axios from 'src/hooks/axios';
 import {AppContext} from 'src/Context/AppProvider';
 import {AuthContext} from 'src/Context/AuthProvider';
 import MessageArea from './messageArea';
@@ -39,7 +39,7 @@ function RoadMap() {
 
   const fetchIssuesData = async () => {
     try {
-      const res = await axios.get(`/issues/${pId}`);
+      const res = await axios.get(`http://localhost:8800/issues/${pId}`);
 
       const data = {
         data: res.data.map((issue) => {
@@ -76,7 +76,7 @@ function RoadMap() {
 
   const updateIssue = async (cId, id, status, startDate, dueDate) => {
     try {
-      const res = await axios.put(`/issue/${id}`, {
+      const res = await axios.put(`http://localhost:8800/issue/${id}`, {
         cId: cId,
         status: status,
         startDate: startDate,
@@ -206,7 +206,7 @@ function RoadMap() {
             </>
           )}
         </Box>
-        <MessageArea messages={messagesState} />
+        {/* <MessageArea messages={messagesState} /> */}
       </Box>
     </div>
   );

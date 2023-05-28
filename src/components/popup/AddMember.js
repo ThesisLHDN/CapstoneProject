@@ -2,7 +2,7 @@ import React, {useContext, useState} from 'react';
 import {Box, Paper, Typography, Button, TextField, Dialog} from '@mui/material';
 import {color} from 'src/style';
 import {AppContext} from 'src/Context/AppProvider';
-import axios from 'axios';
+import axios from 'src/hooks/axios';
 import {useLocation} from 'react-router-dom';
 
 function AddMember(props) {
@@ -23,7 +23,7 @@ function AddMember(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('/pmember', data);
+      const res = await axios.post(`http://localhost:8800/pmember`, data);
       onClose();
     } catch (err) {
       console.log(err);

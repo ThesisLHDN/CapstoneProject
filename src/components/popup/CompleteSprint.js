@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import {styled} from '@mui/material/styles';
 import {colorHover} from 'src/style';
-import axios from 'axios';
+import axios from 'src/hooks/axios';
 import {AppContext} from 'src/Context/AppProvider';
 
 const GrayButton = styled(Button)({
@@ -42,7 +42,7 @@ function CompleteSprint({setTriggerIssue, sprintId, display, setDisplay}) {
     e.preventDefault();
     setDisplay(false);
     try {
-      const res = await axios.put(`/sprint/${sprintId}`, {
+      const res = await axios.put(`http://localhost:8800/sprint/${sprintId}`, {
         pId: project.id,
       });
       // console.log(res);

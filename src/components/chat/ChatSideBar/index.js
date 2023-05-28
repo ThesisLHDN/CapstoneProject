@@ -104,7 +104,10 @@ function ChatSideBar({data, projectId}) {
                 <Box sx={{padding: 1}}>
                   <Grid container sx={{alignItems: 'center'}}>
                     <Grid item xs={3}>
-                      <Avatar src={coverPicture} alt={name} />
+                      <Avatar
+                        src={coverPicture ? coverPicture : '/'}
+                        alt={name}
+                      />
                     </Grid>
                     <Grid item xs={6}>
                       <Typography variant="body2" sx={{fontWeight: 'bold'}}>

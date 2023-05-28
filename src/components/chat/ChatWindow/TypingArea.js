@@ -35,9 +35,6 @@ function TypingArea({uid, roomId}) {
   // const [selectedFile, setSelectedFile] = useState();
 
   const uploadHandler = async (file) => {
-    // event.preventDefault();
-
-    // todo upload
     if (file) {
       const path = `comments/${new Date().getTime() + file.name}`;
       const fileRef = ref(storage, path);

@@ -17,7 +17,7 @@ import {ref, getDownloadURL, uploadBytesResumable} from 'firebase/storage';
 import {updateAuthFirestore} from 'src/firebase/firestoreServices';
 import {storage} from 'src/firebase/config';
 import {colorHover, color} from 'src/style';
-import axios from 'axios';
+import axios from 'src/hooks/axios';
 
 function Profile() {
   const {
@@ -27,6 +27,7 @@ function Profile() {
   const [name, setName] = useState(displayName);
   const [avatar, setAvatar] = useState(photoURL);
   const [progress, setProgress] = useState();
+  const [rename, setRename] = useState();
 
   const uploadHandler = async (files) => {
     if (files) {
@@ -56,7 +57,7 @@ function Profile() {
               let downloadURL = url;
               if (downloadURL) {
                 try {
-                  const res = await axios.put(`/user/${uid}`, {
+                  const res = await axios.put(`http://localhost:8800/user/${uid}`, {
                     username: name,
                     photoURL: downloadURL,
                   });
@@ -81,7 +82,7 @@ function Profile() {
     e.preventDefault();
     if (name) {
       try {
-        const res = await axios.put(`/user/${uid}`, {
+        const res = await axios.put(`http://localhost:8800/user/${uid}`, {
           username: name,
           photoURL: avatar,
         });
@@ -91,6 +92,7 @@ function Profile() {
       } catch (err) {
         console.log(err);
       }
+      setRename(false);
     }
   };
 
@@ -99,7 +101,7 @@ function Profile() {
       <Typography variant="h5" sx={{color: color.green03, fontWeight: 700}}>
         Account Settings
       </Typography>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<CircularProgress />}>
         <Box
           sx={{
             display: 'flex',
@@ -167,6 +169,7 @@ function Profile() {
               size="small"
               sx={{width: '100%', backgroundColor: '#ECECEC'}}
               onChange={(e) => {
+                setRename(true);
                 setName(e.target.value);
               }}
               onKeyUp={(event) =>
@@ -175,7 +178,7 @@ function Profile() {
             ></TextField>
           </Grid>
           <Grid item xs={2}>
-            {name && (
+            {rename && (
               <Button
                 variant="contained"
                 sx={{ml: 1, ...colorHover.greenGradBtn}}

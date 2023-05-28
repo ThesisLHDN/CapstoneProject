@@ -51,7 +51,7 @@ function Message({mine, children}) {
       >
         {' '}
         <Paper
-          elevation={0}
+          elevation={1}
           sx={{
             overflow: 'hidden',
             maxWidth: '75%',

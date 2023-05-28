@@ -14,7 +14,7 @@ import {styled} from '@mui/material/styles';
 import {CssTextField} from './CreateProject';
 import {colorHover} from 'src/style';
 import {AppContext} from 'src/Context/AppProvider';
-import axios from 'axios';
+import axios from 'src/hooks/axios';
 
 const GrayButton = styled(Button)({
   textTransform: 'none',
@@ -57,7 +57,7 @@ function EditSprint({setTriggerSprint, curSprint, complete}) {
   const handleClick = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.put(`/editsprint/${curSprint.id}`, sprint);
+      const res = await axios.put(`http://localhost:8800/editsprint/${curSprint.id}`, sprint);
       setOpen(false);
 
       // setIsSprint(true);

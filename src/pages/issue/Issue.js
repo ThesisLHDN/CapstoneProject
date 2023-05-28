@@ -3,7 +3,7 @@ import { Grid, Breadcrumbs, Typography, Link } from '@mui/material';
 import LeftIssueDetail from 'src/components/issue/LeftIssueDetail';
 import RightIssueDetail from 'src/components/issue/RightIssueDetail';
 import { useLocation } from 'react-router-dom';
-import axios from 'axios';
+import axios from 'src/hooks/axios';
 import { AppContext } from 'src/Context/AppProvider';
 import { AuthContext } from 'src/Context/AuthProvider';
 
@@ -19,7 +19,7 @@ function Issue() {
 
   const fetchIssueData = async () => {
     try {
-      const res = await axios.get(`/issue/${issueId}`);
+      const res = await axios.get(`http://localhost:8800/issue/${issueId}`);
       setIssue(res.data);
     } catch (err) {
       console.log(err);

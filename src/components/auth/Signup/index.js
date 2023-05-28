@@ -62,12 +62,8 @@ export default function SignInSide() {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-
         const newUser = {...user, displayName: `${fName} ${lName}`};
-        // console.log(newUser);
-
         addNewUser(newUser, getAdditionalUserInfo(userCredential).providerId);
-        // setUserData(newUser);
       })
       .then(() =>
         updateProfile(auth.currentUser, {

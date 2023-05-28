@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import {useNavigate, useLocation} from 'react-router-dom';
 import TableCell from '@mui/material/TableCell';
-import axios from 'axios';
+import axios from 'src/hooks/axios';
 import {AppContext} from 'src/Context/AppProvider';
 import {AuthContext} from 'src/Context/AuthProvider';
 
@@ -27,7 +27,7 @@ export default function ProjectTable() {
   const fetchProjects = async () => {
     try {
       const res = await axios.get(
-        `/projects/${wsId}?user=${uid == workspace.adminId ? '' : uid}`,
+        `http://localhost:8800/projects/${wsId}?user=${uid == workspace.adminId ? '' : uid}`,
       );
       setProjects(res.data);
     } catch (err) {
@@ -37,7 +37,7 @@ export default function ProjectTable() {
 
   const handleClick = async (pid) => {
     try {
-      const res = await axios.post('/pmember', {
+      await axios.post(`http://localhost:8800/pmember`, {
         email: email,
         projectId: pid,
       });

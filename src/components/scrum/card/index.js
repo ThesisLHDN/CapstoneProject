@@ -11,7 +11,7 @@ import FlagRoundedIcon from '@mui/icons-material/FlagRounded';
 import QuestionMarkRoundedIcon from '@mui/icons-material/QuestionMarkRounded';
 import {useContext, useEffect, useState} from 'react';
 import {AppContext} from 'src/Context/AppProvider';
-import axios from 'axios';
+import axios from 'src/hooks/axios';
 
 const Epic = (props) => {
   const colors = (epic) => {
@@ -106,7 +106,7 @@ function Card({issue}) {
 
   const getAssignee = async () => {
     try {
-      const res = await axios.get(`/user/${issue.assigneeId}`);
+      const res = await axios.get(`http://localhost:8800/user/${issue.assigneeId}`);
       setAssignee(res.data);
       // console.log(res);
     } catch (err) {

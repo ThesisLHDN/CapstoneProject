@@ -17,7 +17,7 @@ import {styled} from '@mui/material/styles';
 import {useNavigate} from 'react-router-dom';
 import {AuthContext} from 'src/Context/AuthProvider';
 import {AppContext} from 'src/Context/AppProvider';
-import axios from 'axios';
+import axios from 'src/hooks/axios';
 import {setDocument} from 'src/firebase/firestoreServices';
 
 export const CssTextField = styled(TextField)({
@@ -78,7 +78,7 @@ function CreateProject() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const newPj = await axios.post('/project', project);
+      const newPj = await axios.post(`http://localhost:8800/project`, project);
       if (newPj.data) {
         setProjects([project, ...projects]);
         setDocument('projects', `${newPj.data.id}`, {

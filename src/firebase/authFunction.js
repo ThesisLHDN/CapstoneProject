@@ -1,20 +1,25 @@
 import {
   FacebookAuthProvider,
   GoogleAuthProvider,
-  signInWithPopup, getAdditionalUserInfo
+  signInWithPopup,
+  getAdditionalUserInfo,
 } from 'firebase/auth';
 import authErrors from './authErrors';
 
-import { collection, addDoc } from 'firebase/firestore';
+import {collection, addDoc} from 'firebase/firestore';
 
-import { db, auth } from 'src/firebase/config';
+import {db, auth} from 'src/firebase/config';
 
 const facebookProvider = new FacebookAuthProvider();
 const googleProvider = new GoogleAuthProvider();
 
 const errorCodeConverter = (error) => {
-  const errorCode = error.replace('auth/', '');
-  return authErrors[errorCode];
+  if (error) {
+    console.log(error);
+    const errorCode = error.replace('auth/', '');
+    return authErrors[errorCode];
+  }
+  return '';
 };
 
 const facebookAuthHandler = () => {

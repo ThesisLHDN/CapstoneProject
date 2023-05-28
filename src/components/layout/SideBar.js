@@ -7,7 +7,7 @@ import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 import ViewTimelineOutlinedIcon from '@mui/icons-material/ViewTimelineOutlined';
 import ViewListOutlinedIcon from '@mui/icons-material/ViewListOutlined';
-import axios from 'axios';
+import axios from 'src/hooks/axios';
 import {AppContext} from 'src/Context/AppProvider';
 
 function SideBar(props) {
@@ -57,7 +57,7 @@ function SideBar(props) {
 
   const fetchWorkspacesData = async () => {
     try {
-      const res = await axios.get(`/workspaces${user}`);
+      const res = await axios.get(`http://localhost:8800/workspaces${user}`);
       setWorkspaces(res.data);
     } catch (err) {
       console.log(err);
@@ -66,7 +66,7 @@ function SideBar(props) {
 
   const fetchProjectData = async () => {
     try {
-      const res = await axios.get(`/project/${pId}`);
+      const res = await axios.get(`http://localhost:8800/project/${pId}`);
       setProject(res.data);
     } catch (err) {
       console.log(err);
@@ -96,7 +96,7 @@ function SideBar(props) {
             <p className="mx-6 mt-4 h-0.5 border-0 bg-black font-extrabold shadow-2xl"></p>
           </div>
           <div className="mt-3">
-            {workspaces.map((wp) => (
+            {workspaces?.map((wp) => (
               <NavLink
                 key={wp.id}
                 to={`/workspace-setting/${wp.id}?user=${uid}`}

@@ -4,7 +4,6 @@ import {Chart as ChartJS} from 'chart.js/auto';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import {
   Box,
-  Button,
   ClickAwayListener,
   MenuItem,
   MenuList,

@@ -19,7 +19,7 @@ import Sort from 'src/components/Sort';
 
 import {color} from 'src/style';
 import {useContext, useEffect, useState} from 'react';
-import axios from 'axios';
+import axios from 'src/hooks/axios';
 import {useLocation} from 'react-router-dom';
 import {AppContext} from 'src/Context/AppProvider';
 import {AuthContext} from 'src/Context/AuthProvider';
@@ -58,7 +58,7 @@ function Board() {
 
   const fetchLastestSprint = async () => {
     try {
-      const res = await axios.get(`/lastsprint/${pId}`);
+      const res = await axios.get(`http://localhost:8800/lastsprint/${pId}`);
       setLastestSprint(res.data);
       console.log(res.data);
     } catch (err) {
