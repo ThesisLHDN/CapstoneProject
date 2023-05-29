@@ -115,6 +115,7 @@ const deleteDocument = async (collectionPath, data) => {
   console.log(data);
   const id = `${data.id}`;
   console.log('delete', collectionPath, id);
+  var storagePath = null;
   try {
     const split = collectionPath.split('/');
     const last = split[split.length - 1];
@@ -135,12 +136,12 @@ const deleteDocument = async (collectionPath, data) => {
         });
         break;
       case 'messages':
-        var storagePath = data.file ? data.file.storagePath : null;
+        storagePath = data.file ? data.file.storagePath : null;
         console.log('delete nè trời', storagePath);
         deleteFromStorage(storagePath);
         break;
       case 'comments':
-        var storagePath = data.storagePath;
+        storagePath = data.storagePath;
         deleteFromStorage(storagePath);
         break;
       case 'documents':

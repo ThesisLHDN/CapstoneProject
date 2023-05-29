@@ -8,7 +8,7 @@ import {useLocation} from 'react-router-dom';
 import axios from 'src/hooks/axios';
 import {AppContext} from 'src/Context/AppProvider';
 import {AuthContext} from 'src/Context/AuthProvider';
-import MessageArea from './messageArea';
+// import MessageArea from './messageArea';
 import moment from 'moment/moment';
 
 // import Filter from 'src/components/Filter';

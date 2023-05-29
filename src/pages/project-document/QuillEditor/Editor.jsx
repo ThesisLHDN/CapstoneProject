@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import ReactQuill from 'react-quill';
 // import ImageResize  from 'quill-image-resize-module';
 import 'react-quill/dist/quill.snow.css';
 // import katex from "katex";
 // import "katex/dist/katex.min.css";
 import CustomToolbar from './CustomToolbar';
-import { Box, Button, Paper, TextField, Dialog, Typography } from '@mui/material';
+import {Box, Button, Paper, TextField, Dialog, Typography} from '@mui/material';
 import './quill.css';
 // window.katex = katex;
-import { color } from 'src/style';
+import {colorHover} from 'src/style';
 
 // Quill.register('modules/ImageResize',ImageResize);
 const Editor = ({file, onClose, open, editing}) => {
@@ -121,14 +121,7 @@ const Editor = ({file, onClose, open, editing}) => {
             >
               Cancel
             </Button>
-            <Button
-              sx={{
-                backgroundColor: color.green03,
-                color: 'white',
-                '&:hover': {backgroundColor: '#1BB738'},
-              }}
-              onClick={onSaveHandler}
-            >
+            <Button sx={{...colorHover.greenGradBtn}} onClick={onSaveHandler}>
               Save
             </Button>
           </Box>

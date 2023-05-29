@@ -107,16 +107,12 @@ function TaskCard({issue, setTrigger, isChild = false}) {
 
   const getAssignee = async () => {
     try {
-      const res = await axios.get(
-        `/user/${issue.assigneeId}`,
-      );
+      const res = await axios.get(`/user/${issue.assigneeId}`);
       setAssignee(res.data);
     } catch (err) {
       console.log(err);
     }
   };
-
-  console.log(assignee);
 
   const handleChange = (event, element) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
@@ -149,9 +145,7 @@ function TaskCard({issue, setTrigger, isChild = false}) {
     e.preventDefault();
     setOpenDelPopup(false);
     try {
-      await axios.delete(
-        `/issue/${issue.id}?pId=${project.id}`,
-      );
+      await axios.delete(`/issue/${issue.id}?pId=${project.id}`);
       setTrigger(true);
     } catch (err) {
       console.log(err);
@@ -166,10 +160,11 @@ function TaskCard({issue, setTrigger, isChild = false}) {
 
   return (
     <Box
-      className={`flex justify-between hover:cursor-pointer ${
-        isChild ? 'my-2' : ''
-      }`}
+      className={` hover:cursor-pointer ${isChild ? 'my-2' : ''}`}
       sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        width: '100%',
         '&:hover .deleteBtn': {
           visibility: 'visible',
         },
@@ -215,8 +210,8 @@ function TaskCard({issue, setTrigger, isChild = false}) {
         </span>
 
         <Button
+          size="small"
           style={{
-            display: 'flex',
             textTransform: 'none',
             height: 24,
             borderRadius: 3,
@@ -242,9 +237,9 @@ function TaskCard({issue, setTrigger, isChild = false}) {
             }`,
           }}
           onClick={handleClick}
+          endIcon={<ExpandMoreIcon />}
         >
           {status}
-          <ExpandMoreIcon />
         </Button>
 
         <Popper id={id} open={open} anchorEl={anchorEl} sx={{zIndex: 5}}>
@@ -298,7 +293,7 @@ function TaskCard({issue, setTrigger, isChild = false}) {
         </Popper>
 
         <Avatar
-          src={assignee.photoURL ? assignee.photoURL : '/'}
+          src={`${assignee.photoURL}`}
           sx={{
             width: 24,
             height: 24,
@@ -316,6 +311,7 @@ function TaskCard({issue, setTrigger, isChild = false}) {
           <ClearRoundedIcon />{' '}
         </IconButton>
       </div>
+
       <WarningPopup
         title={'Delete Issue'}
         open={openDelPopup}

@@ -66,7 +66,7 @@ function ImageIndividual({member, workspace, uid}) {
       <ImageListItem key={member.id} sx={{overflowX: 'visible !important'}}>
         <Avatar
           alt={member.username ? member.username : member.email}
-          src={member.photoURL}
+          src={member.photoURL ? member.photoURL : '/'}
           // {...stringAvatar(member.username ? member.username : member.email)}
         />
       </ImageListItem>
@@ -141,7 +141,7 @@ function AvatarList() {
 
   const fetchWorkspaceMember = async () => {
     try {
-      const res = await axios.get(`/wsmember/${wsId}`);
+      const res = await axios.get(`http://localhost:8800/wsmember/${wsId}`);
       console.log(res, res.data);
       setMembers(res.data);
     } catch (err) {

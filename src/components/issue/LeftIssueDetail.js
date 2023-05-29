@@ -230,14 +230,18 @@ function LeftIssueDetail({issue, setIssue, trigger, setTrigger}) {
                 ? '#A4E7AB'
                 : issue.issuestatus === 'In progress'
                 ? '#9AD1EF'
-                : '#EDCBB9'
+                : issue.issuestatus === 'To do'
+                ? '#EDCBB9'
+                : '#FFE663'
             }`,
             color: `${
               issue.issuestatus === 'Done'
                 ? '#009606'
                 : issue.issuestatus === 'In progress'
                 ? '#006BA7'
-                : '#EC6F28'
+                : issue.issuestatus === 'To do'
+                ? '#EC6F28'
+                : '#EC8E00'
             }`,
           }}
           onClick={handleClick}

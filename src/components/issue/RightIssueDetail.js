@@ -146,7 +146,7 @@ function RightIssueDetail({issue, setIssue, trigger, setTrigger}) {
             <LinearProgress
               aria-label="progress-bar"
               variant="determinate"
-              value={`${
+              value={
                 issue.dueDate
                   ? Math.ceil(
                       Math.abs(
@@ -157,7 +157,7 @@ function RightIssueDetail({issue, setIssue, trigger, setTrigger}) {
                       ),
                     )
                   : 0
-              }`}
+              }
               color="success"
               sx={{
                 marginTop: 2,
@@ -200,10 +200,16 @@ function RightIssueDetail({issue, setIssue, trigger, setTrigger}) {
                 {assignee.username ? (
                   <div className="flex">
                     <Avatar
-                      src={assignee.photoURL}
-                      sx={{width: 32, height: 32, backgroundColor: '#8993A4'}}
-                      alt={assignee.username}
-                    />
+                      src={`${assignee.photoURL}`}
+                      sx={{
+                        width: 24,
+                        height: 24,
+                        ml: 1,
+                        backgroundColor: '#8993A4',
+                        marginRight: 1,
+                      }}
+                      alt={assignee ? assignee.username : ''}
+                    ></Avatar>
                     <span className="mt-1 ml-2 text-sm text-black">
                       {assignee.username ? assignee.username : ''}
                     </span>

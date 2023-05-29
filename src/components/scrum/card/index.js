@@ -13,35 +13,35 @@ import {useContext, useEffect, useState} from 'react';
 import {AppContext} from 'src/Context/AppProvider';
 import axios from 'src/hooks/axios';
 
-const Epic = (props) => {
-  const colors = (epic) => {
-    switch (epic) {
-      case 'Epic 1':
-        return ['#bee8e8', '#3db0d1'];
-      case 'Epic 2':
-        return ['#FFE5E2', '#E93B81'];
-      case 'Epic 3':
-        return ['#DEFBC2', '#459D72'];
-      default:
-        return ['#ccc', '#3C4048'];
-    }
-  };
+// const Epic = (props) => {
+//   const colors = (epic) => {
+//     switch (epic) {
+//       case 'Epic 1':
+//         return ['#bee8e8', '#3db0d1'];
+//       case 'Epic 2':
+//         return ['#FFE5E2', '#E93B81'];
+//       case 'Epic 3':
+//         return ['#DEFBC2', '#459D72'];
+//       default:
+//         return ['#ccc', '#3C4048'];
+//     }
+//   };
 
-  const [background, text] = colors(props.children);
-  return (
-    <Chip
-      sx={{
-        color: text,
-        backgroundColor: background,
-        display: 'inline-flex',
-        borderRadius: '2px',
-        mr: 1,
-      }}
-      size="small"
-      label={props.children}
-    />
-  );
-};
+//   const [background, text] = colors(props.children);
+//   return (
+//     <Chip
+//       sx={{
+//         color: text,
+//         backgroundColor: background,
+//         display: 'inline-flex',
+//         borderRadius: '2px',
+//         mr: 1,
+//       }}
+//       size="small"
+//       label={props.children}
+//     />
+//   );
+// };
 
 export const issueIcon = (type) => {
   switch (type) {
@@ -157,10 +157,16 @@ function Card({issue}) {
               <Chip size="small" label={issue.estimatePoint} />
             )}
             <Avatar
-              src={assignee.photoURL}
-              sx={{width: 32, height: 32, ml: 1}}
-              alt={issue.assigneeId}
-            />
+              src={`${assignee.photoURL}`}
+              sx={{
+                width: 24,
+                height: 24,
+                ml: 1,
+                backgroundColor: '#8993A4',
+                marginRight: 1,
+              }}
+              alt={assignee ? assignee.username : ''}
+            ></Avatar>
           </div>
         </div>
       </Paper>

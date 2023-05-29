@@ -164,6 +164,7 @@ function AddItem({parentId, projectId, onClose}) {
                 <MenuItem sx={{fontSize: 14}}>
                   <NoteAddRoundedIcon />
                   <input
+                    multiple
                     type="file"
                     id="upload"
                     hidden
