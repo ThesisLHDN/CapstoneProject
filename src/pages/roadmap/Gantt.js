@@ -148,6 +148,8 @@ export default class Gantt extends Component {
     gantt.locale.labels.section_priority = 'Priority';
     gantt.locale.labels.section_period = 'Time period';
     gantt.locale.labels.section_parent = 'Parent';
+    gantt.config.min_duration = 1;
+    gantt.config.autoscroll = true;
 
     gantt.config.columns = [
       {

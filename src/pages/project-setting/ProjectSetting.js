@@ -265,7 +265,7 @@ function ProjectSetting() {
               onClose={handleCloseDelete}
               title={
                 <p>
-                  Delete <i>Project 01</i>
+                  Delete <i>{project.pname}</i>
                 </p>
               }
               content={

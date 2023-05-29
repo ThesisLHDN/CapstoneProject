@@ -26,6 +26,7 @@ import {getDownloadURL, ref, uploadBytesResumable} from 'firebase/storage';
 import {addDocument} from 'src/firebase/firestoreServices';
 import {AuthContext} from 'src/Context/AuthProvider';
 import Attachments from './Attachments';
+import Priority from 'src/components/priorities';
 import axios from 'src/hooks/axios';
 
 function handleCreateTime(time) {
@@ -417,18 +418,21 @@ function LeftIssueDetail({issue, setIssue, trigger, setTrigger}) {
               style={{
                 textTransform: 'none',
                 height: 20,
-                color: `${
-                  issue.priority === 'High'
-                    ? 'red'
-                    : issue.priority === 'Medium'
-                    ? 'orange'
-                    : 'green'
-                }`,
+                // color: `${
+                //   issue.priority === 'High'
+                //     ? 'red'
+                //     : issue.priority === 'Medium'
+                //     ? 'orange'
+                //     : 'green'
+                // }`,
               }}
               onClick={handleClickPriority}
             >
-              {issue.priority}
-              {/* <KeyboardDoubleArrowUpIcon /> */}
+              {issue.priority ? (
+                <Priority priority={issue.priority} text />
+              ) : (
+                'Select'
+              )}
             </Button>
             <Popper
               id={idPriority}
@@ -452,7 +456,7 @@ function LeftIssueDetail({issue, setIssue, trigger, setTrigger}) {
                   }}
                 >
                   <MenuList sx={{px: 0, width: '100%'}}>
-                    {['High', 'Medium', 'Low']
+                    {['Critical', 'High', 'Medium', 'Low']
                       .filter((element) => {
                         return element !== issue.priority;
                       })
@@ -463,17 +467,10 @@ function LeftIssueDetail({issue, setIssue, trigger, setTrigger}) {
                               py: 1,
                               fontSize: 14,
                               fontWeight: 600,
-                              color: `${
-                                element === 'High'
-                                  ? 'red'
-                                  : element === 'Medium'
-                                  ? 'orange'
-                                  : 'green'
-                              }`,
                             }}
                             onClick={(e) => handleChangePriority(e, element)}
                           >
-                            {element}
+                            <Priority priority={element} text></Priority>
                           </MenuItem>
                         );
                       })}

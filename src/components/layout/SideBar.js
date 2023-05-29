@@ -49,7 +49,7 @@ function SideBar(props) {
   const [isActive, setIsActive] = useState(false);
   const [workspaces, setWorkspaces] = useState([]);
   const {project, setProject} = useContext(AppContext);
-  const [char, setChar] = useState('');
+  // const [char, setChar] = useState('');
 
   const {
     user: {uid},
@@ -71,7 +71,7 @@ function SideBar(props) {
     } catch (err) {
       console.log(err);
     }
-    setChar(project.pname?.charAt(0));
+    // setChar(project.pname?.charAt(0));
   };
 
   useEffect(() => {
@@ -127,7 +127,7 @@ function SideBar(props) {
               }}
               className="text-4xl font-extrabold px-3 py-0.5 rounded text-white"
             >
-              {char?.toUpperCase()}
+              {project.pname ? project.pname[0].toUpperCase() : ''}
             </p>
             <p className="ml-3 2xl:text-base xl:text-sm py-3 font-semibold text-green-tx overflow-hidden truncate">
               {project.pname}

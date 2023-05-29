@@ -1,8 +1,8 @@
-import { useContext, useState } from 'react';
-import { Box, Paper, Typography, Button, TextField, Dialog } from '@mui/material';
-import { color } from 'src/style';
-import { AppContext } from 'src/Context/AppProvider';
-import { updateDocument } from 'src/firebase/firestoreServices';
+import {useContext, useState} from 'react';
+import {Box, Paper, Typography, Button, TextField, Dialog} from '@mui/material';
+import {color} from 'src/style';
+import {AppContext} from 'src/Context/AppProvider';
+import {updateDocument} from 'src/firebase/firestoreServices';
 
 function InviteMember({
   onSubmit,
@@ -44,7 +44,7 @@ function InviteMember({
             members: selectedRoom.members,
             allmembers: selectedRoom.allmembers,
           });
-          setError();
+          setError(`Successfully added ${email} to this room`);
         }
       } else {
         setError('Member not found in project');

@@ -183,6 +183,7 @@ function Scrum({me, sprint, vals, fil, setFil, srtVal, srt, setSrt, input}) {
         justifyContent: 'flex-start',
         height: '100%',
         marginTop: 10,
+        height: 'fit-content',
       }}
     >
       <DragDropContext onDragEnd={(result) => onDragEnd(result, columns)}>
@@ -193,6 +194,7 @@ function Scrum({me, sprint, vals, fil, setFil, srtVal, srt, setSrt, input}) {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
+                height: '100%',
               }}
               key={column.id}
             >
@@ -210,7 +212,8 @@ function Scrum({me, sprint, vals, fil, setFil, srtVal, srt, setSrt, input}) {
                               : '#e8e8e8',
                             padding: 8,
                             width: '19vw',
-                            minHeight: 500,
+                            minHeight: 700,
+                            height: '100%',
                             borderRadius: 5,
                           }}
                         >

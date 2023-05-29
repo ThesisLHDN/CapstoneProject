@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import {Box, Paper, Typography, Button, TextField, Dialog} from '@mui/material';
-import {color} from 'src/style';
+import {color, colorHover} from 'src/style';
 
 function CreationPopup({
   title,
@@ -122,9 +122,10 @@ function CreationPopup({
           <Button
             size="small"
             sx={{
-              backgroundColor: color.green03,
-              color: 'white',
-              '&:hover': {backgroundColor: '#1BB738'},
+              ...colorHover.greenGradBtn,
+              // backgroundColor: color.green03,
+              // color: 'white',
+              // '&:hover': {backgroundColor: '#1BB738'},
             }}
             onClick={() => onSubmitHandler(input)}
           >

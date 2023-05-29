@@ -6,6 +6,7 @@ import {
   Popper,
   ClickAwayListener,
   Box,
+  Typography,
   MenuList,
   MenuItem,
 } from '@mui/material';
@@ -21,6 +22,7 @@ import {AppContext} from 'src/Context/AppProvider';
 import axios from 'src/hooks/axios';
 import ClearRoundedIcon from '@mui/icons-material/ClearRounded';
 import WarningPopup from 'src/components/popup/Warning';
+import Priority from 'src/components/priorities';
 
 export const IssueIcon = (type) => {
   switch (type) {
@@ -291,6 +293,8 @@ function TaskCard({issue, setTrigger, isChild = false}) {
             </Box>
           </ClickAwayListener>
         </Popper>
+
+        <Priority priority={issue.priority} text/>
 
         <Avatar
           src={`${assignee.photoURL}`}

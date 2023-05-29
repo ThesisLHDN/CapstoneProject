@@ -21,7 +21,7 @@ function TagsInput(props) {
 
   const createTag = async (tagname) => {
     try {
-      await axios.post(`'/tag`, {
+      await axios.post(`/tag`, {
         tagname: tagname,
         issueId: props.issueId,
       });

@@ -12,6 +12,7 @@ import QuestionMarkRoundedIcon from '@mui/icons-material/QuestionMarkRounded';
 import {useContext, useEffect, useState} from 'react';
 import {AppContext} from 'src/Context/AppProvider';
 import axios from 'src/hooks/axios';
+import Priority from 'src/components/priorities';
 
 // const Epic = (props) => {
 //   const colors = (epic) => {
@@ -156,6 +157,22 @@ function Card({issue}) {
             {issue.estimatePoint && (
               <Chip size="small" label={issue.estimatePoint} />
             )}
+            <Priority priority={issue.priority}></Priority>
+            {/* <Typography
+              variant="subtitle2"
+              sx={{
+                ml: 1,
+                color: `${
+                  issue.priority === 'High'
+                    ? 'red'
+                    : issue.priority === 'Medium'
+                    ? 'orange'
+                    : 'green'
+                }`,
+              }}
+            >
+              {issue.priority}
+            </Typography> */}
             <Avatar
               src={`${assignee.photoURL}`}
               sx={{

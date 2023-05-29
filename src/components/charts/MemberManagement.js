@@ -79,13 +79,13 @@ function MemberManagement({data, setScope}) {
 
       <div
         className={`flex mt-6 ${
-          data.length <= 2 ? 'xl:mb-8' : 'xl:mb-5'
-        } 2xl:mb-4 overflow-auto ml-6`}
+          data.length !== 0 ? 'xl:mb-8 2xl:mb-4' : 'xl:mb-5 2xl:mb-80 2xl:mt-10'
+        } overflow-auto ml-6`}
       >
         {data.map((member) => {
           return (
             <div
-              className="xl:mb-2 2xl:mb-10 2xl:mt-5 3xl:mt-7 3xl:mb-16"
+              className="xl:mb-2 2xl:mb-8 2xl:mt-2 3xl:mt-7 3xl:mb-16"
               key={member.id}
               style={{
                 border: '1px solid gray',

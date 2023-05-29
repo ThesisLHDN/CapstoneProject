@@ -66,8 +66,6 @@ function RoadMap() {
           };
         }),
       };
-      console.log('roadmap data', data);
-
       setIssues(data);
     } catch (err) {
       console.log(err);
@@ -82,8 +80,7 @@ function RoadMap() {
         startDate: startDate,
         dueDate: dueDate ? dueDate : null,
       });
-      console.log('update successful', res);
-      // setIssues([...res.data]);
+      console.log('Update successful', res);
     } catch (err) {
       console.log(err);
     }
@@ -93,26 +90,18 @@ function RoadMap() {
     fetchIssuesData();
   }, []);
 
-  const addMessage = (message) => {
-    const maxLogLength = 5;
-    const newMessage = {message};
-    const messages = [newMessage, ...messagesState];
+  // const addMessage = (message) => {
+  //   const maxLogLength = 5;
+  //   const newMessage = {message};
+  //   const messages = [newMessage, ...messagesState];
 
-    if (messages.length > maxLogLength) {
-      messages.length = maxLogLength;
-    }
-    setMessagesState(messages);
-  };
+  //   if (messages.length > maxLogLength) {
+  //     messages.length = maxLogLength;
+  //   }
+  //   setMessagesState(messages);
+  // };
 
   const updateItem = (type, action, item, id) => {
-    console.log(
-      'update',
-      item.cId,
-      item.id,
-      item.status,
-      item.start_date,
-      item.end_date,
-    );
     convertTime(item.start_date, item.end_date);
     updateIssue(
       item.cId,
