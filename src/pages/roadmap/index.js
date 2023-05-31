@@ -63,6 +63,7 @@ function RoadMap() {
             open: true,
             projectId: issue.projectId,
             cId: issue.cycleId,
+            type: issue.issueType,
           };
         }),
       };

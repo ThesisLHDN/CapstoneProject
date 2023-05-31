@@ -151,6 +151,10 @@ export default class Gantt extends Component {
     gantt.config.min_duration = 1;
     gantt.config.autoscroll = true;
 
+    gantt.templates.grid_file = function (item) {
+      return `<div class='icon ${item.type}'></div>`;
+    };
+
     gantt.config.columns = [
       {
         name: 'text',
