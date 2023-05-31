@@ -120,6 +120,7 @@ function CreationPopup({
             {cancelContent ? cancelContent : 'Cancel'}
           </Button>
           <Button
+            variant="contained"
             size="small"
             sx={{
               ...colorHover.greenGradBtn,

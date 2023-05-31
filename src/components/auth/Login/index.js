@@ -1,13 +1,11 @@
 import {useState} from 'react';
 import {errorCodeConverter} from 'src/firebase/authServices';
-
+import {Link} from 'react-router-dom';
+import logo from 'src/assets/logo/official/icon_color.svg';
 import {
   Button,
   IconButton,
   TextField,
-  FormControlLabel,
-  Checkbox,
-  Link,
   Box,
   Grid,
   Divider,
@@ -16,7 +14,7 @@ import {
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {ReactComponent as FacebookIcon} from '../logo/Facebook.svg';
 import {ReactComponent as GoogleIcon} from '../logo/Google.svg';
-import {color, colorHover} from 'src/style';
+import {color, colorHover, background} from 'src/style';
 
 import {signInWithEmailAndPassword} from 'firebase/auth';
 import {auth} from 'src/firebase/config';
@@ -66,11 +64,10 @@ export default function SignInSide() {
         container
         component="main"
         sx={{
-          background:
-            'radial-gradient(farthest-corner at -100% -00%, #5DC75C, #7CC7B2, #5B69C6)',
           height: '100vh',
           justifyContent: 'center',
           alignItems: 'center',
+          ...background.landingBG,
         }}
       >
         <Box
@@ -88,6 +85,7 @@ export default function SignInSide() {
             height: 'fit-content',
           }}
         >
+          <img src={logo} atl={''} />
           <Typography component="h1" variant="h5">
             Login to your account
           </Typography>
@@ -103,32 +101,37 @@ export default function SignInSide() {
               },
             }}
           >
-            <TextField
-              size="small"
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Enter email"
-              name="email"
-              autoComplete="email"
-              autoFocus
-              onChange={onChangeHandler}
-              sx={{borderWidth: 2, borderColor: 'green'}}
-            />
-            <TextField
-              size="small"
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Enter password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              onChange={onChangeHandler}
-            />
-            <FormControlLabel
+            <Grid container sx={{display: 'flex', gap: 2}}>
+              <Grid item xs={12}>
+                <TextField
+                  size="small"
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  autoComplete="email"
+                  autoFocus
+                  onChange={onChangeHandler}
+                  sx={{borderWidth: 2, borderColor: 'green'}}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  size="small"
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="current-password"
+                  onChange={onChangeHandler}
+                />
+              </Grid>
+            </Grid>
+
+            {/* <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
               sx={{
@@ -139,7 +142,7 @@ export default function SignInSide() {
                   fontSize: 14,
                 },
               }}
-            />
+            /> */}
             {error && (
               <Typography
                 variant="subtitle2"
@@ -152,29 +155,29 @@ export default function SignInSide() {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{...colorHover.greenGradBtn}}
+              sx={{mt: 2, ...colorHover.greenGradBtn}}
             >
               Login
             </Button>
-            <Grid
-              container
-              sx={{lineHeight: '40px', mt: 1, color: color.gray02}}
-            >
-              <Grid item xs>
-                <Typography variant="body2" sx={{lineHeight: 'inherit'}}>
-                  <Link
-                    href="/forget"
-                    variant="body2"
-                    sx={{color: color.green03}}
-                  >
+            <Grid container spacing={0} justifyContent="space-around">
+              <Grid item xs={5}>
+                <Typography
+                  variant="body2"
+                  sx={{lineHeight: '40px', color: color.gray02, mt: 1}}
+                >
+                  <Link to="/forgot" style={{color: color.green03}}>
                     Forgot password?
                   </Link>
                 </Typography>
               </Grid>
-              <Grid item>
-                <Typography variant="body2" sx={{lineHeight: 'inherit'}}>
+
+              <Grid item xs={7}>
+                <Typography
+                  variant="body2"
+                  sx={{lineHeight: '40px', color: color.gray02, mt: 1}}
+                >
                   Don't have an account?{' '}
-                  <Link href="/signup" sx={{color: color.green03}}>
+                  <Link to="/signup" style={{color: color.green03}}>
                     {'Sign Up'}
                   </Link>
                 </Typography>
