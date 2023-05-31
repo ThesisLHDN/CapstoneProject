@@ -21,6 +21,8 @@ export default function ChatProvider({children}) {
       fieldName: 'members',
       operator: 'array-contains',
       compareValue: uid,
+      sort: 'desc',
+      sortAttr: 'updatedAt',
     }),
     [uid],
   );
