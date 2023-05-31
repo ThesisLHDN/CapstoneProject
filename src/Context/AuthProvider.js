@@ -43,15 +43,15 @@ function AuthProvider({children}) {
         if (
           pathName === '/login' ||
           pathName === '/signup' ||
-          pathName === '/forget' ||
+          pathName === 'forgot' ||
           pathName === '/'
         ) {
           getLastestWorkspace(uid);
         }
         setIsLoading(false);
       } else {
-        if (pathName !== '/signup' && pathName !== '/forget') {
-          history('/login');
+        if (!['/signup', '/forgot', '', '/login'].includes(pathName)) {
+          history('');
           setIsLoading(false);
         } else {
           setIsLoading(false);

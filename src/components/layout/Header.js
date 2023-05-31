@@ -1,5 +1,5 @@
 import {useContext, useState} from 'react';
-import logo from 'src/assets/images/logo.svg';
+import logo from "src/assets/logo/official/full_color.svg";
 import {
   Box,
   Tabs,

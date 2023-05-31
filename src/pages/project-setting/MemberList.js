@@ -93,7 +93,7 @@ function MemberList() {
             <TableRow>
               <TableCell sx={{fontWeight: 700}}>Name</TableCell>
               <TableCell sx={{fontWeight: 700}}>Email</TableCell>
-              <TableCell align="right" sx={{fontWeight: 700}}>
+              <TableCell align="center" sx={{fontWeight: 700}}>
                 Role
               </TableCell>
               {uid == project.adminId && (
@@ -110,7 +110,7 @@ function MemberList() {
                 <TableCell component="th" scope="row">
                   {member.email}
                 </TableCell>
-                <TableCell align="right">
+                <TableCell align="center">
                   <Button
                     style={{
                       display: 'inline-flex',
