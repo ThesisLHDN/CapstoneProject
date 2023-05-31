@@ -18,6 +18,7 @@ import axios from 'src/hooks/axios';
 
 import {AuthContext} from 'src/Context/AuthProvider';
 import EditSprint from '../popup/EditSprint';
+import { setDocument} from 'src/firebase/firestoreServices';
 
 const columnsFromBackend = [
   {
@@ -159,6 +160,9 @@ function TaskList({hide, me, vals, fil, setFil, srtVal, srt, setSrt, input}) {
           createTime: new Date().toISOString().slice(0, 19).replace('T', ' '),
           cycleId: columnId,
         });
+        if (res.data) {
+          setDocument(`issues`, `${res.data.id}`, {projectId: pId});
+        }
         setTriggerIssue(true);
         event.target.value = '';
       }
