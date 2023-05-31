@@ -235,7 +235,7 @@ function Scrum({me, sprint, vals, fil, setFil, srtVal, srt, setSrt, input}) {
                             })
                             .map((issue, index) => {
                               return (
-                                <div>
+                                <div key={issue.id}>
                                   {!me || issue.assigneeId === uid ? (
                                     <Draggable
                                       key={issue.id}
