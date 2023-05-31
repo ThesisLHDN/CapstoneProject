@@ -73,3 +73,32 @@
   align-items: center;
   justify-content: center;
 }
+
+.icon.task {
+  color: blue;
+  background-image: url(icon/task.png);
+}
+.icon.story {
+  color: green;
+  background-image: url(icon/story.png);
+}
+.icon.bug {
+  color: red;
+  background-image: url(icon/bug.png);
+}
+
+.icon {
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+  margin-left: 4px;
+  background-size: cover;
+  flex-shrink: 0;
+}
+
+.gantt_tree_icon.gantt_blank {
+  width: 0px;
+}
+.gantt_cell.gantt_cell_tree {
+  align-items: center;
+}
