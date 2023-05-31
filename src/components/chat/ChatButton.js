@@ -1,5 +1,5 @@
 import {useMemo, useState} from 'react';
-import {color} from 'src/style';
+import {color, colorHover} from 'src/style';
 import {IconButton} from '@mui/material';
 import ChatRoundedIcon from '@mui/icons-material/ChatRounded';
 import ChatProvider from 'src/Context/ChatProvider';
@@ -41,9 +41,14 @@ function ChatButton({currentUser, projectId}) {
       <IconButton
         aria-label="chat-button"
         onClick={() => setOpenChat(true)}
-        sx={{position: 'fixed', bottom: 40, right: 40}}
+        sx={{
+          position: 'fixed',
+          bottom: 40,
+          right: 40,
+          ...colorHover.greenGradBtn,
+        }}
       >
-        <ChatRoundedIcon sx={{width: 40, height: 40, color: color.green03}} />
+        <ChatRoundedIcon sx={{width: 40, height: 40}} />
       </IconButton>
       {Chat}
       {/* </Badge> */}
