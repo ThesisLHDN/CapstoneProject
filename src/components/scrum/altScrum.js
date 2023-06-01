@@ -62,7 +62,7 @@ function Scrum({me, sprint, vals, fil, setFil, srtVal, srt, setSrt, input}) {
           : null,
       });
       // setIssues([...res.data]);
-      console.log(res);
+      // console.log(res);
     } catch (err) {
       console.log(err);
     }

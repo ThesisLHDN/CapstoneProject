@@ -11,12 +11,11 @@ function Issue() {
   const {
     user: {uid},
   } = useContext(AuthContext);
-  const {project} = useContext(AppContext);
+  const {project, reload, setReload} = useContext(AppContext);
   const location = useLocation();
   const issueId = location.pathname.split('/')[3];
   const [issue, setIssue] = useState({});
   const [trigger, setTrigger] = useState(false);
-  console.log(issue);
 
   const fetchIssueData = async () => {
     try {
@@ -30,6 +29,13 @@ function Issue() {
   useEffect(() => {
     fetchIssueData();
   }, [trigger]);
+
+  useEffect(() => {
+    if (reload == true) {
+      window.location.reload();
+      setReload(false);
+    }
+  }, [reload]);
 
   return (
     <div>

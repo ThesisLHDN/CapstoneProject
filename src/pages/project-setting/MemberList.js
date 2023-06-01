@@ -8,25 +8,25 @@ import {
   TableRow,
   Paper,
   Button,
-  // Popper,
-  // MenuList,
-  // MenuItem,
-  // ClickAwayListener,
-  // Box,
+  Typography,
+  FormControl,
+  MenuItem,
+  Select,
+  Avatar,
 } from '@mui/material';
 import {AppContext} from 'src/Context/AppProvider';
 import axios from 'src/hooks/axios';
 import {useLocation} from 'react-router-dom';
 import WarningPopup from 'src/components/popup/Warning';
-// import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {AuthContext} from 'src/Context/AuthProvider';
+import GroupsIcon from '@mui/icons-material/Groups';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 
 function MemberList() {
   const [openDelPopup, setOpenDelPopup] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-  // const [role, setRole] = useState('');
   const {project, members, setMembers} = useContext(AppContext);
-  // const [members, setMembers] = useState([]);
+  const [ownerId, setOwnerId] = useState(project.ownerId);
   const location = useLocation();
   const pId = location.pathname.split('/')[2];
   const {
@@ -37,17 +37,15 @@ function MemberList() {
     setAnchorEl(anchorEl ? null : event.currentTarget);
   };
 
-  const handleSetOwner = (event, ownerId) => {
-    console.log('AAAAAAAAAAAAAA', ownerId);
-    setAnchorEl(anchorEl ? null : event.currentTarget);
-    setOwner(ownerId);
-  };
+  // const handleSetOwner = (event, ownerId) => {
+  //   setAnchorEl(anchorEl ? null : event.currentTarget);
+  //   setOwner(ownerId);
+  // };
 
   const fetchProjectMember = async () => {
     try {
       // TODO get memberlist
       const res = await axios.get(`/pmembers/${pId}`);
-      // console.log(res.data);
       setMembers(res.data);
       console.log(members);
     } catch (err) {
@@ -62,6 +60,7 @@ function MemberList() {
         pkey: project.pkey,
         ownerId: ownerId,
       });
+      setOwnerId(ownerId);
       console.log(res);
     } catch (err) {
       console.log(err);
@@ -81,12 +80,72 @@ function MemberList() {
     fetchProjectMember();
   }, [openDelPopup]);
 
-  // console.log(project);
-
   // const open = Boolean(anchorEl);
   // const id = open ? 'simple-popper' : undefined;
   return (
     <div style={{width: '95%'}}>
+      <Typography
+        sx={{
+          display: 'flex',
+          color: 'green',
+          marginTop: 2,
+          marginLeft: 1,
+          fontSize: 16,
+          fontWeight: 700,
+        }}
+      >
+        <PersonOutlineIcon sx={{marginRight: 2, width: 24, height: 24}} />
+        Project Owner
+      </Typography>
+      <FormControl
+        fullWidth
+        size="small"
+        sx={{
+          marginLeft: 6,
+          marginTop: 1,
+          marginBottom: 3,
+          width: '25%',
+          backgroundColor: '#ECECEC',
+        }}
+      >
+        <Select
+          value={ownerId}
+          onChange={(event) => setOwner(event.target.value)}
+          disabled={uid === project.adminId ? false : true}
+        >
+          {members.map((member) => (
+            <MenuItem value={member.id} key={member.id} sx={{marginY: 0.5}}>
+              <div className="flex">
+                <Avatar
+                  src={member.photoURL}
+                  sx={{
+                    width: 24,
+                    height: 24,
+                    ml: 1,
+                    backgroundColor: '#8993A4',
+                    marginRight: 1,
+                  }}
+                  alt={member.username}
+                ></Avatar>
+                {member.username}
+              </div>
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      <Typography
+        sx={{
+          display: 'flex',
+          color: 'green',
+          marginTop: 2,
+          marginLeft: 1,
+          fontSize: 16,
+          fontWeight: 700,
+        }}
+      >
+        <GroupsIcon sx={{marginRight: 2, width: 24, height: 24}} />
+        Project Members
+      </Typography>
       <TableContainer component={Paper} sx={{marginLeft: 6, marginY: 2}}>
         <Table sx={{minWidth: 650}} aria-label="simple table">
           <TableHead>
@@ -180,9 +239,9 @@ function MemberList() {
                     </Popper>
                   )} */}
                 </TableCell>
-                {uid == project.adminId && (
+                {[project.adminId, project.ownerId].includes(uid) && (
                   <TableCell align="right">
-                    {member.id !== project.adminId && (
+                    {![project.adminId, project.ownerId].includes(uid) && (
                       <>
                         <Button
                           onClick={() => setOpenDelPopup(true)}

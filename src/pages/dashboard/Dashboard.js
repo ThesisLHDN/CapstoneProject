@@ -190,7 +190,6 @@ function Dashboard() {
         scope == 'Project'
           ? await axios.get(`/performance/${pId}`)
           : await axios.get(`/performance/${pId}?sprint=${true}`);
-      console.log('ZZZZZZZZZZZZZ', res.data);
       setPerformanceData(res.data);
     } catch (err) {
       console.log(err);

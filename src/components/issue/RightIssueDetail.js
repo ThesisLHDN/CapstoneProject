@@ -16,6 +16,8 @@ import TagsInput from './tags-input/TagsInput';
 import axios from 'src/hooks/axios';
 import {AppContext} from 'src/Context/AppProvider';
 import {useLocation} from 'react-router-dom';
+import {AuthContext} from 'src/Context/AuthProvider';
+import {SocketContext} from 'src/Context/SocketProvider';
 
 function RightIssueDetail({issue, setIssue, trigger, setTrigger}) {
   const location = useLocation();
@@ -25,7 +27,11 @@ function RightIssueDetail({issue, setIssue, trigger, setTrigger}) {
   const [assignee, setAssignee] = useState({});
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const {
+    user: {uid, displayName, photoURL},
+  } = useContext(AuthContext);
   const {project} = useContext(AppContext);
+  const {socket} = useContext(SocketContext);
   const [members, setMembers] = useState([]);
 
   const id = open ? 'simple-popper' : undefined;
@@ -34,7 +40,6 @@ function RightIssueDetail({issue, setIssue, trigger, setTrigger}) {
     try {
       const res = await axios.get(`/tags/${issue.id}`);
       setTags(res.data.map((tag) => tag.tagname));
-      // console.log(res.data.map((tag) => tag.tagname));
     } catch (err) {
       console.log(err);
     }
@@ -44,7 +49,6 @@ function RightIssueDetail({issue, setIssue, trigger, setTrigger}) {
     try {
       const res = await axios.get(`/user/${issue.reporterId}`);
       setReporter(res.data);
-      // console.log(res);
     } catch (err) {
       console.log(err);
     }
@@ -54,7 +58,6 @@ function RightIssueDetail({issue, setIssue, trigger, setTrigger}) {
     try {
       const res = await axios.get(`/user/${issue.assigneeId}`);
       setAssignee(res.data);
-      // console.log(res);
     } catch (err) {
       console.log(err);
     }
@@ -63,7 +66,6 @@ function RightIssueDetail({issue, setIssue, trigger, setTrigger}) {
   const fetchProjectMember = async () => {
     try {
       const res = await axios.get(`/pmembers/${pId}`);
-      // console.log(res.data);
       setMembers([...res.data]);
     } catch (err) {
       console.log(err);
@@ -72,13 +74,29 @@ function RightIssueDetail({issue, setIssue, trigger, setTrigger}) {
 
   const updatePoint = (event) => {
     updateIssue({point: event.target.value});
+    setIssue({...issue, estimatePoint: event.target.value});
     event.target.value = '';
+    socket.emit('updateIssue', {
+      senderId: uid,
+      senderName: displayName,
+      senderAvatar: photoURL,
+      issueId: issue.id,
+      updatedIssue: issue.issueindex,
+      projectId: project.pId,
+      projectKey: project.pkey,
+      receiverId:
+        issue.assigneeId && issue.assigneeId != issue.reporterId
+          ? [issue.reporterId, issue.assigneeId]
+          : [issue.reporterId],
+      type: 'point',
+      newState: '',
+      dateUpdate: new Date(),
+    });
   };
 
   const updateIssue = async ({status, due, priority, assignee, point} = {}) => {
-    console.log('################', point);
     try {
-      const res = await axios.put(`/issue/${issue.id}`, {
+      await axios.put(`/issue/${issue.id}`, {
         issuestatus: status ? status : issue.issuestatus,
         descript: issue.descript,
         dueDate: due
@@ -91,7 +109,6 @@ function RightIssueDetail({issue, setIssue, trigger, setTrigger}) {
         estimatePoint: point ? point : issue.estimatePoint,
       });
       setTrigger(true);
-      // console.log('#############3', res);
       // setIssues([...res.data]);
     } catch (err) {
       console.log(err);
@@ -104,6 +121,22 @@ function RightIssueDetail({issue, setIssue, trigger, setTrigger}) {
     setIssue({...issue, assigneeId: element.id});
     setOpen(!open);
     updateIssue({assignee: element.id});
+    socket.emit('updateIssue', {
+      senderId: uid,
+      senderName: displayName,
+      senderAvatar: photoURL,
+      issueId: issue.id,
+      updatedIssue: issue.issueindex,
+      projectId: project.pId,
+      projectKey: project.pkey,
+      receiverId:
+        issue.assigneeId && issue.assigneeId != issue.reporterId
+          ? [issue.reporterId, issue.assigneeId]
+          : [issue.reporterId],
+      type: 'assignee',
+      newState: element.username,
+      dateUpdate: new Date(),
+    });
   };
 
   const handleClick = (event) => {
@@ -269,7 +302,7 @@ function RightIssueDetail({issue, setIssue, trigger, setTrigger}) {
           </Grid>
           <Grid item xs={6.5}>
             <div className="mt-3">
-              <TagsInput tags={tags} issueId={issue.id} />
+              <TagsInput tags={tags} issue={issue} />
             </div>
           </Grid>
         </Grid>

@@ -1,24 +1,26 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {useNavigate, useLocation} from 'react-router-dom';
 import {auth} from 'src/firebase/config';
 import CircularProgress from '@mui/material/CircularProgress';
 import axios from 'src/hooks/axios';
+import {SocketContext} from './SocketProvider';
 
 export const AuthContext = React.createContext();
 
 function AuthProvider({children}) {
   const [user, setUser] = useState();
   const [isLoading, setIsLoading] = useState(true);
+  const {socket} = useContext(SocketContext);
   const paths = useLocation();
-  // console.log(paths.pathname);
+
   const pathName = paths.pathname;
 
   const history = useNavigate();
 
   const addUser = async () => {
     try {
-      const res = await axios.post(`/user`, user);
-      console.log(res);
+      await axios.post(`/user`, user);
+      socket?.emit('newUser', user.uid);
     } catch (err) {
       console.log(err);
     }

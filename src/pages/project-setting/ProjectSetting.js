@@ -10,7 +10,6 @@ import {
 } from '@mui/material';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import KeyIcon from '@mui/icons-material/Key';
-import ShareIcon from '@mui/icons-material/Share';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import MemberList from './MemberList';
 import WarningPopup from 'src/components/popup/Warning';
@@ -33,7 +32,7 @@ const GradButton = styled(Button)({
 
 function ProjectSetting() {
   // const [openLeave, setOpenLeave] = useState(false);
-  const {project, setProject, workspace} = useContext(AppContext);
+  const {project, setProject} = useContext(AppContext);
   const {
     user: {uid},
   } = useContext(AuthContext);
@@ -66,9 +65,7 @@ function ProjectSetting() {
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.put(`/project/${project.id}`, project);
-      // console.log(workspace);
-      // console.log(res);
+      await axios.put(`/project/${project.id}`, project);
       setRename(false);
       setKey(false);
     } catch (err) {
@@ -222,20 +219,6 @@ function ProjectSetting() {
           </Grid>
         )}
       </Grid>
-      <Typography
-        sx={{
-          display: 'flex',
-          color: 'green',
-          marginTop: 2,
-          marginLeft: 1,
-          fontSize: 16,
-          fontWeight: 700,
-        }}
-      >
-        <ShareIcon sx={{marginRight: 2, width: 24, height: 24}} />
-        Sharing & Permission
-      </Typography>
-      {/* <SearchBar sx={{width: '250px', marginLeft: 6, marginTop: 2}} /> */}
       <MemberList />
 
       {uid === project.adminId && (

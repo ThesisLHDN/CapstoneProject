@@ -6,7 +6,6 @@ import {
   Popper,
   ClickAwayListener,
   Box,
-  Typography,
   MenuList,
   MenuItem,
 } from '@mui/material';
@@ -23,6 +22,8 @@ import axios from 'src/hooks/axios';
 import ClearRoundedIcon from '@mui/icons-material/ClearRounded';
 import WarningPopup from 'src/components/popup/Warning';
 import Priority from 'src/components/priorities';
+import {SocketContext} from 'src/Context/SocketProvider';
+import {AuthContext} from 'src/Context/AuthProvider';
 
 export const IssueIcon = (type) => {
   switch (type) {
@@ -100,8 +101,12 @@ function convertDate(d) {
 }
 
 function TaskCard({issue, setTrigger, isChild = false}) {
-  // console.log(issue);
-  const {project} = useContext(AppContext);
+  const {
+    user: {uid, displayName, photoURL},
+  } = useContext(AuthContext);
+  const {project, setReload} = useContext(AppContext);
+  const {socket} = useContext(SocketContext);
+
   const [status, setStatus] = useState(issue.issuestatus);
   const [anchorEl, setAnchorEl] = useState(null);
   const [assignee, setAssignee] = useState({});
@@ -120,6 +125,23 @@ function TaskCard({issue, setTrigger, isChild = false}) {
     setAnchorEl(anchorEl ? null : event.currentTarget);
     setStatus(element);
     updateIssue(element);
+    // setReload(true);
+    socket.emit('updateIssue', {
+      senderId: uid,
+      senderName: displayName,
+      senderAvatar: photoURL,
+      issueId: issue.id,
+      updatedIssue: issue.issueindex,
+      projectId: project.pId,
+      projectKey: project.pkey,
+      receiverId:
+        issue.assigneeId && issue.assigneeId != issue.reporterId
+          ? [issue.reporterId, issue.assigneeId]
+          : [issue.reporterId],
+      type: 'status',
+      newState: element,
+      dateUpdate: new Date(),
+    });
   };
 
   const handleClick = (event) => {
@@ -172,7 +194,10 @@ function TaskCard({issue, setTrigger, isChild = false}) {
         },
       }}
     >
-      <Link to={`/issue/${project.id}/${issue.id}`}>
+      <Link
+        to={`/issue/${project.id}/${issue.id}`}
+        onClick={() => setReload(true)}
+      >
         <div
           className={`${
             isChild ? 'ml-1 md:pr-20 2xl:pr-24' : 'ml-3 md:pr-80 2xl:pr-96'
@@ -294,7 +319,7 @@ function TaskCard({issue, setTrigger, isChild = false}) {
           </ClickAwayListener>
         </Popper>
 
-        <Priority priority={issue.priority} text/>
+        <Priority priority={issue.priority} text />
 
         <Avatar
           src={`${assignee.photoURL}`}

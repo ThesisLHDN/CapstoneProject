@@ -1,10 +1,18 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {TextField} from '@mui/material';
 import './taginput.scss';
 import axios from 'src/hooks/axios';
+import {AuthContext} from 'src/Context/AuthProvider';
+import {AppContext} from 'src/Context/AppProvider';
+import {SocketContext} from 'src/Context/SocketProvider';
 
 function TagsInput(props) {
   const [tags, setTags] = useState([]);
+  const {
+    user: {uid, displayName, photoURL},
+  } = useContext(AuthContext);
+  const {project} = useContext(AppContext);
+  const {socket} = useContext(SocketContext);
 
   const removeTags = (indexToRemove, tagname) => {
     setTags([...tags.filter((_, index) => index !== indexToRemove)]);
@@ -16,6 +24,23 @@ function TagsInput(props) {
       setTags([...tags, event.target.value]);
       createTag(event.target.value);
       event.target.value = '';
+      socket.emit('updateIssue', {
+        senderId: uid,
+        senderName: displayName,
+        senderAvatar: photoURL,
+        issueId: props.issue.id,
+        updatedIssue: props.issue.issueindex,
+        projectId: project.pId,
+        projectKey: project.pkey,
+        receiverId:
+          props.issue.assigneeId &&
+          props.issue.assigneeId != props.issue.reporterId
+            ? [props.issue.reporterId, props.issue.assigneeId]
+            : [props.issue.reporterId],
+        type: 'tag',
+        newState: '',
+        dateUpdate: new Date(),
+      });
     }
   };
 
@@ -23,7 +48,7 @@ function TagsInput(props) {
     try {
       await axios.post(`/tag`, {
         tagname: tagname,
-        issueId: props.issueId,
+        issueId: props.issue.id,
       });
     } catch (err) {
       console.log(err);
@@ -32,7 +57,7 @@ function TagsInput(props) {
 
   const deleteTag = async (tagname) => {
     try {
-      await axios.delete(`/tag/${props.issueId}?name=${tagname}`);
+      await axios.delete(`/tag/${props.issue.id}?name=${tagname}`);
     } catch (err) {
       console.log(err);
     }
@@ -41,8 +66,6 @@ function TagsInput(props) {
   useEffect(() => {
     setTags(props.tags);
   }, [props.tags]);
-
-  // console.log('###########', props.tags);
 
   return (
     <div className="flex items-start flex-wrap w-full">
