@@ -1,6 +1,6 @@
 import React, {useContext, useState} from 'react';
 import {Box, Paper, Typography, Button, TextField, Dialog} from '@mui/material';
-import {color} from 'src/style';
+import {color, colorHover} from 'src/style';
 import {AppContext} from 'src/Context/AppProvider';
 import axios from 'src/hooks/axios';
 import {useLocation} from 'react-router-dom';
@@ -61,7 +61,7 @@ function AddMember(props) {
               '& *': {fontSize: 18},
             }}
           >
-            Add Member to {project.pname}
+            Add Member to <i>{project.pname}</i>
           </Typography>
         </Box>
 
@@ -103,9 +103,7 @@ function AddMember(props) {
           <Button
             size="small"
             sx={{
-              backgroundColor: color.green03,
-              color: 'white',
-              '&:hover': {backgroundColor: '#1BB738'},
+              ...colorHover.greenGradBtn,
             }}
             onClick={handleSubmit}
           >

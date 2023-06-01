@@ -1,7 +1,7 @@
 import React from 'react';
-import {Box, Grid, Button, Typography} from '@mui/material';
-import {background, colorHover} from 'src/style';
-import {Link} from 'react-router-dom';
+import { Box, Grid, Button, Typography } from '@mui/material';
+import { background, colorHover } from 'src/style';
+import { Link } from 'react-router-dom';
 import logo from 'src/assets/logo/official/full_white.svg';
 import illu from 'src/assets/images/landing_illu.svg';
 
@@ -40,11 +40,13 @@ function Landing() {
           <img src={logo} width="100%" height="80" alt="Logo" />
           <Typography
             variant="body1"
-            sx={{fontSize: 24, color: 'white', textAlign: 'justify'}}
+            sx={{ fontSize: 20, color: 'white', textAlign: 'justify' }}
           >
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin
-            tempor lectus id ligula bibendum aliquam. Phasellus blandit euismod
-            lorem at pellentesque.
+            Stay agile, self-organize, and deliver exceptional software products
+            with our Agile project management software. Empowering
+            project teams, we offer the tools you need to streamline workflows,
+            foster collaboration, and achieve outstanding results. Experience
+            the future of Agile project management today.
             {/* Proin tempus nec enim sed vulputate. Fusce ac
             mi viverra, imperdiet neque id, sollicitudin nulla. Sed tincidunt
             auctor purus, congue semper tortor finibus eget. */}
@@ -52,7 +54,7 @@ function Landing() {
           <Grid container spacing={1}>
             <Grid item xs={6}>
               {' '}
-              <Link style={{width: '100%'}} to="/signup">
+              <Link style={{ width: '100%' }} to="/signup">
                 <Button
                   variant="outlined"
                   sx={{
@@ -68,7 +70,7 @@ function Landing() {
             </Grid>
             <Grid item xs={6}>
               {' '}
-              <Link style={{width: '100%'}} to="/login">
+              <Link style={{ width: '100%' }} to="/login">
                 <Button
                   variant="contained"
                   sx={{
@@ -84,7 +86,7 @@ function Landing() {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={7} sx={{width: '56%'}}>
+        <Grid item xs={7} sx={{ width: '56%' }}>
           <img src={illu} width="750" alt="Logo" />
         </Grid>
       </Grid>
