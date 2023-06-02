@@ -42,10 +42,12 @@ function Notification() {
   } = useContext(AuthContext);
   const {socket} = useContext(SocketContext);
   const [notifications, setNotifications] = useState([]);
+  const [notiDot, setNotiDot] = useState(false);
 
   useEffect(() => {
     socket.on('getNotification', (data) => {
       setNotifications((prev) => [data, ...prev]);
+      setNotiDot(true);
       console.log('AAAAAAA', data);
       addNoti(data);
     });
@@ -77,6 +79,7 @@ function Notification() {
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
+    setNotiDot(false);
   };
 
   const handleClose = (event) => {
