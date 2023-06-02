@@ -13,6 +13,7 @@ import WarningPopup from 'src/components/popup/Warning';
 import {styled} from '@mui/material/styles';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
+import {deleteCollection} from 'src/firebase/firestoreServices';
 import {
   Typography,
   Avatar,
@@ -130,7 +131,13 @@ function WorkspaceSetting() {
     e.preventDefault();
     try {
       const res = await axios.delete(`/workspace/${wsId}`);
-      console.log(res);
+      if (res.data) {
+        deleteCollection('projects', {
+          fieldName: 'workspaceId',
+          operator: '==',
+          compareValue: wsId,
+        });
+      }
       getLastestWorkspace();
     } catch (err) {
       console.log(err);

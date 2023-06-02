@@ -122,6 +122,11 @@ const deleteDocument = async (collectionPath, data) => {
     switch (last) {
       case 'projects':
         deleteCollection(`projects/${id}/documents`);
+        deleteCollection(`issues`, {
+          fieldName: 'projectId',
+          operator: '==',
+          compareValue: `${id}`,
+        });
         break;
       case 'issues':
         deleteCollection(`issues/${id}/comments`);
@@ -137,7 +142,6 @@ const deleteDocument = async (collectionPath, data) => {
         break;
       case 'messages':
         storagePath = data.file ? data.file.storagePath : null;
-        console.log('delete nè trời', storagePath);
         deleteFromStorage(storagePath);
         break;
       case 'comments':
@@ -145,7 +149,7 @@ const deleteDocument = async (collectionPath, data) => {
         deleteFromStorage(storagePath);
         break;
       case 'documents':
-        var storagePath = data.storagePath;
+        storagePath = data.storagePath;
         deleteFromStorage(storagePath);
         break;
       default:
@@ -191,5 +195,6 @@ export {
   setDocument,
   deleteDocument,
   updateDocument,
-  getDocumentWithCondition,
+  deleteCollection,
+  // getDocumentWithCondition,
 };

@@ -24,10 +24,7 @@ import CreationPopup from 'src/components/popup/Create';
 
 import Message from './Message';
 import TypingArea from './TypingArea';
-import {ChatContext} from 'src/Context/ChatProvider';
-import {useFirestore} from 'src/hooks/useFirestore';
 import {
-  getDocumentWithCondition,
   updateDocument,
   deleteDocument,
 } from 'src/firebase/firestoreServices';
@@ -142,34 +139,34 @@ function ChatWindow({
     }
   }, [selectedRoom]);
 
-  const addMemberHandler = async (email) => {
-    console.log(email);
-    // TODO validate
-    const newMemberList = await getDocumentWithCondition('users', {
-      fieldName: 'email',
-      operator: '==',
-      compareValue: email,
-    });
+  // const addMemberHandler = async (email) => {
+  //   console.log(email);
+  //   // TODO validate
+  //   const newMemberList = await getDocumentWithCondition('users', {
+  //     fieldName: 'email',
+  //     operator: '==',
+  //     compareValue: email,
+  //   });
 
-    console.log(newMemberList);
-    const member = newMemberList.docs.map((member) => ({
-      id: member.id,
-      ...member.data(),
-    }))[0];
-    console.log(member);
-    if (member) {
-      if (!(member.id in currentRoomMembers)) {
-        selectedRoom.members.push(member.id);
-        console.log('start update', member);
-        updateDocument('rooms', selectedRoom.id, {
-          members: selectedRoom.members,
-          allmembers: selectedRoom.members,
-        });
-      }
-    }
+  //   console.log(newMemberList);
+  //   const member = newMemberList.docs.map((member) => ({
+  //     id: member.id,
+  //     ...member.data(),
+  //   }))[0];
+  //   console.log(member);
+  //   if (member) {
+  //     if (!(member.id in currentRoomMembers)) {
+  //       selectedRoom.members.push(member.id);
+  //       console.log('start update', member);
+  //       updateDocument('rooms', selectedRoom.id, {
+  //         members: selectedRoom.members,
+  //         allmembers: selectedRoom.members,
+  //       });
+  //     }
+  //   }
 
-    setOpen(false);
-  };
+  //   setOpen(false);
+  // };
 
   const renameHandler = (name) => {
     if (name) {

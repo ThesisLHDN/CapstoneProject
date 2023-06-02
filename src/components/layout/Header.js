@@ -1,5 +1,5 @@
 import {useContext, useState} from 'react';
-import logo from 'src/assets/images/logo.svg';
+import logo from "src/assets/logo/official/full_color.svg";
 import {
   Box,
   Tabs,
@@ -242,7 +242,7 @@ export default function Header() {
                     sx={{py: 1, fontSize: 12, borderTop: 'solid 1px #ECEDF0'}}
                   >
                     <Link
-                      to="/login"
+                      to=""
                       onClick={handleLogout}
                       className="text-base"
                     >

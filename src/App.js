@@ -1,13 +1,14 @@
 import './App.css';
 import {Routes, Route, useLocation} from 'react-router-dom';
-import {CircularProgress} from '@mui/material';
+// import {CircularProgress} from '@mui/material';
 // import ChatRoundedIcon from '@mui/icons-material/ChatRounded';
 
 import Layout from 'src/components/layout';
 import AuthLayout from 'src/components/layout/AuthLayout';
+import Landing from 'src/pages/landing';
 import Login from './components/auth/Login';
 import Signup from './components/auth/Signup';
-import ForgetPassword from './components/auth/ForgetPassword';
+import ForgotPassword from './components/auth/ForgotPassword';
 
 import RoadMap from './pages/roadmap';
 import Issue from './pages/issue/Issue';
@@ -48,29 +49,24 @@ function App() {
           <Routes location={background || location}>
             <Route path="/">
               <Route element={<AuthLayout />}>
-                <Route path="login" element={<Login />}></Route>
-                <Route path="signup" element={<Signup />}></Route>
-                <Route path="forget" element={<ForgetPassword />}></Route>
-                <Route
-                  path="create-workspace"
-                  element={<CreateWorkspace />}
-                ></Route>
+                <Route path="" element={<Landing />} />
+                <Route path="login" element={<Login />} />
+                <Route path="signup" element={<Signup />} />
+                <Route path="forgot" element={<ForgotPassword />} />
+                <Route path="create-workspace" element={<CreateWorkspace />} />
               </Route>
               <Route element={<Layout />}>
-                <Route
+                {/* <Route
                   path=""
                   element={<CircularProgress></CircularProgress>}
-                ></Route>
+                /> */}
                 <Route
                   path="project-setting/:id"
                   element={<ProjectSetting></ProjectSetting>}
-                ></Route>
-                <Route
-                  path="dashboard/:id"
-                  element={<Dashboard></Dashboard>}
-                ></Route>
-                <Route path="board/:id" element={<Board />}></Route>
-                <Route path="roadmap/:id" element={<RoadMap />}></Route>
+                />
+                <Route path="dashboard/:id" element={<Dashboard></Dashboard>} />
+                <Route path="board/:id" element={<Board />} />
+                <Route path="roadmap/:id" element={<RoadMap />} />
                 <Route path="backlog/:id" element={<Backlog />} />
                 <Route
                   path="document/:id"

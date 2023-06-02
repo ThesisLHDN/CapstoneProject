@@ -319,7 +319,7 @@ function TaskCard({issue, setTrigger, isChild = false}) {
           </ClickAwayListener>
         </Popper>
 
-        <Priority priority={issue.priority} text />
+        <Priority priority={issue.priority} />
 
         <Avatar
           src={`${assignee.photoURL}`}

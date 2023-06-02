@@ -37,7 +37,7 @@ function ChatRoom({projectId, openChat, onCloseChat}) {
 
   const ChatSidebar = useMemo(
     () => <ChatSideBar data={rooms} projectId={projectId}></ChatSideBar>,
-    [rooms],
+    [rooms, projectId],
   );
 
   const ChatContent = useMemo(

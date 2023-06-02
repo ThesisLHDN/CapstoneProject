@@ -1,6 +1,6 @@
 import {useContext, useState} from 'react';
 import {Box, Paper, Typography, Button, TextField, Dialog} from '@mui/material';
-import {color} from 'src/style';
+import {color, colorHover} from 'src/style';
 import {AppContext} from 'src/Context/AppProvider';
 import {updateDocument} from 'src/firebase/firestoreServices';
 
@@ -20,7 +20,8 @@ function InviteMember({
   const {members} = useContext(AppContext);
   const membersEmail = members.map((mem) => mem.email);
 
-  const addMemberHandler = async (email) => {
+  const addMemberHandler = async (rawEmail) => {
+    const email = rawEmail.trim();
     console.log('email to add: ' + email);
     const currentRoomMemEmails = currentRoomMembers.map(
       (member) => member.email,
@@ -81,7 +82,7 @@ function InviteMember({
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
-      onSubmitHandler(input);
+      addMemberHandler(input);
       setInput(false);
     }
   };
@@ -190,11 +191,10 @@ function InviteMember({
             Cancel
           </Button>
           <Button
+            variant="contained"
             size="small"
             sx={{
-              backgroundColor: color.green03,
-              color: 'white',
-              '&:hover': {backgroundColor: '#1BB738'},
+              ...colorHover.greenGradBtn,
             }}
             onClick={() => addMemberHandler(input)}
           >

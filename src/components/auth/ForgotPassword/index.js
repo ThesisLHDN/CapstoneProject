@@ -1,11 +1,12 @@
-import { useState } from 'react';
-import { color, colorHover } from 'src/style';
-import { errorCodeConverter } from 'src/firebase/authServices';
-
-import { Button, TextField, Link, Box, Grid, Typography } from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { auth } from 'src/firebase/config';
-import { sendPasswordResetEmail } from 'firebase/auth';
+import {useState} from 'react';
+import {color, colorHover, background} from 'src/style';
+import {errorCodeConverter} from 'src/firebase/authServices';
+import {Link} from 'react-router-dom';
+import {Button, TextField, Box, Grid, Typography} from '@mui/material';
+import {createTheme, ThemeProvider} from '@mui/material/styles';
+import {auth} from 'src/firebase/config';
+import {sendPasswordResetEmail} from 'firebase/auth';
+import logo from 'src/assets/logo/official/icon_color.svg';
 
 const theme = createTheme();
 
@@ -28,13 +29,12 @@ export default function SignInSide() {
     <ThemeProvider theme={theme}>
       <Grid
         container
-        component="main"
+        component={'main'}
         sx={{
-          background:
-            'radial-gradient(farthest-corner at -100% -00%, #5DC75C, #7CC7B2, #5B69C6)',
           height: '100vh',
           justifyContent: 'center',
           alignItems: 'center',
+          ...background.landingBG,
         }}
       >
         <Box
@@ -52,8 +52,10 @@ export default function SignInSide() {
             height: 'fit-content',
           }}
         >
+          {' '}
+          <img src={logo} atl={''} />
           <Typography component="h1" variant="h5">
-            Forget Password
+            Forgot Password
           </Typography>
           <Box
             component="form"
@@ -68,7 +70,6 @@ export default function SignInSide() {
           >
             <TextField
               size="small"
-              margin="normal"
               required
               fullWidth
               id="email"
@@ -103,9 +104,9 @@ export default function SignInSide() {
               <Grid item xs></Grid>
               <Grid item>
                 <Link
-                  href="/login"
+                  to="/login"
                   variant="body2"
-                  sx={{mt: 2, color: color.green03}}
+                  style={{mt: 2, color: color.green03}}
                 >
                   {'Login'}
                 </Link>

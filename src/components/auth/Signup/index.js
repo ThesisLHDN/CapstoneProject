@@ -1,12 +1,13 @@
 import {useState} from 'react';
 import {color, colorHover} from 'src/style';
 import {errorCodeConverter} from 'src/firebase/authFunction';
-
+import {Link} from 'react-router-dom';
+import logo from 'src/assets/logo/official/icon_color.svg';
 import {
   Button,
   IconButton,
   TextField,
-  Link,
+  // Link,
   Box,
   Grid,
   Divider,
@@ -20,6 +21,7 @@ import {
   facebookLoginHandler,
   googleLoginHandler,
 } from 'src/firebase/authServices';
+import {background} from 'src/style';
 
 import {
   createUserWithEmailAndPassword,
@@ -51,10 +53,10 @@ export default function SignInSide() {
     event.preventDefault();
     const email = formData.email;
     const password = formData.password;
-    const fName = formData.firstName;
-    const lName = formData.lastName;
+    const displayName = formData.displayName;
+    // const lName = formData.lastName;
 
-    if (!(email, password, fName, lName)) {
+    if (!(email, password, displayName)) {
       setError('All fields are required.');
       return;
     }
@@ -62,12 +64,12 @@ export default function SignInSide() {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        const newUser = {...user, displayName: `${fName} ${lName}`};
+        const newUser = {...user, displayName: displayName};
         addNewUser(newUser, getAdditionalUserInfo(userCredential).providerId);
       })
       .then(() =>
         updateProfile(auth.currentUser, {
-          displayName: `${fName} ${lName}`,
+          displayName: displayName,
         }),
       )
       .then(() => {
@@ -86,11 +88,10 @@ export default function SignInSide() {
         container
         component="main"
         sx={{
-          background:
-            'radial-gradient(farthest-corner at -100% -00%, #5DC75C, #7CC7B2, #5B69C6)',
           height: '100vh',
           justifyContent: 'center',
           alignItems: 'center',
+          ...background.landingBG,
         }}
       >
         <Box
@@ -108,6 +109,7 @@ export default function SignInSide() {
             height: 'fit-content',
           }}
         >
+          <img src={logo} atl={''} />
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
@@ -116,28 +118,28 @@ export default function SignInSide() {
             noValidate
             onSubmit={signUpHandler}
             sx={{
-              // mt: 1,
+              mt: 1,
               '& .MuiInputLabel-root': {
                 color: color.gray01,
                 fontSize: 14,
               },
             }}
           >
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
+            <Grid container sx={{display: 'flex', gap: 2}}>
+              <Grid item xs={12}>
                 <TextField
                   size="small"
                   autoComplete="given-name"
-                  name="firstName"
+                  name="displayName"
                   required
                   fullWidth
-                  id="firstName"
-                  label="First Name"
+                  id="displayName"
+                  label="Display Name"
                   autoFocus
                   onChange={onChangeHandler}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              {/* <Grid item xs={12} sm={6}>
                 <TextField
                   size="small"
                   required
@@ -148,7 +150,7 @@ export default function SignInSide() {
                   autoComplete="family-name"
                   onChange={onChangeHandler}
                 />
-              </Grid>
+              </Grid> */}
               <Grid item xs={12}>
                 <TextField
                   size="small"
@@ -159,6 +161,7 @@ export default function SignInSide() {
                   name="email"
                   autoComplete="email"
                   onChange={onChangeHandler}
+                  sx={{borderWidth: 2, borderColor: 'green'}}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -197,8 +200,9 @@ export default function SignInSide() {
                   variant="body2"
                   sx={{lineHeight: '40px', color: color.gray02, mt: 1}}
                 >
+                  
                   Already have an account?{' '}
-                  <Link href="/login" sx={{color: color.green03}}>
+                  <Link to="/login" style={{color: color.green03}}>
                     {'Login'}
                   </Link>
                 </Typography>
