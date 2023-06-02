@@ -9,6 +9,7 @@ import {
   MenuList,
   MenuItem,
   Box,
+  Badge,
 } from '@mui/material';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import {color} from 'src/style';
@@ -112,7 +113,13 @@ function Notification() {
         onClick={handleToggle}
         sx={{color: color.green03, textTransform: 'none'}}
       >
-        <NotificationsNoneIcon />
+        {notiDot ? (
+          <Badge color="warning" variant="dot">
+            <NotificationsNoneIcon />
+          </Badge>
+        ) : (
+          <NotificationsNoneIcon />
+        )}
       </IconButton>
 
       <Popper
