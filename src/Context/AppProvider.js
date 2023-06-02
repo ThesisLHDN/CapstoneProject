@@ -8,6 +8,7 @@ function AppProvider({children}) {
   const [project, setProject] = useState({});
   const [admin, setAdmin] = useState({});
   const [members, setMembers] = useState([]);
+  const [reload, setReload] = useState(false);
 
   return (
     <AppContext.Provider
@@ -22,6 +23,8 @@ function AppProvider({children}) {
         setAdmin,
         members,
         setMembers,
+        reload,
+        setReload,
       }}
     >
       {children}

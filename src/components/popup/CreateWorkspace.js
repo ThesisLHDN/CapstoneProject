@@ -45,7 +45,6 @@ export default function CreateWorkspace() {
     e.preventDefault();
     try {
       const res = await axios.post(`/workspace`, workspace);
-      console.log('AAAAAAAAAAAAAAAAAAAAA', res.data.id);
       navigate(`/workspace-setting/${res.data.id}?user=${uid}`);
     } catch (err) {
       console.log(err);

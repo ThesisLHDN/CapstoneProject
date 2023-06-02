@@ -28,6 +28,8 @@ import {AuthContext} from 'src/Context/AuthProvider';
 import Attachments from './Attachments';
 import Priority from 'src/components/priorities';
 import axios from 'src/hooks/axios';
+import {AppContext} from 'src/Context/AppProvider';
+import {SocketContext} from 'src/Context/SocketProvider';
 
 function handleCreateTime(time) {
   const t = new Date(time);
@@ -38,6 +40,8 @@ function handleCreateTime(time) {
 
 function LeftIssueDetail({issue, setIssue, trigger, setTrigger}) {
   const {user} = useContext(AuthContext);
+  const {project} = useContext(AppContext);
+  const {socket} = useContext(SocketContext);
 
   const [open, setOpen] = useState(false);
   const [openPriority, setOpenPriority] = useState(false);
@@ -56,18 +60,18 @@ function LeftIssueDetail({issue, setIssue, trigger, setTrigger}) {
     [issue.id],
   );
 
-  const [startDate, setStartDate] = useState(new Date());
+  // const [startDate, setStartDate] = useState(new Date());
   // const [status, setStatus] = useState(issue.issuestatus);
   const [anchorEl, setAnchorEl] = useState(null);
   const [anchorElPriority, setAnchorElPriority] = useState(null);
-  const [childIssue, setChildIssue] = useState(false);
-  const [createChild, setCreateChild] = useState(false);
+  // const [childIssue, setChildIssue] = useState(false);
+  // const [createChild, setCreateChild] = useState(false);
   const [snackbarContent, setSnackbarContent] = useState();
   const [changeDescription, setChangeDescription] = useState(false);
 
   const updateIssue = async ({status, due, priority, assignee, point} = {}) => {
     try {
-      const res = await axios.put(`/issue/${issue.id}`, {
+      await axios.put(`/issue/${issue.id}`, {
         issuestatus: status ? status : issue.issuestatus,
         descript: issue.descript,
         dueDate: due
@@ -80,7 +84,6 @@ function LeftIssueDetail({issue, setIssue, trigger, setTrigger}) {
         estimatePoint: issue.estimatePoint,
       });
       setTrigger(true);
-      console.log('#############3', res);
       // setIssues([...res.data]);
     } catch (err) {
       console.log(err);
@@ -93,6 +96,22 @@ function LeftIssueDetail({issue, setIssue, trigger, setTrigger}) {
     setIssue({...issue, issuestatus: element});
     setOpen(!open);
     updateIssue({status: element});
+    socket.emit('updateIssue', {
+      senderId: user.uid,
+      senderName: user.displayName,
+      senderAvatar: user.photoURL,
+      issueId: issue.id,
+      updatedIssue: issue.issueindex,
+      projectId: project.pId,
+      projectKey: project.pkey,
+      receiverId:
+        issue.assigneeId && issue.assigneeId != issue.reporterId
+          ? [issue.reporterId, issue.assigneeId]
+          : [issue.reporterId],
+      type: 'status',
+      newState: element,
+      dateUpdate: new Date(),
+    });
   };
 
   const handleChangePriority = (event, element) => {
@@ -101,27 +120,72 @@ function LeftIssueDetail({issue, setIssue, trigger, setTrigger}) {
     setIssue({...issue, priority: element});
     setOpenPriority(!openPriority);
     updateIssue({priority: element});
+    socket.emit('updateIssue', {
+      senderId: user.uid,
+      senderName: user.displayName,
+      senderAvatar: user.photoURL,
+      issueId: issue.id,
+      updatedIssue: issue.issueindex,
+      projectId: project.pId,
+      projectKey: project.pkey,
+      receiverId:
+        issue.assigneeId && issue.assigneeId != issue.reporterId
+          ? [issue.reporterId, issue.assigneeId]
+          : [issue.reporterId],
+      type: 'priority',
+      newState: element,
+      dateUpdate: new Date(),
+    });
   };
 
   const handleChangeDescription = (event) => {
     setChangeDescription(true);
     setIssue({...issue, [event.target.name]: event.target.value});
-    // console.log(issue.descript);
   };
 
   const onChangeDate = (date) => {
-    console.log('%%%%%%%%%%%%%55', date);
     setIssue({
       ...issue,
       dueDate: date,
     });
     updateIssue({due: date});
+    socket.emit('updateIssue', {
+      senderId: user.uid,
+      senderName: user.displayName,
+      senderAvatar: user.photoURL,
+      issueId: issue.id,
+      updatedIssue: issue.issueindex,
+      projectId: project.pId,
+      projectKey: project.pkey,
+      receiverId:
+        issue.assigneeId && issue.assigneeId != issue.reporterId
+          ? [issue.reporterId, issue.assigneeId]
+          : [issue.reporterId],
+      type: 'due date',
+      newState: date,
+      dateUpdate: new Date(),
+    });
   };
 
   const handleUpdate = (event) => {
     updateIssue();
-    console.log('$$$$$$$$$$$$$$$$3', issue.descript);
     setChangeDescription(false);
+    socket.emit('updateIssue', {
+      senderId: user.uid,
+      senderName: user.displayName,
+      senderAvatar: user.photoURL,
+      issueId: issue.id,
+      updatedIssue: issue.issueindex,
+      projectId: project.pId,
+      projectKey: project.pkey,
+      receiverId:
+        issue.assigneeId && issue.assigneeId != issue.reporterId
+          ? [issue.reporterId, issue.assigneeId]
+          : [issue.reporterId],
+      type: 'description',
+      newState: '',
+      dateUpdate: new Date(),
+    });
   };
 
   const handleClick = (event) => {

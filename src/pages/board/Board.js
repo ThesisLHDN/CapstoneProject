@@ -60,7 +60,6 @@ function Board() {
     try {
       const res = await axios.get(`/lastsprint/${pId}`);
       setLastestSprint(res.data);
-      console.log(res.data);
     } catch (err) {
       console.log(err);
     }
@@ -69,7 +68,7 @@ function Board() {
   useEffect(() => {
     fetchLastestSprint();
   }, []);
-  console.log(srtVal);
+
   return (
     <Box style={{textAlign: 'left'}}>
       <Grid container spacing={2}>

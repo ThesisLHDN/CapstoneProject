@@ -103,7 +103,7 @@ export const issueIcon = (type) => {
 
 function Card({issue}) {
   const [assignee, setAssignee] = useState({});
-  const {project} = useContext(AppContext);
+  const {project, setReload} = useContext(AppContext);
 
   const getAssignee = async () => {
     try {
@@ -122,7 +122,10 @@ function Card({issue}) {
   }, [issue]);
 
   return (
-    <Link to={`/issue/${project.id}/${issue.id}`}>
+    <Link
+      to={`/issue/${project.id}/${issue.id}`}
+      onClick={() => setReload(true)}
+    >
       {' '}
       <Paper elevation={1} className="card">
         <Typography>{issue.issuename}</Typography>

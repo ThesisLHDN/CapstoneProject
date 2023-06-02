@@ -1,15 +1,11 @@
 import './scrum.scss';
-import {
-  Button,
-  Box,
-  Typography,
-} from '@mui/material';
+import {Button, Box, Typography} from '@mui/material';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
 import mockData from './mockData';
-import { useState } from 'react';
+import {useState} from 'react';
 import Card from './card';
-import { colorHover } from 'src/style';
+import {colorHover} from 'src/style';
 
 const Scrum = () => {
   const [data, setData] = useState(mockData);
@@ -17,7 +13,6 @@ const Scrum = () => {
   const onDragEnd = (result) => {
     if (!result.destination) return;
     const {source, destination} = result;
-    console.log(source, destination);
 
     if (source.droppableId !== destination.droppableId) {
       const sourceColIndex = data.findIndex((e) => e.id === source.droppableId);
@@ -112,4 +107,3 @@ const Scrum = () => {
     </DragDropContext>
   );
 };
-

@@ -27,9 +27,19 @@ import AppProvider from './Context/AppProvider';
 import DocProvider from './Context/DocProvider';
 import CreateProject from './components/popup/CreateProject';
 
+import {io} from 'socket.io-client';
+import {useContext, useEffect} from 'react';
+import {SocketContext} from './Context/SocketProvider';
+
 function App() {
   const location = useLocation();
   const background = location.state && location.state.background;
+
+  const {setSocket} = useContext(SocketContext);
+
+  useEffect(() => {
+    setSocket(io('http://localhost:5000'));
+  }, []);
 
   return (
     <AuthProvider>

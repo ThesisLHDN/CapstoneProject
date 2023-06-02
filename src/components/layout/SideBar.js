@@ -9,6 +9,7 @@ import ViewTimelineOutlinedIcon from '@mui/icons-material/ViewTimelineOutlined';
 import ViewListOutlinedIcon from '@mui/icons-material/ViewListOutlined';
 import axios from 'src/hooks/axios';
 import {AppContext} from 'src/Context/AppProvider';
+import {SocketContext} from 'src/Context/SocketProvider';
 
 function SideBar(props) {
   const location = useLocation();
@@ -49,6 +50,7 @@ function SideBar(props) {
   const [isActive, setIsActive] = useState(false);
   const [workspaces, setWorkspaces] = useState([]);
   const {project, setProject} = useContext(AppContext);
+  const {socket} = useContext(SocketContext);
   // const [char, setChar] = useState('');
 
   const {
@@ -77,6 +79,7 @@ function SideBar(props) {
   useEffect(() => {
     fetchProjectData();
     fetchWorkspacesData();
+    socket?.emit('newUser', uid);
   }, [location.pathname]);
 
   const handleClick = () => {

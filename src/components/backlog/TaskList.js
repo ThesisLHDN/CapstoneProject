@@ -111,7 +111,6 @@ function TaskList({hide, me, vals, fil, setFil, srtVal, srt, setSrt, input}) {
         setColumns([...res.data, ...[columns[columns.length - 1]]]);
       }
       // setTriggerSprint(false);
-      // console.log(res.data);
     } catch (err) {
       console.log(err);
     }
@@ -123,14 +122,12 @@ function TaskList({hide, me, vals, fil, setFil, srtVal, srt, setSrt, input}) {
       setIssues([...res.data]);
       setTempIssues(res.data);
       setTriggerIssue(false);
-      // console.log(issues);
     } catch (err) {
       console.log(err);
     }
   };
 
   const updateIssue = async (cId, id, status, destination, source, pId) => {
-    // console.log('$$$$$$$$$$$$$$$', status);
     try {
       const res = await axios.put(`/issue/${id}`, {
         cId: cId,
@@ -141,7 +138,6 @@ function TaskList({hide, me, vals, fil, setFil, srtVal, srt, setSrt, input}) {
       });
       // setIssues([...res.data]);
       setTriggerIssue(true);
-      // console.log('###########', res);
     } catch (err) {
       console.log(err);
     }
@@ -150,12 +146,10 @@ function TaskList({hide, me, vals, fil, setFil, srtVal, srt, setSrt, input}) {
   const handleIssueType = (event) => {
     setIssueType(event.target.value);
     setIssue({...issue, issueType: event.target.value});
-    // console.log(issue);
   };
 
   const handleChangeName = (event) => {
     setIssue({...issue, issuename: event.target.value});
-    // console.log(issue);
   };
 
   const addIssue = async (event, columnId) => {
@@ -170,7 +164,6 @@ function TaskList({hide, me, vals, fil, setFil, srtVal, srt, setSrt, input}) {
           setDocument(`issues`, `${res.data.id}`, {projectId: pId});
         }
         setTriggerIssue(true);
-        // console.log(res);
         event.target.value = '';
       }
       setCreateIssueCurSprint(false);
@@ -216,7 +209,6 @@ function TaskList({hide, me, vals, fil, setFil, srtVal, srt, setSrt, input}) {
   };
 
   const onDragEnd = (result, columns, issues) => {
-    // console.log('AAAAAAAAAAAAAAA');
     if (!result.destination) return;
     const {source, destination} = result;
 
