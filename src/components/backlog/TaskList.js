@@ -18,7 +18,7 @@ import axios from 'src/hooks/axios';
 
 import {AuthContext} from 'src/Context/AuthProvider';
 import EditSprint from '../popup/EditSprint';
-import { setDocument} from 'src/firebase/firestoreServices';
+import {setDocument} from 'src/firebase/firestoreServices';
 
 const columnsFromBackend = [
   {

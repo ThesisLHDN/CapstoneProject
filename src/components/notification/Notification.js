@@ -1,6 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { Avatar, IconButton, Popper, ClickAwayListener, Grow, Button, Typography, MenuList, MenuItem, Box, FormControl } from '@mui/material';
-import { Link } from 'react-router-dom';
+import React, {useState, useEffect, useRef, useContext} from 'react';
+import {
+  Avatar,
+  IconButton,
+  Popper,
+  ClickAwayListener,
+  Grow,
+  Typography,
+  MenuList,
+  MenuItem,
+  Box,
+  Badge,
+} from '@mui/material';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import {color} from 'src/style';
@@ -44,9 +54,49 @@ function FilterRow() {
 function Notification() {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
+  const {
+    user: {uid, photoURL},
+  } = useContext(AuthContext);
+  const {socket} = useContext(SocketContext);
+  const [notifications, setNotifications] = useState([]);
+  const [notiDot, setNotiDot] = useState(false);
+
+  useEffect(() => {
+    socket.on('getNotification', (data) => {
+      setNotifications((prev) => [data, ...prev]);
+      setNotiDot(true);
+      console.log('AAAAAAA', data);
+      addNoti(data);
+    });
+  }, [socket]);
+
+  useEffect(() => {
+    fetchNotiData();
+  }, []);
+
+  const fetchNotiData = async () => {
+    try {
+      const res = await axios.get(`/noti/${uid}`);
+      setNotifications(
+        res.data.filter((noti) => noti.senderAvatar != photoURL),
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const addNoti = async (data) => {
+    try {
+      const res = await axios.post('/noti', data);
+      console.log('AAAAAAA', res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
+    setNotiDot(false);
   };
 
   const handleClose = (event) => {
@@ -80,7 +130,13 @@ function Notification() {
         onClick={handleToggle}
         sx={{color: color.green03, textTransform: 'none' }}
       >
-        <NotificationsNoneIcon />
+        {notiDot ? (
+          <Badge color="warning" variant="dot">
+            <NotificationsNoneIcon />
+          </Badge>
+        ) : (
+          <NotificationsNoneIcon />
+        )}
       </IconButton>
 
       <Popper
