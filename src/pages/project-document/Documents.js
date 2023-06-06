@@ -50,7 +50,7 @@ const PlainButton = styled(Button)({
   '& :hover': {backgroundColor: '#eee'},
 });
 
-function Document({parentId}) {
+function Document() {
   const {
     selectedParentId,
     selectedProjectId,
@@ -65,7 +65,8 @@ function Document({parentId}) {
   const {
     user: {uid},
   } = useContext(AuthContext);
-  const {project} = useContext(AppContext);
+  const {project, admin} = useContext(AppContext);
+  console.log(project, admin);
 
   setSelectedProjectId(projectId);
   const [openDeletePopup, setOpenDeletePopup] = useState(false);
@@ -79,7 +80,7 @@ function Document({parentId}) {
         (item) => item.parentId === (selectedParentId ? selectedParentId : ''),
       )
     : [];
-  console.log('documents', rawDocuments, documents);
+  // console.log('documents', rawDocuments, documents);
 
   const deleteFileHandler = (confirmed) => {
     const path = `projects/${selectedProjectId}/documents`;
@@ -288,8 +289,12 @@ function Document({parentId}) {
                     {item.updatedAt ? convertDate(item.updatedAt.toDate()) : ''}
                   </Typography>
                 </Grid>
-                <Grid item xs={2}>
-                  <Grid container sx={{justifyContent: 'flex-end'}}>
+                <Grid item container xs={2} sx={{justifyContent: 'flex-end'}}>
+                  <Grid
+                    item
+                    xs={8}
+                    sx={{display: 'flex', justifyContent: 'flex-end'}}
+                  >
                     {item.type === 'editableHTML' && (
                       <IconButton
                         onClick={() => {
@@ -303,7 +308,6 @@ function Document({parentId}) {
                         ></EditRoundedIcon>
                       </IconButton>
                     )}
-
                     {item.type !== 'folder' && item.type !== 'editableHTML' && (
                       <a
                         href={item.downloadURL}
@@ -318,17 +322,22 @@ function Document({parentId}) {
                         </IconButton>
                       </a>
                     )}
-                    {/* {item.name} */}
-                    <IconButton
-                      size="medium"
-                      onClick={() => {
-                        setOpenDeletePopup(true);
-                        setSelectedFile(item);
-                      }}
-                    >
-                      <DeleteOutlineRoundedIcon sx={{color: '#e02828'}} />
-                      {/* <MoreHorizOutlinedIcon  /> */}
-                    </IconButton>
+                  </Grid>
+                  <Grid item xs={4}>
+                    {[project.ownerId, item.authorId, project.adminId].includes(
+                      uid,
+                    ) && (
+                      <IconButton
+                        size="medium"
+                        onClick={() => {
+                          setOpenDeletePopup(true);
+                          setSelectedFile(item);
+                        }}
+                      >
+                        <DeleteOutlineRoundedIcon sx={{color: '#e02828'}} />
+                        {/* <MoreHorizOutlinedIcon  /> */}
+                      </IconButton>
+                    )}
                   </Grid>
                 </Grid>
               </Grid>

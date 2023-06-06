@@ -1,4 +1,4 @@
-import {useState, useMemo} from 'react';
+import {useState, useMemo, useContext} from 'react';
 import {Typography, Paper, IconButton, Box} from '@mui/material';
 import 'react-datepicker/dist/react-datepicker.css';
 import {useFirestore} from 'src/hooks/useFirestore';
@@ -6,10 +6,12 @@ import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
 import WarningPopup from 'src/components/popup/Warning';
+import {AppContext} from 'src/Context/AppProvider';
 
 import {deleteDocument} from 'src/firebase/firestoreServices';
 
 function Attachments({issueId, uid}) {
+  const {project} = useContext(AppContext);
   const attachmentsCondition = useMemo(
     () => ({
       sort: 'desc',
@@ -109,25 +111,28 @@ function Attachments({issueId, uid}) {
                         <DownloadRoundedIcon sx={{color: '#181818'}} />
                       </IconButton>
                     </a>
-
-                    <IconButton
-                      sx={{
-                        width: 28,
-                        height: 28,
-                        borderRadius: '4px',
-                        backgroundColor: '#efefef',
-                      }}
-                      onClick={() => {
-                        setOpenDeletePopup(true);
-                        setSelectedFile({
-                          id: file.id,
-                          name: file.name,
-                          storagePath: file.storagePath,
-                        });
-                      }}
-                    >
-                      <DeleteOutlineRoundedIcon sx={{color: '#181818'}} />
-                    </IconButton>
+                    {[project.adminId, project.ownerId, file.authorId].includes(
+                      uid,
+                    ) && (
+                      <IconButton
+                        sx={{
+                          width: 28,
+                          height: 28,
+                          borderRadius: '4px',
+                          backgroundColor: '#efefef',
+                        }}
+                        onClick={() => {
+                          setOpenDeletePopup(true);
+                          setSelectedFile({
+                            id: file.id,
+                            name: file.name,
+                            storagePath: file.storagePath,
+                          });
+                        }}
+                      >
+                        <DeleteOutlineRoundedIcon sx={{color: '#181818'}} />
+                      </IconButton>
+                    )}
                   </Box>
                 </Box>
               </Box>
