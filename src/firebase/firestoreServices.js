@@ -50,11 +50,11 @@ const setDocument = async (collectionPath, id, data) => {
   }
 };
 
-const updateDocument = async (collectionPath, id, data) => {
+const updateDocument = async (collectionPath, id, data, updateDate = true) => {
   try {
     const docData = {
       ...data,
-      updatedAt: serverTimestamp(),
+      ...(updateDate && {updatedAt: serverTimestamp()}),
     };
 
     const docRef = await updateDoc(doc(db, collectionPath, `${id}`), docData);

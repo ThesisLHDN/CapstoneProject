@@ -2,6 +2,7 @@ import React, {useState, useMemo, useContext} from 'react';
 import {useFirestore} from 'src/hooks/useFirestore';
 import {AuthContext} from './AuthProvider';
 import {AppContext} from './AppProvider';
+import {updateDocument} from 'src/firebase/firestoreServices';
 export const ChatContext = React.createContext();
 
 export default function ChatProvider({children}) {
@@ -14,6 +15,17 @@ export default function ChatProvider({children}) {
   } = useContext(AppContext);
 
   const [selectedRoomId, setSelectedRoomId] = useState('');
+  const viewMessage = (room) => {
+    if (room) {
+      if (!room.readList.includes(uid)) {
+        const readMem = room.readList;
+
+        console.log(room.readList);
+        readMem.push(uid);
+        updateDocument('rooms', room.id, {readList: readMem}, false);
+      }
+    }
+  };
   // const [projectId, setProjectId] = useState();
 
   const RoomsCondition = useMemo(
@@ -31,9 +43,15 @@ export default function ChatProvider({children}) {
 
   const rooms = rawRooms.filter((room) => room.projectId === id);
 
+  const notiDot = rooms
+    .map((room) => room.readList.includes(uid))
+    .includes(false);
+
   const selectedRoom = selectedRoomId
     ? rooms.find((room) => room.id === selectedRoomId)
     : rooms[0];
+
+  // viewMessage(selectedRoom);
   // const selectedRoom = rooms.find((room) => room.id === selectedRoomId);
 
   const membersCondition = useMemo(
@@ -61,6 +79,8 @@ export default function ChatProvider({children}) {
         selectedRoomId,
         setSelectedRoomId,
         currentRoomMembers,
+        notiDot,
+        viewMessage,
       }}
     >
       {children}
