@@ -39,7 +39,7 @@ function RightIssueDetail({issue, setIssue, trigger, setTrigger}) {
   const getTags = async () => {
     try {
       const res = await axios.get(`/tags/${issue.id}`);
-      setTags(res.data.map((tag) => tag.tagname));
+      setTags(res.data[0].map((tag) => tag.tagname));
     } catch (err) {
       console.log(err);
     }

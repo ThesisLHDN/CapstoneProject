@@ -25,6 +25,39 @@ import Priority from 'src/components/priorities';
 import {SocketContext} from 'src/Context/SocketProvider';
 import {AuthContext} from 'src/Context/AuthProvider';
 
+function stringToColor(string) {
+  let hash = 0;
+  let i;
+
+  /* eslint-disable no-bitwise */
+  for (i = 0; i < string.length; i += 1) {
+    hash = string.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  let color = '#';
+
+  for (i = 0; i < 3; i += 1) {
+    const value = (hash >> (i * 8)) & 0xff;
+    color += `00${value.toString(16)}`.slice(-2);
+  }
+  /* eslint-enable no-bitwise */
+
+  return color;
+}
+
+const colors = [
+  '#FF7F7F',
+  '#FF8E5D',
+  '#FFCE6E',
+  '#CAFF74',
+  '#9DFFA1',
+  '#89E8E2',
+  '#73B2FD',
+  '#9E8EFF',
+  '#DB8EFF',
+  '#FF8ABB',
+];
+
 export const IssueIcon = (type) => {
   switch (type) {
     case 'task':
@@ -82,19 +115,6 @@ export const IssueIcon = (type) => {
   }
 };
 
-// const epicColor = (epic) => {
-//   switch (epic) {
-//     case 'Epic 1':
-//       return ['#bee8e8', '#3db0d1'];
-//     case 'Epic 2':
-//       return ['#FFE5E2', '#E93B81'];
-//     case 'Epic 3':
-//       return ['#DEFBC2', '#459D72'];
-//     default:
-//       return ['#FF95E6', '#3C4048'];
-//   }
-// };
-
 function convertDate(d) {
   const date = new Date(d);
   return date.getDate() + ' ' + date.toLocaleString('en-us', {month: 'short'});
@@ -111,6 +131,8 @@ function TaskCard({issue, setTrigger, isChild = false}) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [assignee, setAssignee] = useState({});
   const [openDelPopup, setOpenDelPopup] = useState(false);
+  const [tags, setTags] = useState([]);
+  const [totalTags, setTotalTags] = useState([]);
 
   const getAssignee = async () => {
     try {
@@ -165,6 +187,23 @@ function TaskCard({issue, setTrigger, isChild = false}) {
     }
   };
 
+  const getTags = async () => {
+    try {
+      const res = await axios.get(`/tags/${issue.id}`);
+      setTags(res.data[0].reverse().slice(0, 3));
+      setTotalTags(
+        res.data[1]
+          .filter((item, pos) => {
+            return res.data[1].indexOf(item) == pos;
+          })
+          .map((tag) => tag.tagname),
+      );
+      // console.log(totalTags);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const deleteIssueHandler = async (e) => {
     e.preventDefault();
     setOpenDelPopup(false);
@@ -180,6 +219,7 @@ function TaskCard({issue, setTrigger, isChild = false}) {
     if (issue.assigneeId) {
       getAssignee();
     }
+    getTags();
   }, [issue]);
 
   return (
@@ -200,7 +240,7 @@ function TaskCard({issue, setTrigger, isChild = false}) {
       >
         <div
           className={`${
-            isChild ? 'ml-1 md:pr-20 2xl:pr-24' : 'ml-3 md:pr-80 2xl:pr-96'
+            isChild ? 'ml-1 md:pr-20 2xl:pr-24' : 'ml-3 md:pr-60 2xl:pr-96'
           } flex`}
         >
           <div>{IssueIcon(issue.issueType)}</div>
@@ -209,6 +249,18 @@ function TaskCard({issue, setTrigger, isChild = false}) {
           </div>
           <div className="ml-3 font-medium text-sm pt-0.5">
             {issue.issuename}
+          </div>
+          <div className="ml-3 font-medium text-sm  flex">
+            {tags.map((tag) => (
+              <div
+                className="ml-2 px-3 py-0.5 rounded bg-slate-400"
+                style={{
+                  backgroundColor: colors[totalTags.indexOf(tag.tagname)],
+                }}
+              >
+                {tag.tagname}
+              </div>
+            ))}
           </div>
         </div>
       </Link>

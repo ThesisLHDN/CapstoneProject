@@ -1,4 +1,4 @@
-import {useEffect, useState, useRef} from 'react';
+import {useEffect, useState, useRef, useContext} from 'react';
 import {
   Paper,
   Typography,
@@ -13,11 +13,14 @@ import FilterAltRoundedIcon from '@mui/icons-material/FilterAltRounded';
 import {Box} from '@mui/system';
 import {color, colorHover} from 'src/style';
 import {useLocation} from 'react-router-dom';
+import {AppContext} from 'src/Context/AppProvider';
+import axios from 'src/hooks/axios';
 
 const data = {
-  status: ['To do', 'In progress', 'Done'],
+  status: ['To do', 'In progress', 'Testing', 'Done'],
   type: ['Task', 'Bug', 'Story'],
   priority: ['High', 'Medium', 'Low'],
+  tags: [],
 };
 
 function FilterRow({property, values, state, setState}) {
@@ -71,6 +74,7 @@ function Filter({vals, setVals, setFil}) {
   const anchorRef = useRef(null);
   const location = useLocation();
   const position = location.pathname.split('/')[1];
+  const {project} = useContext(AppContext);
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -81,6 +85,7 @@ function Filter({vals, setVals, setFil}) {
       status: '',
       type: '',
       priority: '',
+      tags: '',
     });
   };
 
@@ -93,7 +98,6 @@ function Filter({vals, setVals, setFil}) {
     if (anchorRef.current && anchorRef.current.contains(event.target)) {
       return;
     }
-
     setOpen(false);
   };
 
@@ -106,6 +110,15 @@ function Filter({vals, setVals, setFil}) {
     }
   }
 
+  const getTags = async () => {
+    try {
+      const res = await axios.get(`/ptags/${project.id}`);
+      data['tags'] = res.data.map((tag) => tag.tagname);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   // return focus to the button when we transitioned from !open -> open
   const prevOpen = useRef(open);
   useEffect(() => {
@@ -115,6 +128,12 @@ function Filter({vals, setVals, setFil}) {
 
     prevOpen.current = open;
   }, [open]);
+
+  useEffect(() => {
+    getTags();
+  }, []);
+
+  console.log(vals);
 
   return (
     <>
