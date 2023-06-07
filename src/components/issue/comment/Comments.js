@@ -1,8 +1,8 @@
-import { useMemo, useState, useEffect } from 'react';
+import {useMemo, useState, useEffect} from 'react';
 import CommentForm from './CommentForm';
 import Comment from './Comment';
 
-import { useFirestore } from 'src/hooks/useFirestore';
+import {useFirestore} from 'src/hooks/useFirestore';
 import {
   addDocument,
   deleteDocument,
@@ -26,8 +26,27 @@ const Comments = ({currentUser, issueId}) => {
     }),
     [issueId],
   );
-  const comments = useFirestore(issuePath + '/comments', commentsCodition);
-  console.log(refPath + '/comments');
+  const rawComments = useFirestore(issuePath + '/comments', commentsCodition);
+  const authorIds = rawComments ? rawComments.map((com) => com.authorId) : [];
+  const authorCondition = useMemo(
+    () => ({fieldName: 'uid', operator: 'in', compareValue: authorIds}),
+    [],
+  );
+  const authors = useFirestore('users', authorCondition);
+  const comments =
+    rawComments && authors
+      ? rawComments.map((comment) => {
+          const author = authors.find(
+            (author) => author.uid === comment.authorId,
+          );
+          return {
+            ...comment,
+            authorName: author.displayName,
+            authorAvatar: author.photoURL,
+          };
+        })
+      : [];
+  // console.log(refPath + '/comments');
 
   const [activeComment, setActiveComment] = useState(null);
   const [activeAllBtn, setActiveAllBtn] = useState(false);
@@ -59,7 +78,7 @@ const Comments = ({currentUser, issueId}) => {
   };
 
   const deleteComment = (comment) => {
-    const thisId = comment.id;
+    // const thisId = comment.id;
     const parentId = comment.parentId;
     // TODO
     const path = parentId ? `${refPath}/replies` : `${refPath}/comments`;

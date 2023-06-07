@@ -33,7 +33,28 @@ const Comment = ({
     [parentId],
   );
   const repliesPath = 'issues/' + issueId + '/replies';
-  const replies = useFirestore(repliesPath, repliesConditions);
+  const rawReplies = useFirestore(repliesPath, repliesConditions);
+
+  const authorIds = rawReplies ? rawReplies.map((rep) => rep.authorId) : [];
+  const authorCondition = useMemo(
+    () => ({fieldName: 'uid', operator: 'in', compareValue: authorIds}),
+    [],
+  );
+  const authors = useFirestore('users', authorCondition);
+  const replies =
+    rawReplies && authors
+      ? rawReplies.map((comment) => {
+          const author = authors.find(
+            (author) => author.uid === comment.authorId,
+          );
+          return {
+            ...comment,
+            authorName: author.displayName,
+            authorAvatar: author.photoURL,
+          };
+        })
+      : [];
+
   // console.log(replies);
   const isEditing =
     activeComment &&
@@ -151,7 +172,7 @@ const Comment = ({
                   updateComment(
                     newComment,
                     comment.id,
-                    subcomment ? parentId : null, 
+                    subcomment ? parentId : null,
                     // TODO replace with firestore doc id
                   )
                 }
