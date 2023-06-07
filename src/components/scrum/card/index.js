@@ -14,35 +14,18 @@ import {AppContext} from 'src/Context/AppProvider';
 import axios from 'src/hooks/axios';
 import Priority from 'src/components/priorities';
 
-// const Epic = (props) => {
-//   const colors = (epic) => {
-//     switch (epic) {
-//       case 'Epic 1':
-//         return ['#bee8e8', '#3db0d1'];
-//       case 'Epic 2':
-//         return ['#FFE5E2', '#E93B81'];
-//       case 'Epic 3':
-//         return ['#DEFBC2', '#459D72'];
-//       default:
-//         return ['#ccc', '#3C4048'];
-//     }
-//   };
-
-//   const [background, text] = colors(props.children);
-//   return (
-//     <Chip
-//       sx={{
-//         color: text,
-//         backgroundColor: background,
-//         display: 'inline-flex',
-//         borderRadius: '2px',
-//         mr: 1,
-//       }}
-//       size="small"
-//       label={props.children}
-//     />
-//   );
-// };
+const colors = [
+  '#FF7F7F',
+  '#FF8E5D',
+  '#FFCE6E',
+  '#CAFF74',
+  '#9DFFA1',
+  '#89E8E2',
+  '#73B2FD',
+  '#9E8EFF',
+  '#DB8EFF',
+  '#FF8ABB',
+];
 
 export const issueIcon = (type) => {
   switch (type) {
@@ -104,6 +87,8 @@ export const issueIcon = (type) => {
 function Card({issue}) {
   const [assignee, setAssignee] = useState({});
   const {project, setReload} = useContext(AppContext);
+  const [tags, setTags] = useState([]);
+  const [totalTags, setTotalTags] = useState([]);
 
   const getAssignee = async () => {
     try {
@@ -115,10 +100,28 @@ function Card({issue}) {
     }
   };
 
+  const getTags = async () => {
+    try {
+      const res = await axios.get(`/tags/${issue.id}`);
+      setTags(res.data[0].reverse().slice(0, 3));
+      setTotalTags(
+        res.data[1]
+          .filter((item, pos) => {
+            return res.data[1].indexOf(item) == pos;
+          })
+          .map((tag) => tag.tagname),
+      );
+      // console.log(totalTags);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
     if (issue.assigneeId) {
       getAssignee();
     }
+    getTags();
   }, [issue]);
 
   return (
@@ -129,8 +132,20 @@ function Card({issue}) {
       {' '}
       <Paper elevation={1} className="card">
         <Typography>{issue.issuename}</Typography>
-        <div style={{margin: '10px 0px'}}>
-          {/* <Epic>{'Some epic'}</Epic> */}
+        <div className="mt-2 mb-2 flex flex-wrap">
+          <div className="font-medium text-sm flex">
+            {tags.map((tag) => (
+              <div
+                className="mr-2 mb-2 px-3 py-0.5 rounded bg-slate-400"
+                style={{
+                  backgroundColor: colors[totalTags.indexOf(tag.tagname)],
+                }}
+              >
+                {tag.tagname}
+              </div>
+            ))}
+          </div>
+
           {issue.dueDate && (
             <Chip
               size="small"
@@ -158,30 +173,15 @@ function Card({issue}) {
           </div>
           <div style={{display: 'inline-flex', alignItems: 'flex-end'}}>
             {issue.estimatePoint && (
-              <Chip size="small" label={issue.estimatePoint} />
+              <Chip size="small" label={issue.estimatePoint} sx={{mr: 0.5}} />
             )}
             <Priority priority={issue.priority}></Priority>
-            {/* <Typography
-              variant="subtitle2"
-              sx={{
-                ml: 1,
-                color: `${
-                  issue.priority === 'High'
-                    ? 'red'
-                    : issue.priority === 'Medium'
-                    ? 'orange'
-                    : 'green'
-                }`,
-              }}
-            >
-              {issue.priority}
-            </Typography> */}
             <Avatar
               src={`${assignee.photoURL}`}
               sx={{
                 width: 24,
                 height: 24,
-                ml: 1,
+                ml: 0.5,
                 backgroundColor: '#8993A4',
                 marginRight: 1,
               }}

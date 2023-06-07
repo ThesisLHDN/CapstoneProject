@@ -7,6 +7,7 @@ import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 import ViewTimelineOutlinedIcon from '@mui/icons-material/ViewTimelineOutlined';
 import ViewListOutlinedIcon from '@mui/icons-material/ViewListOutlined';
+import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import axios from 'src/hooks/axios';
 import {AppContext} from 'src/Context/AppProvider';
 import {SocketContext} from 'src/Context/SocketProvider';
@@ -106,7 +107,7 @@ function SideBar(props) {
                 onClick={() => handleClick()}
                 className={({isActive}) => (isActive ? 'text-green-tx' : '')}
               >
-                <div className="hover:bg-gray-300">
+                <div className="hover:bg-gray-300 flex justify-between">
                   <div
                     key={wp.wsname}
                     className="px-5 pt-3 pb-3 font-semibold "
@@ -115,6 +116,18 @@ function SideBar(props) {
                       {wp.wsname}
                     </span>
                   </div>
+                  {console.log(wp)}
+                  {uid == wp.adminId && (
+                    <div className="py-3 mr-4">
+                      <VpnKeyIcon
+                        fontSize="small"
+                        sx={{
+                          rotate: '315deg',
+                          transform: 'scaleX(-1)',
+                        }}
+                      />
+                    </div>
+                  )}
                 </div>
               </NavLink>
             ))}
