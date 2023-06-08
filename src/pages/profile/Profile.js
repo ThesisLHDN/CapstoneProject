@@ -18,6 +18,7 @@ import {updateAuthFirestore} from 'src/firebase/firestoreServices';
 import {storage} from 'src/firebase/config';
 import {colorHover, color} from 'src/style';
 import axios from 'src/hooks/axios';
+import {AppContext} from 'src/Context/AppProvider';
 
 function Profile() {
   const {
@@ -25,7 +26,8 @@ function Profile() {
   } = useContext(AuthContext);
 
   const [name, setName] = useState(displayName);
-  const [avatar, setAvatar] = useState(photoURL);
+  const {avatar, setAvatar} = useContext(AppContext);
+  // const [avatar, setAvatar] = useState(photoURL);
   const [progress, setProgress] = useState();
   const [rename, setRename] = useState();
 

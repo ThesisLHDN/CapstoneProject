@@ -9,6 +9,7 @@ function AppProvider({children}) {
   const [admin, setAdmin] = useState({});
   const [members, setMembers] = useState([]);
   const [reload, setReload] = useState(false);
+  const [avatar, setAvatar] = useState();
 
   return (
     <AppContext.Provider
@@ -25,6 +26,8 @@ function AppProvider({children}) {
         setMembers,
         reload,
         setReload,
+        avatar,
+        setAvatar,
       }}
     >
       {children}
