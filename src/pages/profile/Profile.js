@@ -20,6 +20,7 @@ import {colorHover, color} from 'src/style';
 import axios from 'src/hooks/axios';
 import {AppContext} from 'src/Context/AppProvider';
 
+
 function Profile() {
   const {
     user: {displayName, email, photoURL, uid},
@@ -37,7 +38,7 @@ function Profile() {
       console.log('Updating');
       if (file) {
         console.log(file);
-        const path = `avatar/${new Date().getTime() + file.name}`;
+        const path = `avatar/${uid}`;
         const fileRef = ref(storage, path);
         const upLoadTask = uploadBytesResumable(fileRef, file);
         upLoadTask.on(

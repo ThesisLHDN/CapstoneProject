@@ -185,7 +185,7 @@ export default function Gantt({tasks, onDataUpdated, zoom}) {
   gantt.init(ganttContainer);
   initGanttDataProcessor();
   gantt.parse(tasks);
-  console.log(tasks);
+  // console.log(tasks);
 
   setZoom(zoom);
 
