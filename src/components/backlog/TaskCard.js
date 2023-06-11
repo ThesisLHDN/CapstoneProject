@@ -16,6 +16,7 @@ import FlagRoundedIcon from '@mui/icons-material/FlagRounded';
 import QuestionMarkRoundedIcon from '@mui/icons-material/QuestionMarkRounded';
 import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ReportIcon from '@mui/icons-material/Report';
 import {Link} from 'react-router-dom';
 import {AppContext} from 'src/Context/AppProvider';
 import axios from 'src/hooks/axios';
@@ -222,6 +223,8 @@ function TaskCard({issue, setTrigger, isChild = false}) {
     getTags();
   }, [issue]);
 
+  const diff = new Date(issue.dueDate) - new Date();
+
   return (
     <Box
       className={` hover:cursor-pointer ${isChild ? 'my-2' : ''}`}
@@ -266,12 +269,60 @@ function TaskCard({issue, setTrigger, isChild = false}) {
       </Link>
 
       <div className="inline-flex align-baseline">
-        <span className="flex px-1.5 py-1 rounded-xl bg-gray-400 text-xs mr-2">
-          <AccessTimeRoundedIcon
-            sx={{height: 14, width: 14, marginRight: 0.5, marginTop: 0.1}}
-          />
-          {issue.dueDate ? <p>{convertDate(issue.dueDate)}</p> : <p>-</p>}
-        </span>
+        {!issue.dueDate ? (
+          <span className="flex px-1.5 py-1 rounded-xl bg-gray-400 text-xs mr-2">
+            <AccessTimeRoundedIcon
+              sx={{height: 14, width: 14, marginRight: 0.5, marginTop: 0.1}}
+            />
+            {issue.dueDate ? <p>{convertDate(issue.dueDate)}</p> : <p>-</p>}
+          </span>
+        ) : diff < 0 ? (
+          <div className="flex">
+            <ReportIcon
+              color="error"
+              fontSize="small"
+              sx={{mt: 0.25, mr: 0.25}}
+            />
+            <div className="font-bold pt-0.5 mr-2" style={{color: '#DB0000'}}>
+              Overdue
+            </div>
+            <span
+              className="flex px-1.5 py-1 rounded-xl text-white text-xs mr-2"
+              style={{backgroundColor: '#DB0000'}}
+            >
+              <AccessTimeRoundedIcon
+                sx={{height: 14, width: 14, marginRight: 0.5, marginTop: 0.1}}
+              />
+              {issue.dueDate ? <p>{convertDate(issue.dueDate)}</p> : <p>-</p>}
+            </span>
+          </div>
+        ) : diff < 86400000 ? (
+          <div className="flex">
+            <ReportIcon
+              fontSize="small"
+              sx={{mt: 0.25, mr: 0.25, color: '#FF6B00'}}
+            />
+            <div className="font-bold pt-0.5 mr-2" style={{color: '#FF6B00'}}>
+              Due soon
+            </div>
+            <span
+              className="flex px-1.5 py-1 rounded-xl text-white text-xs mr-2"
+              style={{backgroundColor: '#FF6B00'}}
+            >
+              <AccessTimeRoundedIcon
+                sx={{height: 14, width: 14, marginRight: 0.5, marginTop: 0.1}}
+              />
+              {issue.dueDate ? <p>{convertDate(issue.dueDate)}</p> : <p>-</p>}
+            </span>
+          </div>
+        ) : (
+          <span className="flex px-1.5 py-1 rounded-xl bg-gray-400 text-xs mr-2">
+            <AccessTimeRoundedIcon
+              sx={{height: 14, width: 14, marginRight: 0.5, marginTop: 0.1}}
+            />
+            {issue.dueDate ? <p>{convertDate(issue.dueDate)}</p> : <p>-</p>}
+          </span>
+        )}
 
         <span
           className={`px-1.5 py-1 rounded-xl text-white text-xs mr-2
