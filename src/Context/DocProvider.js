@@ -59,6 +59,14 @@ export default function DocProvider({children}) {
     docsCondition,
   );
 
+  rawAllDocs.sort((a, b) =>
+    a.name.toLowerCase() > b.name.toLowerCase()
+      ? 1
+      : b.name.toLowerCase() > a.name.toLowerCase()
+      ? -1
+      : 0,
+  );
+
   var rawFolders = [];
   var rawFiles = [];
   if (rawAllDocs) {
