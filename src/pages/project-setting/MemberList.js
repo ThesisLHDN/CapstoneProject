@@ -241,7 +241,7 @@ function MemberList() {
                 </TableCell>
                 {[project.adminId, project.ownerId].includes(uid) && (
                   <TableCell align="right">
-                    {![project.adminId, project.ownerId].includes(uid) && (
+                    {![project.adminId, project.ownerId].includes(member.id) && (
                       <>
                         <Button
                           onClick={() => setOpenDelPopup(true)}

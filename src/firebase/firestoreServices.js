@@ -50,11 +50,11 @@ const setDocument = async (collectionPath, id, data) => {
   }
 };
 
-const updateDocument = async (collectionPath, id, data) => {
+const updateDocument = async (collectionPath, id, data, updateDate = true) => {
   try {
     const docData = {
       ...data,
-      updatedAt: serverTimestamp(),
+      ...(updateDate && {updatedAt: serverTimestamp()}),
     };
 
     const docRef = await updateDoc(doc(db, collectionPath, `${id}`), docData);
@@ -69,19 +69,43 @@ const updateDocument = async (collectionPath, id, data) => {
 };
 
 const deleteCollection = async (collectionPath, condition = {}) => {
-  console.log('delete collection', collectionPath);
+  // console.log('delete collection', collectionPath);
+  // const collRef = collection(db, collectionPath);
+  // const q =
+  //   collectionPath === 'messages'
+  //     ? query(
+  //         collection(db, 'messages'),
+  //         where(
+  //           condition.fieldName,
+  //           condition.operator,
+  //           condition.compareValue,
+  //         ),
+  //       )
+  //     : query(collRef, limit(batchSize));
+
+  //todo
+  console.log('delete collection', collectionPath, condition);
   const collRef = collection(db, collectionPath);
-  const q =
-    collectionPath === 'messages'
-      ? query(
-          collection(db, 'messages'),
-          where(
-            condition.fieldName,
-            condition.operator,
-            condition.compareValue,
-          ),
-        )
-      : query(collRef, limit(batchSize));
+
+  // const before = await getDocs(collRef);
+  // console.log(
+  //   'before filter',
+  //   before.forEach((e) => console.log(e.data())),
+  // );
+
+  const q = condition.fieldName
+    ? query(
+        collRef,
+        where(condition.fieldName, condition.operator, condition.compareValue),
+      )
+    : collRef;
+
+  // const after = await getDocs(q);
+  // console.log(
+  //   'after filter',
+  //   after.forEach((e) => console.log(e.data())),
+  // );
+
   while (true) {
     const qBatch = query(q, limit(batchSize));
     const batchSnap = await getDocs(qBatch);
@@ -89,9 +113,8 @@ const deleteCollection = async (collectionPath, condition = {}) => {
       break;
     }
     batchSnap.forEach((snap) => {
-      console.log('deletesnap', snap.id);
-      // deleteDoc(doc(db, collectionPath, `${snap.id}`));
-      deleteDoc(collectionPath, `${snap.id}`);
+      console.log('deletesnap', collectionPath, `${snap.id}`);
+      deleteDocument(collectionPath, {id: `${snap.id}`});
     });
   }
 };

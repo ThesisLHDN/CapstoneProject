@@ -18,6 +18,8 @@ import {updateAuthFirestore} from 'src/firebase/firestoreServices';
 import {storage} from 'src/firebase/config';
 import {colorHover, color} from 'src/style';
 import axios from 'src/hooks/axios';
+import {AppContext} from 'src/Context/AppProvider';
+
 
 function Profile() {
   const {
@@ -25,7 +27,8 @@ function Profile() {
   } = useContext(AuthContext);
 
   const [name, setName] = useState(displayName);
-  const [avatar, setAvatar] = useState(photoURL);
+  const {avatar, setAvatar} = useContext(AppContext);
+  // const [avatar, setAvatar] = useState(photoURL);
   const [progress, setProgress] = useState();
   const [rename, setRename] = useState();
 
@@ -35,7 +38,7 @@ function Profile() {
       console.log('Updating');
       if (file) {
         console.log(file);
-        const path = `avatar/${new Date().getTime() + file.name}`;
+        const path = `avatar/${uid}`;
         const fileRef = ref(storage, path);
         const upLoadTask = uploadBytesResumable(fileRef, file);
         upLoadTask.on(

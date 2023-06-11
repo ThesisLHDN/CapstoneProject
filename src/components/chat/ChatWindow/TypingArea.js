@@ -68,7 +68,10 @@ function TypingArea({uid, roomId}) {
               };
               console.log('new message', messageData);
               addDocument('messages', messageData);
-              updateDocument('rooms', roomId, {lastMessage: messageData});
+              updateDocument('rooms', roomId, {
+                lastMessage: messageData,
+                readList: [],
+              });
             }
             console.log(downloadURL);
           });
@@ -105,7 +108,10 @@ function TypingArea({uid, roomId}) {
         };
         console.log('new message', messageData);
         addDocument('messages', messageData);
-        updateDocument('rooms', roomId, {lastMessage: messageData});
+        updateDocument('rooms', roomId, {
+          lastMessage: messageData,
+          readList: [],
+        });
         setMessage({body: ''});
       }
       if (reparedFiles.length) {

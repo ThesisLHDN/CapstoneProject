@@ -43,10 +43,10 @@ function RoadMap() {
 
       const data = {
         data: res.data.map((issue) => {
-          console.log(
-            moment(issue.dueDate, 'YYYY-MM-DD HH:mm:ss'),
-            moment(issue.createTime, 'YYYY-MM-DD HH:mm:ss'),
-          );
+          // console.log(
+          //   moment(issue.dueDate, 'YYYY-MM-DD HH:mm:ss'),
+          //   moment(issue.createTime, 'YYYY-MM-DD HH:mm:ss'),
+          // );
           return {
             text: issue.issuename,
             id: issue.id,

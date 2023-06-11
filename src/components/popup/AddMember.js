@@ -52,13 +52,13 @@ function AddMember(props) {
         >
           <Typography
             sx={{
-              display: 'flex',
-              justifyContent: 'center',
+              // display: 'flex',
+              // justifyContent: 'center',
               gap: 1,
-              alignItems: 'center',
+              // alignItems: 'center',
               fontWeight: '700 !important',
               color: color.green03,
-              '& *': {fontSize: 18},
+              '& *': {fontSize: 16},
             }}
           >
             Add Member to <i>{project.pname}</i>

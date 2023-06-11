@@ -11,6 +11,7 @@ import {
   Button,
   // styled,
 } from '@mui/material';
+import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import {colorHover} from 'src/style';
 
 import CreationPopup from 'src/components/popup/Create';
@@ -24,7 +25,8 @@ import {addDocument} from 'src/firebase/firestoreServices';
 import {ChatContext} from 'src/Context/ChatProvider';
 
 function ChatSideBar({data, projectId}) {
-  const {setSelectedRoomId, selectedRoom, uid} = useContext(ChatContext);
+  const {setSelectedRoomId, selectedRoom, uid, viewMessage, notiDot} =
+    useContext(ChatContext);
   const [open, setOpen] = useState(false);
   // const handleClose = () => {
   //   setOpen(false);
@@ -38,6 +40,7 @@ function ChatSideBar({data, projectId}) {
         members: [uid],
         allmembers: [uid],
         coverPicture: '',
+        readList: [],
       };
       addDocument('rooms', newRoomData);
     }
@@ -80,7 +83,7 @@ function ChatSideBar({data, projectId}) {
           }}
         >
           {data &&
-            data.map(({name, id, coverPicture, lastMessage}) => (
+            data.map(({name, id, coverPicture, lastMessage, readList}) => (
               <Box
                 sx={{
                   textDecoration: 'none',
@@ -96,7 +99,16 @@ function ChatSideBar({data, projectId}) {
                 }}
                 onClick={() => {
                   setSelectedRoomId(id);
-                  console.log(id);
+                  if (!readList.includes(uid)) {
+                    console.log('chua doc');
+                    viewMessage({
+                      name,
+                      id,
+                      coverPicture,
+                      lastMessage,
+                      readList,
+                    });
+                  }
                 }}
                 // onClick={() => props.onSelect(id)}
               >
@@ -108,7 +120,7 @@ function ChatSideBar({data, projectId}) {
                         alt={name}
                       />
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={8}>
                       <Typography variant="body2" sx={{fontWeight: 'bold'}}>
                         {name}
                       </Typography>
@@ -123,10 +135,13 @@ function ChatSideBar({data, projectId}) {
                         {lastMessage ? lastMessage.body : ''}
                       </Typography>
                     </Grid>
-                    <Grid item xs={3}>
-                      <Typography variant="subtitle2">
-                        {/* {format(time, 'dd-MM, hh:mm')} */}
-                      </Typography>
+                    <Grid item xs={1}>
+                      {!readList.includes(uid) && (
+                        <FiberManualRecordIcon
+                          sx={{width: 12, height: 12}}
+                          color="warning"
+                        />
+                      )}
                     </Grid>
                   </Grid>
                 </Box>

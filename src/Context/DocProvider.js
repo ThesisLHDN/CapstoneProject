@@ -1,4 +1,3 @@
-import {AuthContext} from './AuthProvider';
 import React, {useState, useMemo, useContext} from 'react';
 import {useFirestore} from 'src/hooks/useFirestore';
 import {AppContext} from './AppProvider';
@@ -55,10 +54,26 @@ export default function DocProvider({children}) {
     [selectedParentId],
   );
 
-  const rawDocuments = useFirestore(
+  const rawAllDocs = useFirestore(
     `projects/${selectedProjectId}/documents`,
     docsCondition,
   );
+
+  var rawFolders = [];
+  var rawFiles = [];
+  if (rawAllDocs) {
+    for (var doc of rawAllDocs) {
+      if (doc.type === 'folder') {
+        rawFolders.push(doc);
+      } else {
+        rawFiles.push(doc);
+      }
+    }
+  }
+
+  const rawDocuments = rawFolders.concat(rawFiles);
+
+  // const rawFolders
 
   return (
     <DocContext.Provider

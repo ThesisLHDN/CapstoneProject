@@ -1,5 +1,5 @@
-import {useContext, useState} from 'react';
-import logo from "src/assets/logo/official/full_color.svg";
+import {useContext, useState, useEffect} from 'react';
+import logo from 'src/assets/logo/official/full_color.svg';
 import {
   Box,
   Tabs,
@@ -45,11 +45,12 @@ export default function Header() {
   // const handleClose = () => setOpen(false);
 
   const [value, setValue] = useState(0);
+  // const [avatar, setAvatar] = useState('');
   const [openAddMembers, setOpenAddMembers] = useState(false);
   const {
     user: {displayName, photoURL, uid},
   } = useContext(AuthContext);
-  const {project} = useContext(AppContext);
+  const {project, reload, avatar, setAvatar} = useContext(AppContext);
   const navigate = useNavigate();
 
   const getLastestWorkspace = async () => {
@@ -94,6 +95,11 @@ export default function Header() {
   //   // TODO get value
   //   setOpenAddMembers(false);
   // }
+  useEffect(() => {
+    if (photoURL) {
+      setAvatar(photoURL);
+    }
+  }, [photoURL]);
 
   return (
     <Paper
@@ -200,7 +206,8 @@ export default function Header() {
           <IconButton onClick={handleClick}>
             <Avatar
               alt={displayName ? displayName : ''}
-              src={photoURL}
+              // src={photoURL}
+              src={avatar}
               sx={{height: 32, width: 32}}
             />
           </IconButton>
@@ -241,11 +248,7 @@ export default function Header() {
                   <MenuItem
                     sx={{py: 1, fontSize: 12, borderTop: 'solid 1px #ECEDF0'}}
                   >
-                    <Link
-                      to=""
-                      onClick={handleLogout}
-                      className="text-base"
-                    >
+                    <Link to="" onClick={handleLogout} className="text-base">
                       Log out
                     </Link>
                   </MenuItem>

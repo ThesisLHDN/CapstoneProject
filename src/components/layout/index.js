@@ -8,6 +8,7 @@ import ChatRoom from '../chat';
 import {color} from 'src/style';
 import ChatRoundedIcon from '@mui/icons-material/ChatRounded';
 
+import ChatButton from 'src/components/chat/ChatButton';
 import {AuthContext} from 'src/Context/AuthProvider';
 import {AppContext} from 'src/Context/AppProvider';
 import ChatProvider from 'src/Context/ChatProvider';
@@ -19,16 +20,16 @@ function Layout({pf, wp}) {
   const [openChat, setOpenChat] = useState(false);
   const Chat = useMemo(
     () => (
-      <ChatProvider>
-        <ChatRoom
-          openChat={openChat}
-          onCloseChat={() => {
-            setOpenChat(false);
-          }}
-          currentUser={user}
-          projectId={id}
-        />
-      </ChatProvider>
+      // <ChatProvider>
+      <ChatRoom
+        openChat={openChat}
+        onCloseChat={() => {
+          setOpenChat(false);
+        }}
+        currentUser={user}
+        projectId={id}
+      />
+      // </ChatProvider>
     ),
     [openChat],
   );
@@ -58,16 +59,25 @@ function Layout({pf, wp}) {
           </Grid>
         </Grid>
       </Box>{' '}
+      {/* {!wp && !pf && (
+        <ChatProvider>
+          <IconButton
+            aria-label="chat-button"
+            onClick={() => setOpenChat(true)}
+            sx={{position: 'fixed', bottom: 40, right: 40}}
+          >
+            <ChatRoundedIcon
+              sx={{width: 40, height: 40, color: color.green03}}
+            />
+          </IconButton>{' '}
+          {Chat}
+        </ChatProvider>
+      )} */}
       {!wp && !pf && (
-        <IconButton
-          aria-label="chat-button"
-          onClick={() => setOpenChat(true)}
-          sx={{position: 'fixed', bottom: 40, right: 40}}
-        >
-          <ChatRoundedIcon sx={{width: 40, height: 40, color: color.green03}} />
-        </IconButton>
+        <ChatProvider>
+          <ChatButton currentUser={user} projectId={id} />
+        </ChatProvider>
       )}
-      {!wp && !pf && Chat}
     </div>
   );
 }

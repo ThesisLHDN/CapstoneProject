@@ -135,7 +135,7 @@ function WorkspaceSetting() {
         deleteCollection('projects', {
           fieldName: 'workspaceId',
           operator: '==',
-          compareValue: wsId,
+          compareValue: `${wsId}`,
         });
       }
       getLastestWorkspace();
