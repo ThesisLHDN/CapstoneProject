@@ -276,7 +276,7 @@ function TaskCard({issue, setTrigger, isChild = false}) {
             />
             {issue.dueDate ? <p>{convertDate(issue.dueDate)}</p> : <p>-</p>}
           </span>
-        ) : diff < 0 ? (
+        ) : diff < 0 && issue.issuestatus != 'Done' ? (
           <div className="flex">
             <ReportIcon
               color="error"
@@ -296,7 +296,7 @@ function TaskCard({issue, setTrigger, isChild = false}) {
               {issue.dueDate ? <p>{convertDate(issue.dueDate)}</p> : <p>-</p>}
             </span>
           </div>
-        ) : diff < 86400000 ? (
+        ) : diff < 86400000 && issue.issuestatus != 'Done' ? (
           <div className="flex">
             <ReportIcon
               fontSize="small"
