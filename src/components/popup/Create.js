@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import {Box, Paper, Typography, Button, TextField, Dialog} from '@mui/material';
 import {color, colorHover} from 'src/style';
 
@@ -13,6 +13,7 @@ function CreationPopup({
   sx,
   onClose,
   open,
+  defaultValue,
 }) {
   const [input, setInput] = useState('');
   const [error, setError] = useState('');
@@ -41,6 +42,12 @@ function CreationPopup({
     setError();
     onClose();
   };
+
+  useEffect(() => {
+    if (open) {
+      setInput(defaultValue);
+    } else setInput('');
+  }, [defaultValue]);
 
   return (
     <Dialog open={open} onClose={onCancelHandler}>
@@ -91,6 +98,7 @@ function CreationPopup({
           }}
           onChange={(e) => setInput(e.target.value)}
           onKeyPress={handleKeyPress}
+          defaultValue={defaultValue}
         ></TextField>
         {error && (
           <Typography variant="subtitle2" sx={{color: 'red', fontSize: '12px'}}>

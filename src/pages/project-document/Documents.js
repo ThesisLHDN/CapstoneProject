@@ -2,6 +2,7 @@ import {useContext, useState, Suspense} from 'react';
 
 import AddItem from './AddItem';
 import WarningPopup from 'src/components/popup/Warning';
+import CreatePopup from 'src/components/popup/Create';
 import TextEditor from './QuillEditor/Editor';
 import {addDocument, updateDocument} from 'src/firebase/firestoreServices';
 
@@ -19,6 +20,7 @@ import FolderOutlinedIcon from '@mui/icons-material/FolderOutlined';
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
+import InsertDriveFileOutlinedIcon from '@mui/icons-material/InsertDriveFileOutlined';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import {DocContext} from 'src/Context/DocProvider';
@@ -92,7 +94,7 @@ function Document() {
   };
 
   const [openEditor, setOpenEditor] = useState(false);
-  const [enableEditText, setEnableEditText] = useState(true);
+  const [openRename, setOpenRename] = useState(false);
 
   const onSubmitTextEditor = (file) => {
     console.log('text editor', file);
@@ -120,7 +122,15 @@ function Document() {
     setOpenEditor(false);
     // setOpenEditPopup(false);
     setSelectedFile({name: 'Untitled', body: ''});
-    setEnableEditText(true);
+  };
+
+  const renameHandler = (name) => {
+    console.log(selectedFile, 'rename to', name);
+    updateDocument(`projects/${projectId}/documents`, selectedFile.id, {
+      name: name,
+    });
+    setSelectedFile({name: 'Untitled', body: ''});
+    setOpenRename(false);
   };
 
   return (
@@ -251,16 +261,16 @@ function Document() {
                           setSelectedFile(item);
                         }
                       }}
-                      target="_blank"
-                      download
-                      rel="noreferrer"
-                      sx={{}}
+                      // target="_blank"
+                      // download
+                      // rel="noreferrer"
+                      // sx={{}}
                     >
                       {item.name}
                     </PlainButton>
                   ) : (
                     <PlainButton
-                      startIcon={<DescriptionOutlinedIcon />}
+                      startIcon={<InsertDriveFileOutlinedIcon />}
                       href={item.downloadURL}
                       target="_blank"
                       download
@@ -295,19 +305,7 @@ function Document() {
                     xs={8}
                     sx={{display: 'flex', justifyContent: 'flex-end'}}
                   >
-                    {item.type === 'editableHTML' && (
-                      <IconButton
-                        onClick={() => {
-                          setOpenEditor(true);
-                          setSelectedFile(item);
-                          // setEnableEditText(false);
-                        }}
-                      >
-                        <EditRoundedIcon
-                          sx={{color: '#181818'}}
-                        ></EditRoundedIcon>
-                      </IconButton>
-                    )}
+                    {' '}
                     {item.type !== 'folder' && item.type !== 'editableHTML' && (
                       <a
                         href={item.downloadURL}
@@ -321,6 +319,31 @@ function Document() {
                           ></DownloadRoundedIcon>
                         </IconButton>
                       </a>
+                    )}
+                    {item.type === 'editableHTML' ? (
+                      <IconButton
+                        onClick={() => {
+                          setOpenEditor(true);
+                          setSelectedFile(item);
+                          // setEnableEditText(false);
+                        }}
+                      >
+                        <EditRoundedIcon
+                          sx={{color: '#181818'}}
+                        ></EditRoundedIcon>
+                      </IconButton>
+                    ) : (
+                      <IconButton
+                        onClick={() => {
+                          setOpenRename(true);
+                          setSelectedFile(item);
+                          // setEnableEditText(false);
+                        }}
+                      >
+                        <EditRoundedIcon
+                          sx={{color: '#181818'}}
+                        ></EditRoundedIcon>
+                      </IconButton>
                     )}
                   </Grid>
                   <Grid item xs={4}>
@@ -355,6 +378,14 @@ function Document() {
             }}
             content="This file will be permanently deleted"
           ></WarningPopup>
+          <CreatePopup
+            defaultValue={selectedFile.name}
+            title={`Rename document ${selectedFile.name}`}
+            fieldLabel={'Enter new name'}
+            onSubmit={renameHandler}
+            open={openRename}
+            onClose={() => setOpenRename(false)}
+          ></CreatePopup>
         </div>
       </Suspense>
 
