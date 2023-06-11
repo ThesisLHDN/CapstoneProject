@@ -1,4 +1,4 @@
-import React, {useContext, useMemo, useState} from 'react';
+import React, { useState } from 'react';
 import {styled} from '@mui/material/styles';
 import {color, colorHover} from 'src/style';
 import {
@@ -24,10 +24,7 @@ import CreationPopup from 'src/components/popup/Create';
 
 import Message from './Message';
 import TypingArea from './TypingArea';
-import {
-  updateDocument,
-  deleteDocument,
-} from 'src/firebase/firestoreServices';
+import {updateDocument, deleteDocument} from 'src/firebase/firestoreServices';
 import WarningPopup from 'src/components/popup/Warning';
 import InviteMember from '../InviteMember';
 
@@ -263,13 +260,13 @@ function ChatWindow({
                 // scrollSnapType: 'y proximity',
               }}
             >
-              {newMess
-                .reverse()
-                .map(({author, authorId, body, type, createdAt, file}) => (
+              {newMess.map(
+                ({author, authorId, body, type, createdAt, file}) => (
                   <Message mine={authorId === uid}>
                     {{author, authorId, body, type, createdAt, file}}
                   </Message>
-                ))}{' '}
+                ),
+              )}{' '}
               <div ref={messagesRef} />
             </Box>
             {/* <DrawerFooter sx={{backgroundColor: 'green', width: '100%'}} />{' '} */}

@@ -20,7 +20,8 @@ function ChatRoom({projectId, openChat, onCloseChat}) {
       fieldName: 'roomId',
       operator: '==',
       compareValue: selectedRoom ? selectedRoom.id : '',
-      sort: 'desc',
+      sort: 'asc',
+      sortAttr: 'createdAt',
     }),
     [selectedRoom],
   );
