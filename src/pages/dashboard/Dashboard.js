@@ -250,11 +250,16 @@ function Dashboard() {
       <Grid container sx={{marginTop: 2}}>
         <Grid item xs={6}>
           <Grid item sx={{paddingRight: 1, paddingBottom: 2}}>
-            <Workload chartData={workloadData} setScope={setWorkloadScope} />
+            <Workload
+              chartData={workloadData}
+              scope={workloadScope}
+              setScope={setWorkloadScope}
+            />
           </Grid>
           <Grid item sx={{paddingRight: 1, paddingBottom: 2}}>
             <CumulativeFlow
               chartData={cumulative}
+              scope={cumulativeScope}
               setScope={setCumulativeScope}
             />
           </Grid>
@@ -267,6 +272,7 @@ function Dashboard() {
           <Grid item sx={{paddingLeft: 1, paddingBottom: 2}}>
             <MemberManagement
               data={performanceData}
+              scope={performanceScope}
               setScope={setPerformanceScope}
             />
           </Grid>

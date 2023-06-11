@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {Pie} from 'react-chartjs-2';
 import {Chart as ChartJS} from 'chart.js/auto';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
+import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import {
   Box,
   Button,
@@ -11,7 +12,7 @@ import {
   Popper,
 } from '@mui/material';
 
-function Workload({chartData, setScope}) {
+function Workload({chartData, scope, setScope}) {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleChange = (event, element) => {
@@ -28,14 +29,31 @@ function Workload({chartData, setScope}) {
 
   return (
     <div style={{border: '1px solid #787878', borderRadius: 16}}>
-      <div className="flex">
-        <p className="text-left text-tg-text-color font-bold text-base mt-8 mx-6">
+      <div className="flex justify-between">
+        <p className="text-left text-tg-text-color font-bold text-base mt-8 ml-6">
           Workload
         </p>
-        <SettingsOutlinedIcon
-          sx={{marginTop: 3.75, cursor: 'pointer'}}
-          onClick={handleClick}
-        />
+        <div>
+          <SettingsOutlinedIcon sx={{marginTop: '34px'}} />
+          <Button
+            style={{
+              textTransform: 'none',
+              height: 20,
+              width: 'fit-content',
+              backgroundColor: '#fff',
+              marginTop: '34px',
+              marginRight: '24px',
+              color: 'black',
+              fontWeight: 600,
+              fontSize: 14,
+            }}
+            onClick={handleClick}
+          >
+            {scope}
+            <KeyboardArrowDownRoundedIcon />
+          </Button>
+        </div>
+
         <Popper id={id} open={open} anchorEl={anchorEl} sx={{zIndex: 5}}>
           <ClickAwayListener onClickAway={handleClick}>
             <Box

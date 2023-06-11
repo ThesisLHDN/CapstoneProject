@@ -51,6 +51,7 @@ function Board() {
     status: '',
     type: '',
     priority: '',
+    tags: '',
   });
   const [srt, setSrt] = useState(false);
   const [srtVal, setSrtVal] = useState('None');
