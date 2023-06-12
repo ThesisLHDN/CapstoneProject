@@ -332,7 +332,10 @@ function TaskList({hide, me, vals, fil, setFil, srtVal, srt, setSrt, input}) {
                               <span className="px-1.5 py-1 rounded-xl text-white bg-to-do-color my-10 mr-1 text-xs">
                                 {issues
                                   .filter((x) => {
-                                    return x.issuestatus == 'To do';
+                                    return (
+                                      x.issuestatus == 'To do' &&
+                                      x.cycleId == column.id
+                                    );
                                   })
                                   .reduce((sum, a) => sum + a.estimatePoint, 0)}
                               </span>
@@ -349,7 +352,10 @@ function TaskList({hide, me, vals, fil, setFil, srtVal, srt, setSrt, input}) {
                               <span className="px-1.5 py-1 rounded-xl text-white bg-in-progress-color my-10 mr-1 text-xs">
                                 {issues
                                   .filter((x) => {
-                                    return x.issuestatus == 'In progress';
+                                    return (
+                                      x.issuestatus == 'In progress' &&
+                                      x.cycleId == column.id
+                                    );
                                   })
                                   .reduce((sum, a) => sum + a.estimatePoint, 0)}
                               </span>
@@ -366,7 +372,10 @@ function TaskList({hide, me, vals, fil, setFil, srtVal, srt, setSrt, input}) {
                               <span className="px-1.5 py-1 rounded-xl text-white bg-testing-color my-10 mr-1 text-xs">
                                 {issues
                                   .filter((x) => {
-                                    return x.issuestatus == 'Testing';
+                                    return (
+                                      x.issuestatus == 'Testing' &&
+                                      x.cycleId == column.id
+                                    );
                                   })
                                   .reduce((sum, a) => sum + a.estimatePoint, 0)}
                               </span>
@@ -383,7 +392,10 @@ function TaskList({hide, me, vals, fil, setFil, srtVal, srt, setSrt, input}) {
                               <span className="px-1.5 py-1 rounded-xl text-white bg-done-color my-10 mr-1 text-xs">
                                 {issues
                                   .filter((x) => {
-                                    return x.issuestatus == 'Done';
+                                    return (
+                                      x.issuestatus == 'Done' &&
+                                      x.cycleId == column.id
+                                    );
                                   })
                                   .reduce((sum, a) => sum + a.estimatePoint, 0)}
                               </span>
