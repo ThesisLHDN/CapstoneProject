@@ -106,10 +106,10 @@ function Card({issue}) {
       setTags(res.data[0].reverse().slice(0, 3));
       setTotalTags(
         res.data[1]
-          .filter((item, pos) => {
-            return res.data[1].indexOf(item) == pos;
-          })
-          .map((tag) => tag.tagname),
+          .map((tag) => tag.tagname)
+          .filter((item, pos, arr) => {
+            return arr.indexOf(item) == pos;
+          }),
       );
       // console.log(totalTags);
     } catch (err) {

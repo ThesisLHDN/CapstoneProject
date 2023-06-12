@@ -194,12 +194,12 @@ function TaskCard({issue, setTrigger, isChild = false}) {
       setTags(res.data[0].reverse().slice(0, 3));
       setTotalTags(
         res.data[1]
-          .filter((item, pos) => {
-            return res.data[1].indexOf(item) == pos;
-          })
-          .map((tag) => tag.tagname),
+          .map((tag) => tag.tagname)
+          .filter((item, pos, arr) => {
+            return arr.indexOf(item) == pos;
+          }),
       );
-      // console.log(totalTags);
+      console.log(totalTags);
     } catch (err) {
       console.log(err);
     }
@@ -296,7 +296,7 @@ function TaskCard({issue, setTrigger, isChild = false}) {
               {issue.dueDate ? <p>{convertDate(issue.dueDate)}</p> : <p>-</p>}
             </span>
           </div>
-        ) : diff < 86400000 && issue.issuestatus != 'Done' ? (
+        ) : diff < 86400000 * 1.5 && issue.issuestatus != 'Done' ? (
           <div className="flex">
             <ReportIcon
               fontSize="small"
