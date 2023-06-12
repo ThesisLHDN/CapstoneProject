@@ -37,7 +37,7 @@ function Dashboard() {
           {
             label: 'Amount',
             data: Object.values(WorkloadData),
-            backgroundColor: ['#EC6F28', '#006BA7', '#EC8E00', '#009606'],
+            backgroundColor: ['#e83a31', '#006BA7', '#ffb300', '#009606'],
             borderWidth: 0,
           },
         ],
@@ -126,8 +126,8 @@ function Dashboard() {
       {
         label: 'To Do',
         data: [],
-        backgroundColor: '#EDCBB9',
-        borderColor: '#EC6F28',
+        backgroundColor: '#ff8787',
+        borderColor: '#ff4040',
         borderWidth: 1,
         fill: true,
       },
@@ -169,8 +169,8 @@ function Dashboard() {
           {
             label: 'To Do',
             data: res.data[1],
-            backgroundColor: '#EDCBB9',
-            borderColor: '#EC6F28',
+            backgroundColor: '#ff8787',
+            borderColor: '#ff4040',
             borderWidth: 1,
             fill: true,
           },

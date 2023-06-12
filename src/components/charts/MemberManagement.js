@@ -233,7 +233,7 @@ function MemberManagement({data, scope, setScope}) {
                         member['Testing'][0] +
                         member['Done'][0])
                     }%`,
-                    backgroundColor: '#ff0000',
+                    backgroundColor: '#e83a31',
                   }}
                 ></p>
                 <p
@@ -281,7 +281,7 @@ function MemberManagement({data, scope, setScope}) {
                 {member['To do'][0] != 0 && (
                   <p
                     className="text-xs font-bold"
-                    style={{color: '#ff0000'}}
+                    style={{color: '#ff4040'}}
                   >{`${Math.round(
                     (member['To do'][0] * 100) /
                       (member['To do'][0] +
@@ -305,7 +305,7 @@ function MemberManagement({data, scope, setScope}) {
                 {member['Testing'][0] != 0 && (
                   <p
                     className="text-xs font-bold"
-                    style={{color: '#EC8E00'}}
+                    style={{color: '#ffb300'}}
                   >{`${Math.round(
                     (member['Testing'][0] * 100) /
                       (member['To do'][0] +

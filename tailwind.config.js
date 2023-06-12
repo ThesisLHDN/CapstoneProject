@@ -26,7 +26,7 @@ module.exports = {
         'light-gray': '#F7F7F7',
         'half-transparent': 'rgba(0, 0, 0, 0.5)',
         'sidebar-bg': '#98A0AF',
-        'to-do-color': '#EC6F28',
+        'to-do-color': '#F74848',
         'in-progress-color': '#006BA7',
         'testing-color': '#EC8E00',
         'done-color': '#009606',
