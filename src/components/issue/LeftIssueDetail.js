@@ -56,7 +56,7 @@ function LeftIssueDetail({issue, setIssue, trigger, setTrigger}) {
   );
 
   const AttachmentArea = useMemo(
-    () => <Attachments issueId={issue.id} />,
+    () => <Attachments issueId={issue.id} uid={user.uid} />,
     [issue.id],
   );
 

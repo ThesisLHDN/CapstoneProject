@@ -322,7 +322,7 @@ function RightIssueDetail({issue, setIssue, trigger, setTrigger}) {
           </Grid>
           <Grid item xs={6.5}>
             <div className="flex ml-1">
-              {issue.estimatePoint && (
+              {!!issue.estimatePoint && (
                 <span className="mt-5 mr-5">{issue.estimatePoint}</span>
               )}
               <TextField

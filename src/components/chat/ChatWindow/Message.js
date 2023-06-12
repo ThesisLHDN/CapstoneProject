@@ -31,7 +31,7 @@ function Message({mine, children}) {
           }}
         >
           <Avatar
-            src="#"
+            src={author ? author.photoURL : '#'}
             alt={author ? author.displayName : ''}
             sx={{width: 32, height: 32, mr: 1}}
           ></Avatar>
