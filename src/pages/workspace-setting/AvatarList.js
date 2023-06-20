@@ -153,28 +153,33 @@ function AvatarList() {
   }, [wsId]);
 
   return (
-    <ImageList
-      sx={{
-        width: 1000,
-        scrollbarGutter: 'stable',
-        scrollbarWidth: 'thin',
-        overflowX: 'unset !important',
-        overflowY: 'unset !important',
-      }}
-      cols={12}
-      rowHeight={50}
-    >
-      {members
-        .filter((member) => member.id !== workspace.adminId)
-        .map((member) => (
-          <ImageIndividual
-            key={member.id}
-            member={member}
-            workspace={workspace}
-            uid={uid}
-          ></ImageIndividual>
-        ))}
-    </ImageList>
+    <>
+      {members.length && (
+        <ImageList
+          sx={{
+            width: 1000,
+            scrollbarGutter: 'stable',
+            scrollbarWidth: 'thin',
+            overflowX: 'unset !important',
+            overflowY: 'unset !important',
+          }}
+          cols={12}
+          rowHeight={50}
+        >
+          {members.length &&
+            members
+              ?.filter((member) => member.id !== workspace.adminId)
+              .map((member) => (
+                <ImageIndividual
+                  key={member.id}
+                  member={member}
+                  workspace={workspace}
+                  uid={uid}
+                ></ImageIndividual>
+              ))}
+        </ImageList>
+      )}
+    </>
   );
 }
 

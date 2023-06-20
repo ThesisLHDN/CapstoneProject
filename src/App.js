@@ -37,9 +37,9 @@ function App() {
 
   const {setSocket} = useContext(SocketContext);
 
-  useEffect(() => {
-    setSocket(io('http://localhost:5000'));
-  }, []);
+  // useEffect(() => {
+  //   setSocket(io('http://localhost:5000'));
+  // }, []);
 
   return (
     <AuthProvider>

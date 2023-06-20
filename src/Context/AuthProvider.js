@@ -20,7 +20,7 @@ function AuthProvider({children}) {
   const addUser = async () => {
     try {
       await axios.post(`/user`, user);
-      socket.emit('newUser', user.uid);
+      // socket.emit('newUser', user.uid);
     } catch (err) {
       console.log(err);
     }

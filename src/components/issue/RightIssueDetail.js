@@ -76,22 +76,22 @@ function RightIssueDetail({issue, setIssue, trigger, setTrigger}) {
     updateIssue({point: event.target.value});
     setIssue({...issue, estimatePoint: event.target.value});
     event.target.value = '';
-    socket.emit('updateIssue', {
-      senderId: uid,
-      senderName: displayName,
-      senderAvatar: photoURL,
-      issueId: issue.id,
-      updatedIssue: issue.issueindex,
-      projectId: project.pId,
-      projectKey: project.pkey,
-      receiverId:
-        issue.assigneeId && issue.assigneeId != issue.reporterId
-          ? [issue.reporterId, issue.assigneeId]
-          : [issue.reporterId],
-      type: 'point',
-      newState: '',
-      dateUpdate: new Date(),
-    });
+    // socket.emit('updateIssue', {
+    //   senderId: uid,
+    //   senderName: displayName,
+    //   senderAvatar: photoURL,
+    //   issueId: issue.id,
+    //   updatedIssue: issue.issueindex,
+    //   projectId: project.pId,
+    //   projectKey: project.pkey,
+    //   receiverId:
+    //     issue.assigneeId && issue.assigneeId != issue.reporterId
+    //       ? [issue.reporterId, issue.assigneeId]
+    //       : [issue.reporterId],
+    //   type: 'point',
+    //   newState: '',
+    //   dateUpdate: new Date(),
+    // });
   };
 
   const updateIssue = async ({status, due, priority, assignee, point} = {}) => {
@@ -121,22 +121,22 @@ function RightIssueDetail({issue, setIssue, trigger, setTrigger}) {
     setIssue({...issue, assigneeId: element.id});
     setOpen(!open);
     updateIssue({assignee: element.id});
-    socket.emit('updateIssue', {
-      senderId: uid,
-      senderName: displayName,
-      senderAvatar: photoURL,
-      issueId: issue.id,
-      updatedIssue: issue.issueindex,
-      projectId: project.pId,
-      projectKey: project.pkey,
-      receiverId:
-        issue.assigneeId && issue.assigneeId != issue.reporterId
-          ? [issue.reporterId, issue.assigneeId]
-          : [issue.reporterId],
-      type: 'assignee',
-      newState: element.username,
-      dateUpdate: new Date(),
-    });
+    // socket.emit('updateIssue', {
+    //   senderId: uid,
+    //   senderName: displayName,
+    //   senderAvatar: photoURL,
+    //   issueId: issue.id,
+    //   updatedIssue: issue.issueindex,
+    //   projectId: project.pId,
+    //   projectKey: project.pkey,
+    //   receiverId:
+    //     issue.assigneeId && issue.assigneeId != issue.reporterId
+    //       ? [issue.reporterId, issue.assigneeId]
+    //       : [issue.reporterId],
+    //   type: 'assignee',
+    //   newState: element.username,
+    //   dateUpdate: new Date(),
+    // });
   };
 
   const handleClick = (event) => {

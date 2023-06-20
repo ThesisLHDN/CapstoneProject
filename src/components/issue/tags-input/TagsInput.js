@@ -24,23 +24,23 @@ function TagsInput(props) {
       setTags([...tags, event.target.value]);
       createTag(event.target.value);
       event.target.value = '';
-      socket.emit('updateIssue', {
-        senderId: uid,
-        senderName: displayName,
-        senderAvatar: photoURL,
-        issueId: props.issue.id,
-        updatedIssue: props.issue.issueindex,
-        projectId: project.pId,
-        projectKey: project.pkey,
-        receiverId:
-          props.issue.assigneeId &&
-          props.issue.assigneeId != props.issue.reporterId
-            ? [props.issue.reporterId, props.issue.assigneeId]
-            : [props.issue.reporterId],
-        type: 'tag',
-        newState: '',
-        dateUpdate: new Date(),
-      });
+      // socket.emit('updateIssue', {
+      //   senderId: uid,
+      //   senderName: displayName,
+      //   senderAvatar: photoURL,
+      //   issueId: props.issue.id,
+      //   updatedIssue: props.issue.issueindex,
+      //   projectId: project.pId,
+      //   projectKey: project.pkey,
+      //   receiverId:
+      //     props.issue.assigneeId &&
+      //     props.issue.assigneeId != props.issue.reporterId
+      //       ? [props.issue.reporterId, props.issue.assigneeId]
+      //       : [props.issue.reporterId],
+      //   type: 'tag',
+      //   newState: '',
+      //   dateUpdate: new Date(),
+      // });
     }
   };
 

@@ -54,6 +54,7 @@ function SideBar(props) {
   const {socket} = useContext(SocketContext);
   // const [char, setChar] = useState('');
 
+  // console.log(workspaces);
   const {
     user: {uid},
   } = useContext(AuthContext);
@@ -86,6 +87,7 @@ function SideBar(props) {
   const handleClick = () => {
     setIsActive(!isActive);
   };
+  // console.log(workspaces)
 
   return (
     <div className="fixed overflow-auto bg-gray-200 h-screen w-1/6">
@@ -116,7 +118,7 @@ function SideBar(props) {
                       {wp.wsname}
                     </span>
                   </div>
-                  {console.log(wp)}
+                  {/* {console.log(wp)} */}
                   {uid == wp.adminId && (
                     <div className="py-3 mr-4">
                       <VpnKeyIcon

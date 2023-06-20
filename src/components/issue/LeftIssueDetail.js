@@ -96,22 +96,22 @@ function LeftIssueDetail({issue, setIssue, trigger, setTrigger}) {
     setIssue({...issue, issuestatus: element});
     setOpen(!open);
     updateIssue({status: element});
-    socket.emit('updateIssue', {
-      senderId: user.uid,
-      senderName: user.displayName,
-      senderAvatar: user.photoURL,
-      issueId: issue.id,
-      updatedIssue: issue.issueindex,
-      projectId: project.pId,
-      projectKey: project.pkey,
-      receiverId:
-        issue.assigneeId && issue.assigneeId != issue.reporterId
-          ? [issue.reporterId, issue.assigneeId]
-          : [issue.reporterId],
-      type: 'status',
-      newState: element,
-      dateUpdate: new Date(),
-    });
+    // socket.emit('updateIssue', {
+    //   senderId: user.uid,
+    //   senderName: user.displayName,
+    //   senderAvatar: user.photoURL,
+    //   issueId: issue.id,
+    //   updatedIssue: issue.issueindex,
+    //   projectId: project.pId,
+    //   projectKey: project.pkey,
+    //   receiverId:
+    //     issue.assigneeId && issue.assigneeId != issue.reporterId
+    //       ? [issue.reporterId, issue.assigneeId]
+    //       : [issue.reporterId],
+    //   type: 'status',
+    //   newState: element,
+    //   dateUpdate: new Date(),
+    // });
   };
 
   const handleChangePriority = (event, element) => {
@@ -120,22 +120,22 @@ function LeftIssueDetail({issue, setIssue, trigger, setTrigger}) {
     setIssue({...issue, priority: element});
     setOpenPriority(!openPriority);
     updateIssue({priority: element});
-    socket.emit('updateIssue', {
-      senderId: user.uid,
-      senderName: user.displayName,
-      senderAvatar: user.photoURL,
-      issueId: issue.id,
-      updatedIssue: issue.issueindex,
-      projectId: project.pId,
-      projectKey: project.pkey,
-      receiverId:
-        issue.assigneeId && issue.assigneeId != issue.reporterId
-          ? [issue.reporterId, issue.assigneeId]
-          : [issue.reporterId],
-      type: 'priority',
-      newState: element,
-      dateUpdate: new Date(),
-    });
+    // socket.emit('updateIssue', {
+    //   senderId: user.uid,
+    //   senderName: user.displayName,
+    //   senderAvatar: user.photoURL,
+    //   issueId: issue.id,
+    //   updatedIssue: issue.issueindex,
+    //   projectId: project.pId,
+    //   projectKey: project.pkey,
+    //   receiverId:
+    //     issue.assigneeId && issue.assigneeId != issue.reporterId
+    //       ? [issue.reporterId, issue.assigneeId]
+    //       : [issue.reporterId],
+    //   type: 'priority',
+    //   newState: element,
+    //   dateUpdate: new Date(),
+    // });
   };
 
   const handleChangeDescription = (event) => {
@@ -149,43 +149,43 @@ function LeftIssueDetail({issue, setIssue, trigger, setTrigger}) {
       dueDate: date,
     });
     updateIssue({due: date});
-    socket.emit('updateIssue', {
-      senderId: user.uid,
-      senderName: user.displayName,
-      senderAvatar: user.photoURL,
-      issueId: issue.id,
-      updatedIssue: issue.issueindex,
-      projectId: project.pId,
-      projectKey: project.pkey,
-      receiverId:
-        issue.assigneeId && issue.assigneeId != issue.reporterId
-          ? [issue.reporterId, issue.assigneeId]
-          : [issue.reporterId],
-      type: 'due date',
-      newState: date,
-      dateUpdate: new Date(),
-    });
+    // socket.emit('updateIssue', {
+    //   senderId: user.uid,
+    //   senderName: user.displayName,
+    //   senderAvatar: user.photoURL,
+    //   issueId: issue.id,
+    //   updatedIssue: issue.issueindex,
+    //   projectId: project.pId,
+    //   projectKey: project.pkey,
+    //   receiverId:
+    //     issue.assigneeId && issue.assigneeId != issue.reporterId
+    //       ? [issue.reporterId, issue.assigneeId]
+    //       : [issue.reporterId],
+    //   type: 'due date',
+    //   newState: date,
+    //   dateUpdate: new Date(),
+    // });
   };
 
   const handleUpdate = (event) => {
     updateIssue();
     setChangeDescription(false);
-    socket.emit('updateIssue', {
-      senderId: user.uid,
-      senderName: user.displayName,
-      senderAvatar: user.photoURL,
-      issueId: issue.id,
-      updatedIssue: issue.issueindex,
-      projectId: project.pId,
-      projectKey: project.pkey,
-      receiverId:
-        issue.assigneeId && issue.assigneeId != issue.reporterId
-          ? [issue.reporterId, issue.assigneeId]
-          : [issue.reporterId],
-      type: 'description',
-      newState: '',
-      dateUpdate: new Date(),
-    });
+    // socket.emit('updateIssue', {
+    //   senderId: user.uid,
+    //   senderName: user.displayName,
+    //   senderAvatar: user.photoURL,
+    //   issueId: issue.id,
+    //   updatedIssue: issue.issueindex,
+    //   projectId: project.pId,
+    //   projectKey: project.pkey,
+    //   receiverId:
+    //     issue.assigneeId && issue.assigneeId != issue.reporterId
+    //       ? [issue.reporterId, issue.assigneeId]
+    //       : [issue.reporterId],
+    //   type: 'description',
+    //   newState: '',
+    //   dateUpdate: new Date(),
+    // });
   };
 
   const handleClick = (event) => {

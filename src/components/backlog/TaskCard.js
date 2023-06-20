@@ -149,22 +149,22 @@ function TaskCard({issue, setTrigger, isChild = false}) {
     setStatus(element);
     updateIssue(element);
     // setReload(true);
-    socket.emit('updateIssue', {
-      senderId: uid,
-      senderName: displayName,
-      senderAvatar: photoURL,
-      issueId: issue.id,
-      updatedIssue: issue.issueindex,
-      projectId: project.pId,
-      projectKey: project.pkey,
-      receiverId:
-        issue.assigneeId && issue.assigneeId != issue.reporterId
-          ? [issue.reporterId, issue.assigneeId]
-          : [issue.reporterId],
-      type: 'status',
-      newState: element,
-      dateUpdate: new Date(),
-    });
+    // socket.emit('updateIssue', {
+    //   senderId: uid,
+    //   senderName: displayName,
+    //   senderAvatar: photoURL,
+    //   issueId: issue.id,
+    //   updatedIssue: issue.issueindex,
+    //   projectId: project.pId,
+    //   projectKey: project.pkey,
+    //   receiverId:
+    //     issue.assigneeId && issue.assigneeId != issue.reporterId
+    //       ? [issue.reporterId, issue.assigneeId]
+    //       : [issue.reporterId],
+    //   type: 'status',
+    //   newState: element,
+    //   dateUpdate: new Date(),
+    // });
   };
 
   const handleClick = (event) => {

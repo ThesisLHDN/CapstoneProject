@@ -46,12 +46,12 @@ function Notification() {
   const [notiDot, setNotiDot] = useState(false);
 
   useEffect(() => {
-    socket.on('getNotification', (data) => {
-      setNotifications((prev) => [data, ...prev]);
-      setNotiDot(true);
-      console.log('AAAAAAA', data);
-      addNoti(data);
-    });
+    // socket.on('getNotification', (data) => {
+    //   setNotifications((prev) => [data, ...prev]);
+    //   setNotiDot(true);
+    //   console.log('AAAAAAA', data);
+    //   addNoti(data);
+    // });
   }, [socket]);
 
   useEffect(() => {
@@ -61,9 +61,9 @@ function Notification() {
   const fetchNotiData = async () => {
     try {
       const res = await axios.get(`/noti/${uid}`);
-      setNotifications(
-        res.data.filter((noti) => noti.senderAvatar != photoURL),
-      );
+      // setNotifications(
+      //   res.data.filter((noti) => noti.senderAvatar != photoURL),
+      // );
     } catch (err) {
       console.log(err);
     }
@@ -167,7 +167,7 @@ function Notification() {
                   </div>
                   <div className="flex justify-between">
                     <MenuList>
-                      {notifications.map((noti) => (
+                      {/* {notifications.map((noti) => (
                         <MenuItem
                           sx={{
                             pt: 1.5,
@@ -262,7 +262,7 @@ function Notification() {
                             </div>
                           </div>
                         </MenuItem>
-                      ))}
+                      ))} */}
                     </MenuList>
                   </div>
                 </Box>
