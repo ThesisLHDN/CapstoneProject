@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {styled} from '@mui/material/styles';
 import {color, colorHover} from 'src/style';
 import {
@@ -215,7 +215,9 @@ function ChatWindow({
             <Toolbar sx={{display: 'flex', justifyContent: 'space-between'}}>
               <Box sx={{display: 'flex', gap: 2, alignItems: 'center'}}>
                 <Avatar
-                  src={selectedRoom.coverPicture}
+                  src={
+                    selectedRoom.coverPicture ? selectedRoom.coverPicture : '#'
+                  }
                   alt={selectedRoom.name}
                 ></Avatar>
 
@@ -343,7 +345,25 @@ function ChatWindow({
                     <Avatar src={member.photoURL} alt={member.name}></Avatar>
                     <Typography>{member.displayName}</Typography>
                   </Box>
-
+                  {/* {adminRight ? (
+                    member.id !== uid ? (
+                      <IconButton
+                        onClick={() => {
+                          setMem(member);
+                          setOpenRemoveMem(true);
+                        }}
+                      >
+                        <PersonRemoveAlt1RoundedIcon />
+                      </IconButton>
+                    ) : (
+                      <IconButton disabled>
+                        <KeyRoundedIcon sx={{color: '#f4c430'}} />
+                      </IconButton>
+                    )
+                  ) : (
+                    <IconButton disabled></IconButton>
+                  )} */}
+                  {/* 
                   {adminRight && member.id !== uid ? (
                     <IconButton
                       onClick={() => {
@@ -354,6 +374,22 @@ function ChatWindow({
                       <PersonRemoveAlt1RoundedIcon />
                     </IconButton>
                   ) : (
+                    <IconButton disabled>
+                      <KeyRoundedIcon sx={{color: '#f4c430'}} />
+                    </IconButton>
+                  )} */}
+
+                  {adminRight && member.id !== uid && (
+                    <IconButton
+                      onClick={() => {
+                        setMem(member);
+                        setOpenRemoveMem(true);
+                      }}
+                    >
+                      <PersonRemoveAlt1RoundedIcon />
+                    </IconButton>
+                  )}
+                  {selectedRoom.adminId === member.id && (
                     <IconButton disabled>
                       <KeyRoundedIcon sx={{color: '#f4c430'}} />
                     </IconButton>

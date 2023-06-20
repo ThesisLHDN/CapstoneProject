@@ -242,7 +242,7 @@ function Document() {
                 }}
                 key={item.id}
               >
-                <Grid item xs={5} sx={{pr: 1, ustifyContent: 'flex-start'}}>
+                <Grid item xs={5} sx={{pr: 1, justifyContent: 'flex-start'}}>
                   {item.type === 'folder' ? (
                     <PlainButton
                       startIcon={<FolderOutlinedIcon />}
